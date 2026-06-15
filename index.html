@@ -7,263 +7,246 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%236c47ff'/><text y='.9em' font-size='75' x='12'>🔐</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
-:root{--bg:#0a0a0f;--bg2:#111118;--card:#16161f;--card2:#1c1c28;--border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.15);--acc:#6c47ff;--acc-g:rgba(108,71,255,.3);--acc2:#00d4aa;--gold:#f0c040;--red:#ff4d6d;--txt:#f0f0f8;--txt2:#8888aa;--txt3:#555570;--r:16px;--rs:10px;--fd:'Space Grotesk',sans-serif;--fb:'Inter',sans-serif}
+:root{
+  --bg:#0a0a0f;--bg2:#111118;--card:#16161f;--card2:#1c1c28;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.15);
+  --acc:#6c47ff;--acc-g:rgba(108,71,255,.3);--acc2:#00d4aa;
+  --gold:#f0c040;--red:#ff4d6d;
+  --txt:#f0f0f8;--txt2:#8888aa;--txt3:#555570;
+  --r:16px;--rs:10px;
+  --fd:'Space Grotesk',sans-serif;--fb:'Inter',sans-serif;
+}
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
-body{font-family:var(--fb);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;line-height:1.6;transition:background .3s}
-::-webkit-scrollbar{width:5px}::-webkit-scrollbar-track{background:var(--bg)}::-webkit-scrollbar-thumb{background:var(--acc);border-radius:3px}
+body{font-family:var(--fb);background:var(--bg);color:var(--txt);min-height:100vh;overflow-x:hidden;line-height:1.6}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:var(--bg)}
+::-webkit-scrollbar-thumb{background:var(--acc);border-radius:3px}
 
-/* AUTH */
-#authWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(108,71,255,.18) 0%,transparent 70%)}
-.acard{width:100%;max-width:440px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:48px 40px;box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 40px rgba(108,71,255,.2);animation:slideUp .4s ease}
-.alogo{display:flex;align-items:center;gap:12px;margin-bottom:32px;justify-content:center}
-.alogo .li{width:48px;height:48px;background:linear-gradient(135deg,var(--acc),#a855f7);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 24px var(--acc-g)}
-.alogo .lt{font-family:var(--fd);font-size:24px;font-weight:700;background:linear-gradient(135deg,#fff 30%,var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.atitle{font-family:var(--fd);font-size:22px;font-weight:700;margin-bottom:6px}
-.asub{color:var(--txt2);font-size:14px;margin-bottom:28px}
-.fg{margin-bottom:18px}
-.fl{display:block;font-size:13px;font-weight:500;color:var(--txt2);margin-bottom:8px}
-input.fi,select.fi{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:13px 16px;color:var(--txt);font-size:15px;font-family:var(--fb);transition:border-color .2s,box-shadow .2s;outline:none}
-input.fi:focus,select.fi:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-g)}
-input.fi::placeholder{color:var(--txt3)}
-select.fi{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
+/* ===== ERROR BANNER ===== */
+#errBanner{display:none;position:fixed;inset:0;z-index:99999;background:#0a0a0f;color:#fff;padding:32px;font-family:monospace;overflow:auto;white-space:pre-wrap;font-size:13px;line-height:1.6}
+#errBanner .et{font-family:var(--fd);font-size:22px;font-weight:700;color:var(--red);margin-bottom:16px}
+#errBanner .em{color:#ccc}
+#errBanner button{margin-top:20px;padding:10px 20px;background:var(--acc);color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:var(--fb);font-weight:600;font-size:14px}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-size:15px;font-weight:600;font-family:var(--fb);transition:all .2s;text-decoration:none;white-space:nowrap}
-.bprim{background:linear-gradient(135deg,var(--acc) 0%,#a855f7 100%);color:#fff;box-shadow:0 4px 20px var(--acc-g);width:100%}
-.bprim:hover{transform:translateY(-1px);box-shadow:0 6px 28px var(--acc-g)}
-.bprim:active{transform:translateY(0)}
-.bsec{background:var(--bg2);border:1px solid var(--border);color:var(--txt);width:100%}
-.bsec:hover{border-color:var(--border2);background:var(--card2)}
-.bgoog{background:#fff;color:#222;width:100%;margin-top:12px}
-.bgoog:hover{background:#f0f0f0}
-.bdang{background:rgba(255,77,109,.15);border:1px solid rgba(255,77,109,.3);color:var(--red);padding:10px 16px;font-size:14px}
-.bdang:hover{background:rgba(255,77,109,.25)}
-.bsm{padding:8px 14px;font-size:13px;border-radius:8px;width:auto}
+/* ===== LOADER ===== */
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
+#loader .li{width:64px;height:64px;background:linear-gradient(135deg,var(--acc),#a855f7);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 0 40px var(--acc-g);animation:pulse 1.5s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+
+/* ===== TOASTS ===== */
+#toastBox{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;max-width:90vw}
+.toast{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border2);border-radius:var(--rs);padding:14px 18px;min-width:260px;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:toastIn .3s ease;pointer-events:all}
+.toast.s{border-left:3px solid var(--acc2)}
+.toast.e{border-left:3px solid var(--red)}
+.toast.i{border-left:3px solid var(--acc)}
+.toast.w{border-left:3px solid var(--gold)}
+@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* ===== AUTH ===== */
+.authWrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px;background:radial-gradient(ellipse 80% 60% at 50% -10%,rgba(108,71,255,.18) 0%,transparent 70%)}
+.authCard{width:100%;max-width:440px;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:48px 40px;box-shadow:0 8px 32px rgba(0,0,0,.5),0 0 40px rgba(108,71,255,.2);animation:slideUp .4s ease}
+.aLogo{display:flex;align-items:center;gap:12px;margin-bottom:32px;justify-content:center}
+.aLogo .li{width:48px;height:48px;background:linear-gradient(135deg,var(--acc),#a855f7);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;box-shadow:0 0 24px var(--acc-g)}
+.aLogo .lt{font-family:var(--fd);font-size:24px;font-weight:700;background:linear-gradient(135deg,#fff 30%,var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.aTitle{font-family:var(--fd);font-size:22px;font-weight:700;margin-bottom:6px}
+.aSub{color:var(--txt2);font-size:14px;margin-bottom:28px}
+.fGroup{margin-bottom:18px}
+.fLabel{display:block;font-size:13px;font-weight:500;color:var(--txt2);margin-bottom:8px}
+.fInput{width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:var(--rs);padding:13px 16px;color:var(--txt);font-size:15px;font-family:var(--fb);outline:none;transition:border-color .2s,box-shadow .2s}
+.fInput:focus{border-color:var(--acc);box-shadow:0 0 0 3px var(--acc-g)}
+.fInput::placeholder{color:var(--txt3)}
+select.fInput{appearance:none;cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238888aa' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:38px}
 .divider{display:flex;align-items:center;gap:12px;color:var(--txt3);font-size:13px;margin:20px 0}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
-.afooter{text-align:center;margin-top:20px;font-size:14px;color:var(--txt2)}
-.afooter a{color:var(--acc);text-decoration:none;font-weight:500;cursor:pointer}
+.aFooter{text-align:center;margin-top:20px;font-size:14px;color:var(--txt2)}
+.aFooter a{color:var(--acc);text-decoration:none;font-weight:500;cursor:pointer}
 
-/* APP */
-#appWrap{display:flex;min-height:100vh}
+/* ===== BUTTONS ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-size:15px;font-weight:600;font-family:var(--fb);transition:all .2s;text-decoration:none;white-space:nowrap}
+.btnPrim{background:linear-gradient(135deg,var(--acc) 0%,#a855f7 100%);color:#fff;box-shadow:0 4px 20px var(--acc-g);width:100%}
+.btnPrim:hover{transform:translateY(-1px);box-shadow:0 6px 28px var(--acc-g)}
+.btnSec{background:var(--bg2);border:1px solid var(--border);color:var(--txt);width:100%}
+.btnSec:hover{border-color:var(--border2);background:var(--card2)}
+.btnGoog{background:#fff;color:#222;width:100%;margin-top:12px}
+.btnGoog:hover{background:#f0f0f0}
+.btnDang{background:rgba(255,77,109,.15);border:1px solid rgba(255,77,109,.3);color:var(--red);padding:10px 16px;font-size:14px}
+.btnDang:hover{background:rgba(255,77,109,.25)}
+.btnSm{padding:8px 14px;font-size:13px;border-radius:8px;width:auto}
+
+/* ===== APP LAYOUT ===== */
+.appWrap{display:flex;min-height:100vh}
 .sidebar{width:260px;background:var(--bg2);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:24px 16px;position:fixed;top:0;left:0;height:100vh;z-index:100;transition:transform .3s ease;overflow-y:auto}
-.sblogo{display:flex;align-items:center;gap:10px;padding:8px 8px 28px;border-bottom:1px solid var(--border);margin-bottom:20px}
-.sblogo .li{width:38px;height:38px;background:linear-gradient(135deg,var(--acc),#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 16px var(--acc-g);flex-shrink:0}
-.sblogo span{font-family:var(--fd);font-size:18px;font-weight:700;background:linear-gradient(135deg,#fff 30%,var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.nsl{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt3);font-weight:600;padding:0 8px;margin:16px 0 8px}
-.nv{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:var(--rs);color:var(--txt2);text-decoration:none;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid transparent;user-select:none}
-.nv:hover{background:var(--card);color:var(--txt)}
-.nv.active{background:rgba(108,71,255,.15);color:var(--acc);border-color:rgba(108,71,255,.2)}
-.nv .ni{font-size:18px;width:22px;text-align:center;flex-shrink:0}
-.sbfoot{margin-top:auto;padding-top:20px;border-top:1px solid var(--border)}
-.sbu{display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:var(--rs);cursor:pointer;transition:background .2s}
-.sbu:hover{background:var(--card)}
-.uav{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#a855f7);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;overflow:hidden}
-.uav img{width:100%;height:100%;object-fit:cover;display:none}
-.ui-name{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.ui-id{font-size:11px;color:var(--txt3);font-family:monospace}
+.sbLogo{display:flex;align-items:center;gap:10px;padding:8px 8px 28px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.sbLogo .li{width:38px;height:38px;background:linear-gradient(135deg,var(--acc),#a855f7);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 0 16px var(--acc-g);flex-shrink:0}
+.sbLogo span{font-family:var(--fd);font-size:18px;font-weight:700;background:linear-gradient(135deg,#fff 30%,var(--acc));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+.navLabel{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--txt3);font-weight:600;padding:0 8px;margin:16px 0 8px}
+.navItem{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:var(--rs);color:var(--txt2);text-decoration:none;font-size:14px;font-weight:500;cursor:pointer;transition:all .2s;border:1px solid transparent;user-select:none}
+.navItem:hover{background:var(--card);color:var(--txt)}
+.navItem.active{background:rgba(108,71,255,.15);color:var(--acc);border-color:rgba(108,71,255,.2)}
+.navItem .ni{font-size:18px;width:22px;text-align:center;flex-shrink:0}
+.sbFoot{margin-top:auto;padding-top:20px;border-top:1px solid var(--border)}
+.sbUser{display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:var(--rs);cursor:pointer;transition:background .2s}
+.sbUser:hover{background:var(--card)}
+.avatar{width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--acc),#a855f7);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;flex-shrink:0;overflow:hidden}
+.avatar img{width:100%;height:100%;object-fit:cover;display:none}
+.uiName{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.uiId{font-size:11px;color:var(--txt3);font-family:monospace}
 
-/* MAIN */
 .main{flex:1;margin-left:260px;padding:32px;min-height:100vh}
 .page{display:none}
 .page.active{display:block;animation:fadeIn .3s ease}
-.ph{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
-.ptitle{font-family:var(--fd);font-size:26px;font-weight:700}
-.psub{color:var(--txt2);font-size:14px;margin-top:2px}
+.pHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px;gap:16px;flex-wrap:wrap}
+.pTitle{font-family:var(--fd);font-size:26px;font-weight:700}
+.pSub{color:var(--txt2);font-size:14px;margin-top:2px}
 
-/* CARDS */
+/* ===== CARDS ===== */
 .card{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;transition:border-color .2s}
 .card:hover{border-color:var(--border2)}
-.bcard{background:linear-gradient(135deg,#1a1030 0%,#0f0f1a 50%,#0d1a2e 100%);border:1px solid rgba(108,71,255,.3);border-radius:24px;padding:32px;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(108,71,255,.2)}
-.bcard::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(108,71,255,.25) 0%,transparent 70%);pointer-events:none}
-.bcard::after{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,212,170,.12) 0%,transparent 70%);pointer-events:none}
-.blabel{font-size:13px;color:var(--txt2);margin-bottom:8px;font-weight:500}
-.bamount{font-family:var(--fd);font-size:48px;font-weight:700;line-height:1;margin-bottom:4px}
-.bcode{font-size:13px;color:var(--acc2);margin-top:8px}
 
-/* ACTION GRID */
-.agrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
-.abtn{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--rs);padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s;color:var(--txt);font-size:13px;font-weight:500;font-family:var(--fb)}
-.abtn:hover:not(.dis){background:rgba(108,71,255,.15);border-color:rgba(108,71,255,.4);color:var(--acc);transform:translateY(-2px)}
-.abtn.dis{opacity:.5;cursor:not-allowed}
-.abtn .ai{font-size:24px;margin-bottom:8px}
+.balCard{background:linear-gradient(135deg,#1a1030 0%,#0f0f1a 50%,#0d1a2e 100%);border:1px solid rgba(108,71,255,.3);border-radius:24px;padding:32px;position:relative;overflow:hidden;box-shadow:0 0 40px rgba(108,71,255,.2)}
+.balCard::before{content:'';position:absolute;top:-60px;right:-60px;width:200px;height:200px;background:radial-gradient(circle,rgba(108,71,255,.25) 0%,transparent 70%);pointer-events:none}
+.balCard::after{content:'';position:absolute;bottom:-40px;left:-40px;width:160px;height:160px;background:radial-gradient(circle,rgba(0,212,170,.12) 0%,transparent 70%);pointer-events:none}
+.balLabel{font-size:13px;color:var(--txt2);margin-bottom:8px;font-weight:500}
+.balAmt{font-family:var(--fd);font-size:48px;font-weight:700;line-height:1;margin-bottom:4px}
+.balCode{font-size:13px;color:var(--acc2);margin-top:8px}
 
-/* STATS GRID */
-.sgrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
-.scard{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:20px}
-.slabel{font-size:12px;color:var(--txt2);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
-.sval{font-family:var(--fd);font-size:22px;font-weight:700}
+.actGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:24px}
+.actBtn{background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:var(--rs);padding:16px 8px;text-align:center;cursor:pointer;transition:all .2s;color:var(--txt);font-size:13px;font-weight:500;font-family:var(--fb)}
+.actBtn:hover:not(.dis){background:rgba(108,71,255,.15);border-color:rgba(108,71,255,.4);color:var(--acc);transform:translateY(-2px)}
+.actBtn.dis{opacity:.5;cursor:not-allowed}
+.actBtn .ai{font-size:24px;margin-bottom:8px}
 
-/* COINS */
-.cgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
-.ccrd{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:20px;transition:all .2s;cursor:pointer}
-.ccrd:hover{border-color:var(--border2);background:var(--card2);transform:translateY(-2px)}
-.chdr{display:flex;align-items:center;gap:12px;margin-bottom:16px}
-.cico{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
-.cname{font-weight:600;font-size:15px}
-.csym{color:var(--txt2);font-size:12px}
-.cbal{font-family:var(--fd);font-size:22px;font-weight:700;margin-bottom:4px}
-.cusd{font-size:13px;color:var(--txt2)}
+.statGrid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px}
+.statCard{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:20px}
+.statLabel{font-size:12px;color:var(--txt2);font-weight:500;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.statVal{font-family:var(--fd);font-size:22px;font-weight:700}
 
-/* TX */
-.txlist{display:flex;flex-direction:column;gap:8px}
-.txi{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);transition:border-color .2s}
-.txi:hover{border-color:var(--border2)}
-.txico{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
-.txico.send{background:rgba(255,77,109,.15)}
-.txico.recv{background:rgba(0,212,170,.15)}
-.txico.check{background:rgba(240,192,64,.15)}
-.txi-info{flex:1;min-width:0}
-.txi-title{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.txi-date{font-size:12px;color:var(--txt3);margin-top:2px}
-.txi-amt{text-align:right;flex-shrink:0}
-.txi-amt .am{font-size:15px;font-weight:600;font-family:var(--fd)}
+.coinGrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:16px}
+.coinCard{background:var(--card);border:1px solid var(--border);border-radius:var(--rs);padding:20px;transition:all .2s}
+.coinCard:hover{border-color:var(--border2);background:var(--card2);transform:translateY(-2px)}
+.coinHead{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.coinIco{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:20px}
+.coinName{font-weight:600;font-size:15px}
+.coinSym{color:var(--txt2);font-size:12px}
+.coinBal{font-family:var(--fd);font-size:22px;font-weight:700;margin-bottom:4px}
+.coinUsd{font-size:13px;color:var(--txt2)}
 
-/* MODAL */
-.moverlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
-.moverlay.open{opacity:1;pointer-events:all}
+/* ===== TX LIST ===== */
+.txList{display:flex;flex-direction:column;gap:8px}
+.txItem{display:flex;align-items:center;gap:14px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);transition:border-color .2s}
+.txItem:hover{border-color:var(--border2)}
+.txIco{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.txIco.send{background:rgba(255,77,109,.15)}
+.txIco.recv{background:rgba(0,212,170,.15)}
+.txInfo{flex:1;min-width:0}
+.txTitle{font-size:14px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.txDate{font-size:12px;color:var(--txt3);margin-top:2px}
+.txAmt{text-align:right;flex-shrink:0}
+.txAmt .am{font-size:15px;font-weight:600;font-family:var(--fd)}
+.empty{color:var(--txt3);text-align:center;padding:40px 20px;font-size:14px}
+
+/* ===== MODAL ===== */
+.mOverlay{position:fixed;inset:0;background:rgba(0,0,0,.75);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+.mOverlay.open{opacity:1;pointer-events:all}
 .modal{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:32px;width:100%;max-width:480px;max-height:90vh;overflow-y:auto;transform:translateY(20px) scale(.97);transition:transform .25s}
-.moverlay.open .modal{transform:translateY(0) scale(1)}
-.mhdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
-.mtitle{font-family:var(--fd);font-size:20px;font-weight:700}
-.mclose{background:var(--bg2);border:1px solid var(--border);color:var(--txt2);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.mclose:hover{color:var(--txt);border-color:var(--border2)}
+.mOverlay.open .modal{transform:translateY(0) scale(1)}
+.mHead{display:flex;align-items:center;justify-content:space-between;margin-bottom:24px}
+.mTitle{font-family:var(--fd);font-size:20px;font-weight:700}
+.mClose{background:var(--bg2);border:1px solid var(--border);color:var(--txt2);width:34px;height:34px;border-radius:8px;cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;transition:all .2s}
+.mClose:hover{color:var(--txt);border-color:var(--border2)}
 
-/* LEADERBOARD */
-.lbi{display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px;transition:all .2s}
-.lbi:hover{border-color:var(--border2)}
+/* ===== LEADERBOARD ===== */
+.lbItem{display:flex;align-items:center;gap:16px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:var(--rs);margin-bottom:8px;transition:all .2s}
+.lbItem:hover{border-color:var(--border2)}
 .rank{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0}
 .r1{background:rgba(240,192,64,.2);color:var(--gold);border:1px solid rgba(240,192,64,.3)}
 .r2{background:rgba(192,192,192,.15);color:#c0c0c0;border:1px solid rgba(192,192,192,.2)}
 .r3{background:rgba(205,127,50,.15);color:#cd7f32;border:1px solid rgba(205,127,50,.2)}
 .rn{background:var(--bg2);color:var(--txt3);border:1px solid var(--border)}
 
-/* ADMIN */
-.admin-badge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(240,192,64,.15);border:1px solid rgba(240,192,64,.3);border-radius:20px;font-size:12px;font-weight:600;color:var(--gold)}
-.atable{width:100%;border-collapse:collapse;font-size:14px}
-.atable th{text-align:left;padding:12px 16px;color:var(--txt2);font-size:12px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border)}
-.atable td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--txt)}
-.atable tr:last-child td{border-bottom:none}
-.atable tr:hover td{background:rgba(255,255,255,.03)}
+/* ===== ADMIN ===== */
+.ownerBadge{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;background:rgba(240,192,64,.15);border:1px solid rgba(240,192,64,.3);border-radius:20px;font-size:12px;font-weight:600;color:var(--gold)}
+.aTable{width:100%;border-collapse:collapse;font-size:14px}
+.aTable th{text-align:left;padding:12px 16px;color:var(--txt2);font-size:12px;text-transform:uppercase;letter-spacing:.5px;font-weight:600;border-bottom:1px solid var(--border)}
+.aTable td{padding:12px 16px;border-bottom:1px solid var(--border);color:var(--txt)}
+.aTable tr:last-child td{border-bottom:none}
+.aTable tr:hover td{background:rgba(255,255,255,.03)}
+.tblWrap{overflow-x:auto}
 
-/* BADGES */
+/* ===== BADGES ===== */
 .badge{display:inline-flex;align-items:center;padding:3px 8px;border-radius:20px;font-size:11px;font-weight:600}
-.bs{background:rgba(0,212,170,.15);color:var(--acc2)}
-.bd{background:rgba(255,77,109,.15);color:var(--red)}
-.bw{background:rgba(240,192,64,.15);color:var(--gold)}
-.bi{background:rgba(108,71,255,.15);color:var(--acc)}
+.bS{background:rgba(0,212,170,.15);color:var(--acc2)}
+.bD{background:rgba(255,77,109,.15);color:var(--red)}
+.bW{background:rgba(240,192,64,.15);color:var(--gold)}
+.bI{background:rgba(108,71,255,.15);color:var(--acc)}
 
-/* SETTINGS */
-.ssec{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:20px}
-.sstitle{font-family:var(--fd);font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
-.avthumb{width:52px;height:52px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s;object-fit:cover}
-.avthumb:hover{transform:scale(1.08)}
-.avthumb.sel{border-color:var(--acc)}
-.cswat{width:40px;height:40px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:transform .2s,border-color .2s;position:relative}
-.cswat:hover{transform:scale(1.1)}
-.cswat.sel{border-color:var(--acc)}
-.cswat.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.5)}
+/* ===== SETTINGS ===== */
+.sSection{background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:24px;margin-bottom:20px}
+.sTitle{font-family:var(--fd);font-size:16px;font-weight:700;margin-bottom:20px;display:flex;align-items:center;gap:10px}
+.avThumb{width:52px;height:52px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:border-color .2s,transform .2s;object-fit:cover}
+.avThumb:hover{transform:scale(1.08)}
+.avThumb.sel{border-color:var(--acc)}
+.cSwatch{width:40px;height:40px;border-radius:10px;cursor:pointer;border:2px solid transparent;transition:transform .2s,border-color .2s;position:relative}
+.cSwatch:hover{transform:scale(1.1)}
+.cSwatch.sel{border-color:var(--acc)}
+.cSwatch.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.5)}
 
-/* CHECK */
-.chcard{background:linear-gradient(135deg,#1a1030 0%,#0d1a2e 100%);border:1px solid rgba(108,71,255,.3);border-radius:20px;padding:28px;margin-bottom:12px;position:relative;overflow:hidden}
-.chcard::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(108,71,255,.2) 0%,transparent 70%)}
-.chamt{font-family:var(--fd);font-size:36px;font-weight:700}
-.chfrom{font-size:14px;color:var(--txt2);margin-top:8px}
-.chid{font-family:monospace;font-size:12px;color:var(--txt3);margin-top:6px}
+/* ===== CHECKS ===== */
+.checkCard{background:linear-gradient(135deg,#1a1030 0%,#0d1a2e 100%);border:1px solid rgba(108,71,255,.3);border-radius:20px;padding:28px;margin-bottom:12px;position:relative;overflow:hidden}
+.checkCard::before{content:'';position:absolute;top:-30px;right:-30px;width:120px;height:120px;background:radial-gradient(circle,rgba(108,71,255,.2) 0%,transparent 70%)}
+.checkAmt{font-family:var(--fd);font-size:36px;font-weight:700}
+.checkDesc{font-size:14px;color:var(--txt2);margin-top:8px}
+.checkId{font-family:monospace;font-size:12px;color:var(--txt3);margin-top:6px}
 
-/* TOAST */
-#toast-c{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none}
-.toast{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--border2);border-radius:var(--rs);padding:14px 18px;min-width:280px;box-shadow:0 8px 32px rgba(0,0,0,.5);animation:toastIn .3s ease;pointer-events:all}
-.toast.s{border-left:3px solid var(--acc2)}
-.toast.e{border-left:3px solid var(--red)}
-.toast.i{border-left:3px solid var(--acc)}
-.toast.w{border-left:3px solid var(--gold)}
-
-/* LOADER */
-#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:9999;flex-direction:column;gap:16px}
-#loader .li{width:64px;height:64px;background:linear-gradient(135deg,var(--acc),#a855f7);border-radius:18px;display:flex;align-items:center;justify-content:center;font-size:28px;box-shadow:0 0 40px var(--acc-g);animation:pulse 1.5s infinite}
-
-/* MENU TOGGLE */
-.mtgl{display:none;position:fixed;top:16px;left:16px;z-index:200;background:var(--card);border:1px solid var(--border);border-radius:10px;width:42px;height:42px;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--txt)}
-.sbkdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
-
-/* TABS */
+/* ===== TABS ===== */
 .tabs{display:flex;gap:4px;background:var(--bg2);border-radius:var(--rs);padding:4px;margin-bottom:24px}
 .tab{flex:1;padding:9px 16px;background:transparent;border:none;cursor:pointer;color:var(--txt2);font-size:14px;font-weight:500;border-radius:8px;transition:all .2s;font-family:var(--fb)}
 .tab.active{background:var(--card);color:var(--txt);box-shadow:0 2px 8px rgba(0,0,0,.3)}
 
-/* BLOCKED */
-.blocked{background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.25);border-radius:var(--rs);padding:16px;color:var(--red);font-size:14px;display:flex;align-items:center;gap:10px;margin-bottom:24px}
+/* ===== BLOCKED NOTICE ===== */
+.blockedNotice{background:rgba(255,77,109,.1);border:1px solid rgba(255,77,109,.25);border-radius:var(--rs);padding:16px;color:var(--red);font-size:14px;display:flex;align-items:center;gap:10px;margin-bottom:24px}
 
-/* AMT WRAP */
-.amtwrap{position:relative}
-.amtwrap .cbadge{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600;color:var(--txt2)}
+/* ===== AMOUNT INPUT ===== */
+.amtWrap{position:relative}
+.amtWrap .cBadge{position:absolute;right:14px;top:50%;transform:translateY(-50%);background:var(--bg);border:1px solid var(--border);border-radius:6px;padding:4px 10px;font-size:13px;font-weight:600;color:var(--txt2)}
 
-/* ANIMATIONS */
-@keyframes slideUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes toastIn{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
-@keyframes spin{to{transform:rotate(360deg)}}
+/* ===== MOBILE ===== */
+.mToggle{display:none;position:fixed;top:16px;left:16px;z-index:200;background:var(--card);border:1px solid var(--border);border-radius:10px;width:42px;height:42px;align-items:center;justify-content:center;cursor:pointer;font-size:20px;color:var(--txt)}
+.sbBackdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
 
-/* RESPONSIVE */
-@media(max-width:900px){.sgrid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.statGrid{grid-template-columns:repeat(2,1fr)}}
 @media(max-width:768px){
   .sidebar{transform:translateX(-100%)}
   .sidebar.open{transform:translateX(0)}
-  .sbkdrop.open{display:block}
-  .mtgl{display:flex}
+  .sbBackdrop.open{display:block}
+  .mToggle{display:flex}
   .main{margin-left:0;padding:20px 16px;padding-top:72px}
-  .bamount{font-size:36px}
-  .agrid{grid-template-columns:repeat(4,1fr)}
-  .sgrid{grid-template-columns:repeat(2,1fr)}
-  .cgrid{grid-template-columns:repeat(2,1fr)}
+  .balAmt{font-size:36px}
+  .actGrid{grid-template-columns:repeat(4,1fr)}
+  .statGrid{grid-template-columns:repeat(2,1fr)}
+  .coinGrid{grid-template-columns:repeat(2,1fr)}
   .modal{padding:24px}
-  .acard{padding:32px 24px}
-  .atable{font-size:12px}
-  .atable th,.atable td{padding:10px}
+  .authCard{padding:32px 24px}
+  .aTable{font-size:12px}
+  .aTable th,.aTable td{padding:10px}
 }
 @media(max-width:480px){
-  .cgrid{grid-template-columns:1fr}
-  .agrid{grid-template-columns:repeat(4,1fr)}
-  .agrid .abtn{padding:12px 4px;font-size:11px}
+  .coinGrid{grid-template-columns:1fr}
+  .actGrid .actBtn{padding:12px 4px;font-size:11px}
 }
 </style>
 </head>
 <body>
 
 <!-- ERROR BANNER -->
-<div id="err-banner" style="display:none;position:fixed;inset:0;z-index:99999;background:#0a0a0f;color:#fff;padding:32px;font-family:monospace;overflow:auto;white-space:pre-wrap;font-size:13px;line-height:1.6">
-  <div style="font-family:'Space Grotesk',sans-serif;font-size:22px;font-weight:700;color:#ff4d6d;margin-bottom:16px">⚠️ Ошибка загрузки BlackVault</div>
-  <div id="err-text" style="color:#ccc"></div>
-  <div style="margin-top:24px;color:#8888aa;font-size:12px">Если ошибка связана с auth/unauthorized-domain — добавь этот домен в Firebase Console → Authentication → Settings → Authorized domains.</div>
-  <button onclick="location.reload()" style="margin-top:20px;padding:10px 20px;background:#6c47ff;color:#fff;border:none;border-radius:8px;cursor:pointer;font-family:Inter,sans-serif;font-weight:600">🔄 Перезагрузить страницу</button>
+<div id="errBanner">
+  <div class="et">⚠️ Ошибка загрузки BlackVault</div>
+  <div class="em" id="errText"></div>
+  <button onclick="location.reload()">🔄 Перезагрузить страницу</button>
 </div>
-
-<script>
-// Global error handler — shows readable error instead of blank page
-function bvShowError(msg){
-  var l=document.getElementById('loader'); if(l) l.style.display='none';
-  var b=document.getElementById('err-banner'); var t=document.getElementById('err-text');
-  if(b&&t){ t.textContent += (t.textContent?'\n\n':'') + msg; b.style.display='block'; }
-}
-window.addEventListener('error', function(e){
-  bvShowError('JS Error: ' + (e.message||e) + (e.filename ? ('\nFile: '+e.filename+':'+e.lineno+':'+e.colno) : ''));
-});
-window.addEventListener('unhandledrejection', function(e){
-  bvShowError('Promise Error: ' + (e.reason && e.reason.message ? e.reason.message : e.reason));
-});
-// Fallback: if nothing happens within 8s, show diagnostic
-setTimeout(function(){
-  var l=document.getElementById('loader');
-  var a=document.getElementById('authWrap');
-  var w=document.getElementById('appWrap');
-  if(l && l.style.display!=='none' && (!a||a.style.display==='none') && (!w||w.style.display==='none')){
-    bvShowError('Приложение не загрузилось за 8 секунд.\nВозможные причины:\n- Нет подключения к firebase (gstatic.com / firestore.googleapis.com заблокирован)\n- Ошибка в конфигурации Firebase\n- Проблема с интернет-соединением\n\nПроверь подключение к интернету и обнови страницу (Ctrl+Shift+R).');
-  }
-}, 8000);
-</script>
 
 <!-- LOADER -->
 <div id="loader">
@@ -272,83 +255,89 @@ setTimeout(function(){
 </div>
 
 <!-- TOASTS -->
-<div id="toast-c"></div>
+<div id="toastBox"></div>
 
-<!-- ===== AUTH ===== -->
+<!-- ============ AUTH ============ -->
 <div id="authWrap" style="display:none">
 
   <!-- LOGIN -->
-  <div id="pg-login" class="acard">
-    <div class="alogo"><div class="li">🔐</div><span class="lt">BlackVault</span></div>
-    <div class="atitle">Добро пожаловать</div>
-    <div class="asub">Войдите в свой криптокошелёк</div>
-    <div class="fg"><label class="fl">Email</label><input id="l-email" class="fi" type="email" placeholder="you@example.com"/></div>
-    <div class="fg"><label class="fl">Пароль</label><input id="l-pass" class="fi" type="password" placeholder="••••••••"/></div>
-    <button class="btn bprim" onclick="loginEmail()">Войти</button>
-    <div class="divider">или</div>
-    <button class="btn bgoog" onclick="loginGoogle()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"/> Войти через Google
-    </button>
-    <div class="afooter">Нет аккаунта? <a onclick="ap('pg-reg')">Зарегистрироваться</a></div>
+  <div id="pgLogin" class="authWrap">
+    <div class="authCard">
+      <div class="aLogo"><div class="li">🔐</div><span class="lt">BlackVault</span></div>
+      <div class="aTitle">Добро пожаловать</div>
+      <div class="aSub">Войдите в свой криптокошелёк</div>
+      <div class="fGroup"><label class="fLabel">Email</label><input id="loginEmail" class="fInput" type="email" placeholder="you@example.com"/></div>
+      <div class="fGroup"><label class="fLabel">Пароль</label><input id="loginPass" class="fInput" type="password" placeholder="••••••••"/></div>
+      <button class="btn btnPrim" id="btnLogin">Войти</button>
+      <div class="divider">или</div>
+      <button class="btn btnGoog" id="btnGoogle1">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"/> Войти через Google
+      </button>
+      <div class="aFooter">Нет аккаунта? <a id="toRegister">Зарегистрироваться</a></div>
+    </div>
   </div>
 
   <!-- REGISTER -->
-  <div id="pg-reg" class="acard" style="display:none">
-    <div class="alogo"><div class="li">🔐</div><span class="lt">BlackVault</span></div>
-    <div class="atitle">Создать аккаунт</div>
-    <div class="asub">Присоединитесь к BlackVault</div>
-    <div class="fg"><label class="fl">Email</label><input id="r-email" class="fi" type="email" placeholder="you@example.com"/></div>
-    <div class="fg"><label class="fl">Пароль</label><input id="r-pass" class="fi" type="password" placeholder="Минимум 6 символов"/></div>
-    <div class="fg"><label class="fl">Повторите пароль</label><input id="r-pass2" class="fi" type="password" placeholder="••••••••"/></div>
-    <button class="btn bprim" onclick="registerEmail()">Создать аккаунт</button>
-    <div class="divider">или</div>
-    <button class="btn bgoog" onclick="loginGoogle()">
-      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"/> Войти через Google
-    </button>
-    <div class="afooter">Уже есть аккаунт? <a onclick="ap('pg-login')">Войти</a></div>
+  <div id="pgRegister" class="authWrap" style="display:none">
+    <div class="authCard">
+      <div class="aLogo"><div class="li">🔐</div><span class="lt">BlackVault</span></div>
+      <div class="aTitle">Создать аккаунт</div>
+      <div class="aSub">Присоединитесь к BlackVault</div>
+      <div class="fGroup"><label class="fLabel">Email</label><input id="regEmail" class="fInput" type="email" placeholder="you@example.com"/></div>
+      <div class="fGroup"><label class="fLabel">Пароль</label><input id="regPass" class="fInput" type="password" placeholder="Минимум 6 символов"/></div>
+      <div class="fGroup"><label class="fLabel">Повторите пароль</label><input id="regPass2" class="fInput" type="password" placeholder="••••••••"/></div>
+      <button class="btn btnPrim" id="btnRegister">Создать аккаунт</button>
+      <div class="divider">или</div>
+      <button class="btn btnGoog" id="btnGoogle2">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="18"/> Войти через Google
+      </button>
+      <div class="aFooter">Уже есть аккаунт? <a id="toLogin">Войти</a></div>
+    </div>
   </div>
 
   <!-- USERNAME -->
-  <div id="pg-uname" class="acard" style="display:none">
-    <div class="alogo"><div class="li">🔐</div><span class="lt">BlackVault</span></div>
-    <div class="atitle">Выберите никнейм</div>
-    <div class="asub">Он будет виден другим пользователям</div>
-    <div class="fg"><label class="fl">Никнейм</label><input id="uname-inp" class="fi" type="text" placeholder="например: CryptoKing" maxlength="24"/></div>
-    <button class="btn bprim" onclick="saveUname()">Продолжить →</button>
+  <div id="pgUsername" class="authWrap" style="display:none">
+    <div class="authCard">
+      <div class="aLogo"><div class="li">🔐</div><span class="lt">BlackVault</span></div>
+      <div class="aTitle">Выберите никнейм</div>
+      <div class="aSub">Он будет виден другим пользователям</div>
+      <div class="fGroup"><label class="fLabel">Никнейм</label><input id="usernameInput" class="fInput" type="text" placeholder="например: CryptoKing" maxlength="24"/></div>
+      <button class="btn btnPrim" id="btnSaveUsername">Продолжить →</button>
+    </div>
   </div>
 
 </div>
 
-<!-- ===== APP ===== -->
+<!-- ============ APP ============ -->
 <div id="appWrap" style="display:none">
 
-  <button class="mtgl" onclick="toggleSB()">☰</button>
-  <div class="sbkdrop" id="sbkdrop" onclick="closeSB()"></div>
+  <button class="mToggle" id="btnMenuToggle">☰</button>
+  <div class="sbBackdrop" id="sbBackdrop"></div>
 
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
-    <div class="sblogo"><div class="li">🔐</div><span>BlackVault</span></div>
+    <div class="sbLogo"><div class="li">🔐</div><span>BlackVault</span></div>
 
-    <span class="nsl">Кошелёк</span>
-    <div class="nv active" onclick="nav('pg-home')"><span class="ni">🏠</span>Главная</div>
-    <div class="nv" onclick="nav('pg-assets')"><span class="ni">💎</span>Активы</div>
-    <div class="nv" onclick="nav('pg-transfer')"><span class="ni">🔄</span>Перевод</div>
-    <div class="nv" onclick="nav('pg-checks')"><span class="ni">🧾</span>Чеки</div>
-    <div class="nv" onclick="nav('pg-history')"><span class="ni">📋</span>История</div>
+    <span class="navLabel">Кошелёк</span>
+    <div class="navItem active" data-page="pgHome"><span class="ni">🏠</span>Главная</div>
+    <div class="navItem" data-page="pgAssets"><span class="ni">💎</span>Активы</div>
+    <div class="navItem" data-page="pgTransfer"><span class="ni">🔄</span>Перевод</div>
+    <div class="navItem" data-page="pgChecks"><span class="ni">🧾</span>Чеки</div>
+    <div class="navItem" data-page="pgHistory"><span class="ni">📋</span>История</div>
 
-    <span class="nsl">Сообщество</span>
-    <div class="nv" onclick="nav('pg-lb')"><span class="ni">🏆</span>Рейтинг Forbes</div>
+    <span class="navLabel">Сообщество</span>
+    <div class="navItem" data-page="pgLeaderboard"><span class="ni">🏆</span>Рейтинг Forbes</div>
 
-    <span class="nsl" id="adm-nsl" style="display:none">Администратор</span>
-    <div class="nv" id="adm-nav" style="display:none" onclick="nav('pg-admin')"><span class="ni">👑</span>Панель владельца</div>
+    <span class="navLabel" id="adminLabel" style="display:none">Администратор</span>
+    <div class="navItem" id="adminNav" style="display:none" data-page="pgAdmin"><span class="ni">👑</span>Панель владельца</div>
 
-    <div class="sbfoot">
-      <div class="nv" onclick="nav('pg-settings')"><span class="ni">⚙️</span>Настройки</div>
-      <div class="sbu" onclick="nav('pg-settings')">
-        <div class="uav" id="sb-av"><span id="sb-av-txt">?</span><img id="sb-av-img"/></div>
+    <div class="sbFoot">
+      <div class="navItem" data-page="pgSettings"><span class="ni">⚙️</span>Настройки</div>
+      <div class="sbUser" data-page="pgSettings">
+        <div class="avatar" id="sbAvatar"><span id="sbAvatarTxt">?</span><img id="sbAvatarImg"/></div>
         <div style="flex:1;min-width:0">
-          <div class="ui-name" id="sb-uname">—</div>
-          <div class="ui-id" id="sb-code">BV-??????</div>
+          <div class="uiName" id="sbUsername">—</div>
+          <div class="uiId" id="sbCode">BV-??????</div>
         </div>
       </div>
     </div>
@@ -358,95 +347,95 @@ setTimeout(function(){
   <main class="main">
 
     <!-- HOME -->
-    <div class="page active" id="pg-home">
-      <div class="ph">
+    <div class="page active" id="pgHome">
+      <div class="pHead">
         <div>
-          <div class="ptitle" id="h-greet">Привет 👋</div>
-          <div class="psub" id="h-date"></div>
+          <div class="pTitle" id="homeGreeting">Привет 👋</div>
+          <div class="pSub" id="homeDate"></div>
         </div>
-        <div id="h-ownbadge" style="display:none"><span class="admin-badge">👑 Владелец</span></div>
+        <div id="homeOwnerBadge" style="display:none"><span class="ownerBadge">👑 Владелец</span></div>
       </div>
 
-      <div id="h-blocked" class="blocked" style="display:none">🔒 Ваш кошелёк заблокирован. Обратитесь в поддержку.</div>
+      <div id="homeBlocked" class="blockedNotice" style="display:none">🔒 Ваш кошелёк заблокирован администратором. Обратитесь в поддержку.</div>
 
-      <div class="bcard" style="margin-bottom:24px">
-        <div class="blabel">Общий баланс</div>
-        <div class="bamount">$<span id="h-bal">0.00</span></div>
-        <div class="bcode" id="h-code">🔑 BV-??????</div>
-        <div class="agrid">
-          <div class="abtn dis" onclick="cs('Пополнение')"><div class="ai">📥</div>Пополнить</div>
-          <div class="abtn" onclick="nav('pg-transfer')"><div class="ai">🔄</div>Перевод</div>
-          <div class="abtn dis" onclick="cs('Вывод')"><div class="ai">📤</div>Вывести</div>
-          <div class="abtn" onclick="nav('pg-checks')"><div class="ai">🧾</div>Чек</div>
+      <div class="balCard" style="margin-bottom:24px">
+        <div class="balLabel">Общий баланс</div>
+        <div class="balAmt">$<span id="homeBalance">0.00</span></div>
+        <div class="balCode" id="homeCode">🔑 Код: BV-??????</div>
+        <div class="actGrid">
+          <div class="actBtn dis" data-soon="Пополнение"><div class="ai">📥</div>Пополнить</div>
+          <div class="actBtn" data-page="pgTransfer"><div class="ai">🔄</div>Перевод</div>
+          <div class="actBtn dis" data-soon="Вывод"><div class="ai">📤</div>Вывести</div>
+          <div class="actBtn" data-page="pgChecks"><div class="ai">🧾</div>Чек</div>
         </div>
       </div>
 
-      <div class="sgrid" style="margin-bottom:24px">
-        <div class="scard"><div class="slabel">USD</div><div class="sval" id="h-usd">$0.00</div></div>
-        <div class="scard"><div class="slabel">TON</div><div class="sval" id="h-ton">0</div></div>
-        <div class="scard"><div class="slabel">BTC</div><div class="sval" id="h-btc">0</div></div>
-        <div class="scard"><div class="slabel">ETH</div><div class="sval" id="h-eth">0</div></div>
+      <div class="statGrid">
+        <div class="statCard"><div class="statLabel">USD</div><div class="statVal" id="homeUSD">$0.00</div></div>
+        <div class="statCard"><div class="statLabel">TON</div><div class="statVal" id="homeTON">0</div></div>
+        <div class="statCard"><div class="statLabel">BTC</div><div class="statVal" id="homeBTC">0</div></div>
+        <div class="statCard"><div class="statLabel">ETH</div><div class="statVal" id="homeETH">0</div></div>
       </div>
 
       <div class="card">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
           <div style="font-family:var(--fd);font-weight:700;font-size:16px">Последние операции</div>
-          <span onclick="nav('pg-history')" style="font-size:13px;color:var(--acc);cursor:pointer">Все →</span>
+          <span class="navItem" data-page="pgHistory" style="padding:0;font-size:13px;color:var(--acc);background:none;border:none">Все →</span>
         </div>
-        <div class="txlist" id="h-txlist"><div style="color:var(--txt3);text-align:center;padding:24px;font-size:14px">Операций ещё нет</div></div>
+        <div class="txList" id="homeTxList"><div class="empty">Операций ещё нет</div></div>
       </div>
     </div>
 
     <!-- ASSETS -->
-    <div class="page" id="pg-assets">
-      <div class="ph"><div><div class="ptitle">💎 Мои активы</div><div class="psub">Ваш крипто-портфель</div></div></div>
-      <div class="cgrid" id="cgrid"></div>
+    <div class="page" id="pgAssets">
+      <div class="pHead"><div><div class="pTitle">💎 Мои активы</div><div class="pSub">Ваш крипто-портфель</div></div></div>
+      <div class="coinGrid" id="coinGrid"></div>
     </div>
 
     <!-- TRANSFER -->
-    <div class="page" id="pg-transfer">
-      <div class="ph"><div><div class="ptitle">🔄 Перевод</div><div class="psub">Отправьте средства другому пользователю</div></div></div>
+    <div class="page" id="pgTransfer">
+      <div class="pHead"><div><div class="pTitle">🔄 Перевод</div><div class="pSub">Отправьте средства другому пользователю</div></div></div>
       <div class="card" style="max-width:480px">
-        <div class="fg"><label class="fl">Код получателя (BV-XXXXXX)</label><input class="fi" id="tr-to" placeholder="BV-ABC123" style="text-transform:uppercase"/></div>
-        <div class="fg">
-          <label class="fl">Валюта</label>
-          <select class="fi" id="tr-cur" onchange="document.getElementById('tr-cbadge').textContent=this.value">
+        <div class="fGroup"><label class="fLabel">Код получателя (BV-XXXXXX)</label><input class="fInput" id="trTo" placeholder="BV-ABC123" style="text-transform:uppercase"/></div>
+        <div class="fGroup">
+          <label class="fLabel">Валюта</label>
+          <select class="fInput" id="trCur">
             <option value="USD">💵 USD — Доллар</option>
             <option value="TON">💎 TON — Toncoin</option>
             <option value="BTC">₿ BTC — Bitcoin</option>
             <option value="ETH">⟠ ETH — Ethereum</option>
           </select>
         </div>
-        <div class="fg">
-          <label class="fl">Сумма</label>
-          <div class="amtwrap">
-            <input class="fi" id="tr-amt" type="number" placeholder="0.00" style="padding-right:70px"/>
-            <span class="cbadge" id="tr-cbadge">USD</span>
+        <div class="fGroup">
+          <label class="fLabel">Сумма</label>
+          <div class="amtWrap">
+            <input class="fInput" id="trAmt" type="number" placeholder="0.00" style="padding-right:70px"/>
+            <span class="cBadge" id="trCurBadge">USD</span>
           </div>
         </div>
-        <div class="fg"><label class="fl">Комментарий</label><input class="fi" id="tr-comment" placeholder="За кофе ☕"/></div>
+        <div class="fGroup"><label class="fLabel">Комментарий</label><input class="fInput" id="trComment" placeholder="За кофе ☕"/></div>
         <div style="background:var(--bg2);border-radius:var(--rs);padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--txt2)">ℹ️ Перевод мгновенный. Комиссия: 0%</div>
-        <button class="btn bprim" onclick="doTransfer()">Отправить перевод</button>
+        <button class="btn btnPrim" id="btnTransfer">Отправить перевод</button>
       </div>
     </div>
 
     <!-- CHECKS -->
-    <div class="page" id="pg-checks">
-      <div class="ph">
-        <div><div class="ptitle">🧾 Чеки</div><div class="psub">Создавайте и принимайте платежи</div></div>
-        <button class="btn bprim bsm" onclick="om('m-newcheck')">+ Создать чек</button>
+    <div class="page" id="pgChecks">
+      <div class="pHead">
+        <div><div class="pTitle">🧾 Чеки</div><div class="pSub">Создавайте и принимайте платежи</div></div>
+        <button class="btn btnPrim btnSm" id="btnOpenCheckModal">+ Создать чек</button>
       </div>
       <div class="tabs">
-        <button class="tab active" onclick="stab('t-mychk','t-inchk',this)">Мои чеки</button>
-        <button class="tab" onclick="stab('t-inchk','t-mychk',this)">Оплатить чек</button>
+        <button class="tab active" data-tab="tabMyChecks">Мои чеки</button>
+        <button class="tab" data-tab="tabPayCheck">Оплатить чек</button>
       </div>
-      <div id="t-mychk"><div id="mychk-list"><div style="color:var(--txt3);text-align:center;padding:40px;font-size:14px">Вы ещё не создавали чеки</div></div></div>
-      <div id="t-inchk" style="display:none">
-        <div class="card" style="max-width:480px;margin-bottom:16px">
-          <div class="fg"><label class="fl">ID чека</label>
+      <div id="tabMyChecks"><div id="myChecksList"><div class="empty">Вы ещё не создавали чеки</div></div></div>
+      <div id="tabPayCheck" style="display:none">
+        <div class="card" style="max-width:480px">
+          <div class="fGroup"><label class="fLabel">ID чека</label>
             <div style="display:flex;gap:10px">
-              <input class="fi" id="pay-chk-id" placeholder="Введите ID чека"/>
-              <button class="btn bprim bsm" onclick="payCheck()" style="white-space:nowrap">Оплатить</button>
+              <input class="fInput" id="payCheckId" placeholder="Введите ID чека"/>
+              <button class="btn btnPrim btnSm" id="btnPayCheck" style="white-space:nowrap">Оплатить</button>
             </div>
           </div>
         </div>
@@ -454,581 +443,918 @@ setTimeout(function(){
     </div>
 
     <!-- HISTORY -->
-    <div class="page" id="pg-history">
-      <div class="ph"><div><div class="ptitle">📋 История</div><div class="psub">Все ваши транзакции</div></div></div>
-      <div class="card"><div class="txlist" id="hist-list"><div style="color:var(--txt3);text-align:center;padding:40px;font-size:14px">Нет операций</div></div></div>
+    <div class="page" id="pgHistory">
+      <div class="pHead"><div><div class="pTitle">📋 История</div><div class="pSub">Все ваши транзакции</div></div></div>
+      <div class="card"><div class="txList" id="historyList"><div class="empty">Нет операций</div></div></div>
     </div>
 
     <!-- LEADERBOARD -->
-    <div class="page" id="pg-lb">
-      <div class="ph"><div><div class="ptitle">🏆 Рейтинг Forbes</div><div class="psub">Богатейшие пользователи BlackVault</div></div></div>
-      <div class="card"><div id="lb-list"><div style="color:var(--txt3);text-align:center;padding:40px;font-size:14px">Загрузка...</div></div></div>
+    <div class="page" id="pgLeaderboard">
+      <div class="pHead"><div><div class="pTitle">🏆 Рейтинг Forbes</div><div class="pSub">Богатейшие пользователи BlackVault</div></div></div>
+      <div class="card"><div id="leaderboardList"><div class="empty">Загрузка...</div></div></div>
     </div>
 
     <!-- ADMIN -->
-    <div class="page" id="pg-admin">
-      <div class="ph">
-        <div><div class="ptitle">👑 Панель владельца</div><div class="psub">Полный контроль над системой</div></div>
-        <span class="admin-badge">OWNER</span>
+    <div class="page" id="pgAdmin">
+      <div class="pHead">
+        <div><div class="pTitle">👑 Панель владельца</div><div class="pSub">Полный контроль над системой</div></div>
+        <span class="ownerBadge">OWNER</span>
       </div>
       <div class="tabs">
-        <button class="tab active" onclick="stab('adm-wallets','adm-tx,adm-give',this)">Кошельки</button>
-        <button class="tab" onclick="stab('adm-tx','adm-wallets,adm-give',this)">Транзакции</button>
-        <button class="tab" onclick="stab('adm-give','adm-wallets,adm-tx',this)">Выдать деньги</button>
+        <button class="tab active" data-tab="tabAdminWallets">Кошельки</button>
+        <button class="tab" data-tab="tabAdminTx">Транзакции</button>
+        <button class="tab" data-tab="tabAdminGive">Выдать деньги</button>
       </div>
-      <div id="adm-wallets">
-        <div class="card" style="overflow-x:auto">
-          <table class="atable"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Действия</th></tr></thead>
-          <tbody id="adm-wal-body"><tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:32px">Загрузка...</td></tr></tbody></table>
+
+      <div id="tabAdminWallets">
+        <div class="card tblWrap">
+          <table class="aTable"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Действия</th></tr></thead>
+          <tbody id="adminWalletsBody"><tr><td colspan="5" class="empty">Загрузка...</td></tr></tbody></table>
         </div>
       </div>
-      <div id="adm-tx" style="display:none">
-        <div class="card" style="overflow-x:auto">
-          <table class="atable"><thead><tr><th>От</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr></thead>
-          <tbody id="adm-tx-body"><tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:32px">Загрузка...</td></tr></tbody></table>
+      <div id="tabAdminTx" style="display:none">
+        <div class="card tblWrap">
+          <table class="aTable"><thead><tr><th>От кого</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr></thead>
+          <tbody id="adminTxBody"><tr><td colspan="5" class="empty">Загрузка...</td></tr></tbody></table>
         </div>
       </div>
-      <div id="adm-give" style="display:none">
+      <div id="tabAdminGive" style="display:none">
         <div class="card" style="max-width:480px">
-          <div style="font-family:var(--fd);font-weight:700;margin-bottom:20px;font-size:16px">💰 Начислить деньги</div>
-          <div class="fg"><label class="fl">Валюта</label>
-            <select class="fi" id="adm-cur"><option value="USD">USD</option><option value="TON">TON</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select>
+          <div style="font-family:var(--fd);font-weight:700;margin-bottom:20px;font-size:16px">💰 Начислить деньги себе</div>
+          <div class="fGroup"><label class="fLabel">Валюта</label>
+            <select class="fInput" id="adminCur"><option value="USD">USD</option><option value="TON">TON</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select>
           </div>
-          <div class="fg"><label class="fl">Сумма</label><input class="fi" id="adm-amt" type="number" placeholder="0.00"/></div>
-          <button class="btn bprim" onclick="admGive()">Начислить себе</button>
+          <div class="fGroup"><label class="fLabel">Сумма</label><input class="fInput" id="adminAmt" type="number" placeholder="0.00"/></div>
+          <button class="btn btnPrim" id="btnAdminGive">Начислить</button>
         </div>
       </div>
     </div>
 
     <!-- SETTINGS -->
-    <div class="page" id="pg-settings">
-      <div class="ph"><div><div class="ptitle">⚙️ Настройки</div><div class="psub">Аккаунт и интерфейс</div></div></div>
+    <div class="page" id="pgSettings">
+      <div class="pHead"><div><div class="pTitle">⚙️ Настройки</div><div class="pSub">Аккаунт и интерфейс</div></div></div>
 
-      <div class="ssec">
-        <div class="sstitle">👤 Профиль</div>
+      <div class="sSection">
+        <div class="sTitle">👤 Профиль</div>
         <div style="display:flex;align-items:center;gap:20px;margin-bottom:20px">
-          <div class="uav" style="width:72px;height:72px;font-size:28px" id="set-av"><span id="set-av-txt">?</span><img id="set-av-img" style="display:none"/></div>
+          <div class="avatar" style="width:72px;height:72px;font-size:28px" id="setAvatar"><span id="setAvatarTxt">?</span><img id="setAvatarImg"/></div>
           <div>
-            <div style="font-size:18px;font-weight:700" id="set-uname">—</div>
-            <div style="font-size:13px;color:var(--txt3);font-family:monospace;margin-top:4px" id="set-code">BV-??????</div>
-            <div style="font-size:13px;color:var(--txt2);margin-top:2px" id="set-email">—</div>
+            <div style="font-size:18px;font-weight:700" id="setUsername">—</div>
+            <div style="font-size:13px;color:var(--txt3);font-family:monospace;margin-top:4px" id="setCode">BV-??????</div>
+            <div style="font-size:13px;color:var(--txt2);margin-top:2px" id="setEmail">—</div>
           </div>
         </div>
-        <div class="fg">
-          <label class="fl">Изменить никнейм</label>
+        <div class="fGroup">
+          <label class="fLabel">Изменить никнейм</label>
           <div style="display:flex;gap:10px">
-            <input class="fi" id="new-uname" placeholder="Новый никнейм"/>
-            <button class="btn bsec bsm" onclick="changeUname()" style="white-space:nowrap">Сохранить</button>
+            <input class="fInput" id="newUsername" placeholder="Новый никнейм"/>
+            <button class="btn btnSec btnSm" id="btnChangeUsername" style="white-space:nowrap">Сохранить</button>
           </div>
         </div>
       </div>
 
-      <div class="ssec">
-        <div class="sstitle">🖼 Аватар</div>
-        <label class="btn bsec bsm" style="width:auto;display:inline-flex;cursor:pointer;margin-bottom:12px">
-          📁 Загрузить фото <input type="file" id="av-inp" accept="image/*" style="display:none" onchange="uploadAv(this)"/>
+      <div class="sSection">
+        <div class="sTitle">🖼 Аватар</div>
+        <label class="btn btnSec btnSm" style="width:auto;display:inline-flex;cursor:pointer;margin-bottom:12px">
+          📁 Загрузить фото <input type="file" id="avatarInput" accept="image/*" style="display:none"/>
         </label>
         <div style="font-size:13px;color:var(--txt2);margin-bottom:8px">История аватаров:</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap" id="av-hist"><div style="color:var(--txt3);font-size:13px">Нет</div></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="avatarHistory"><div style="color:var(--txt3);font-size:13px">Нет</div></div>
       </div>
 
-      <div class="ssec">
-        <div class="sstitle">🎨 Интерфейс</div>
+      <div class="sSection">
+        <div class="sTitle">🎨 Интерфейс</div>
         <div style="font-size:13px;color:var(--txt2);margin-bottom:12px">Выберите цвет фона:</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap" id="col-grid"></div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap" id="colorGrid"></div>
         <div style="margin-top:20px">
           <div style="font-size:13px;color:var(--txt2);margin-bottom:10px">Или загрузите изображение:</div>
-          <label class="btn bsec bsm" style="width:auto;display:inline-flex;cursor:pointer">
-            🖼 Выбрать фон <input type="file" id="bg-inp" accept="image/*" style="display:none" onchange="uploadBG(this)"/>
+          <label class="btn btnSec btnSm" style="width:auto;display:inline-flex;cursor:pointer">
+            🖼 Выбрать фон <input type="file" id="bgInput" accept="image/*" style="display:none"/>
           </label>
-          <button class="btn bdang bsm" style="margin-left:10px" onclick="resetBG()">Сбросить</button>
+          <button class="btn btnDang btnSm" id="btnResetBg" style="margin-left:10px">Сбросить</button>
         </div>
       </div>
 
-      <div class="ssec">
-        <div class="sstitle">🔑 Код владельца</div>
+      <div class="sSection">
+        <div class="sTitle">🔑 Код владельца</div>
         <div style="font-size:13px;color:var(--txt2);margin-bottom:12px">Введите секретный код для активации статуса владельца.</div>
         <div style="display:flex;gap:10px">
-          <input type="password" class="fi" id="own-code" placeholder="Секретный код"/>
-          <button class="btn bsec bsm" onclick="activateOwner()" style="white-space:nowrap">Активировать</button>
+          <input type="password" class="fInput" id="ownerCodeInput" placeholder="Секретный код"/>
+          <button class="btn btnSec btnSm" id="btnActivateOwner" style="white-space:nowrap">Активировать</button>
         </div>
-        <div id="own-status" style="font-size:13px;margin-top:8px"></div>
+        <div id="ownerStatus" style="font-size:13px;margin-top:8px"></div>
       </div>
 
-      <div class="ssec" style="border-color:rgba(255,77,109,.2)">
-        <div class="sstitle" style="color:var(--red)">⚠️ Опасная зона</div>
-        <button class="btn bdang" onclick="doLogout()">🚪 Выйти из аккаунта</button>
+      <div class="sSection" style="border-color:rgba(255,77,109,.2)">
+        <div class="sTitle" style="color:var(--red)">⚠️ Опасная зона</div>
+        <button class="btn btnDang" id="btnLogout">🚪 Выйти из аккаунта</button>
       </div>
     </div>
 
   </main>
 </div>
 
-<!-- MODALS -->
-<div class="moverlay" id="m-newcheck">
+<!-- ============ MODALS ============ -->
+<div class="mOverlay" id="modalNewCheck">
   <div class="modal">
-    <div class="mhdr"><div class="mtitle">🧾 Создать чек</div><button class="mclose" onclick="cm('m-newcheck')">✕</button></div>
-    <div class="fg"><label class="fl">Валюта</label>
-      <select class="fi" id="chk-cur"><option value="USD">💵 USD</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select>
+    <div class="mHead"><div class="mTitle">🧾 Создать чек</div><button class="mClose" data-close="modalNewCheck">✕</button></div>
+    <div class="fGroup"><label class="fLabel">Валюта</label>
+      <select class="fInput" id="checkCur"><option value="USD">💵 USD</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select>
     </div>
-    <div class="fg"><label class="fl">Сумма</label><input class="fi" id="chk-amt" type="number" placeholder="0.00"/></div>
-    <div class="fg"><label class="fl">Описание</label><input class="fi" id="chk-desc" placeholder="За что этот чек..."/></div>
-    <button class="btn bprim" onclick="createCheck()">Создать чек</button>
+    <div class="fGroup"><label class="fLabel">Сумма</label><input class="fInput" id="checkAmt" type="number" placeholder="0.00"/></div>
+    <div class="fGroup"><label class="fLabel">Описание</label><input class="fInput" id="checkDesc" placeholder="За что этот чек..."/></div>
+    <button class="btn btnPrim" id="btnCreateCheck">Создать чек</button>
   </div>
 </div>
 
 <script type="module">
 (async () => {
 try {
-// ─── IMPORTS ───
+
+// ===== IMPORTS =====
 const { initializeApp } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js");
-const { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
-const { getFirestore, doc, getDoc, setDoc, updateDoc, collection, addDoc, query, where, orderBy, getDocs, limit, onSnapshot, serverTimestamp, increment, writeBatch } = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+const {
+  getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup
+} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js");
+const {
+  getFirestore, doc, getDoc, setDoc, updateDoc, collection,
+  addDoc, query, where, orderBy, getDocs, limit, onSnapshot,
+  serverTimestamp, increment, writeBatch
+} = await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
 
-const app = initializeApp({
-  apiKey:"AIzaSyCmXswh7MgI1tOcPCWl0AHBABY636gOczk",
-  authDomain:"blackvault-7a10e.firebaseapp.com",
-  projectId:"blackvault-7a10e",
-  storageBucket:"blackvault-7a10e.firebasestorage.app",
-  messagingSenderId:"1061227024519",
-  appId:"1:1061227024519:web:d7fb72171bc26f5e4ce822"
+// ===== FIREBASE INIT =====
+const firebaseApp = initializeApp({
+  apiKey: "AIzaSyCmXswh7MgI1tOcPCWl0AHBABY636gOczk",
+  authDomain: "blackvault-7a10e.firebaseapp.com",
+  projectId: "blackvault-7a10e",
+  storageBucket: "blackvault-7a10e.firebasestorage.app",
+  messagingSenderId: "1061227024519",
+  appId: "1:1061227024519:web:d7fb72171bc26f5e4ce822"
 });
-const auth = getAuth(app);
-const db = getFirestore(app);
+const auth = getAuth(firebaseApp);
+const db = getFirestore(firebaseApp);
 
-// ─── OWNER HASH ───
-async function h(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
-const OH = await h("ghkslhtoprodl';c'klkgodjthjnmnjslg:LkOihjodfjnjvnjkkg;ldfhjkpfdrjyijfklvmklsd;f'");
-
-// ─── STATE ───
-let CU=null, UD=null, unsub=null;
-
-// ─── UTILS ───
-function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return 'BV-'+Array.from({length:6},()=>c[Math.floor(Math.random()*c.length)]).join('')}
-function genChkId(){return Array.from({length:10},()=>Math.floor(Math.random()*36).toString(36).toUpperCase()).join('')}
-function fmtDate(ts){if(!ts)return'—';const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'})}
-function fmtAmt(n,c){if(c==='USD')return'$'+parseFloat(n).toFixed(2);if(c==='BTC')return parseFloat(n).toFixed(8)+' BTC';return parseFloat(n).toFixed(4)+' '+c}
-function rate(c){return{TON:6.5,BTC:67000,ETH:3500,USD:1}[c]||1}
-const COINS={USD:{name:'US Dollar',ico:'💵',col:'#22c55e'},TON:{name:'Toncoin',ico:'💎',col:'#0088cc'},BTC:{name:'Bitcoin',ico:'₿',col:'#f7931a'},ETH:{name:'Ethereum',ico:'⟠',col:'#627eea'}};
-
-// ─── TOAST ───
-function toast(msg,t='i',dur=3500){
-  const icons={s:'✅',e:'❌',i:'ℹ️',w:'⚠️'};
-  const el=document.createElement('div');
-  el.className=`toast ${t}`;
-  el.innerHTML=`<span style="font-size:18px;flex-shrink:0">${icons[t]||'ℹ️'}</span><span style="font-size:14px">${msg}</span>`;
-  document.getElementById('toast-c').appendChild(el);
-  setTimeout(()=>el.remove(),dur);
+// ===== OWNER CODE (hashed) =====
+async function sha256(str){
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+  return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join('');
 }
-window.toast=toast;
+const OWNER_HASH = await sha256("ghkslhtoprodl';c'klkgodjthjnmnjslg:LkOihjodfjnjvnjkkg;ldfhjkpfdrjyijfklvmklsd;f'");
 
-// ─── AUTH PAGES ───
-window.ap=function(id){
-  ['pg-login','pg-reg','pg-uname'].forEach(p=>{
-    const el=document.getElementById(p);
-    if(el)el.style.display=(p===id)?'flex':'none';
+// ===== CONSTANTS =====
+const COINS = {
+  USD:{name:'US Dollar', ico:'💵', col:'#22c55e'},
+  TON:{name:'Toncoin',   ico:'💎', col:'#0088cc'},
+  BTC:{name:'Bitcoin',   ico:'₿',  col:'#f7931a'},
+  ETH:{name:'Ethereum',  ico:'⟠',  col:'#627eea'}
+};
+const RATES = {USD:1, TON:6.5, BTC:67000, ETH:3500};
+const BG_COLORS = [
+  {n:'Чёрный', v:'#0a0a0f'},
+  {n:'Тёмно-синий', v:'#050a1a'},
+  {n:'Тёмно-зелёный', v:'#051a0f'},
+  {n:'Тёмно-фиолетовый', v:'#12051a'},
+  {n:'Тёмно-красный', v:'#1a0505'},
+  {n:'Серый', v:'#0d1117'},
+  {n:'Морской', v:'#041018'}
+];
+
+// ===== STATE =====
+let curUser = null;
+let curData = null;
+let unsubWallet = null;
+
+// ===== HELPERS =====
+function genCode(){
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  let s = '';
+  for(let i=0;i<6;i++) s += chars[Math.floor(Math.random()*chars.length)];
+  return 'BV-' + s;
+}
+function genCheckId(){
+  let s = '';
+  for(let i=0;i<10;i++) s += Math.floor(Math.random()*36).toString(36).toUpperCase();
+  return s;
+}
+function fmtDate(ts){
+  if(!ts) return '—';
+  const d = ts.toDate ? ts.toDate() : new Date(ts);
+  return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function fmtAmt(n,c){
+  n = parseFloat(n)||0;
+  if(c==='USD') return '$'+n.toFixed(2);
+  if(c==='BTC') return n.toFixed(8)+' BTC';
+  if(c==='ETH') return n.toFixed(6)+' ETH';
+  return n.toFixed(4)+' '+c;
+}
+function totalUSD(bal){
+  bal = bal||{};
+  return (bal.USD||0) + (bal.TON||0)*RATES.TON + (bal.BTC||0)*RATES.BTC + (bal.ETH||0)*RATES.ETH;
+}
+
+// ===== TOAST =====
+function toast(msg, type, dur){
+  type = type || 'i';
+  dur = dur || 3500;
+  const icons = {s:'✅', e:'❌', i:'ℹ️', w:'⚠️'};
+  const el = document.createElement('div');
+  el.className = 'toast ' + type;
+  el.innerHTML = '<span style="font-size:18px;flex-shrink:0">'+(icons[type]||'ℹ️')+'</span><span style="font-size:14px">'+msg+'</span>';
+  document.getElementById('toastBox').appendChild(el);
+  setTimeout(()=>el.remove(), dur);
+}
+
+// ===== AUTH PAGE SWITCHING =====
+function showAuthPage(id){
+  ['pgLogin','pgRegister','pgUsername'].forEach(p=>{
+    const el = document.getElementById(p);
+    if(el) el.style.display = (p===id) ? 'flex' : 'none';
   });
-  document.getElementById('authWrap').style.display='flex';
-};
+  document.getElementById('authWrap').style.display = 'block';
+  document.getElementById('appWrap').style.display = 'none';
+}
 
-window.loginEmail=async function(){
-  const e=document.getElementById('l-email').value.trim(),p=document.getElementById('l-pass').value;
-  if(!e||!p)return toast('Заполните все поля','w');
-  try{await signInWithEmailAndPassword(auth,e,p)}catch{toast('Неверный email или пароль','e')}
-};
+document.getElementById('toRegister').addEventListener('click', ()=>showAuthPage('pgRegister'));
+document.getElementById('toLogin').addEventListener('click', ()=>showAuthPage('pgLogin'));
 
-window.registerEmail=async function(){
-  const e=document.getElementById('r-email').value.trim(),p=document.getElementById('r-pass').value,p2=document.getElementById('r-pass2').value;
-  if(!e||!p)return toast('Заполните все поля','w');
-  if(p!==p2)return toast('Пароли не совпадают','e');
-  if(p.length<6)return toast('Пароль мин. 6 символов','w');
-  try{await createUserWithEmailAndPassword(auth,e,p)}
-  catch(err){toast(err.code==='auth/email-already-in-use'?'Email уже используется':'Ошибка регистрации','e')}
-};
+// ===== AUTH ACTIONS =====
+document.getElementById('btnLogin').addEventListener('click', async ()=>{
+  const email = document.getElementById('loginEmail').value.trim();
+  const pass = document.getElementById('loginPass').value;
+  if(!email || !pass) return toast('Заполните все поля','w');
+  try{
+    await signInWithEmailAndPassword(auth, email, pass);
+  }catch(e){
+    toast('Неверный email или пароль','e');
+  }
+});
 
-window.loginGoogle=async function(){
-  try{await signInWithPopup(auth,new GoogleAuthProvider())}catch{toast('Ошибка Google авторизации','e')}
-};
+document.getElementById('btnRegister').addEventListener('click', async ()=>{
+  const email = document.getElementById('regEmail').value.trim();
+  const pass = document.getElementById('regPass').value;
+  const pass2 = document.getElementById('regPass2').value;
+  if(!email || !pass) return toast('Заполните все поля','w');
+  if(pass !== pass2) return toast('Пароли не совпадают','e');
+  if(pass.length < 6) return toast('Пароль минимум 6 символов','w');
+  try{
+    await createUserWithEmailAndPassword(auth, email, pass);
+  }catch(e){
+    if(e.code === 'auth/email-already-in-use') toast('Email уже используется','e');
+    else toast('Ошибка регистрации','e');
+  }
+});
 
-window.saveUname=async function(){
-  const n=document.getElementById('uname-inp').value.trim();
-  if(!n||n.length<2)return toast('Мин. 2 символа','w');
-  if(!CU)return;
-  await updateDoc(doc(db,'wallets',CU.uid),{username:n});
+async function googleLogin(){
+  try{
+    await signInWithPopup(auth, new GoogleAuthProvider());
+  }catch(e){
+    toast('Ошибка Google авторизации','e');
+  }
+}
+document.getElementById('btnGoogle1').addEventListener('click', googleLogin);
+document.getElementById('btnGoogle2').addEventListener('click', googleLogin);
+
+document.getElementById('btnSaveUsername').addEventListener('click', async ()=>{
+  const name = document.getElementById('usernameInput').value.trim();
+  if(!name || name.length < 2) return toast('Никнейм минимум 2 символа','w');
+  if(name.length > 24) return toast('Максимум 24 символа','w');
+  if(!curUser) return;
+  await updateDoc(doc(db,'wallets',curUser.uid), {username:name});
   toast('Никнейм установлен!','s');
-};
+});
 
-// ─── AUTH STATE ───
-onAuthStateChanged(auth,async user=>{
-  document.getElementById('loader').style.display='none';
+// ===== AUTH STATE LISTENER =====
+onAuthStateChanged(auth, async (user)=>{
+  document.getElementById('loader').style.display = 'none';
+
   if(!user){
-    CU=null;UD=null;
-    if(unsub){unsub();unsub=null;}
-    document.getElementById('appWrap').style.display='none';
-    document.getElementById('authWrap').style.display='flex';
-    ap('pg-login');
+    curUser = null;
+    curData = null;
+    if(unsubWallet){ unsubWallet(); unsubWallet = null; }
+    document.getElementById('appWrap').style.display = 'none';
+    showAuthPage('pgLogin');
     return;
   }
-  CU=user;
-  const wRef=doc(db,'wallets',user.uid);
-  const wSnap=await getDoc(wRef);
-  if(!wSnap.exists()){
-    await setDoc(wRef,{uid:user.uid,email:user.email,username:'',code:genCode(),avatarUrl:'',avatarHistory:[],balances:{USD:0,TON:0,BTC:0,ETH:0},isOwner:false,blocked:false,frozen:false,createdAt:serverTimestamp()});
+
+  curUser = user;
+  const walletRef = doc(db,'wallets',user.uid);
+  const walletSnap = await getDoc(walletRef);
+
+  if(!walletSnap.exists()){
+    await setDoc(walletRef, {
+      uid: user.uid,
+      email: user.email,
+      username: '',
+      code: genCode(),
+      avatarUrl: '',
+      avatarHistory: [],
+      balances: {USD:0, TON:0, BTC:0, ETH:0},
+      isOwner: false,
+      blocked: false,
+      frozen: false,
+      createdAt: serverTimestamp()
+    });
   }
-  unsub=onSnapshot(wRef,snap=>{UD=snap.data();renderApp();});
-  document.getElementById('authWrap').style.display='none';
-  document.getElementById('appWrap').style.display='flex';
+
+  unsubWallet = onSnapshot(walletRef, (snap)=>{
+    curData = snap.data();
+    renderApp();
+  });
 });
 
-// ─── RENDER ───
-function renderApp(){
-  if(!UD)return;
-  if(!UD.username){
-    document.getElementById('appWrap').style.display='none';
-    document.getElementById('authWrap').style.display='flex';
-    ap('pg-uname');return;
+// ===== RENDER APP =====
+function setAvatarEl(containerId, textId, imgId, url, initials){
+  const txt = document.getElementById(textId);
+  const img = document.getElementById(imgId);
+  if(url){
+    txt.style.display = 'none';
+    img.src = url;
+    img.style.display = 'block';
+  }else{
+    txt.textContent = initials;
+    txt.style.display = 'block';
+    img.style.display = 'none';
   }
-  document.getElementById('appWrap').style.display='flex';
-  document.getElementById('authWrap').style.display='none';
+}
+
+function renderApp(){
+  if(!curData) return;
+
+  if(!curData.username){
+    document.getElementById('appWrap').style.display = 'none';
+    showAuthPage('pgUsername');
+    return;
+  }
+
+  document.getElementById('authWrap').style.display = 'none';
+  document.getElementById('appWrap').style.display = 'flex';
 
   // Sidebar
-  document.getElementById('sb-uname').textContent=UD.username;
-  document.getElementById('sb-code').textContent=UD.code;
-  setAv('sb-av','sb-av-txt','sb-av-img',UD.avatarUrl,UD.username.charAt(0).toUpperCase());
-  setAv('set-av','set-av-txt','set-av-img',UD.avatarUrl,UD.username.charAt(0).toUpperCase());
+  document.getElementById('sbUsername').textContent = curData.username;
+  document.getElementById('sbCode').textContent = curData.code;
+  const initial = curData.username.charAt(0).toUpperCase();
+  setAvatarEl('sbAvatar','sbAvatarTxt','sbAvatarImg', curData.avatarUrl, initial);
+  setAvatarEl('setAvatar','setAvatarTxt','setAvatarImg', curData.avatarUrl, initial);
 
-  // Settings
-  document.getElementById('set-uname').textContent=UD.username;
-  document.getElementById('set-code').textContent=UD.code;
-  document.getElementById('set-email').textContent=UD.email||CU?.email||'—';
-  document.getElementById('own-status').textContent=UD.isOwner?'✅ Статус владельца активен':'';
-  document.getElementById('own-status').style.color='var(--acc2)';
+  // Settings info
+  document.getElementById('setUsername').textContent = curData.username;
+  document.getElementById('setCode').textContent = curData.code;
+  document.getElementById('setEmail').textContent = curData.email || (curUser && curUser.email) || '—';
 
-  // Admin nav
-  document.getElementById('adm-nsl').style.display=UD.isOwner?'block':'none';
-  document.getElementById('adm-nav').style.display=UD.isOwner?'flex':'none';
-  document.getElementById('h-ownbadge').style.display=UD.isOwner?'block':'none';
+  const ownerStatusEl = document.getElementById('ownerStatus');
+  if(curData.isOwner){
+    ownerStatusEl.textContent = '✅ Статус владельца активен';
+    ownerStatusEl.style.color = 'var(--acc2)';
+  }else{
+    ownerStatusEl.textContent = '';
+  }
 
-  // Home
-  const b=UD.balances||{};
-  const tot=(b.USD||0)+(b.TON||0)*6.5+(b.BTC||0)*67000+(b.ETH||0)*3500;
-  document.getElementById('h-bal').textContent=tot.toFixed(2);
-  document.getElementById('h-code').textContent='🔑 Код: '+UD.code;
-  document.getElementById('h-greet').textContent='Привет, '+UD.username+' 👋';
-  document.getElementById('h-date').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
-  document.getElementById('h-usd').textContent='$'+(b.USD||0).toFixed(2);
-  document.getElementById('h-ton').textContent=(b.TON||0).toFixed(4);
-  document.getElementById('h-btc').textContent=(b.BTC||0).toFixed(8);
-  document.getElementById('h-eth').textContent=(b.ETH||0).toFixed(6);
-  document.getElementById('h-blocked').style.display=(UD.blocked||UD.frozen)?'flex':'none';
+  // Admin nav visibility
+  document.getElementById('adminLabel').style.display = curData.isOwner ? 'block' : 'none';
+  document.getElementById('adminNav').style.display = curData.isOwner ? 'flex' : 'none';
+  document.getElementById('homeOwnerBadge').style.display = curData.isOwner ? 'block' : 'none';
 
-  // Coins
-  document.getElementById('cgrid').innerHTML=Object.entries(COINS).map(([k,c])=>`
-    <div class="ccrd">
-      <div class="chdr">
-        <div class="cico" style="background:${c.col}22;color:${c.col}">${c.ico}</div>
-        <div><div class="cname">${c.name}</div><div class="csym">${k}</div></div>
-      </div>
-      <div class="cbal" style="color:${c.col}">${k==='USD'?'$':''}${(b[k]||0).toFixed(k==='BTC'?8:k==='ETH'?6:4)}${k!=='USD'?' '+k:''}</div>
-      <div class="cusd">${k!=='USD'?'≈ $'+((b[k]||0)*rate(k)).toFixed(2):''}</div>
-    </div>`).join('');
+  // Home / balances
+  const bal = curData.balances || {};
+  const tot = totalUSD(bal);
+  document.getElementById('homeBalance').textContent = tot.toFixed(2);
+  document.getElementById('homeCode').textContent = '🔑 Код: ' + curData.code;
+  document.getElementById('homeGreeting').textContent = 'Привет, ' + curData.username + ' 👋';
+  document.getElementById('homeDate').textContent = new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
+  document.getElementById('homeUSD').textContent = '$' + (bal.USD||0).toFixed(2);
+  document.getElementById('homeTON').textContent = (bal.TON||0).toFixed(4);
+  document.getElementById('homeBTC').textContent = (bal.BTC||0).toFixed(8);
+  document.getElementById('homeETH').textContent = (bal.ETH||0).toFixed(6);
+  document.getElementById('homeBlocked').style.display = (curData.blocked || curData.frozen) ? 'flex' : 'none';
+
+  // Coins grid
+  renderCoins(bal);
 
   // Avatar history
-  const av=UD.avatarHistory||[];
-  const avC=document.getElementById('av-hist');
-  avC.innerHTML=av.length?av.map(u=>`<img src="${u}" class="avthumb${u===UD.avatarUrl?' sel':''}" onclick="selAv('${u}')" title="Выбрать"/>`).join(''):'<div style="color:var(--txt3);font-size:13px">Нет</div>';
+  renderAvatarHistory();
 
-  // Colors
-  renderColors();
+  // Color grid
+  renderColorGrid();
   applyTheme();
+
+  // Async data
   loadRecentTx();
-  loadLB();
-  loadMyChecks();
   loadHistory();
-  if(UD.isOwner)loadAdmin();
-}
-
-function setAv(cid,tid,iid,url,init){
-  const t=document.getElementById(tid),i=document.getElementById(iid);
-  if(url){t.style.display='none';i.src=url;i.style.display='block';}
-  else{t.textContent=init;t.style.display='block';i.style.display='none';}
-}
-
-// ─── NAV ───
-window.nav=function(pgId){
-  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
-  document.querySelectorAll('.nv').forEach(n=>n.classList.remove('active'));
-  const pg=document.getElementById(pgId);
-  if(pg)pg.classList.add('active');
-  closeSB();
-};
-window.toggleSB=function(){document.getElementById('sidebar').classList.toggle('open');document.getElementById('sbkdrop').classList.toggle('open')};
-window.closeSB=function(){document.getElementById('sidebar').classList.remove('open');document.getElementById('sbkdrop').classList.remove('open')};
-
-// ─── MODALS ───
-window.om=function(id){document.getElementById(id).classList.add('open')};
-window.cm=function(id){document.getElementById(id).classList.remove('open')};
-
-// ─── TABS ───
-window.stab=function(show,hideIds,btn){
-  btn.closest('.tabs').querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  hideIds.split(',').forEach(id=>{const el=document.getElementById(id.trim());if(el)el.style.display='none'});
-  const sh=document.getElementById(show);if(sh)sh.style.display='block';
-};
-
-// ─── TRANSFER ───
-window.doTransfer=async function(){
-  if(!UD||UD.blocked||UD.frozen)return toast('Ваш кошелёк заблокирован','e');
-  const toCode=document.getElementById('tr-to').value.trim().toUpperCase();
-  const cur=document.getElementById('tr-cur').value;
-  const amt=parseFloat(document.getElementById('tr-amt').value);
-  const cmt=document.getElementById('tr-comment').value.trim();
-  if(!toCode.startsWith('BV-')||toCode.length!==9)return toast('Неверный код получателя','w');
-  if(!amt||amt<=0)return toast('Введите сумму','w');
-  if(toCode===UD.code)return toast('Нельзя переводить себе','w');
-  if(amt>(UD.balances?.[cur]||0))return toast('Недостаточно '+cur,'e');
-  const q2=query(collection(db,'wallets'),where('code','==',toCode));
-  const snap=await getDocs(q2);
-  if(snap.empty)return toast('Получатель не найден','e');
-  const rDoc=snap.docs[0];const rD=rDoc.data();
-  if(rD.blocked||rD.frozen)return toast('Кошелёк получателя заблокирован','e');
-  const batch=writeBatch(db);
-  batch.update(doc(db,'wallets',CU.uid),{[`balances.${cur}`]:increment(-amt)});
-  batch.update(doc(db,'wallets',rDoc.id),{[`balances.${cur}`]:increment(amt)});
-  batch.set(doc(collection(db,'transactions')),{fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,toUid:rDoc.id,toCode,toUsername:rD.username,currency:cur,amount:amt,comment:cmt,type:'transfer',createdAt:serverTimestamp()});
-  await batch.commit();
-  toast('Переведено '+fmtAmt(amt,cur)+' → '+rD.username,'s');
-  document.getElementById('tr-to').value='';document.getElementById('tr-amt').value='';document.getElementById('tr-comment').value='';
-};
-
-// ─── CHECKS ───
-window.createCheck=async function(){
-  if(!UD||UD.blocked||UD.frozen)return toast('Ваш кошелёк заблокирован','e');
-  const cur=document.getElementById('chk-cur').value;
-  const amt=parseFloat(document.getElementById('chk-amt').value);
-  const desc=document.getElementById('chk-desc').value.trim();
-  if(!amt||amt<=0)return toast('Введите сумму','w');
-  if(amt>(UD.balances?.[cur]||0))return toast('Недостаточно '+cur,'e');
-  const cid=genChkId();
-  await setDoc(doc(db,'checks',cid),{id:cid,fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,currency:cur,amount:amt,description:desc,status:'active',createdAt:serverTimestamp()});
-  await updateDoc(doc(db,'wallets',CU.uid),{[`balances.${cur}`]:increment(-amt)});
-  cm('m-newcheck');
-  document.getElementById('chk-amt').value='';document.getElementById('chk-desc').value='';
-  toast('Чек создан! ID: '+cid,'s',6000);
+  loadLeaderboard();
   loadMyChecks();
-};
+  if(curData.isOwner) loadAdminData();
+}
 
-window.payCheck=async function(){
-  if(!UD||UD.blocked||UD.frozen)return toast('Ваш кошелёк заблокирован','e');
-  const cid=document.getElementById('pay-chk-id').value.trim().toUpperCase();
-  if(!cid)return toast('Введите ID чека','w');
-  const cRef=doc(db,'checks',cid);
-  const cSnap=await getDoc(cRef);
-  if(!cSnap.exists())return toast('Чек не найден','e');
-  const ch=cSnap.data();
-  if(ch.status!=='active')return toast('Чек уже использован','w');
-  if(ch.fromUid===CU.uid)return toast('Нельзя оплатить свой чек','w');
-  const batch=writeBatch(db);
-  batch.update(cRef,{status:'paid',paidBy:CU.uid,paidAt:serverTimestamp()});
-  batch.update(doc(db,'wallets',ch.fromUid),{[`balances.${ch.currency}`]:increment(ch.amount)});
-  batch.set(doc(collection(db,'transactions')),{fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,toUid:ch.fromUid,toCode:ch.fromCode,toUsername:ch.fromUsername,currency:ch.currency,amount:ch.amount,type:'check_payment',checkId:cid,createdAt:serverTimestamp()});
+function renderCoins(bal){
+  const grid = document.getElementById('coinGrid');
+  let html = '';
+  for(const key in COINS){
+    const c = COINS[key];
+    const amount = bal[key] || 0;
+    const decimals = key==='BTC' ? 8 : (key==='ETH' ? 6 : 4);
+    const usdVal = (amount * RATES[key]).toFixed(2);
+    html += '<div class="coinCard">'
+      + '<div class="coinHead"><div class="coinIco" style="background:'+c.col+'22;color:'+c.col+'">'+c.ico+'</div>'
+      + '<div><div class="coinName">'+c.name+'</div><div class="coinSym">'+key+'</div></div></div>'
+      + '<div class="coinBal" style="color:'+c.col+'">' + (key==='USD'?'$':'') + amount.toFixed(decimals) + (key!=='USD' ? ' '+key : '') + '</div>'
+      + '<div class="coinUsd">' + (key!=='USD' ? '≈ $'+usdVal : '') + '</div>'
+      + '</div>';
+  }
+  grid.innerHTML = html;
+}
+
+function renderAvatarHistory(){
+  const history = curData.avatarHistory || [];
+  const el = document.getElementById('avatarHistory');
+  if(!history.length){
+    el.innerHTML = '<div style="color:var(--txt3);font-size:13px">Нет</div>';
+    return;
+  }
+  el.innerHTML = history.map(url=>{
+    const sel = url===curData.avatarUrl ? ' sel' : '';
+    return '<img src="'+url+'" class="avThumb'+sel+'" data-avatar-url="'+encodeURIComponent(url)+'" title="Выбрать"/>';
+  }).join('');
+  el.querySelectorAll('.avThumb').forEach(img=>{
+    img.addEventListener('click', async ()=>{
+      const url = decodeURIComponent(img.getAttribute('data-avatar-url'));
+      await updateDoc(doc(db,'wallets',curUser.uid), {avatarUrl:url});
+      toast('Аватар выбран','s');
+    });
+  });
+}
+
+function renderColorGrid(){
+  const saved = localStorage.getItem('bv_bg_color');
+  const grid = document.getElementById('colorGrid');
+  grid.innerHTML = BG_COLORS.map(c=>{
+    const sel = saved===c.v ? ' sel' : '';
+    const border = saved===c.v ? 'var(--acc)' : 'var(--border)';
+    return '<div class="cSwatch'+sel+'" style="background:'+c.v+';border-color:'+border+'" data-color="'+c.v+'" title="'+c.n+'"></div>';
+  }).join('');
+  grid.querySelectorAll('.cSwatch').forEach(sw=>{
+    sw.addEventListener('click', ()=>{
+      localStorage.setItem('bv_bg_color', sw.getAttribute('data-color'));
+      localStorage.removeItem('bv_bg_image');
+      applyTheme();
+      renderColorGrid();
+    });
+  });
+}
+
+function applyTheme(){
+  const img = localStorage.getItem('bv_bg_image');
+  const col = localStorage.getItem('bv_bg_color');
+  if(img){
+    document.body.style.background = 'url(' + img + ') center/cover fixed';
+    document.body.style.backgroundColor = '';
+  }else if(col){
+    document.body.style.background = '';
+    document.body.style.backgroundColor = col;
+  }else{
+    document.body.style.background = '';
+    document.body.style.backgroundColor = '';
+  }
+}
+
+// ===== NAVIGATION =====
+function navigateTo(pageId){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.navItem').forEach(n=>n.classList.remove('active'));
+  const page = document.getElementById(pageId);
+  if(page) page.classList.add('active');
+  document.querySelectorAll('.navItem[data-page="'+pageId+'"]').forEach(n=>n.classList.add('active'));
+  closeSidebar();
+
+  if(pageId==='pgLeaderboard') loadLeaderboard();
+  if(pageId==='pgHistory') loadHistory();
+  if(pageId==='pgChecks') loadMyChecks();
+  if(pageId==='pgAdmin' && curData && curData.isOwner) loadAdminData();
+}
+
+document.querySelectorAll('[data-page]').forEach(el=>{
+  el.addEventListener('click', ()=>navigateTo(el.getAttribute('data-page')));
+});
+
+function toggleSidebar(){
+  document.getElementById('sidebar').classList.toggle('open');
+  document.getElementById('sbBackdrop').classList.toggle('open');
+}
+function closeSidebar(){
+  document.getElementById('sidebar').classList.remove('open');
+  document.getElementById('sbBackdrop').classList.remove('open');
+}
+document.getElementById('btnMenuToggle').addEventListener('click', toggleSidebar);
+document.getElementById('sbBackdrop').addEventListener('click', closeSidebar);
+
+// ===== MODALS =====
+function openModal(id){ document.getElementById(id).classList.add('open'); }
+function closeModal(id){ document.getElementById(id).classList.remove('open'); }
+document.querySelectorAll('[data-close]').forEach(el=>{
+  el.addEventListener('click', ()=>closeModal(el.getAttribute('data-close')));
+});
+document.getElementById('btnOpenCheckModal').addEventListener('click', ()=>openModal('modalNewCheck'));
+
+// ===== TABS =====
+document.querySelectorAll('.tab').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    const group = btn.closest('.tabs');
+    const targetId = btn.getAttribute('data-tab');
+    group.querySelectorAll('.tab').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    // Find sibling tab panels - they're the next elements after .tabs with matching ids
+    group.parentElement.querySelectorAll(':scope > div[id]').forEach(panel=>{
+      panel.style.display = (panel.id===targetId) ? 'block' : 'none';
+    });
+  });
+});
+
+// ===== TRANSFER =====
+document.getElementById('trCur').addEventListener('change', (e)=>{
+  document.getElementById('trCurBadge').textContent = e.target.value;
+});
+
+document.getElementById('btnTransfer').addEventListener('click', async ()=>{
+  if(!curData || curData.blocked || curData.frozen) return toast('Ваш кошелёк заблокирован','e');
+  const toCode = document.getElementById('trTo').value.trim().toUpperCase();
+  const cur = document.getElementById('trCur').value;
+  const amt = parseFloat(document.getElementById('trAmt').value);
+  const comment = document.getElementById('trComment').value.trim();
+
+  if(!toCode.startsWith('BV-') || toCode.length !== 9) return toast('Неверный код получателя','w');
+  if(!amt || amt <= 0) return toast('Введите сумму','w');
+  if(toCode === curData.code) return toast('Нельзя переводить себе','w');
+  if(amt > (curData.balances[cur] || 0)) return toast('Недостаточно '+cur,'e');
+
+  const q = query(collection(db,'wallets'), where('code','==',toCode));
+  const snap = await getDocs(q);
+  if(snap.empty) return toast('Получатель не найден','e');
+
+  const recipDoc = snap.docs[0];
+  const recipData = recipDoc.data();
+  if(recipData.blocked || recipData.frozen) return toast('Кошелёк получателя заблокирован','e');
+
+  const batch = writeBatch(db);
+  batch.update(doc(db,'wallets',curUser.uid), {['balances.'+cur]: increment(-amt)});
+  batch.update(doc(db,'wallets',recipDoc.id), {['balances.'+cur]: increment(amt)});
+  batch.set(doc(collection(db,'transactions')), {
+    fromUid: curUser.uid, fromCode: curData.code, fromUsername: curData.username,
+    toUid: recipDoc.id, toCode: toCode, toUsername: recipData.username,
+    currency: cur, amount: amt, comment: comment, type: 'transfer',
+    createdAt: serverTimestamp()
+  });
+
   await batch.commit();
-  toast('Оплачено! '+fmtAmt(ch.amount,ch.currency)+' → '+ch.fromUsername,'s');
-  document.getElementById('pay-chk-id').value='';
-};
+  toast('Переведено '+fmtAmt(amt,cur)+' → '+recipData.username,'s');
+  document.getElementById('trTo').value = '';
+  document.getElementById('trAmt').value = '';
+  document.getElementById('trComment').value = '';
+});
 
-window.copyId=function(id){navigator.clipboard.writeText(id).then(()=>toast('ID скопирован','s'))};
+// ===== CHECKS =====
+document.getElementById('btnCreateCheck').addEventListener('click', async ()=>{
+  if(!curData || curData.blocked || curData.frozen) return toast('Ваш кошелёк заблокирован','e');
+  const cur = document.getElementById('checkCur').value;
+  const amt = parseFloat(document.getElementById('checkAmt').value);
+  const desc = document.getElementById('checkDesc').value.trim();
+
+  if(!amt || amt <= 0) return toast('Введите сумму','w');
+  if(amt > (curData.balances[cur] || 0)) return toast('Недостаточно '+cur,'e');
+
+  const checkId = genCheckId();
+  await setDoc(doc(db,'checks',checkId), {
+    id: checkId, fromUid: curUser.uid, fromCode: curData.code, fromUsername: curData.username,
+    currency: cur, amount: amt, description: desc, status: 'active',
+    createdAt: serverTimestamp()
+  });
+  await updateDoc(doc(db,'wallets',curUser.uid), {['balances.'+cur]: increment(-amt)});
+
+  closeModal('modalNewCheck');
+  document.getElementById('checkAmt').value = '';
+  document.getElementById('checkDesc').value = '';
+  toast('Чек создан! ID: '+checkId, 's', 6000);
+  loadMyChecks();
+});
+
+document.getElementById('btnPayCheck').addEventListener('click', async ()=>{
+  if(!curData || curData.blocked || curData.frozen) return toast('Ваш кошелёк заблокирован','e');
+  const checkId = document.getElementById('payCheckId').value.trim().toUpperCase();
+  if(!checkId) return toast('Введите ID чека','w');
+
+  const checkRef = doc(db,'checks',checkId);
+  const checkSnap = await getDoc(checkRef);
+  if(!checkSnap.exists()) return toast('Чек не найден','e');
+
+  const check = checkSnap.data();
+  if(check.status !== 'active') return toast('Чек уже использован','w');
+  if(check.fromUid === curUser.uid) return toast('Нельзя оплатить свой чек','w');
+
+  const batch = writeBatch(db);
+  batch.update(checkRef, {status:'paid', paidBy:curUser.uid, paidAt:serverTimestamp()});
+  batch.update(doc(db,'wallets',check.fromUid), {['balances.'+check.currency]: increment(check.amount)});
+  batch.set(doc(collection(db,'transactions')), {
+    fromUid: curUser.uid, fromCode: curData.code, fromUsername: curData.username,
+    toUid: check.fromUid, toCode: check.fromCode, toUsername: check.fromUsername,
+    currency: check.currency, amount: check.amount, type: 'check_payment', checkId: checkId,
+    createdAt: serverTimestamp()
+  });
+
+  await batch.commit();
+  toast('Оплачено! '+fmtAmt(check.amount,check.currency)+' → '+check.fromUsername,'s');
+  document.getElementById('payCheckId').value = '';
+});
 
 async function loadMyChecks(){
-  if(!CU)return;
-  const q2=query(collection(db,'checks'),where('fromUid','==',CU.uid),orderBy('createdAt','desc'),limit(20));
-  const snap=await getDocs(q2);
-  const el=document.getElementById('mychk-list');
-  if(snap.empty){el.innerHTML='<div style="color:var(--txt3);text-align:center;padding:40px;font-size:14px">Вы ещё не создавали чеки</div>';return;}
-  el.innerHTML=snap.docs.map(d=>{
-    const c=d.data();
-    const sb=c.status==='active'?'<span class="badge bs">Активен</span>':'<span class="badge bi">Оплачен</span>';
-    return`<div class="chcard"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-      <div><div class="chamt">${fmtAmt(c.amount,c.currency)}</div>${c.description?`<div class="chfrom">${c.description}</div>`:''}<div class="chid">ID: ${c.id}</div><div style="font-size:12px;color:var(--txt3);margin-top:4px">${fmtDate(c.createdAt)}</div></div>
-      <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">${sb}<button class="btn bsec bsm" onclick="copyId('${c.id}')">📋 Скопировать</button></div>
-    </div></div>`;
+  if(!curUser) return;
+  const q = query(collection(db,'checks'), where('fromUid','==',curUser.uid), orderBy('createdAt','desc'), limit(20));
+  const snap = await getDocs(q);
+  const el = document.getElementById('myChecksList');
+  if(snap.empty){
+    el.innerHTML = '<div class="empty">Вы ещё не создавали чеки</div>';
+    return;
+  }
+  el.innerHTML = snap.docs.map(d=>{
+    const c = d.data();
+    const statusBadge = c.status==='active' ? '<span class="badge bS">Активен</span>' : '<span class="badge bI">Оплачен</span>';
+    return '<div class="checkCard"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">'
+      + '<div><div class="checkAmt">'+fmtAmt(c.amount,c.currency)+'</div>'
+      + (c.description ? '<div class="checkDesc">'+escapeHtml(c.description)+'</div>' : '')
+      + '<div class="checkId">ID: '+c.id+'</div>'
+      + '<div style="font-size:12px;color:var(--txt3);margin-top:4px">'+fmtDate(c.createdAt)+'</div></div>'
+      + '<div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px">'+statusBadge
+      + '<button class="btn btnSec btnSm copy-check-btn" data-check-id="'+c.id+'">📋 Скопировать</button></div>'
+      + '</div></div>';
   }).join('');
+  el.querySelectorAll('.copy-check-btn').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      navigator.clipboard.writeText(btn.getAttribute('data-check-id')).then(()=>toast('ID скопирован','s'));
+    });
+  });
 }
 
-// ─── TX ───
-function txItem(tx){
-  const sent=tx.fromUid===CU?.uid;
-  const col=sent?'var(--red)':'var(--acc2)';
-  const ico=tx.type==='check_payment'?'🧾':sent?'📤':'📥';
-  const cls=sent?'send':'recv';
-  const who=sent?(tx.toUsername||tx.toCode):(tx.fromUsername||tx.fromCode);
-  const label=tx.type==='check_payment'?(sent?'Оплата чека':'Получен чек'):(sent?'→ '+who:'От '+who);
-  return`<div class="txi"><div class="txico ${cls}">${ico}</div>
-    <div class="txi-info"><div class="txi-title">${label}${tx.comment?' · '+tx.comment:''}</div><div class="txi-date">${fmtDate(tx.createdAt)}</div></div>
-    <div class="txi-amt"><div class="am" style="color:${col}">${sent?'-':'+'}<span>${fmtAmt(tx.amount,tx.currency)}</span></div></div></div>`;
+function escapeHtml(str){
+  const div = document.createElement('div');
+  div.textContent = str;
+  return div.innerHTML;
+}
+
+// ===== TRANSACTIONS RENDER =====
+function txItemHtml(tx){
+  const sent = tx.fromUid === (curUser && curUser.uid);
+  const col = sent ? 'var(--red)' : 'var(--acc2)';
+  const ico = tx.type==='check_payment' ? '🧾' : (sent ? '📤' : '📥');
+  const cls = sent ? 'send' : 'recv';
+  const who = sent ? (tx.toUsername || tx.toCode) : (tx.fromUsername || tx.fromCode);
+  let label;
+  if(tx.type==='check_payment') label = sent ? 'Оплата чека' : 'Получен чек';
+  else label = sent ? ('→ '+who) : ('От '+who);
+  const comment = tx.comment ? ' · '+escapeHtml(tx.comment) : '';
+
+  return '<div class="txItem"><div class="txIco '+cls+'">'+ico+'</div>'
+    + '<div class="txInfo"><div class="txTitle">'+escapeHtml(label)+comment+'</div><div class="txDate">'+fmtDate(tx.createdAt)+'</div></div>'
+    + '<div class="txAmt"><div class="am" style="color:'+col+'">'+(sent?'-':'+')+fmtAmt(tx.amount,tx.currency)+'</div></div></div>';
 }
 
 async function loadRecentTx(){
-  if(!CU)return;
-  const [s1,s2]=await Promise.all([
-    getDocs(query(collection(db,'transactions'),where('fromUid','==',CU.uid),orderBy('createdAt','desc'),limit(5))),
-    getDocs(query(collection(db,'transactions'),where('toUid','==',CU.uid),orderBy('createdAt','desc'),limit(5)))
+  if(!curUser) return;
+  const [s1,s2] = await Promise.all([
+    getDocs(query(collection(db,'transactions'), where('fromUid','==',curUser.uid), orderBy('createdAt','desc'), limit(5))),
+    getDocs(query(collection(db,'transactions'), where('toUid','==',curUser.uid), orderBy('createdAt','desc'), limit(5)))
   ]);
-  const txs=[...s1.docs,...s2.docs].map(d=>({...d.data(),_id:d.id})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).slice(0,6);
-  const el=document.getElementById('h-txlist');
-  el.innerHTML=txs.length?txs.map(txItem).join(''):'<div style="color:var(--txt3);text-align:center;padding:24px;font-size:14px">Операций ещё нет</div>';
+  let txs = [...s1.docs, ...s2.docs].map(d=>d.data());
+  txs.sort((a,b)=>(b.createdAt && b.createdAt.seconds || 0) - (a.createdAt && a.createdAt.seconds || 0));
+  txs = txs.slice(0,6);
+  const el = document.getElementById('homeTxList');
+  el.innerHTML = txs.length ? txs.map(txItemHtml).join('') : '<div class="empty">Операций ещё нет</div>';
 }
 
 async function loadHistory(){
-  if(!CU)return;
-  const [s1,s2]=await Promise.all([
-    getDocs(query(collection(db,'transactions'),where('fromUid','==',CU.uid),orderBy('createdAt','desc'),limit(50))),
-    getDocs(query(collection(db,'transactions'),where('toUid','==',CU.uid),orderBy('createdAt','desc'),limit(50)))
+  if(!curUser) return;
+  const [s1,s2] = await Promise.all([
+    getDocs(query(collection(db,'transactions'), where('fromUid','==',curUser.uid), orderBy('createdAt','desc'), limit(50))),
+    getDocs(query(collection(db,'transactions'), where('toUid','==',curUser.uid), orderBy('createdAt','desc'), limit(50)))
   ]);
-  const txs=[...s1.docs,...s2.docs].map(d=>({...d.data(),_id:d.id})).sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  const el=document.getElementById('hist-list');
-  el.innerHTML=txs.length?txs.map(txItem).join(''):'<div style="color:var(--txt3);text-align:center;padding:40px;font-size:14px">Нет операций</div>';
+  let txs = [...s1.docs, ...s2.docs].map(d=>d.data());
+  txs.sort((a,b)=>(b.createdAt && b.createdAt.seconds || 0) - (a.createdAt && a.createdAt.seconds || 0));
+  const el = document.getElementById('historyList');
+  el.innerHTML = txs.length ? txs.map(txItemHtml).join('') : '<div class="empty">Нет операций</div>';
 }
 
-// ─── LEADERBOARD ───
-async function loadLB(){
-  const snap=await getDocs(query(collection(db,'wallets'),limit(100)));
-  const users=snap.docs.map(d=>d.data()).filter(u=>u.username&&!u.blocked).map(u=>{
-    const b=u.balances||{};
-    return{...u,tot:(b.USD||0)+(b.TON||0)*6.5+(b.BTC||0)*67000+(b.ETH||0)*3500};
-  }).sort((a,b)=>b.tot-a.tot).slice(0,50);
-  const el=document.getElementById('lb-list');
-  if(!users.length){el.innerHTML='<div style="text-align:center;color:var(--txt3);padding:40px">Нет данных</div>';return;}
-  el.innerHTML=users.map((u,i)=>{
-    const r=i+1;const rc=r===1?'r1':r===2?'r2':r===3?'r3':'rn';
-    const med=r===1?'🥇':r===2?'🥈':r===3?'🥉':r;
-    const me=u.uid===CU?.uid;
-    const av=u.avatarUrl?`<img src="${u.avatarUrl}" style="width:36px;height:36px;border-radius:50%;object-fit:cover"/>`:`<div class="uav" style="width:36px;height:36px;font-size:14px">${u.username.charAt(0).toUpperCase()}</div>`;
-    return`<div class="lbi" style="${me?'border-color:rgba(108,71,255,.4);background:rgba(108,71,255,.05)':''}">
-      <div class="rank ${rc}">${med}</div>${av}
-      <div style="flex:1"><div style="font-weight:600;font-size:14px">${u.username}${me?' (Вы)':''}${u.isOwner?' 👑':''}</div><div style="font-size:12px;color:var(--txt3)">${u.code}</div></div>
-      <div style="text-align:right"><div style="font-family:var(--fd);font-weight:700;font-size:16px;color:var(--gold)">$${u.tot.toLocaleString('ru-RU',{maximumFractionDigits:2})}</div></div>
-    </div>`;
+// ===== LEADERBOARD =====
+async function loadLeaderboard(){
+  const snap = await getDocs(query(collection(db,'wallets'), limit(100)));
+  let users = snap.docs.map(d=>d.data()).filter(u=>u.username && !u.blocked);
+  users = users.map(u=>({...u, tot: totalUSD(u.balances)}));
+  users.sort((a,b)=>b.tot-a.tot);
+  users = users.slice(0,50);
+
+  const el = document.getElementById('leaderboardList');
+  if(!users.length){
+    el.innerHTML = '<div class="empty">Нет данных</div>';
+    return;
+  }
+
+  el.innerHTML = users.map((u,i)=>{
+    const r = i+1;
+    const rc = r===1 ? 'r1' : r===2 ? 'r2' : r===3 ? 'r3' : 'rn';
+    const med = r===1 ? '🥇' : r===2 ? '🥈' : r===3 ? '🥉' : r;
+    const me = curUser && u.uid === curUser.uid;
+    const avatar = u.avatarUrl
+      ? '<img src="'+u.avatarUrl+'" style="width:36px;height:36px;border-radius:50%;object-fit:cover"/>'
+      : '<div class="avatar" style="width:36px;height:36px;font-size:14px">'+u.username.charAt(0).toUpperCase()+'</div>';
+    const meStyle = me ? 'border-color:rgba(108,71,255,.4);background:rgba(108,71,255,.05)' : '';
+
+    return '<div class="lbItem" style="'+meStyle+'">'
+      + '<div class="rank '+rc+'">'+med+'</div>' + avatar
+      + '<div style="flex:1"><div style="font-weight:600;font-size:14px">'+escapeHtml(u.username)+(me?' (Вы)':'')+(u.isOwner?' 👑':'')+'</div>'
+      + '<div style="font-size:12px;color:var(--txt3)">'+u.code+'</div></div>'
+      + '<div style="text-align:right"><div style="font-family:var(--fd);font-weight:700;font-size:16px;color:var(--gold)">$'+u.tot.toLocaleString('ru-RU',{maximumFractionDigits:2})+'</div></div>'
+      + '</div>';
   }).join('');
 }
 
-// ─── ADMIN ───
-async function loadAdmin(){
-  // Wallets
-  const snap=await getDocs(collection(db,'wallets'));
-  document.getElementById('adm-wal-body').innerHTML=snap.docs.map(d=>{
-    const u=d.data();const b=u.balances||{};
-    const tot=((b.USD||0)+(b.TON||0)*6.5+(b.BTC||0)*67000+(b.ETH||0)*3500).toFixed(2);
-    const st=u.blocked?'<span class="badge bd">Заблокирован</span>':u.frozen?'<span class="badge bw">Заморожен</span>':'<span class="badge bs">Активен</span>';
-    return`<tr><td><strong>${u.username||'—'}</strong><br><span style="font-size:11px;color:var(--txt3)">${u.email||''}</span></td>
-      <td><code style="font-size:12px">${u.code||'—'}</code></td><td>$${tot}</td><td>${st}</td>
-      <td><div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn bsec bsm" onclick="admBlock('${d.id}',${!u.blocked})">${u.blocked?'🔓 Разблок':'🔒 Заблок'}</button>
-        <button class="btn bsec bsm" onclick="admFreeze('${d.id}',${!u.frozen})">${u.frozen?'❄️ Разморозить':'🌡 Заморозить'}</button>
-      </div></td></tr>`;
-  }).join('');
+// ===== ADMIN PANEL =====
+async function loadAdminData(){
+  const snap = await getDocs(collection(db,'wallets'));
+  const walletsBody = document.getElementById('adminWalletsBody');
+  walletsBody.innerHTML = snap.docs.map(d=>{
+    const u = d.data();
+    const tot = totalUSD(u.balances).toFixed(2);
+    let status;
+    if(u.blocked) status = '<span class="badge bD">Заблокирован</span>';
+    else if(u.frozen) status = '<span class="badge bW">Заморожен</span>';
+    else status = '<span class="badge bS">Активен</span>';
+
+    return '<tr><td><strong>'+escapeHtml(u.username||'—')+'</strong><br><span style="font-size:11px;color:var(--txt3)">'+escapeHtml(u.email||'')+'</span></td>'
+      + '<td><code style="font-size:12px">'+(u.code||'—')+'</code></td>'
+      + '<td>$'+tot+'</td><td>'+status+'</td>'
+      + '<td><div style="display:flex;gap:6px;flex-wrap:wrap">'
+      + '<button class="btn btnSec btnSm admin-block-btn" data-uid="'+d.id+'" data-block="'+(!u.blocked)+'">'+(u.blocked?'🔓 Разблок':'🔒 Заблок')+'</button>'
+      + '<button class="btn btnSec btnSm admin-freeze-btn" data-uid="'+d.id+'" data-freeze="'+(!u.frozen)+'">'+(u.frozen?'❄️ Разморозить':'🌡 Заморозить')+'</button>'
+      + '</div></td></tr>';
+  }).join('') || '<tr><td colspan="5" class="empty">Нет данных</td></tr>';
+
+  walletsBody.querySelectorAll('.admin-block-btn').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const uid = btn.getAttribute('data-uid');
+      const block = btn.getAttribute('data-block') === 'true';
+      await updateDoc(doc(db,'wallets',uid), {blocked:block});
+      toast(block ? 'Кошелёк заблокирован' : 'Разблокирован', block ? 'w':'s');
+      loadAdminData();
+    });
+  });
+  walletsBody.querySelectorAll('.admin-freeze-btn').forEach(btn=>{
+    btn.addEventListener('click', async ()=>{
+      const uid = btn.getAttribute('data-uid');
+      const freeze = btn.getAttribute('data-freeze') === 'true';
+      await updateDoc(doc(db,'wallets',uid), {frozen:freeze});
+      toast(freeze ? 'Кошелёк заморожен' : 'Разморожен', freeze ? 'i':'s');
+      loadAdminData();
+    });
+  });
+
   // Transactions
-  const tsnap=await getDocs(query(collection(db,'transactions'),orderBy('createdAt','desc'),limit(50)));
-  document.getElementById('adm-tx-body').innerHTML=tsnap.docs.map(d=>{
-    const t=d.data();
-    return`<tr><td>${t.fromUsername||t.fromCode||'—'}</td><td>${t.toUsername||t.toCode||'—'}</td><td>${fmtAmt(t.amount,t.currency)}</td><td>${t.type}</td><td style="font-size:12px">${fmtDate(t.createdAt)}</td></tr>`;
-  }).join('')||'<tr><td colspan="5" style="text-align:center;color:var(--txt3);padding:24px">Нет данных</td></tr>';
+  const tsnap = await getDocs(query(collection(db,'transactions'), orderBy('createdAt','desc'), limit(50)));
+  const txBody = document.getElementById('adminTxBody');
+  txBody.innerHTML = tsnap.docs.map(d=>{
+    const t = d.data();
+    return '<tr><td>'+escapeHtml(t.fromUsername||t.fromCode||'—')+'</td>'
+      + '<td>'+escapeHtml(t.toUsername||t.toCode||'—')+'</td>'
+      + '<td>'+fmtAmt(t.amount,t.currency)+'</td><td>'+t.type+'</td>'
+      + '<td style="font-size:12px">'+fmtDate(t.createdAt)+'</td></tr>';
+  }).join('') || '<tr><td colspan="5" class="empty">Нет данных</td></tr>';
 }
 
-window.admBlock=async function(uid,block){
-  await updateDoc(doc(db,'wallets',uid),{blocked:block});
-  toast(block?'Кошелёк заблокирован':'Разблокирован',block?'w':'s');
-  loadAdmin();
-};
-window.admFreeze=async function(uid,freeze){
-  await updateDoc(doc(db,'wallets',uid),{frozen:freeze});
-  toast(freeze?'Кошелёк заморожен':'Разморожен',freeze?'i':'s');
-  loadAdmin();
-};
-window.admGive=async function(){
-  if(!UD?.isOwner)return;
-  const cur=document.getElementById('adm-cur').value;
-  const amt=parseFloat(document.getElementById('adm-amt').value);
-  if(!amt||amt<=0)return toast('Введите сумму','w');
-  await updateDoc(doc(db,'wallets',CU.uid),{[`balances.${cur}`]:increment(amt)});
-  await addDoc(collection(db,'transactions'),{fromUid:'system',fromCode:'SYSTEM',fromUsername:'Система',toUid:CU.uid,toCode:UD.code,toUsername:UD.username,currency:cur,amount:amt,type:'admin_grant',createdAt:serverTimestamp()});
+document.getElementById('btnAdminGive').addEventListener('click', async ()=>{
+  if(!curData || !curData.isOwner) return;
+  const cur = document.getElementById('adminCur').value;
+  const amt = parseFloat(document.getElementById('adminAmt').value);
+  if(!amt || amt <= 0) return toast('Введите сумму','w');
+
+  await updateDoc(doc(db,'wallets',curUser.uid), {['balances.'+cur]: increment(amt)});
+  await addDoc(collection(db,'transactions'), {
+    fromUid: 'system', fromCode: 'SYSTEM', fromUsername: 'Система',
+    toUid: curUser.uid, toCode: curData.code, toUsername: curData.username,
+    currency: cur, amount: amt, type: 'admin_grant', createdAt: serverTimestamp()
+  });
+
   toast('Начислено '+fmtAmt(amt,cur),'s');
-  document.getElementById('adm-amt').value='';
-};
+  document.getElementById('adminAmt').value = '';
+});
 
-// ─── SETTINGS ───
-window.changeUname=async function(){
-  const n=document.getElementById('new-uname').value.trim();
-  if(!n||n.length<2)return toast('Мин. 2 символа','w');
-  await updateDoc(doc(db,'wallets',CU.uid),{username:n});
+// ===== SETTINGS =====
+document.getElementById('btnChangeUsername').addEventListener('click', async ()=>{
+  const name = document.getElementById('newUsername').value.trim();
+  if(!name || name.length < 2) return toast('Минимум 2 символа','w');
+  await updateDoc(doc(db,'wallets',curUser.uid), {username:name});
   toast('Никнейм изменён','s');
-  document.getElementById('new-uname').value='';
-};
+  document.getElementById('newUsername').value = '';
+});
 
-window.uploadAv=function(inp){
-  const f=inp.files[0];if(!f)return;
-  if(f.size>2*1024*1024)return toast('Максимум 2MB','w');
-  const r=new FileReader();
-  r.onload=async e=>{
-    const b64=e.target.result;
-    const hist=[b64,...(UD.avatarHistory||[])].filter((v,i,a)=>a.indexOf(v)===i).slice(0,8);
-    await updateDoc(doc(db,'wallets',CU.uid),{avatarUrl:b64,avatarHistory:hist});
+document.getElementById('avatarInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  if(file.size > 2*1024*1024) return toast('Максимум 2MB','w');
+
+  const reader = new FileReader();
+  reader.onload = async (ev)=>{
+    const b64 = ev.target.result;
+    let history = curData.avatarHistory || [];
+    history = [b64, ...history].filter((v,i,a)=>a.indexOf(v)===i).slice(0,8);
+    await updateDoc(doc(db,'wallets',curUser.uid), {avatarUrl:b64, avatarHistory:history});
     toast('Аватар обновлён','s');
   };
-  r.readAsDataURL(f);
-};
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
 
-window.selAv=async function(url){
-  await updateDoc(doc(db,'wallets',CU.uid),{avatarUrl:url});
-  toast('Аватар выбран','s');
-};
+document.getElementById('bgInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (ev)=>{
+    localStorage.setItem('bv_bg_image', ev.target.result);
+    localStorage.removeItem('bv_bg_color');
+    applyTheme();
+    toast('Фон установлен','s');
+  };
+  reader.readAsDataURL(file);
+  e.target.value = '';
+});
 
-const BG_COLS=[{n:'Чёрный',v:'#0a0a0f'},{n:'Тёмно-синий',v:'#050a1a'},{n:'Тёмно-зелёный',v:'#051a0f'},{n:'Тёмно-фиолетовый',v:'#12051a'},{n:'Тёмно-красный',v:'#1a0505'},{n:'Серый',v:'#0d1117'},{n:'Морской',v:'#041018'}];
+document.getElementById('btnResetBg').addEventListener('click', ()=>{
+  localStorage.removeItem('bv_bg_color');
+  localStorage.removeItem('bv_bg_image');
+  applyTheme();
+  renderColorGrid();
+  toast('Фон сброшен','s');
+});
 
-function renderColors(){
-  const saved=localStorage.getItem('bv_bgc');
-  document.getElementById('col-grid').innerHTML=BG_COLS.map(c=>`<div class="cswat${saved===c.v?' sel':''}" style="background:${c.v};border-color:${saved===c.v?'var(--acc)':'var(--border)'}" onclick="selColor('${c.v}')" title="${c.n}"></div>`).join('');
-}
+// ===== OWNER CODE ACTIVATION =====
+document.getElementById('btnActivateOwner').addEventListener('click', async ()=>{
+  const input = document.getElementById('ownerCodeInput').value;
+  if(!input) return toast('Введите код','w');
+  const hashed = await sha256(input);
+  document.getElementById('ownerCodeInput').value = '';
+  if(hashed !== OWNER_HASH) return toast('Неверный код','e');
 
-window.selColor=function(v){localStorage.setItem('bv_bgc',v);localStorage.removeItem('bv_bgi');applyTheme();renderColors()};
-window.uploadBG=function(inp){
-  const f=inp.files[0];if(!f)return;
-  const r=new FileReader();
-  r.onload=e=>{localStorage.setItem('bv_bgi',e.target.result);localStorage.removeItem('bv_bgc');applyTheme();toast('Фон установлен','s')};
-  r.readAsDataURL(f);
-};
-window.resetBG=function(){localStorage.removeItem('bv_bgc');localStorage.removeItem('bv_bgi');applyTheme();renderColors();toast('Фон сброшен','s')};
-
-function applyTheme(){
-  const img=localStorage.getItem('bv_bgi'),col=localStorage.getItem('bv_bgc');
-  if(img){document.body.style.background=`url(${img}) center/cover fixed`;document.body.style.backgroundColor='';}
-  else if(col){document.body.style.background='';document.body.style.backgroundColor=col;}
-  else{document.body.style.background='';document.body.style.backgroundColor='';}
-}
-
-// ─── OWNER ───
-window.activateOwner=async function(){
-  const inp=document.getElementById('own-code').value;
-  if(!inp)return toast('Введите код','w');
-  const hashed=await h(inp);
-  if(hashed!==OH){toast('Неверный код','e');document.getElementById('own-code').value='';return;}
-  await updateDoc(doc(db,'wallets',CU.uid),{isOwner:true});
-  document.getElementById('own-code').value='';
+  await updateDoc(doc(db,'wallets',curUser.uid), {isOwner:true});
   toast('Статус владельца активирован! 👑','s',5000);
-};
+});
 
-// ─── MISC ───
-window.cs=function(f){toast(f+' — временно недоступно','i')};
-window.doLogout=async function(){await signOut(auth);toast('Вы вышли','i')};
+// ===== MISC =====
+document.querySelectorAll('[data-soon]').forEach(el=>{
+  el.addEventListener('click', ()=>toast(el.getAttribute('data-soon')+' — временно недоступно','i'));
+});
 
+document.getElementById('btnLogout').addEventListener('click', async ()=>{
+  await signOut(auth);
+  toast('Вы вышли из аккаунта','i');
+});
+
+// ===== INIT THEME =====
 applyTheme();
 
-} catch(err) {
+} catch(err){
   console.error(err);
-  bvShowError('Init Error: ' + (err && err.message ? err.message : err) + (err && err.code ? ('\nCode: '+err.code) : '') + (err && err.stack ? ('\n\n'+err.stack) : ''));
+  const loader = document.getElementById('loader');
+  if(loader) loader.style.display = 'none';
+  const banner = document.getElementById('errBanner');
+  const text = document.getElementById('errText');
+  let msg = 'Error: ' + (err && err.message ? err.message : err);
+  if(err && err.code) msg += '\\nCode: ' + err.code;
+  if(err && err.stack) msg += '\\n\\n' + err.stack;
+  if(text) text.textContent = msg;
+  if(banner) banner.style.display = 'block';
 }
 })();
+
+// Global error handlers (outside async IIFE, for non-module errors)
+window.addEventListener('error', function(e){
+  const banner = document.getElementById('errBanner');
+  const text = document.getElementById('errText');
+  const loader = document.getElementById('loader');
+  if(loader) loader.style.display = 'none';
+  if(text) text.textContent += (text.textContent ? '\\n\\n' : '') + 'JS Error: ' + e.message + (e.filename ? ('\\n'+e.filename+':'+e.lineno) : '');
+  if(banner) banner.style.display = 'block';
+});
+
+// Timeout fallback
+setTimeout(function(){
+  const loader = document.getElementById('loader');
+  const authWrap = document.getElementById('authWrap');
+  const appWrap = document.getElementById('appWrap');
+  const banner = document.getElementById('errBanner');
+  if(loader && loader.style.display !== 'none'
+     && (!authWrap || authWrap.style.display === 'none')
+     && (!appWrap || appWrap.style.display === 'none')){
+    loader.style.display = 'none';
+    const text = document.getElementById('errText');
+    if(text) text.textContent += (text.textContent ? '\\n\\n' : '') + 'Приложение не загрузилось за 10 секунд.\\nВозможные причины: нет интернета, заблокирован доступ к gstatic.com / firestore.googleapis.com, ошибка конфигурации Firebase.';
+    if(banner) banner.style.display = 'block';
+  }
+}, 10000);
 </script>
 </body>
 </html>
