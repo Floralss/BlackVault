@@ -9,40 +9,29 @@
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --c-bg:#121218;
-  --c-surface:#1C1C26;
-  --c-surface2:#242432;
-  --c-border:rgba(255,255,255,.06);
-  --c-border2:rgba(255,255,255,.11);
-  --c-text:#F2F2FA;
-  --c-text2:#9494B8;
-  --c-text3:#5A5A7A;
-  --c-acc:#6C5CE7;
-  --c-acc2:#00CBA8;
-  --c-gold:#F5A623;
-  --c-red:#FF4757;
-  --c-green:#2ED573;
-  --f:'Inter',sans-serif;
-  --r:16px;--rs:12px;--rxs:8px;
+  --c-bg:#0F0F16;--c-surface:#1A1A24;--c-surface2:#22222E;
+  --c-border:rgba(255,255,255,.07);--c-border2:rgba(255,255,255,.13);
+  --c-text:#F2F2FA;--c-text2:#9494B8;--c-text3:#5A5A7A;
+  --c-acc:#6C5CE7;--c-acc2:#00CBA8;--c-gold:#F5A623;--c-red:#FF4757;--c-green:#2ED573;
+  --f:'Inter',sans-serif;--r:16px;--rs:12px;--rxs:8px;
+  --btn1:#6C5CE7;--btn2:#9B8FFF;
 }
 html,body{height:100%;overflow:hidden}
 body{font-family:var(--f);background:var(--c-bg);color:var(--c-text);display:flex;flex-direction:column}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(108,92,231,.4);border-radius:4px}
 
-/* LOADER */
 #loader{position:fixed;inset:0;background:var(--c-bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:9000}
-.ld-logo{width:72px;height:72px;background:linear-gradient(145deg,#5B4FE9,#9B8FFF);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 0 48px rgba(108,92,231,.45);animation:ldPulse 2s ease-in-out infinite}
+.ld-logo{width:72px;height:72px;background:linear-gradient(145deg,var(--btn1),var(--btn2));border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 0 48px rgba(108,92,231,.45);animation:ldPulse 2s ease-in-out infinite}
 @keyframes ldPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.06)}}
 .ld-name{font-size:20px;font-weight:700;letter-spacing:-.3px}
-.ld-dots{display:flex;gap:6px}
-.ld-dots i{width:6px;height:6px;border-radius:50%;background:var(--c-acc);animation:ldDot 1.2s infinite ease-in-out both}
+.ld-dots{display:flex;gap:6px}.ld-dots i{width:6px;height:6px;border-radius:50%;background:var(--c-acc);animation:ldDot 1.2s infinite ease-in-out both}
 .ld-dots i:nth-child(1){animation-delay:-.24s}.ld-dots i:nth-child(2){animation-delay:-.12s}
 @keyframes ldDot{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
 
-/* PIN */
 #pinWall{position:fixed;inset:0;background:var(--c-bg);display:none;flex-direction:column;align-items:center;justify-content:center;z-index:8000;padding:24px}
 #pinWall.show{display:flex}
-.pin-ico{width:64px;height:64px;background:linear-gradient(145deg,#5B4FE9,#9B8FFF);border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px;box-shadow:0 0 40px rgba(108,92,231,.4)}
-.pin-h{font-size:22px;font-weight:700;margin-bottom:6px;letter-spacing:-.3px}
+.pin-ico{width:64px;height:64px;background:linear-gradient(145deg,var(--btn1),var(--btn2));border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:20px;box-shadow:0 0 40px rgba(108,92,231,.4)}
+.pin-h{font-size:22px;font-weight:700;margin-bottom:6px}
 .pin-s{font-size:14px;color:var(--c-text2);margin-bottom:28px}
 .pin-track{display:flex;gap:12px;margin-bottom:32px}
 .pin-d{width:14px;height:14px;border-radius:50%;border:2px solid rgba(255,255,255,.2);transition:all .2s}
@@ -53,49 +42,58 @@ body{font-family:var(--f);background:var(--c-bg);color:var(--c-text);display:fle
 .pin-k.sub{font-size:18px;color:var(--c-text2)}
 #pinErr{color:var(--c-red);font-size:13px;margin-top:14px;min-height:18px;font-weight:500}
 
-/* TOAST */
 #toastRoot{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(360px,90vw)}
-.tst{background:rgba(28,28,38,.96);border:1px solid var(--c-border2);backdrop-filter:blur(20px);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.5);animation:tstIn .3s cubic-bezier(.34,1.56,.64,1);pointer-events:all;max-width:100%}
+.tst{background:rgba(26,26,36,.97);border:1px solid var(--c-border2);backdrop-filter:blur(20px);border-radius:14px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:500;box-shadow:0 8px 30px rgba(0,0,0,.5);animation:tstIn .3s cubic-bezier(.34,1.56,.64,1);pointer-events:all;max-width:100%;transition:opacity .3s}
 @keyframes tstIn{from{opacity:0;transform:translateY(-12px) scale(.92)}to{opacity:1;transform:translateY(0) scale(1)}}
 .tst.s{border-left:3px solid var(--c-green)}.tst.e{border-left:3px solid var(--c-red)}.tst.i{border-left:3px solid var(--c-acc)}.tst.w{border-left:3px solid var(--c-gold)}
 
-/* LAYOUT */
-#app{flex:1;display:flex;overflow:hidden}
-#sidebar{width:260px;background:var(--c-surface);border-right:1px solid var(--c-border);flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto;transition:transform .3s}
+#app{flex:1;display:flex;overflow:hidden;position:relative}
+#sidebar{width:264px;background:var(--c-surface);border-right:1px solid var(--c-border);flex-shrink:0;display:flex;flex-direction:column;overflow-y:auto;transition:transform .3s}
 #main{flex:1;overflow-y:auto;position:relative}
 
-/* SIDEBAR */
-.sb-header{padding:20px 18px 16px;border-bottom:1px solid var(--c-border)}
+.sb-header{padding:18px 16px 14px}
 .sb-brand{display:flex;align-items:center;gap:10px}
-.sb-brand-ico{width:36px;height:36px;background:linear-gradient(145deg,#5B4FE9,#9B8FFF);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
-.sb-brand-name{font-size:17px;font-weight:700;letter-spacing:-.3px}
-.sb-brand-ver{font-size:10px;color:var(--c-text3);font-weight:500;letter-spacing:.5px;text-transform:uppercase}
-.sb-user{margin:12px 12px 8px;background:var(--c-surface2);border-radius:var(--rs);padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:background .2s;border:1px solid var(--c-border)}
-.sb-user:hover{background:rgba(108,92,231,.12);border-color:rgba(108,92,231,.2)}
-.sb-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;position:relative}
+.sb-brand-ico{width:34px;height:34px;background:linear-gradient(145deg,var(--btn1),var(--btn2));border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.sb-brand-name{font-size:16px;font-weight:700;letter-spacing:-.3px}
+.sb-user{margin:0 12px 14px;background:var(--c-surface2);border-radius:var(--rs);padding:12px;display:flex;align-items:center;gap:10px;cursor:pointer;transition:all .2s;border:1px solid var(--c-border)}
+.sb-user:hover{background:rgba(108,92,231,.1);border-color:rgba(108,92,231,.2)}
+.sb-av{width:38px;height:38px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;position:relative;background:linear-gradient(145deg,var(--btn1),var(--btn2))}
 .sb-av img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:none;border-radius:50%}
 .sb-uname{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-code{font-size:10px;color:var(--c-text3);font-family:monospace;letter-spacing:.3px;margin-top:1px}
-.sb-nav{padding:8px 10px;flex:1}
-.sb-group{margin-bottom:6px}
-.sb-sep{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-text3);font-weight:700;padding:10px 8px 5px}
-.sb-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rs);color:var(--c-text2);font-size:14px;font-weight:500;cursor:pointer;transition:all .18s;user-select:none;border:1px solid transparent}
-.sb-item:hover{background:rgba(255,255,255,.04);color:var(--c-text)}
-.sb-item.on{background:rgba(108,92,231,.16);color:#C0AEFF;border-color:rgba(108,92,231,.22);font-weight:600}
-.sb-item .ic{font-size:18px;width:22px;text-align:center;flex-shrink:0}
-.sb-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--c-acc);color:#fff}
-.sb-footer{padding:12px 12px 16px;border-top:1px solid var(--c-border)}
+.sb-code{font-size:10px;color:var(--c-text3);font-family:monospace;margin-top:1px}
+
+/* SEGMENTED MENU - new style */
+.sb-seg{margin:0 12px 8px;display:flex;background:var(--c-surface2);border-radius:var(--rs);padding:3px;gap:2px}
+.sb-seg-btn{flex:1;text-align:center;padding:7px 4px;border-radius:9px;font-size:11px;font-weight:700;color:var(--c-text2);cursor:pointer;transition:all .2s}
+.sb-seg-btn.on{background:var(--c-acc);color:#fff}
+
+.sb-nav{padding:4px 10px 8px;flex:1}
+.sb-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:4px 2px}
+.sb-tile{background:var(--c-surface2);border:1px solid var(--c-border);border-radius:13px;padding:13px 10px;cursor:pointer;transition:all .18s;text-align:center;position:relative}
+.sb-tile:hover{border-color:rgba(108,92,231,.3);transform:translateY(-2px)}
+.sb-tile.on{background:rgba(108,92,231,.18);border-color:rgba(108,92,231,.35)}
+.sb-tile .ic{font-size:22px;margin-bottom:5px;display:block}
+.sb-tile .lb{font-size:11px;font-weight:600;color:var(--c-text2)}
+.sb-tile.on .lb{color:#C0AEFF}
+.sb-tile .dot{position:absolute;top:8px;right:8px;width:7px;height:7px;border-radius:50%;background:var(--c-red);display:none}
+.sb-tile .dot.show{display:block}
+.sb-sep{font-size:10px;text-transform:uppercase;letter-spacing:1.5px;color:var(--c-text3);font-weight:700;padding:12px 8px 6px}
+.sb-list-item{display:flex;align-items:center;gap:11px;padding:10px 12px;border-radius:var(--rs);color:var(--c-text2);font-size:14px;font-weight:500;cursor:pointer;transition:all .18s;margin-bottom:1px}
+.sb-list-item:hover{background:rgba(255,255,255,.04);color:var(--c-text)}
+.sb-list-item.on{background:rgba(108,92,231,.16);color:#C0AEFF;font-weight:600}
+.sb-list-item .ic{font-size:17px;width:22px;text-align:center}
+.sb-badge{margin-left:auto;font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;background:var(--c-red);color:#fff}
+
+.sb-footer{padding:10px 12px 16px;border-top:1px solid var(--c-border)}
 .sb-logout{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);color:var(--c-text3);font-size:14px;font-weight:500;cursor:pointer;transition:all .2s}
 .sb-logout:hover{background:rgba(255,71,87,.1);color:var(--c-red)}
 
-/* MOBILE NAV */
-#mobNav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--c-surface);border-top:1px solid var(--c-border);z-index:500;padding:6px 0 max(6px, env(safe-area-inset-bottom));flex-shrink:0}
+#mobNav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--c-surface);border-top:1px solid var(--c-border);z-index:500;padding:6px 0 max(6px,env(safe-area-inset-bottom));flex-shrink:0}
 .mob-items{display:flex;justify-content:space-around}
-.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:var(--rs);cursor:pointer;transition:all .2s;font-size:10px;font-weight:600;color:var(--c-text3);min-width:60px}
-.mob-item .ic{font-size:22px;transition:transform .2s}
-.mob-item.on{color:var(--c-acc)}.mob-item.on .ic{transform:scale(1.1)}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:6px 12px;border-radius:var(--rs);cursor:pointer;font-size:10px;font-weight:600;color:var(--c-text3);min-width:56px}
+.mob-item .ic{font-size:21px}
+.mob-item.on{color:var(--c-acc)}
 
-/* PAGES */
 .page{display:none;padding:24px;min-height:100%;animation:pgFade .25s ease}
 .page.on{display:block}
 @keyframes pgFade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
@@ -104,46 +102,35 @@ body{font-family:var(--f);background:var(--c-bg);color:var(--c-text);display:fle
 .ph-title{font-size:24px;font-weight:700;letter-spacing:-.5px}
 .ph-sub{font-size:13px;color:var(--c-text2);margin-top:3px}
 
-/* CARDS */
 .card{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden}
 .card-p{padding:18px}
-.card:hover{border-color:var(--c-border2)}
 
-/* WALLET HERO (like TG Wallet) */
 .wallet-hero{background:linear-gradient(160deg,#1E1848 0%,#16213E 40%,#0D1B2A 100%);border-radius:20px;padding:26px 24px 22px;position:relative;overflow:hidden;margin-bottom:20px;box-shadow:0 20px 60px rgba(0,0,0,.5)}
 .wallet-hero::before{content:'';position:absolute;top:-40px;right:-40px;width:180px;height:180px;background:radial-gradient(circle,rgba(108,92,231,.25),transparent 70%)}
-.wallet-hero::after{content:'';position:absolute;bottom:-30px;left:0;right:0;height:80px;background:linear-gradient(to top,rgba(108,92,231,.06),transparent)}
 .wh-label{font-size:12px;color:rgba(255,255,255,.5);font-weight:600;letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px}
 .wh-amount{font-size:44px;font-weight:800;letter-spacing:-2px;line-height:1;color:#fff;margin-bottom:4px}
 .wh-amount span{font-size:24px;font-weight:600;opacity:.7}
 .wh-sub{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:20px}
-.wh-code{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 12px;font-size:12px;font-family:monospace;color:rgba(255,255,255,.7);cursor:pointer;transition:all .2s}
-.wh-code:hover{background:rgba(255,255,255,.12)}
-.wh-actions{display:flex;gap:10px;margin-top:18px}
-.wh-btn{flex:1;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:var(--rs);padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
+.wh-code{display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);border-radius:20px;padding:5px 12px;font-size:12px;font-family:monospace;color:rgba(255,255,255,.7);cursor:pointer}
+.wh-actions{display:flex;gap:10px;margin-top:18px;flex-wrap:wrap}
+.wh-btn{flex:1;min-width:78px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);border-radius:var(--rs);padding:12px 8px;text-align:center;cursor:pointer;transition:all .2s;font-size:12px;font-weight:600;color:rgba(255,255,255,.8)}
 .wh-btn:hover{background:rgba(255,255,255,.14);transform:translateY(-1px)}
-.wh-btn:active{transform:scale(.96)}
 .wh-btn.dis{opacity:.4;cursor:not-allowed}
 .wh-btn-icon{font-size:22px;display:block;margin-bottom:5px}
 .wh-btn.primary{background:rgba(108,92,231,.35);border-color:rgba(108,92,231,.4);color:#C0AEFF}
-.wh-btn.primary:hover{background:rgba(108,92,231,.5)}
 
-/* ASSET ROW (like TG wallet list) */
 .asset-list{display:flex;flex-direction:column;gap:2px}
 .asset-row{display:flex;align-items:center;gap:14px;padding:14px 16px;border-radius:var(--rs);transition:background .18s;cursor:pointer}
 .asset-row:hover{background:var(--c-surface2)}
 .asset-ico{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
 .asset-info{flex:1;min-width:0}
-.asset-name{font-size:15px;font-weight:600;letter-spacing:-.2px}
+.asset-name{font-size:15px;font-weight:600}
 .asset-sym{font-size:12px;color:var(--c-text2);margin-top:1px}
 .asset-right{text-align:right}
-.asset-bal{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.asset-bal{font-size:15px;font-weight:700}
 .asset-usd{font-size:12px;color:var(--c-text2);margin-top:1px}
 
-/* TX LIST (like TG) */
-.tx-section{margin-bottom:6px}
-.tx-date-sep{font-size:12px;font-weight:600;color:var(--c-text3);padding:14px 16px 6px;letter-spacing:.3px}
-.tx-row{display:flex;align-items:center;gap:13px;padding:12px 16px;border-radius:var(--rs);transition:background .18s;cursor:pointer}
+.tx-row{display:flex;align-items:center;gap:13px;padding:12px 16px;border-radius:var(--rs);cursor:pointer;transition:background .18s}
 .tx-row:hover{background:var(--c-surface2)}
 .tx-ico{width:42px;height:42px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
 .tx-ico.out{background:rgba(255,71,87,.12)}.tx-ico.in{background:rgba(46,213,115,.12)}.tx-ico.swap{background:rgba(108,92,231,.12)}
@@ -151,20 +138,18 @@ body{font-family:var(--f);background:var(--c-bg);color:var(--c-text);display:fle
 .tx-who{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .tx-when{font-size:12px;color:var(--c-text2);margin-top:1px}
 .tx-right{text-align:right;flex-shrink:0}
-.tx-amount{font-size:15px;font-weight:700;letter-spacing:-.3px}
+.tx-amount{font-size:15px;font-weight:700}
 .tx-amount.out{color:var(--c-red)}.tx-amount.in{color:var(--c-green)}.tx-amount.swap{color:var(--c-acc)}
-.tx-cur{font-size:11px;color:var(--c-text2);margin-top:1px}
+.tx-cur{font-size:11px;color:var(--c-text2)}
 
-/* SECTION */
 .sec{background:var(--c-surface);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
 .sec-head{display:flex;align-items:center;justify-content:space-between;padding:16px 18px 12px;border-bottom:1px solid var(--c-border)}
-.sec-title{font-size:14px;font-weight:700;letter-spacing:-.2px}
+.sec-title{font-size:14px;font-weight:700}
 .sec-link{font-size:13px;color:var(--c-acc);font-weight:600;cursor:pointer}
 
-/* FORM */
 .form-group{margin-bottom:14px}
 .form-label{font-size:11px;font-weight:700;color:var(--c-text2);text-transform:uppercase;letter-spacing:.7px;display:block;margin-bottom:7px}
-.form-input{width:100%;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--rs);padding:13px 14px;color:var(--c-text);font-size:15px;font-family:var(--f);outline:none;transition:all .2s;-webkit-appearance:none}
+.form-input{width:100%;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--rs);padding:13px 14px;color:var(--c-text);font-size:15px;font-family:var(--f);outline:none;transition:all .2s}
 .form-input:focus{border-color:rgba(108,92,231,.5);background:rgba(108,92,231,.06);box-shadow:0 0 0 3px rgba(108,92,231,.12)}
 .form-input::placeholder{color:var(--c-text3)}
 textarea.form-input{resize:vertical;min-height:72px}
@@ -174,232 +159,183 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
 .input-row .form-input:first-child{flex:0 0 140px}
 .input-row .form-input:last-child{flex:1}
 
-/* BUTTONS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-size:15px;font-weight:700;font-family:var(--f);transition:all .18s;text-decoration:none;white-space:nowrap;letter-spacing:-.2px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-size:15px;font-weight:700;font-family:var(--f);transition:all .18s;white-space:nowrap}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--c-acc);color:#fff;width:100%;box-shadow:0 4px 20px rgba(108,92,231,.35)}
-.btn-primary:hover{background:#7B6CF8;box-shadow:0 6px 28px rgba(108,92,231,.5);transform:translateY(-1px)}
+.btn-primary:hover{background:#7B6CF8;transform:translateY(-1px)}
 .btn-secondary{background:var(--c-surface2);border:1px solid var(--c-border);color:var(--c-text);width:100%}
-.btn-secondary:hover{background:var(--c-border);border-color:var(--c-border2)}
+.btn-secondary:hover{background:var(--c-border)}
 .btn-ghost{background:transparent;border:1px solid var(--c-border);color:var(--c-text2)}
-.btn-ghost:hover{border-color:var(--c-border2);color:var(--c-text)}
 .btn-danger{background:rgba(255,71,87,.12);border:1px solid rgba(255,71,87,.2);color:var(--c-red)}
-.btn-danger:hover{background:rgba(255,71,87,.2)}
 .btn-sm{padding:9px 14px;font-size:13px;border-radius:var(--rxs);width:auto}
 .btn-google{background:#fff;color:#1a1a2e;width:100%;font-weight:700}
+.btn-gold{background:linear-gradient(135deg,#F5A623,#FF8C00);color:#1a1208;width:100%;font-weight:800}
 
-/* BADGES */
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
 .badge-green{background:rgba(46,213,115,.12);color:var(--c-green)}
 .badge-red{background:rgba(255,71,87,.12);color:var(--c-red)}
 .badge-yellow{background:rgba(245,166,35,.12);color:var(--c-gold)}
 .badge-purple{background:rgba(108,92,231,.14);color:#C0AEFF}
-.badge-owner{background:linear-gradient(135deg,rgba(245,166,35,.18),rgba(255,140,0,.12));border:1px solid rgba(245,166,35,.25);color:var(--c-gold)}
-.badge-admin{background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.2);color:var(--c-red)}
-.badge-helper{background:rgba(0,203,168,.1);border:1px solid rgba(0,203,168,.2);color:var(--c-acc2)}
 
-/* LEADERBOARD */
-.lb-row{display:flex;align-items:center;gap:13px;padding:13px 16px;border-radius:var(--rs);transition:background .18s;cursor:pointer}
+/* CUSTOM ROLE TAGS - dynamic color support */
+.role-tag{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:800;border:1px solid;letter-spacing:.2px}
+
+.lb-row{display:flex;align-items:center;gap:13px;padding:13px 16px;border-radius:var(--rs);cursor:pointer;transition:background .18s}
 .lb-row:hover{background:var(--c-surface2)}
 .lb-rank{width:28px;height:28px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;flex-shrink:0}
-.rk-1{background:rgba(245,166,35,.18);color:var(--c-gold);border:1px solid rgba(245,166,35,.3)}
-.rk-2{background:rgba(200,200,200,.12);color:#ccc;border:1px solid rgba(200,200,200,.2)}
-.rk-3{background:rgba(205,127,50,.12);color:#CD7F32;border:1px solid rgba(205,127,50,.2)}
-.rk-n{background:var(--c-surface2);color:var(--c-text3);border:1px solid var(--c-border);font-size:10px}
+.rk-1{background:rgba(245,166,35,.18);color:var(--c-gold)}.rk-2{background:rgba(200,200,200,.12);color:#ccc}.rk-3{background:rgba(205,127,50,.12);color:#CD7F32}
+.rk-n{background:var(--c-surface2);color:var(--c-text3);font-size:10px}
 
-/* MODAL */
-.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
-.overlay.on{opacity:1;pointer-events:all}
-.sheet{background:var(--c-surface);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);padding-bottom:max(20px,env(safe-area-inset-bottom))}
-.overlay.on .sheet{transform:translateY(0)}
-.sheet-handle{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:10px auto}
-.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:4px 20px 16px;border-bottom:1px solid var(--c-border)}
-.sheet-title{font-size:17px;font-weight:700;letter-spacing:-.3px}
-.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--c-surface2);border:none;color:var(--c-text2);font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s}
-.sheet-close:hover{background:var(--c-border2);color:var(--c-text)}
-.sheet-body{padding:18px 20px}
-
-/* PROFILE */
 .profile-wrap{max-width:480px}
 .profile-banner{height:120px;border-radius:var(--r) var(--r) 0 0;background:linear-gradient(135deg,#1E1848,#16213E,#0D1B2A);position:relative;overflow:hidden}
 .profile-banner img{width:100%;height:100%;object-fit:cover}
 .profile-body{background:var(--c-surface);border-radius:0 0 var(--r) var(--r);padding:0 18px 18px;border:1px solid var(--c-border);border-top:none}
 .profile-ava-row{display:flex;align-items:flex-end;justify-content:space-between;margin-top:-28px;margin-bottom:12px}
-.profile-ava{width:64px;height:64px;border-radius:50%;border:3px solid var(--c-surface);overflow:hidden;background:linear-gradient(145deg,#5B4FE9,#9B8FFF);display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800;flex-shrink:0}
+.profile-ava{width:64px;height:64px;border-radius:50%;border:3px solid var(--c-surface);overflow:hidden;background:linear-gradient(145deg,var(--btn1),var(--btn2));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:800}
 .profile-ava img{width:100%;height:100%;object-fit:cover}
-.profile-name{font-size:20px;font-weight:800;letter-spacing:-.4px;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.profile-name{font-size:20px;font-weight:800;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
 .profile-code{font-size:12px;color:var(--c-text3);font-family:monospace;margin-top:2px}
 .profile-bio{font-size:14px;color:var(--c-text2);margin-top:8px;line-height:1.5}
 .profile-links{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
-.profile-link{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:20px;font-size:12px;font-weight:600;color:var(--c-acc);text-decoration:none;transition:all .2s}
-.profile-link:hover{background:rgba(108,92,231,.15);border-color:rgba(108,92,231,.3)}
+.profile-link{display:inline-flex;align-items:center;gap:5px;padding:5px 11px;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:20px;font-size:12px;font-weight:600;color:var(--c-acc);text-decoration:none}
 .profile-stats{display:flex;gap:10px;margin-top:14px;flex-wrap:wrap}
 .profile-stat{background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--rs);padding:10px 14px;flex:1;min-width:90px}
-.profile-stat-label{font-size:10px;color:var(--c-text3);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px}
-.profile-stat-val{font-size:16px;font-weight:800;letter-spacing:-.4px}
+.profile-stat-label{font-size:10px;color:var(--c-text3);font-weight:700;text-transform:uppercase;margin-bottom:4px}
+.profile-stat-val{font-size:16px;font-weight:800}
 
-/* SETTINGS */
 .settings-section{background:var(--c-surface);border-radius:var(--r);overflow:hidden;margin-bottom:14px;border:1px solid var(--c-border)}
-.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--c-border);gap:12px;transition:background .18s}
+.settings-row{display:flex;align-items:center;justify-content:space-between;padding:14px 18px;border-bottom:1px solid var(--c-border);gap:12px}
 .settings-row:last-child{border-bottom:none}
-.settings-row.clickable{cursor:pointer}.settings-row.clickable:hover{background:var(--c-surface2)}
+.settings-row.clickable{cursor:pointer;transition:background .18s}.settings-row.clickable:hover{background:var(--c-surface2)}
 .settings-row-l{flex:1;min-width:0}
-.settings-row-title{font-size:14px;font-weight:600;letter-spacing:-.1px}
+.settings-row-title{font-size:14px;font-weight:600}
 .settings-row-sub{font-size:12px;color:var(--c-text3);margin-top:2px}
-.settings-row-v{font-size:13px;color:var(--c-text2);font-weight:500}
+.settings-row-v{font-size:13px;color:var(--c-text2)}
 
-/* TOGGLE */
 .toggle{width:44px;height:26px;border-radius:13px;background:var(--c-surface2);border:1px solid var(--c-border);position:relative;cursor:pointer;transition:all .25s;flex-shrink:0}
 .toggle.on{background:var(--c-acc);border-color:var(--c-acc)}
-.toggle-k{position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .25s cubic-bezier(.34,1.56,.64,1);box-shadow:0 1px 4px rgba(0,0,0,.3)}
+.toggle-k{position:absolute;width:20px;height:20px;border-radius:50%;background:#fff;top:2px;left:2px;transition:transform .25s cubic-bezier(.34,1.56,.64,1)}
 .toggle.on .toggle-k{transform:translateX(18px)}
 
-/* AUTH */
 .auth-screen{position:fixed;inset:0;background:var(--c-bg);display:flex;align-items:center;justify-content:center;padding:24px;z-index:7000}
 .auth-card{width:100%;max-width:380px;background:var(--c-surface);border:1px solid var(--c-border);border-radius:22px;padding:36px 28px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
 .auth-logo{display:flex;align-items:center;gap:11px;justify-content:center;margin-bottom:26px}
-.auth-logo-ico{width:44px;height:44px;background:linear-gradient(145deg,#5B4FE9,#9B8FFF);border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 0 24px rgba(108,92,231,.4)}
-.auth-logo-name{font-size:22px;font-weight:800;letter-spacing:-.4px}
-.auth-title{font-size:22px;font-weight:800;letter-spacing:-.5px;margin-bottom:5px}
+.auth-logo-ico{width:44px;height:44px;background:linear-gradient(145deg,var(--btn1),var(--btn2));border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:20px}
+.auth-logo-name{font-size:22px;font-weight:800}
+.auth-title{font-size:22px;font-weight:800;margin-bottom:5px}
 .auth-sub{font-size:14px;color:var(--c-text2);margin-bottom:24px}
 .divider{display:flex;align-items:center;gap:12px;color:var(--c-text3);font-size:12px;margin:16px 0}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--c-border)}
 .auth-foot{text-align:center;margin-top:16px;font-size:13px;color:var(--c-text2)}
 .auth-foot a{color:var(--c-acc);font-weight:700;cursor:pointer;text-decoration:none}
 
-/* PROGRESS */
 .progress-bar{height:3px;background:var(--c-border);border-radius:2px;overflow:hidden;margin-top:10px}
 .progress-fill{height:100%;background:linear-gradient(90deg,var(--c-acc),var(--c-acc2));border-radius:2px;transition:width .15s linear}
-
-/* PENDING BOX */
 .pending-box{background:rgba(108,92,231,.08);border:1px solid rgba(108,92,231,.18);border-radius:var(--rs);padding:14px 16px;margin-top:12px;display:none;animation:pendPulse 2s ease-in-out infinite}
 @keyframes pendPulse{0%,100%{opacity:1}50%{opacity:.6}}
-.pending-box-text{font-size:13px;color:#C0AEFF;font-weight:600}
 
-/* TABLE */
 .data-table{width:100%;border-collapse:collapse;font-size:13px}
-.data-table th{text-align:left;padding:11px 14px;color:var(--c-text3);font-size:10px;text-transform:uppercase;letter-spacing:.7px;font-weight:700;border-bottom:1px solid var(--c-border)}
+.data-table th{text-align:left;padding:11px 14px;color:var(--c-text3);font-size:10px;text-transform:uppercase;font-weight:700;border-bottom:1px solid var(--c-border)}
 .data-table td{padding:11px 14px;border-bottom:1px solid var(--c-border);vertical-align:middle}
 .data-table tr:last-child td{border-bottom:none}
-.data-table tr:hover td{background:rgba(255,255,255,.02)}
 .table-wrap{overflow-x:auto;background:var(--c-surface);border-radius:var(--r);border:1px solid var(--c-border)}
 
-/* CHECK CARD */
-.check-card{background:linear-gradient(160deg,var(--c-surface2),#111128);border:1px solid rgba(108,92,231,.2);border-radius:var(--r);padding:20px;margin-bottom:10px;position:relative;overflow:hidden;transition:all .2s}
-.check-card:hover{transform:translateY(-2px);border-color:rgba(108,92,231,.35)}
-.check-card::after{content:'';position:absolute;top:-20px;right:-20px;width:90px;height:90px;background:radial-gradient(circle,rgba(108,92,231,.12),transparent 70%)}
-.check-amount{font-size:30px;font-weight:800;letter-spacing:-1px;margin-bottom:6px}
+.check-card{background:linear-gradient(160deg,var(--c-surface2),#111128);border:1px solid rgba(108,92,231,.2);border-radius:var(--r);padding:20px;margin-bottom:10px;position:relative;overflow:hidden}
+.check-amount{font-size:30px;font-weight:800}
 
-/* REPORT */
 .report-item{display:flex;align-items:flex-start;gap:12px;padding:14px 16px;border-bottom:1px solid var(--c-border);cursor:pointer;transition:background .18s}
 .report-item:last-child{border-bottom:none}
 .report-item:hover{background:var(--c-surface2)}
 .report-dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
-.dot-open{background:#FF8C00;box-shadow:0 0 6px #FF8C00}
-.dot-prog{background:var(--c-acc);box-shadow:0 0 6px rgba(108,92,231,.6)}
-.dot-closed{background:var(--c-text3)}
+.dot-open{background:#FF8C00;box-shadow:0 0 6px #FF8C00}.dot-prog{background:var(--c-acc)}.dot-closed{background:var(--c-text3)}
 
-/* CHAT */
 .chat-area{display:flex;flex-direction:column;height:360px}
 .chat-msgs{flex:1;overflow-y:auto;padding:12px;display:flex;flex-direction:column;gap:8px;background:var(--c-bg);border-radius:var(--rs) var(--rs) 0 0;border:1px solid var(--c-border);border-bottom:none}
 .msg-bubble{max-width:80%;padding:9px 13px;border-radius:12px;font-size:13px;line-height:1.5}
 .msg-bubble.mine{background:rgba(108,92,231,.22);border:1px solid rgba(108,92,231,.2);align-self:flex-end;border-radius:12px 12px 3px 12px}
 .msg-bubble.theirs{background:var(--c-surface2);border:1px solid var(--c-border);align-self:flex-start;border-radius:12px 12px 12px 3px}
+.msg-bubble.sys{align-self:center;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.2);color:var(--c-gold);font-size:12px;text-align:center;max-width:90%}
 .msg-meta{font-size:10px;color:var(--c-text3);margin-top:3px}
 .chat-bar{display:flex;gap:8px;padding:10px;background:var(--c-surface);border:1px solid var(--c-border);border-top:none;border-radius:0 0 var(--rs) var(--rs)}
-.chat-bar input{flex:1;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--rxs);padding:9px 12px;color:var(--c-text);font-size:13px;font-family:var(--f);outline:none;transition:border-color .2s}
-.chat-bar input:focus{border-color:rgba(108,92,231,.4)}
+.chat-bar input{flex:1;background:var(--c-surface2);border:1px solid var(--c-border);border-radius:var(--rxs);padding:9px 12px;color:var(--c-text);font-size:13px;font-family:var(--f);outline:none}
 
-/* EXCHANGE */
-.ex-wrap{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);padding:0;overflow:hidden}
+.ex-wrap{background:var(--c-surface);border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden}
 .ex-side{padding:16px 18px;border-bottom:1px solid var(--c-border)}
-.ex-mid{display:flex;align-items:center;justify-content:center;padding:10px;position:relative}
-.ex-mid::before{content:'';position:absolute;top:0;left:18px;right:18px;height:1px;background:var(--c-border)}
-.ex-mid::after{content:'';position:absolute;bottom:0;left:18px;right:18px;height:1px;background:var(--c-border)}
+.ex-mid{display:flex;align-items:center;justify-content:center;padding:10px}
 .ex-swap-btn{width:36px;height:36px;border-radius:50%;background:var(--c-surface2);border:1px solid var(--c-border2);display:flex;align-items:center;justify-content:center;font-size:18px;cursor:pointer;transition:all .2s}
-.ex-swap-btn:hover{background:rgba(108,92,231,.2);border-color:rgba(108,92,231,.3);transform:rotate(180deg)}
-.ex-label{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--c-text3);margin-bottom:9px}
+.ex-swap-btn:hover{transform:rotate(180deg)}
+.ex-label{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--c-text3);margin-bottom:9px}
 
-/* COLOR SWATCHES */
 .swatches{display:flex;gap:8px;flex-wrap:wrap}
 .swatch{width:32px;height:32px;border-radius:8px;cursor:pointer;border:2px solid transparent;transition:all .2s;position:relative}
 .swatch:hover{transform:scale(1.1)}
-.swatch.sel{border-color:var(--c-acc);box-shadow:0 0 10px rgba(108,92,231,.4)}
+.swatch.sel{border-color:var(--c-acc)}
 .swatch.sel::after{content:'✓';position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:700;text-shadow:0 1px 3px rgba(0,0,0,.6)}
 
-/* AV HISTORY */
 .av-hist{display:flex;gap:8px;flex-wrap:wrap}
 .av-th{width:46px;height:46px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:all .2s;object-fit:cover}
 .av-th:hover{transform:scale(1.08)}.av-th.sel{border-color:var(--c-acc)}
 
-/* EMPTY */
 .empty-state{padding:40px 20px;text-align:center;color:var(--c-text3);font-size:14px}
 .empty-state .emo{font-size:36px;margin-bottom:10px;display:block;opacity:.5}
 
-/* RAINBOW */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);backdrop-filter:blur(12px);z-index:2000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.on{opacity:1;pointer-events:all}
+.sheet{background:var(--c-surface);border-radius:20px 20px 0 0;width:100%;max-width:520px;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s cubic-bezier(.4,0,.2,1);padding-bottom:max(20px,env(safe-area-inset-bottom))}
+.overlay.on .sheet{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:rgba(255,255,255,.15);border-radius:2px;margin:10px auto}
+.sheet-head{display:flex;align-items:center;justify-content:space-between;padding:4px 20px 16px;border-bottom:1px solid var(--c-border)}
+.sheet-title{font-size:17px;font-weight:700}
+.sheet-close{width:30px;height:30px;border-radius:50%;background:var(--c-surface2);border:none;color:var(--c-text2);font-size:16px;cursor:pointer}
+.sheet-body{padding:18px 20px}
+
+.price-tag{display:inline-flex;align-items:center;gap:5px;background:rgba(245,166,35,.12);border:1px solid rgba(245,166,35,.25);color:var(--c-gold);padding:4px 11px;border-radius:20px;font-size:12px;font-weight:700}
+
+#mobMenuBtn{display:none;position:fixed;top:14px;left:14px;z-index:600;width:38px;height:38px;border-radius:10px;background:var(--c-surface);border:1px solid var(--c-border);align-items:center;justify-content:center;font-size:18px;cursor:pointer}
+#sbOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
+
 .rainbow{background:linear-gradient(90deg,#FF4757,#FF8800,#F5A623,#2ED573,#6C5CE7,#C040FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;background-size:200%;animation:rbFlow 3s linear infinite}
 @keyframes rbFlow{0%{background-position:0%}100%{background-position:200%}}
-
-/* MOBILE TOGGLE BTN */
-#mobMenuBtn{display:none;position:fixed;top:14px;left:14px;z-index:600;width:38px;height:38px;border-radius:10px;background:var(--c-surface);border:1px solid var(--c-border);align-items:center;justify-content:center;font-size:18px;cursor:pointer;backdrop-filter:blur(10px)}
-#sbOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:99}
 
 @media(max-width:800px){
   #sidebar{position:fixed;top:0;left:0;height:100%;z-index:100;transform:translateX(-100%)}
   #sidebar.open{transform:translateX(0)}
   #sbOverlay.open{display:block}
   #mobMenuBtn{display:flex}
-  #main{padding-top:0}
   .page{padding:18px 16px 80px}
   #mobNav{display:block}
   .wh-amount{font-size:36px}
   .sheet{max-width:100%}
 }
 @media(max-width:480px){
-  .wh-amount{font-size:30px}
-  .ph-title{font-size:20px}
-  .input-row{flex-direction:column}
-  .input-row .form-input:first-child{flex:unset}
+  .wh-amount{font-size:30px}.ph-title{font-size:20px}
+  .input-row{flex-direction:column}.input-row .form-input:first-child{flex:unset}
 }
 </style>
 </head>
 <body>
 
-<!-- LOADER -->
-<div id="loader">
-  <div class="ld-logo">🔐</div>
-  <div class="ld-name">BlackVault</div>
-  <div class="ld-dots"><i></i><i></i><i></i></div>
-</div>
+<div id="loader"><div class="ld-logo">🔐</div><div class="ld-name">BlackVault</div><div class="ld-dots"><i></i><i></i><i></i></div></div>
 
-<!-- PIN -->
 <div id="pinWall">
-  <div class="pin-ico">🔐</div>
-  <div class="pin-h">BlackVault</div>
-  <div class="pin-s">Введите PIN-код</div>
-  <div class="pin-track">
-    <div class="pin-d" id="pd0"></div><div class="pin-d" id="pd1"></div>
-    <div class="pin-d" id="pd2"></div><div class="pin-d" id="pd3"></div>
-  </div>
+  <div class="pin-ico">🔐</div><div class="pin-h">BlackVault</div><div class="pin-s">Введите PIN-код</div>
+  <div class="pin-track"><div class="pin-d" id="pd0"></div><div class="pin-d" id="pd1"></div><div class="pin-d" id="pd2"></div><div class="pin-d" id="pd3"></div></div>
   <div class="pin-grid">
     <div class="pin-k" data-v="1">1</div><div class="pin-k" data-v="2">2</div><div class="pin-k" data-v="3">3</div>
     <div class="pin-k" data-v="4">4</div><div class="pin-k" data-v="5">5</div><div class="pin-k" data-v="6">6</div>
     <div class="pin-k" data-v="7">7</div><div class="pin-k" data-v="8">8</div><div class="pin-k" data-v="9">9</div>
-    <div class="pin-k sub" data-v="bio">🫆</div><div class="pin-k" data-v="0">0</div><div class="pin-k sub" data-v="del">⌫</div>
+    <div class="pin-k sub"></div><div class="pin-k" data-v="0">0</div><div class="pin-k sub" data-v="del">⌫</div>
   </div>
   <div id="pinErr"></div>
 </div>
 
-<!-- TOASTS -->
 <div id="toastRoot"></div>
 
-<!-- AUTH -->
 <div id="authScreen" style="display:none">
   <div id="pgLogin" class="auth-screen">
     <div class="auth-card">
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
-      <div class="auth-title">Добро пожаловать</div>
-      <div class="auth-sub">Войдите в свой кошелёк</div>
+      <div class="auth-title">Добро пожаловать</div><div class="auth-sub">Войдите в свой кошелёк</div>
       <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
       <div class="form-group"><label class="form-label">Пароль</label><input id="lPass" class="form-input" type="password" placeholder="••••••••"/></div>
       <button class="btn btn-primary" id="btnLogin">Войти</button>
@@ -411,8 +347,7 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
   <div id="pgReg" class="auth-screen" style="display:none">
     <div class="auth-card">
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
-      <div class="auth-title">Создать аккаунт</div>
-      <div class="auth-sub">Присоединяйтесь к BlackVault</div>
+      <div class="auth-title">Создать аккаунт</div><div class="auth-sub">Присоединяйтесь к BlackVault</div>
       <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
       <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов"/></div>
       <div class="form-group"><label class="form-label">Повтор пароля</label><input id="rPass2" class="form-input" type="password" placeholder="••••••••"/></div>
@@ -425,74 +360,61 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
   <div id="pgUname" class="auth-screen" style="display:none">
     <div class="auth-card">
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
-      <div class="auth-title">Ваш никнейм</div>
-      <div class="auth-sub">Выберите уникальное имя</div>
+      <div class="auth-title">Ваш никнейм</div><div class="auth-sub">Выберите уникальное имя</div>
       <div class="form-group"><label class="form-label">Никнейм</label><input id="unameI" class="form-input" maxlength="24" placeholder="CryptoKing"/></div>
       <button class="btn btn-primary" id="btnUname">Продолжить →</button>
     </div>
   </div>
 </div>
 
-<!-- APP -->
 <div id="app" style="display:none">
   <button id="mobMenuBtn">☰</button>
   <div id="sbOverlay"></div>
 
-  <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sb-header">
-      <div class="sb-brand">
-        <div class="sb-brand-ico">🔐</div>
-        <div><div class="sb-brand-name">BlackVault</div><div class="sb-brand-ver">v2.0</div></div>
-      </div>
+      <div class="sb-brand"><div class="sb-brand-ico">🔐</div><div class="sb-brand-name">BlackVault</div></div>
     </div>
     <div class="sb-user" data-goto="pgWallet">
-      <div class="sb-av" id="sbAv" style="background:linear-gradient(145deg,#5B4FE9,#9B8FFF)">
-        <span id="sbAvT">?</span><img id="sbAvI"/>
-      </div>
-      <div style="flex:1;min-width:0">
-        <div class="sb-uname" id="sbName">—</div>
-        <div class="sb-code" id="sbCode">BV-??????</div>
-      </div>
+      <div class="sb-av" id="sbAv"><span id="sbAvT">?</span><img id="sbAvI"/></div>
+      <div style="flex:1;min-width:0"><div class="sb-uname" id="sbName">—</div><div class="sb-code" id="sbCode">BV-??????</div></div>
       <div id="sbRoleBadge"></div>
     </div>
+
     <div class="sb-nav">
-      <div class="sb-group">
-        <div class="sb-sep">Кошелёк</div>
-        <div class="sb-item on" data-goto="pgWallet"><span class="ic">💳</span>Главная</div>
-        <div class="sb-item" data-goto="pgAssets"><span class="ic">💎</span>Активы</div>
-        <div class="sb-item" data-goto="pgTransfer"><span class="ic">↗️</span>Перевод</div>
-        <div class="sb-item" data-goto="pgExchange"><span class="ic">💱</span>Обмен</div>
-        <div class="sb-item" data-goto="pgDeposit"><span class="ic">📥</span>Пополнение</div>
+      <div class="sb-sep">Кошелёк</div>
+      <div class="sb-grid">
+        <div class="sb-tile on" data-goto="pgWallet"><span class="ic">💳</span><span class="lb">Главная</span></div>
+        <div class="sb-tile" data-goto="pgAssets"><span class="ic">💎</span><span class="lb">Активы</span></div>
+        <div class="sb-tile" data-goto="pgTransfer"><span class="ic">↗️</span><span class="lb">Перевод</span></div>
+        <div class="sb-tile" data-goto="pgExchange"><span class="ic">💱</span><span class="lb">Обмен</span></div>
+        <div class="sb-tile" data-goto="pgDeposit"><span class="ic">📥</span><span class="lb">Пополнить</span><span class="dot" id="depDot"></span></div>
+        <div class="sb-tile" data-goto="pgChecks"><span class="ic">🧾</span><span class="lb">Чеки</span></div>
       </div>
-      <div class="sb-group">
-        <div class="sb-sep">Операции</div>
-        <div class="sb-item" data-goto="pgChecks"><span class="ic">🧾</span>Чеки</div>
-        <div class="sb-item" data-goto="pgHistory"><span class="ic">📋</span>История</div>
-      </div>
-      <div class="sb-group">
-        <div class="sb-sep">Сообщество</div>
-        <div class="sb-item" data-goto="pgLeaderboard"><span class="ic">🏆</span>Forbes</div>
-        <div class="sb-item" data-goto="pgSupport"><span class="ic">🎧</span>Поддержка<span class="sb-badge" id="sbSupportBadge" style="display:none">!</span></div>
-      </div>
-      <div class="sb-group" id="sbAdminGroup" style="display:none">
+
+      <div class="sb-sep">Сообщество</div>
+      <div class="sb-list-item" data-goto="pgHistory"><span class="ic">📋</span>История</div>
+      <div class="sb-list-item" data-goto="pgLeaderboard"><span class="ic">🏆</span>Forbes</div>
+      <div class="sb-list-item" data-goto="pgShop"><span class="ic">🛍</span>Магазин</div>
+      <div class="sb-list-item" data-goto="pgSupport"><span class="ic">🎧</span>Поддержка<span class="sb-badge" id="sbSupportBadge" style="display:none">!</span></div>
+
+      <div id="sbAdminGroup" style="display:none">
         <div class="sb-sep">Управление</div>
-        <div class="sb-item" id="sbAdminItem" data-goto="pgAdmin"><span class="ic">👑</span>Панель</div>
+        <div class="sb-list-item" data-goto="pgAdmin"><span class="ic">👑</span>Панель<span class="sb-badge" id="sbAdminBadge" style="display:none">!</span></div>
       </div>
     </div>
+
     <div class="sb-footer">
-      <div class="sb-item" data-goto="pgSettings"><span class="ic">⚙️</span>Настройки</div>
+      <div class="sb-list-item" data-goto="pgSettings"><span class="ic">⚙️</span>Настройки</div>
       <div class="sb-logout" id="btnLogout">⬅️ Выйти</div>
     </div>
   </div>
 
-  <!-- MAIN -->
   <div id="main">
 
-    <!-- WALLET -->
     <div class="page on" id="pgWallet">
       <div class="ph"><div class="ph-top"><div><div class="ph-title" id="homeGreet">Кошелёк</div><div class="ph-sub" id="homeDate"></div></div><div id="homeBadge"></div></div></div>
-      <div id="homeBlockedBanner" style="display:none;background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.2);border-radius:var(--rs);padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--c-red);font-weight:500">🔒 Кошелёк заблокирован. <span style="text-decoration:underline;cursor:pointer" data-goto="pgSupport">Открыть поддержку</span></div>
+      <div id="homeBlockedBanner" style="display:none;background:rgba(255,71,87,.1);border:1px solid rgba(255,71,87,.2);border-radius:var(--rs);padding:12px 16px;margin-bottom:16px;font-size:13px;color:var(--c-red);font-weight:500">🔒 Кошелёк заблокирован. <span style="text-decoration:underline;cursor:pointer" data-goto="pgSupport">Поддержка</span></div>
       <div class="wallet-hero">
         <div class="wh-label">Общий баланс</div>
         <div class="wh-amount"><span>$</span><span id="wBalInt">0</span><span id="wBalDec" style="opacity:.6">.00</span></div>
@@ -506,104 +428,59 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
           <div class="wh-btn" data-goto="pgChecks"><span class="wh-btn-icon">🧾</span>Чек</div>
         </div>
       </div>
-      <div class="sec">
-        <div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все</span></div>
-        <div class="asset-list" id="homeAssets"></div>
-      </div>
-      <div class="sec">
-        <div class="sec-head"><span class="sec-title">Последние операции</span><span class="sec-link" data-goto="pgHistory">Все</span></div>
-        <div id="homeTx"><div class="empty-state"><span class="emo">📭</span>Операций пока нет</div></div>
-      </div>
+      <div class="sec"><div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все</span></div><div class="asset-list" id="homeAssets"></div></div>
+      <div class="sec"><div class="sec-head"><span class="sec-title">Последние операции</span><span class="sec-link" data-goto="pgHistory">Все</span></div><div id="homeTx"><div class="empty-state"><span class="emo">📭</span>Операций пока нет</div></div></div>
     </div>
 
-    <!-- ASSETS -->
     <div class="page" id="pgAssets">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">💎 Активы</div><div class="ph-sub">Ваш крипто-портфель</div></div></div></div>
       <div class="sec"><div class="asset-list" id="assetsList"></div></div>
     </div>
 
-    <!-- TRANSFER -->
     <div class="page" id="pgTransfer">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">↗️ Перевод</div><div class="ph-sub">Отправить средства</div></div></div></div>
       <div class="sec card-p" style="max-width:480px">
-        <div class="form-group"><label class="form-label">Получатель</label><input class="form-input" id="trTo" placeholder="BV-XXXXXX или @nickname"/><div class="form-hint">Введите код кошелька или никнейм</div></div>
+        <div class="form-group"><label class="form-label">Получатель</label><input class="form-input" id="trTo" placeholder="BV-XXXXXX или @nickname"/></div>
         <div class="form-group"><label class="form-label">Валюта и сумма</label>
           <div class="input-row">
-            <select class="form-input" id="trCur">
-              <option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option>
-              <option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option>
-            </select>
+            <select class="form-input" id="trCur"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select>
             <input class="form-input" id="trAmt" type="number" placeholder="0.00"/>
           </div>
           <div class="form-hint" id="trBalHint">Доступно: —</div>
         </div>
         <div class="form-group"><label class="form-label">Комментарий</label><input class="form-input" id="trComment" placeholder="Необязательно..."/></div>
-        <div style="background:var(--c-surface2);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:14px;display:flex;gap:8px;align-items:center"><span>⏳</span><span>Обработка займёт ~5 секунд. Комиссия 0%</span></div>
+        <div style="background:var(--c-surface2);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:14px">⏳ Обработка ~5 секунд. Комиссия 0%</div>
         <button class="btn btn-primary" id="btnTransfer">Отправить</button>
-        <div class="pending-box" id="trPending"><div class="pending-box-text">⏳ Выполняем перевод...</div><div class="progress-bar"><div class="progress-fill" id="trBar" style="width:0%"></div></div></div>
+        <div class="pending-box" id="trPending"><div style="font-size:13px;color:#C0AEFF;font-weight:600">⏳ Выполняем перевод...</div><div class="progress-bar"><div class="progress-fill" id="trBar" style="width:0%"></div></div></div>
       </div>
     </div>
 
-    <!-- EXCHANGE -->
     <div class="page" id="pgExchange">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">💱 Обмен</div><div class="ph-sub">Конвертация по рыночному курсу</div></div></div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">💱 Обмен</div><div class="ph-sub">По рыночному курсу</div></div></div></div>
       <div style="max-width:480px">
         <div class="ex-wrap">
-          <div class="ex-side">
-            <div class="ex-label">Отдаёте</div>
-            <div class="input-row">
-              <select class="form-input" id="exFrom"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select>
-              <input class="form-input" id="exAmt" type="number" placeholder="0.00"/>
-            </div>
+          <div class="ex-side"><div class="ex-label">Отдаёте</div>
+            <div class="input-row"><select class="form-input" id="exFrom"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select><input class="form-input" id="exAmt" type="number" placeholder="0.00"/></div>
           </div>
           <div class="ex-mid"><div class="ex-swap-btn" id="btnSwapEx">⇅</div></div>
-          <div class="ex-side" style="border-bottom:none">
-            <div class="ex-label">Получаете</div>
-            <div class="input-row">
-              <select class="form-input" id="exTo"><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option></select>
-              <input class="form-input" id="exOut" readonly placeholder="~0.00" style="background:transparent;opacity:.7"/>
-            </div>
+          <div class="ex-side" style="border-bottom:none"><div class="ex-label">Получаете</div>
+            <div class="input-row"><select class="form-input" id="exTo"><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option></select><input class="form-input" id="exOut" readonly placeholder="~0.00" style="opacity:.7"/></div>
           </div>
         </div>
-        <div id="exRateInfo" style="font-size:13px;color:var(--c-text2);padding:10px 4px">Выберите валюты и введите сумму</div>
+        <div id="exRateInfo" style="font-size:13px;color:var(--c-text2);padding:10px 4px">Выберите валюты и сумму</div>
         <div style="background:var(--c-surface);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:14px;border:1px solid var(--c-border)">⏳ Время обмена: ~1 минута</div>
         <button class="btn btn-primary" id="btnExchange">Обменять</button>
-        <div class="pending-box" id="exPending"><div class="pending-box-text">💱 Выполняем обмен...</div><div class="progress-bar"><div class="progress-fill" id="exBar" style="width:0%"></div></div></div>
+        <div class="pending-box" id="exPending"><div style="font-size:13px;color:#C0AEFF;font-weight:600">💱 Выполняем обмен...</div><div class="progress-bar"><div class="progress-fill" id="exBar" style="width:0%"></div></div></div>
       </div>
     </div>
 
-    <!-- DEPOSIT -->
+    <!-- DEPOSIT - chat-based request system -->
     <div class="page" id="pgDeposit">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">📥 Пополнение</div><div class="ph-sub">Выберите способ</div></div></div></div>
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;margin-bottom:20px">
-        <div class="sec card-p" style="cursor:pointer;text-align:center;transition:all .2s" onclick="showDepForm('crypto')">
-          <div style="font-size:32px;margin-bottom:8px">🔐</div>
-          <div style="font-size:14px;font-weight:700">Крипто</div>
-          <div style="font-size:12px;color:var(--c-text2);margin-top:2px">BTC, ETH, TON</div>
-        </div>
-        <div class="sec card-p" style="cursor:pointer;text-align:center;transition:all .2s" onclick="showDepForm('steam')">
-          <div style="font-size:32px;margin-bottom:8px">🎮</div>
-          <div style="font-size:14px;font-weight:700">Steam</div>
-          <div style="font-size:12px;color:var(--c-text2);margin-top:2px">Gift cards</div>
-        </div>
-        <div class="sec card-p" style="cursor:pointer;text-align:center;transition:all .2s" onclick="showDepForm('fiat')">
-          <div style="font-size:32px;margin-bottom:8px">💳</div>
-          <div style="font-size:14px;font-weight:700">Фиат</div>
-          <div style="font-size:12px;color:var(--c-text2);margin-top:2px">UAH · RUB · USD</div>
-        </div>
-      </div>
-      <div id="depFormWrap" style="display:none;max-width:480px">
-        <div class="sec card-p">
-          <div style="font-size:15px;font-weight:700;margin-bottom:16px" id="depTitle">Заявка на пополнение</div>
-          <div class="form-group"><label class="form-label">Ваш код / ник</label><input class="form-input" id="depTarget" placeholder="BV-XXXXXX"/></div>
-          <div class="form-group"><label class="form-label">Сумма</label><input class="form-input" id="depAmt" type="number" placeholder="0.00"/></div>
-          <div style="background:var(--c-surface2);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:14px;border:1px solid var(--c-border);line-height:1.6">⚠️ Реквизиты будут добавлены позже. Заявка будет обработана администратором.</div>
-          <button class="btn btn-primary" onclick="submitDep()">Отправить заявку</button>
-        </div>
-      </div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">📥 Пополнение</div><div class="ph-sub">Заявка обрабатывается администратором</div></div>
+      <button class="btn btn-primary btn-sm" id="btnNewDeposit">+ Новая заявка</button></div></div>
+      <div class="sec" id="depRequestsWrap"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div>
     </div>
 
-    <!-- CHECKS -->
     <div class="page" id="pgChecks">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🧾 Чеки</div><div class="ph-sub">Создавайте и принимайте платежи</div></div>
       <button class="btn btn-primary btn-sm" id="btnOpenCheck">+ Создать</button></div></div>
@@ -614,67 +491,84 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
       <div id="myChecksWrap"><div id="myChecksList"><div class="empty-state"><span class="emo">🧾</span>Чеков нет</div></div></div>
       <div id="payCheckWrap" style="display:none">
         <div class="sec card-p" style="max-width:480px">
-          <div class="form-group"><label class="form-label">ID чека</label>
-            <div style="display:flex;gap:8px"><input class="form-input" id="payChkId" placeholder="Введите ID"/><button class="btn btn-primary btn-sm" id="btnPayChk" style="white-space:nowrap">Оплатить</button></div>
-          </div>
+          <div class="form-group"><label class="form-label">ID чека</label><div style="display:flex;gap:8px"><input class="form-input" id="payChkId" placeholder="Введите ID"/><button class="btn btn-primary btn-sm" id="btnPayChk" style="white-space:nowrap">Оплатить</button></div></div>
         </div>
       </div>
     </div>
 
-    <!-- HISTORY -->
     <div class="page" id="pgHistory">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">📋 История</div><div class="ph-sub">Все операции</div></div></div></div>
       <div class="sec" id="histWrap"><div class="empty-state"><span class="emo">📭</span>Нет операций</div></div>
     </div>
 
-    <!-- LEADERBOARD -->
     <div class="page" id="pgLeaderboard">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🏆 Forbes</div><div class="ph-sub">Рейтинг богатейших</div></div></div></div>
       <div class="sec" id="lbWrap"><div class="empty-state"><span class="emo">⏳</span>Загрузка...</div></div>
     </div>
 
-    <!-- SUPPORT -->
+    <!-- SHOP: tag & theme customization -->
+    <div class="page" id="pgShop">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">🛍 Магазин</div><div class="ph-sub">Кастомизация и интерфейсы</div></div></div></div>
+
+      <div class="sec card-p" style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:15px;font-weight:700">🏷 Создать свой тег</div>
+          <span class="price-tag">50 ₴</span>
+        </div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:14px">Придумайте название и цвет для своего уникального тега в профиле</div>
+        <button class="btn btn-gold btn-sm" onclick="openSheet('sheetCreateTag')" id="btnShowCreateTag">Создать тег</button>
+        <div id="myTagInfo" style="margin-top:12px"></div>
+      </div>
+
+      <div class="sec card-p" style="margin-bottom:14px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:15px;font-weight:700">🎨 Кастомизация тега</div>
+          <span class="price-tag">200 ₴</span>
+        </div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:14px">Измените цвет, палитру своего тега (название роли Admin/Helper/Owner менять нельзя)</div>
+        <button class="btn btn-gold btn-sm" onclick="openSheet('sheetCustomizeTag')">Кастомизировать</button>
+      </div>
+
+      <div class="sec card-p">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:15px;font-weight:700">🖌 Кастомизация интерфейса</div>
+          <span class="price-tag">50 ₴</span>
+        </div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:14px">Меняйте цвета кнопок и меню под себя. Готовый интерфейс можно передать другу по коду!</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <button class="btn btn-gold btn-sm" onclick="openSheet('sheetCustomizeUI')">Купить кастомизацию</button>
+          <button class="btn btn-secondary btn-sm" onclick="openSheet('sheetUseTheme')">Использовать код темы</button>
+        </div>
+      </div>
+    </div>
+
     <div class="page" id="pgSupport">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🎧 Поддержка</div><div class="ph-sub">Обращения и тикеты</div></div>
       <button class="btn btn-primary btn-sm" id="btnNewReport">+ Обращение</button></div></div>
       <div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
     </div>
 
-    <!-- ADMIN -->
     <div class="page" id="pgAdmin">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">👑 Панель</div><div class="ph-sub" id="adminRoleSub">Управление</div></div><div id="adminTopBadge"></div></div></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px" id="adminTabs">
         <button class="btn btn-primary btn-sm" onclick="admTab('wallets')">Кошельки</button>
+        <button class="btn btn-secondary btn-sm" onclick="admTab('deposits')">Пополнения<span id="admDepCount" style="margin-left:5px"></span></button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('tx')">Транзакции</button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('reports')">Тикеты</button>
-        <button class="btn btn-secondary btn-sm" onclick="admTab('tgreq')">TG/DC заявки</button>
+        <button class="btn btn-secondary btn-sm" onclick="admTab('tgreq')">TG/DC</button>
         <button class="btn btn-secondary btn-sm" id="admGiveTabBtn" style="display:none" onclick="admTab('give')">Выдать деньги</button>
         <button class="btn btn-secondary btn-sm" id="admStaffTabBtn" style="display:none" onclick="admTab('staff')">Персонал</button>
       </div>
-      <div id="admWallets">
-        <div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Роль</th><th>Действия</th></tr></thead>
-        <tbody id="admWalletsTb"><tr><td colspan="6" class="empty-state">Загрузка...</td></tr></tbody></table></div>
-      </div>
-      <div id="admTx" style="display:none">
-        <div class="table-wrap"><table class="data-table"><thead><tr><th>От</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr></thead>
-        <tbody id="admTxTb"><tr><td colspan="5" class="empty-state">Загрузка...</td></tr></tbody></table></div>
-      </div>
-      <div id="admReports" style="display:none">
-        <div class="sec" id="admReportsList"><div class="empty-state"><span class="emo">🎧</span>Нет</div></div>
-      </div>
-      <div id="admTgReq" style="display:none">
-        <div class="sec" id="admTgReqList"><div class="empty-state"><span class="emo">📱</span>Нет заявок</div></div>
-      </div>
+      <div id="admWallets"><div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Роль</th><th>Действия</th></tr></thead><tbody id="admWalletsTb"><tr><td colspan="6" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
+      <div id="admDeposits" style="display:none"><div class="sec" id="admDepositsList"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div></div>
+      <div id="admTx" style="display:none"><div class="table-wrap"><table class="data-table"><thead><tr><th>От</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr></thead><tbody id="admTxTb"><tr><td colspan="5" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
+      <div id="admReports" style="display:none"><div class="sec" id="admReportsList"><div class="empty-state"><span class="emo">🎧</span>Нет</div></div></div>
+      <div id="admTgReq" style="display:none"><div class="sec" id="admTgReqList"><div class="empty-state"><span class="emo">📱</span>Нет заявок</div></div></div>
       <div id="admGive" style="display:none">
         <div class="sec card-p" style="max-width:480px">
           <div style="font-size:15px;font-weight:700;margin-bottom:16px">💰 Выдать деньги пользователю</div>
           <div class="form-group"><label class="form-label">Получатель</label><input class="form-input" id="agTo" placeholder="BV-XXXXXX или @nickname"/></div>
-          <div class="form-group"><label class="form-label">Валюта и сумма</label>
-            <div class="input-row">
-              <select class="form-input" id="agCur"><option value="USD">USD</option><option value="UAH">UAH</option><option value="RUB">RUB</option><option value="TON">TON</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select>
-              <input class="form-input" id="agAmt" type="number" placeholder="0.00"/>
-            </div>
-          </div>
+          <div class="form-group"><label class="form-label">Валюта и сумма</label><div class="input-row"><select class="form-input" id="agCur"><option value="USD">USD</option><option value="UAH">UAH</option><option value="RUB">RUB</option><option value="TON">TON</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select><input class="form-input" id="agAmt" type="number" placeholder="0.00"/></div></div>
           <button class="btn btn-primary" id="btnAdmGive">Выдать</button>
         </div>
       </div>
@@ -682,24 +576,19 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
         <div class="sec card-p" style="max-width:480px;margin-bottom:16px">
           <div style="font-size:15px;font-weight:700;margin-bottom:16px">👥 Управление персоналом</div>
           <div class="form-group"><label class="form-label">Пользователь</label><input class="form-input" id="stTarget" placeholder="BV-XXXXXX или @nickname"/></div>
-          <div class="form-group"><label class="form-label">Роль</label>
-            <select class="form-input" id="stRole"><option value="admin">Администратор</option><option value="helper">Хелпер</option><option value="user">Снять должность</option></select>
-          </div>
+          <div class="form-group"><label class="form-label">Роль</label><select class="form-input" id="stRole"><option value="admin">Администратор</option><option value="helper">Хелпер</option><option value="user">Снять должность</option></select></div>
           <button class="btn btn-primary" id="btnSetStaff">Применить</button>
         </div>
         <div class="sec" id="staffListWrap"><div class="empty-state"><span class="emo">👥</span>Загрузка...</div></div>
       </div>
     </div>
 
-    <!-- PROFILE VIEW -->
     <div class="page" id="pgProfile">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">Профиль</div></div><button class="btn btn-secondary btn-sm" onclick="goBack()">← Назад</button></div></div>
       <div class="profile-wrap">
         <div class="profile-banner" id="pvBanner"></div>
         <div class="profile-body">
-          <div class="profile-ava-row">
-            <div class="profile-ava" id="pvAva"><img id="pvAvaImg"/><span id="pvAvaTxt"></span></div>
-          </div>
+          <div class="profile-ava-row"><div class="profile-ava" id="pvAva"><img id="pvAvaImg"/><span id="pvAvaTxt"></span></div></div>
           <div class="profile-name" id="pvName">—</div>
           <div class="profile-code" id="pvCode"></div>
           <div class="profile-bio" id="pvBio"></div>
@@ -709,198 +598,177 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
       </div>
     </div>
 
-    <!-- SETTINGS -->
     <div class="page" id="pgSettings">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">⚙️ Настройки</div></div></div></div>
-
       <div class="settings-section">
-        <div class="settings-row">
-          <div class="settings-row-l"><div class="settings-row-title" id="setUname">—</div><div class="settings-row-sub" id="setCode">BV-??????</div></div>
-          <div id="setRoleBadge"></div>
-        </div>
-        <div class="settings-row clickable" onclick="openSheet('sheetEditProfile')">
-          <div class="settings-row-l"><div class="settings-row-title">Редактировать профиль</div><div class="settings-row-sub">Ник, описание, баннер</div></div>
-          <div class="settings-row-v">›</div>
-        </div>
-        <div class="settings-row clickable" onclick="openSheet('sheetAvatar')">
-          <div class="settings-row-l"><div class="settings-row-title">Аватар</div><div class="settings-row-sub">Загрузить или выбрать из истории</div></div>
-          <div class="settings-row-v">›</div>
-        </div>
-        <div class="settings-row clickable" onclick="openSheet('sheetSocials')">
-          <div class="settings-row-l"><div class="settings-row-title">Telegram / Discord</div><div class="settings-row-sub" id="setSocialsHint">Не привязано</div></div>
-          <div class="settings-row-v">›</div>
-        </div>
+        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" id="setUname">—</div><div class="settings-row-sub" id="setCode">BV-??????</div></div><div id="setRoleBadge"></div></div>
+        <div class="settings-row clickable" onclick="openSheet('sheetEditProfile')"><div class="settings-row-l"><div class="settings-row-title">Редактировать профиль</div><div class="settings-row-sub">Ник, описание, баннер</div></div><div class="settings-row-v">›</div></div>
+        <div class="settings-row clickable" onclick="openSheet('sheetAvatar')"><div class="settings-row-l"><div class="settings-row-title">Аватар</div><div class="settings-row-sub">Загрузить или выбрать из истории</div></div><div class="settings-row-v">›</div></div>
+        <div class="settings-row clickable" onclick="openSheet('sheetSocials')"><div class="settings-row-l"><div class="settings-row-title">Telegram / Discord</div><div class="settings-row-sub" id="setSocialsHint">Не привязано</div></div><div class="settings-row-v">›</div></div>
       </div>
-
       <div class="settings-section">
-        <div class="settings-row">
-          <div class="settings-row-l"><div class="settings-row-title">PIN-код при входе</div><div class="settings-row-sub">Блокировка при запуске</div></div>
-          <div class="toggle" id="pinToggle" onclick="togglePin()"><div class="toggle-k"></div></div>
-        </div>
-        <div class="settings-row" id="pinSetRow" style="display:none">
-          <div class="settings-row-l">
-            <div class="settings-row-title">Установить PIN</div>
-            <div style="display:flex;gap:8px;margin-top:8px"><input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:120px;padding:9px 12px"/><button class="btn btn-primary btn-sm" id="btnSetPin">Сохранить</button></div>
-          </div>
-        </div>
+        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">PIN-код при входе</div><div class="settings-row-sub">Блокировка при запуске</div></div><div class="toggle" id="pinToggle" onclick="togglePin()"><div class="toggle-k"></div></div></div>
+        <div class="settings-row" id="pinSetRow" style="display:none"><div class="settings-row-l"><div class="settings-row-title">Установить PIN</div><div style="display:flex;gap:8px;margin-top:8px"><input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:120px;padding:9px 12px"/><button class="btn btn-primary btn-sm" id="btnSetPin">Сохранить</button></div></div></div>
       </div>
-
       <div class="settings-section">
-        <div class="settings-row clickable" onclick="openSheet('sheetTheme')">
-          <div class="settings-row-l"><div class="settings-row-title">Тема оформления</div><div class="settings-row-sub">Цвет фона и изображение</div></div>
-          <div class="settings-row-v">›</div>
-        </div>
+        <div class="settings-row clickable" onclick="openSheet('sheetTheme')"><div class="settings-row-l"><div class="settings-row-title">Тема оформления</div><div class="settings-row-sub">Цвет фона и изображение</div></div><div class="settings-row-v">›</div></div>
       </div>
-
       <div class="settings-section">
-        <div class="settings-row">
-          <div class="settings-row-l"><div class="settings-row-title" style="color:var(--c-red)">Удалить аккаунт</div><div class="settings-row-sub">Необратимое действие</div></div>
-          <button class="btn btn-danger btn-sm" id="btnDeleteSelf">Удалить</button>
-        </div>
+        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" style="color:var(--c-red)">Удалить аккаунт</div><div class="settings-row-sub">Необратимое действие</div></div><button class="btn btn-danger btn-sm" id="btnDeleteSelf">Удалить</button></div>
       </div>
     </div>
 
-  </div><!-- /main -->
-</div><!-- /app -->
+  </div>
+</div>
 
-<!-- MOBILE NAV -->
 <div id="mobNav">
   <div class="mob-items">
     <div class="mob-item on" data-goto="pgWallet"><div class="ic">💳</div>Кошелёк</div>
-    <div class="mob-item" data-goto="pgAssets"><div class="ic">💎</div>Активы</div>
     <div class="mob-item" data-goto="pgTransfer"><div class="ic">↗️</div>Перевод</div>
+    <div class="mob-item" data-goto="pgShop"><div class="ic">🛍</div>Магазин</div>
     <div class="mob-item" data-goto="pgLeaderboard"><div class="ic">🏆</div>Forbes</div>
     <div class="mob-item" data-goto="pgSettings"><div class="ic">⚙️</div>Настройки</div>
   </div>
 </div>
 
-<!-- SHEETS (bottom sheets) -->
-<div class="overlay" id="sheetCreateCheck">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title">🧾 Создать чек</div><button class="sheet-close" onclick="closeSheet('sheetCreateCheck')">✕</button></div>
-    <div class="sheet-body">
-      <div class="form-group"><label class="form-label">Валюта и сумма</label>
-        <div class="input-row">
-          <select class="form-input" id="chkCur"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select>
-          <input class="form-input" id="chkAmt" type="number" placeholder="0.00"/>
-        </div>
-      </div>
-      <div class="form-group"><label class="form-label">Описание</label><input class="form-input" id="chkDesc" placeholder="Необязательно..."/></div>
-      <button class="btn btn-primary" id="btnCreateChk">Создать чек</button>
-    </div>
-  </div>
+<!-- SHEETS -->
+<div class="overlay" id="sheetCreateCheck"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🧾 Создать чек</div><button class="sheet-close" onclick="closeSheet('sheetCreateCheck')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Валюта и сумма</label><div class="input-row"><select class="form-input" id="chkCur"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select><input class="form-input" id="chkAmt" type="number" placeholder="0.00"/></div></div>
+    <div class="form-group"><label class="form-label">Описание</label><input class="form-input" id="chkDesc" placeholder="Необязательно..."/></div>
+    <button class="btn btn-primary" id="btnCreateChk">Создать чек</button>
+  </div></div>
 </div>
 
-<div class="overlay" id="sheetNewReport">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title">🎧 Новое обращение</div><button class="sheet-close" onclick="closeSheet('sheetNewReport')">✕</button></div>
-    <div class="sheet-body">
-      <div class="form-group"><label class="form-label">Тип</label>
-        <select class="form-input" id="repType"><option value="question">❓ Вопрос</option><option value="report">🚨 Репорт</option><option value="request">📋 Просьба</option><option value="unban">🔓 Разбан / разморозка</option></select>
-      </div>
-      <div class="form-group"><label class="form-label">Тема</label><input class="form-input" id="repSubj" placeholder="Кратко опишите"/></div>
-      <div class="form-group"><label class="form-label">Подробности</label><textarea class="form-input" id="repBody" placeholder="Подробное описание..."></textarea></div>
-      <button class="btn btn-primary" id="btnSendReport">Отправить</button>
-    </div>
-  </div>
+<div class="overlay" id="sheetNewReport"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🎧 Новое обращение</div><button class="sheet-close" onclick="closeSheet('sheetNewReport')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Тип</label><select class="form-input" id="repType"><option value="question">❓ Вопрос</option><option value="report">🚨 Репорт</option><option value="request">📋 Просьба</option><option value="unban">🔓 Разбан / разморозка</option></select></div>
+    <div class="form-group"><label class="form-label">Тема</label><input class="form-input" id="repSubj" placeholder="Кратко опишите"/></div>
+    <div class="form-group"><label class="form-label">Подробности</label><textarea class="form-input" id="repBody" placeholder="Подробное описание..."></textarea></div>
+    <button class="btn btn-primary" id="btnSendReport">Отправить</button>
+  </div></div>
 </div>
 
-<div class="overlay" id="sheetReportChat">
-  <div class="sheet" style="max-height:96vh">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head">
-      <div><div class="sheet-title" id="chatTitle">Тикет</div><div style="font-size:12px;color:var(--c-text2);margin-top:2px" id="chatStatus"></div></div>
-      <div style="display:flex;gap:8px;align-items:center">
-        <button class="btn btn-danger btn-sm" id="btnCloseTicket" style="display:none">Закрыть</button>
-        <button class="sheet-close" onclick="closeSheet('sheetReportChat')">✕</button>
-      </div>
-    </div>
-    <div class="sheet-body" style="padding-top:8px">
-      <div class="chat-area">
-        <div class="chat-msgs" id="chatMsgs"></div>
-        <div class="chat-bar" id="chatBar">
-          <input id="chatIn" placeholder="Сообщение..."/>
-          <button class="btn btn-primary btn-sm" id="btnSendChat">→</button>
-        </div>
-      </div>
-    </div>
-  </div>
+<div class="overlay" id="sheetReportChat"><div class="sheet" style="max-height:96vh"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div><div class="sheet-title" id="chatTitle">Тикет</div><div style="font-size:12px;color:var(--c-text2);margin-top:2px" id="chatStatus"></div></div>
+  <div style="display:flex;gap:8px;align-items:center"><button class="btn btn-danger btn-sm" id="btnCloseTicket" style="display:none">Закрыть</button><button class="sheet-close" onclick="closeSheet('sheetReportChat')">✕</button></div></div>
+  <div class="sheet-body" style="padding-top:8px"><div class="chat-area"><div class="chat-msgs" id="chatMsgs"></div><div class="chat-bar" id="chatBar"><input id="chatIn" placeholder="Сообщение..."/><button class="btn btn-primary btn-sm" id="btnSendChat">→</button></div></div></div>
+</div></div>
+
+<!-- DEPOSIT CHAT -->
+<div class="overlay" id="sheetDepositChat"><div class="sheet" style="max-height:96vh"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div><div class="sheet-title" id="depChatTitle">Заявка на пополнение</div><div style="font-size:12px;color:var(--c-text2);margin-top:2px" id="depChatStatus"></div></div>
+  <div style="display:flex;gap:8px;align-items:center" id="depChatActions"><button class="sheet-close" onclick="closeSheet('sheetDepositChat')">✕</button></div></div>
+  <div class="sheet-body" style="padding-top:8px">
+    <div class="chat-area"><div class="chat-msgs" id="depChatMsgs"></div><div class="chat-bar" id="depChatBar"><input id="depChatIn" placeholder="Сообщение..."/><button class="btn btn-primary btn-sm" id="btnSendDepChat">→</button></div></div>
+  </div></div>
 </div>
 
-<div class="overlay" id="sheetDeleteConfirm">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title" style="color:var(--c-red)">🗑 Удалить аккаунт</div><button class="sheet-close" onclick="closeSheet('sheetDeleteConfirm')">✕</button></div>
-    <div class="sheet-body">
-      <div class="form-group"><label class="form-label">Ник удаляемого</label><input class="form-input" id="delNick" placeholder="Ник"/></div>
-      <div class="form-group"><label class="form-label">Причина</label><input class="form-input" id="delReason" placeholder="Причина удаления"/></div>
-      <div class="form-group"><label class="form-label">Ваш ник (администратора)</label><input class="form-input" id="delAdminNick" placeholder="Ваш ник"/></div>
-      <div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.18);border-radius:var(--rs);padding:12px;font-size:13px;color:var(--c-red);margin-bottom:14px">⚠️ Это действие необратимо!</div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-danger" id="btnConfirmDelete">Подтвердить</button>
-        <button class="btn btn-secondary btn-sm" onclick="closeSheet('sheetDeleteConfirm')">Отмена</button>
-      </div>
-    </div>
-  </div>
+<div class="overlay" id="sheetNewDeposit"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">📥 Заявка на пополнение</div><button class="sheet-close" onclick="closeSheet('sheetNewDeposit')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Способ</label><select class="form-input" id="ndMethod"><option value="crypto">🔐 Крипто (BTC/ETH/TON)</option><option value="steam">🎮 Steam Gift</option><option value="fiat">💳 Фиат (UAH/RUB/USD)</option></select></div>
+    <div class="form-group"><label class="form-label">Валюта зачисления</label><select class="form-input" id="ndCur"><option value="USD">USD</option><option value="UAH">UAH</option><option value="RUB">RUB</option><option value="TON">TON</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select></div>
+    <div class="form-group"><label class="form-label">Сумма</label><input class="form-input" id="ndAmt" type="number" placeholder="0.00"/></div>
+    <div style="background:var(--c-surface2);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:14px">ℹ️ После отправки администратор свяжется с вами в чате и пришлёт реквизиты для оплаты</div>
+    <button class="btn btn-primary" id="btnSubmitDeposit">Отправить заявку</button>
+  </div></div>
 </div>
 
-<div class="overlay" id="sheetEditProfile">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title">✏️ Редактировать профиль</div><button class="sheet-close" onclick="closeSheet('sheetEditProfile')">✕</button></div>
-    <div class="sheet-body">
-      <div class="form-group"><label class="form-label">Никнейм</label><input class="form-input" id="editUname" placeholder="Никнейм"/></div>
-      <div class="form-group"><label class="form-label">Описание</label><textarea class="form-input" id="editBio" placeholder="О себе..."></textarea></div>
-      <div class="form-group"><label class="form-label">Баннер профиля</label><label class="btn btn-secondary" style="display:inline-flex;cursor:pointer">📸 Загрузить баннер<input type="file" id="bannerIn" accept="image/*" style="display:none"/></label></div>
-      <button class="btn btn-primary" id="btnSaveProfile">Сохранить</button>
-    </div>
-  </div>
+<div class="overlay" id="sheetDeleteConfirm"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title" style="color:var(--c-red)">🗑 Удалить аккаунт</div><button class="sheet-close" onclick="closeSheet('sheetDeleteConfirm')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Ник удаляемого</label><input class="form-input" id="delNick" placeholder="Ник"/></div>
+    <div class="form-group"><label class="form-label">Причина</label><input class="form-input" id="delReason" placeholder="Причина удаления"/></div>
+    <div class="form-group"><label class="form-label">Ваш ник (администратора)</label><input class="form-input" id="delAdminNick" placeholder="Ваш ник"/></div>
+    <div style="background:rgba(255,71,87,.08);border:1px solid rgba(255,71,87,.18);border-radius:var(--rs);padding:12px;font-size:13px;color:var(--c-red);margin-bottom:14px">⚠️ Необратимо!</div>
+    <div style="display:flex;gap:8px"><button class="btn btn-danger" id="btnConfirmDelete">Подтвердить</button><button class="btn btn-secondary btn-sm" onclick="closeSheet('sheetDeleteConfirm')">Отмена</button></div>
+  </div></div>
 </div>
 
-<div class="overlay" id="sheetAvatar">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title">🖼 Аватар</div><button class="sheet-close" onclick="closeSheet('sheetAvatar')">✕</button></div>
-    <div class="sheet-body">
-      <label class="btn btn-secondary" style="display:inline-flex;cursor:pointer;margin-bottom:16px">📁 Загрузить фото<input type="file" id="avIn" accept="image/*" style="display:none"/></label>
-      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--c-text3);margin-bottom:10px">История аватаров</div>
-      <div class="av-hist" id="avHistEl"><div style="color:var(--c-text3);font-size:13px">Нет</div></div>
-    </div>
-  </div>
+<div class="overlay" id="sheetEditProfile"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">✏️ Редактировать профиль</div><button class="sheet-close" onclick="closeSheet('sheetEditProfile')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Никнейм</label><input class="form-input" id="editUname" placeholder="Никнейм"/></div>
+    <div class="form-group"><label class="form-label">Описание</label><textarea class="form-input" id="editBio" placeholder="О себе..."></textarea></div>
+    <div class="form-group"><label class="form-label">Баннер профиля</label><label class="btn btn-secondary" style="display:inline-flex;cursor:pointer">📸 Загрузить баннер<input type="file" id="bannerIn" accept="image/*" style="display:none"/></label></div>
+    <button class="btn btn-primary" id="btnSaveProfile">Сохранить</button>
+  </div></div>
 </div>
 
-<div class="overlay" id="sheetSocials">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title">📱 Соцсети</div><button class="sheet-close" onclick="closeSheet('sheetSocials')">✕</button></div>
-    <div class="sheet-body">
-      <div class="form-group"><label class="form-label">Telegram</label>
-        <div style="display:flex;gap:8px"><input class="form-input" id="tgIn" placeholder="@username"/><button class="btn btn-primary btn-sm" id="btnTg" style="white-space:nowrap">Отправить заявку</button></div>
-        <div class="form-hint" id="tgHint"></div>
-      </div>
-      <div class="form-group"><label class="form-label">Discord</label>
-        <div style="display:flex;gap:8px"><input class="form-input" id="dcIn" placeholder="user#0000"/><button class="btn btn-primary btn-sm" id="btnDc" style="white-space:nowrap">Отправить заявку</button></div>
-      </div>
-    </div>
-  </div>
+<div class="overlay" id="sheetAvatar"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🖼 Аватар</div><button class="sheet-close" onclick="closeSheet('sheetAvatar')">✕</button></div>
+  <div class="sheet-body">
+    <label class="btn btn-secondary" style="display:inline-flex;cursor:pointer;margin-bottom:16px">📁 Загрузить фото<input type="file" id="avIn" accept="image/*" style="display:none"/></label>
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--c-text3);margin-bottom:10px">История аватаров</div>
+    <div class="av-hist" id="avHistEl"><div style="color:var(--c-text3);font-size:13px">Нет</div></div>
+  </div></div>
 </div>
 
-<div class="overlay" id="sheetTheme">
-  <div class="sheet">
-    <div class="sheet-handle"></div>
-    <div class="sheet-head"><div class="sheet-title">🎨 Тема</div><button class="sheet-close" onclick="closeSheet('sheetTheme')">✕</button></div>
-    <div class="sheet-body">
-      <div style="font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--c-text3);margin-bottom:10px">Цвет фона</div>
-      <div class="swatches" id="colorSwatches"></div>
-      <div style="margin-top:18px;margin-bottom:10px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.7px;color:var(--c-text3)">Своё изображение</div>
-      <div style="display:flex;gap:8px">
-        <label class="btn btn-secondary btn-sm" style="cursor:pointer">🖼 Выбрать<input type="file" id="bgIn" accept="image/*" style="display:none"/></label>
-        <button class="btn btn-danger btn-sm" id="btnResetTheme">Сбросить</button>
-      </div>
+<div class="overlay" id="sheetSocials"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">📱 Соцсети</div><button class="sheet-close" onclick="closeSheet('sheetSocials')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Telegram</label><div style="display:flex;gap:8px"><input class="form-input" id="tgIn" placeholder="@username"/><button class="btn btn-primary btn-sm" id="btnTg" style="white-space:nowrap">Отправить</button></div><div class="form-hint" id="tgHint"></div></div>
+    <div class="form-group"><label class="form-label">Discord</label><div style="display:flex;gap:8px"><input class="form-input" id="dcIn" placeholder="user#0000"/><button class="btn btn-primary btn-sm" id="btnDc" style="white-space:nowrap">Отправить</button></div></div>
+  </div></div>
+</div>
+
+<div class="overlay" id="sheetTheme"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🎨 Тема</div><button class="sheet-close" onclick="closeSheet('sheetTheme')">✕</button></div>
+  <div class="sheet-body">
+    <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--c-text3);margin-bottom:10px">Цвет фона</div>
+    <div class="swatches" id="colorSwatches"></div>
+    <div style="margin-top:18px;margin-bottom:10px;font-size:12px;font-weight:700;text-transform:uppercase;color:var(--c-text3)">Своё изображение</div>
+    <div style="display:flex;gap:8px"><label class="btn btn-secondary btn-sm" style="cursor:pointer">🖼 Выбрать<input type="file" id="bgIn" accept="image/*" style="display:none"/></label><button class="btn btn-danger btn-sm" id="btnResetTheme">Сбросить</button></div>
+  </div></div>
+</div>
+
+<!-- TAG SHOP SHEETS -->
+<div class="overlay" id="sheetCreateTag"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🏷 Создать свой тег</div><button class="sheet-close" onclick="closeSheet('sheetCreateTag')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Название тега</label><input class="form-input" id="ctName" maxlength="16" placeholder="например: PRO, VIP, LEGEND"/><div class="form-hint" id="ctNameHint"></div></div>
+    <div class="form-group"><label class="form-label">Цвет тега</label><div class="swatches" id="ctColors"></div></div>
+    <div style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--c-gold)">💰 Стоимость: 50 ₴ (баланс UAH)</div>
+    <button class="btn btn-gold" id="btnBuyTag">Купить за 50 ₴</button>
+  </div></div>
+</div>
+
+<div class="overlay" id="sheetCustomizeTag"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🎨 Кастомизация тега</div><button class="sheet-close" onclick="closeSheet('sheetCustomizeTag')">✕</button></div>
+  <div class="sheet-body">
+    <div id="custTagNotice" style="background:rgba(108,92,231,.08);border:1px solid rgba(108,92,231,.18);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;color:#C0AEFF"></div>
+    <div class="form-group"><label class="form-label">Цвет тега</label><div class="swatches" id="custColors"></div></div>
+    <div class="form-group"><label class="form-label">Эффект</label>
+      <select class="form-input" id="custEffect"><option value="solid">Обычный</option><option value="rainbow">🌈 Переливание цветов</option><option value="redblack">🔴⚫ Красно-чёрный</option></select>
     </div>
-  </div>
+    <div style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--c-gold)">💰 Стоимость: 200 ₴ (баланс UAH)</div>
+    <button class="btn btn-gold" id="btnBuyCustomize">Применить за 200 ₴</button>
+  </div></div>
+</div>
+
+<div class="overlay" id="sheetCustomizeUI"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🖌 Кастомизация интерфейса</div><button class="sheet-close" onclick="closeSheet('sheetCustomizeUI')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Цвет основных кнопок</label><div class="swatches" id="uiColors1"></div></div>
+    <div class="form-group"><label class="form-label">Цвет градиента (второй)</label><div class="swatches" id="uiColors2"></div></div>
+    <div style="background:rgba(245,166,35,.08);border:1px solid rgba(245,166,35,.18);border-radius:var(--rs);padding:12px 14px;margin-bottom:14px;font-size:13px;color:var(--c-gold)">💰 Стоимость: 50 ₴ (баланс UAH)</div>
+    <button class="btn btn-gold" id="btnBuyUI">Применить за 50 ₴</button>
+    <div id="myThemeCodeWrap" style="margin-top:16px;display:none">
+      <div style="font-size:12px;font-weight:700;text-transform:uppercase;color:var(--c-text3);margin-bottom:8px">Ваш код темы (передайте другу)</div>
+      <div style="display:flex;gap:8px"><input class="form-input" id="myThemeCode" readonly/><button class="btn btn-secondary btn-sm" onclick="copyThemeCode()">📋</button></div>
+    </div>
+  </div></div>
+</div>
+
+<div class="overlay" id="sheetUseTheme"><div class="sheet"><div class="sheet-handle"></div>
+  <div class="sheet-head"><div class="sheet-title">🔑 Использовать код темы</div><button class="sheet-close" onclick="closeSheet('sheetUseTheme')">✕</button></div>
+  <div class="sheet-body">
+    <div class="form-group"><label class="form-label">Код темы от друга</label><input class="form-input" id="useThemeCodeIn" placeholder="BVTHEME-XXXXXX"/></div>
+    <button class="btn btn-primary" id="btnUseTheme">Использовать</button>
+  </div></div>
 </div>
 
 <script type="module">
@@ -913,61 +781,80 @@ const{getFirestore,doc,getDoc,setDoc,updateDoc,deleteDoc,collection,addDoc,query
 const fba=initializeApp({apiKey:"AIzaSyCmXswh7MgI1tOcPCWl0AHBABY636gOczk",authDomain:"blackvault-7a10e.firebaseapp.com",projectId:"blackvault-7a10e",storageBucket:"blackvault-7a10e.firebasestorage.app",messagingSenderId:"1061227024519",appId:"1:1061227024519:web:d7fb72171bc26f5e4ce822"});
 const auth=getAuth(fba),db=getFirestore(fba);
 
-// OWNER HASH — hidden, use bvOwner('code') in console
 async function sha(s){const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(s));return Array.from(new Uint8Array(b)).map(x=>x.toString(16).padStart(2,'0')).join('')}
 const OH=await sha("ghkslhtoprodl';c'klkgodjthjnmnjslg:LkOihjodfjnjvnjkkg;ldfhjkpfdrjyijfklvmklsd;f'");
 window.bvOwner=async function(code){if(!CU||!UD)return;const h=await sha(code);if(h!==OH)return;await updateDoc(doc(db,'wallets',CU.uid),{isOwner:true,role:'owner'});toast('👑 Активировано!','s',5000);};
 
-// RATES (real-ish)
 const RATES={USD:1,UAH:41.5,RUB:92,TON:6.5,BTC:64797.46,ETH:3500};
 const COINS={USD:{n:'US Dollar',ico:'💵',col:'#22c55e'},UAH:{n:'Гривна',ico:'🇺🇦',col:'#3b82f6'},RUB:{n:'Рубль',ico:'🇷🇺',col:'#ef4444'},TON:{n:'Toncoin',ico:'💎',col:'#0088cc'},BTC:{n:'Bitcoin',ico:'₿',col:'#f7931a'},ETH:{n:'Ethereum',ico:'⟠',col:'#627eea'}};
-const BGS=[{n:'Тёмный',v:'#121218'},{n:'Полночь',v:'#080812'},{n:'Синий',v:'#060e1c'},{n:'Зелёный',v:'#060e0a'},{n:'Серый',v:'#0e0e12'}];
+const BGS=[{n:'Тёмный',v:'#0F0F16'},{n:'Полночь',v:'#080812'},{n:'Синий',v:'#060e1c'},{n:'Зелёный',v:'#060e0a'},{n:'Серый',v:'#0e0e12'}];
+const TAG_COLORS=[{n:'Фиолет',v:'#6C5CE7'},{n:'Золото',v:'#F5A623'},{n:'Красный',v:'#FF4757'},{n:'Зелёный',v:'#2ED573'},{n:'Голубой',v:'#00CBA8'},{n:'Розовый',v:'#FF6BCB'},{n:'Синий',v:'#3498DB'},{n:'Оранж',v:'#FF8C00'}];
 
-// STATE
-let CU=null,UD=null,UNS=null,prevPage=null,curTicketId=null;
-// Security
+let CU=null,UD=null,prevPage=null,curTicketId=null,curDepId=null;
 const loginAttempts={n:0,until:0};
+let selectedCtColor=TAG_COLORS[0].v,selectedCustColor=TAG_COLORS[0].v,selectedUi1=TAG_COLORS[0].v,selectedUi2='#9B8FFF';
 
-// UTILS
 function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 function fmtNum(n,dec=2){n=parseFloat(n)||0;if(!n)return'0';const p=n.toFixed(dec).split('.');p[0]=p[0].replace(/\B(?=(\d{3})+(?!\d))/g,' ');return p.join('.')}
 function fmtBal(n,c){n=parseFloat(n)||0;const d=c==='BTC'?8:c==='ETH'?6:2;if(c==='USD')return'$'+fmtNum(n,d);if(c==='UAH')return fmtNum(n,d)+' ₴';if(c==='RUB')return fmtNum(n,d)+' ₽';return fmtNum(n,d)+' '+c}
 function toUSD(b){b=b||{};return Object.keys(b).reduce((s,k)=>s+(b[k]||0)*(RATES[k]||1)/RATES.USD,0)}
 function fmtDate(ts){if(!ts)return'—';try{const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return'—'}}
 function genCode(){const c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';return'BV-'+Array.from({length:6},()=>c[~~(Math.random()*c.length)]).join('')}
-function genChkId(){return Array.from({length:10},()=>~~(Math.random()*36).toString(36).toUpperCase()).join('')}
-function roleBadge(u){if(!u)return'';if(u.isOwner)return'<span class="badge badge-owner">👑 Владелец</span>';if(u.role==='admin')return'<span class="badge badge-admin">🛡 Admin</span>';if(u.role==='helper')return'<span class="badge badge-helper">🎧 Helper</span>';return''}
+function genChkId(){return Array.from({length:10},()=>(~~(Math.random()*36)).toString(36).toUpperCase()).join('')}
+function genThemeCode(){return'BVTHEME-'+Array.from({length:8},()=>(~~(Math.random()*36)).toString(36).toUpperCase()).join('')}
 
-// TOAST
+function roleBadge(u){
+  if(!u)return'';
+  if(u.isOwner){
+    const c=u.tagColor||'#F5A623';
+    const eff=u.tagEffect;
+    let style=`background:${c}22;border-color:${c}55;color:${c}`;
+    let cls='role-tag';
+    if(eff==='rainbow')cls+=' rainbow';
+    return`<span class="${cls}" style="${eff!=='rainbow'?style:'border-color:rgba(255,255,255,.2)'}">👑 ${esc(u.tagName||'Владелец')}</span>`;
+  }
+  if(u.role==='admin'){
+    const c=u.tagColor||'#FF4757';const eff=u.tagEffect;
+    let style=`background:${c}22;border-color:${c}55;color:${c}`;let cls='role-tag';if(eff==='rainbow')cls+=' rainbow';
+    return`<span class="${cls}" style="${eff!=='rainbow'?style:'border-color:rgba(255,255,255,.2)'}">🛡 ${esc(u.tagName||'Admin')}</span>`;
+  }
+  if(u.role==='helper'){
+    const c=u.tagColor||'#00CBA8';const eff=u.tagEffect;
+    let style=`background:${c}22;border-color:${c}55;color:${c}`;let cls='role-tag';if(eff==='rainbow')cls+=' rainbow';
+    return`<span class="${cls}" style="${eff!=='rainbow'?style:'border-color:rgba(255,255,255,.2)'}">🎧 ${esc(u.tagName||'Helper')}</span>`;
+  }
+  if(u.customTag){
+    const c=u.customTag.color||'#6C5CE7';
+    return`<span class="role-tag" style="background:${c}22;border-color:${c}55;color:${c}">${esc(u.customTag.name)}</span>`;
+  }
+  return'';
+}
+
 window.toast=function(msg,t,dur){t=t||'i';dur=dur||3500;const icons={s:'✅',e:'❌',i:'ℹ️',w:'⚠️'};const el=document.createElement('div');el.className='tst '+t;el.innerHTML='<span style="font-size:16px">'+icons[t]+'</span><span style="flex:1">'+msg+'</span>';document.getElementById('toastRoot').appendChild(el);setTimeout(()=>el.style.opacity='0',dur-300);setTimeout(()=>el.remove(),dur)};
 
-// SHEETS
-window.openSheet=function(id){document.getElementById(id).classList.add('on')};
+window.openSheet=function(id){document.getElementById(id).classList.add('on');if(id==='sheetCreateTag')renderTagColorPicker('ctColors',c=>selectedCtColor=c);if(id==='sheetCustomizeTag')setupCustomizeTagSheet();if(id==='sheetCustomizeUI')setupUiSheet();};
 window.closeSheet=function(id){document.getElementById(id).classList.remove('on')};
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.classList.remove('on')}));
 
-// NAVIGATION
-function goto(id,addHistory=true){
+function goto(id){
   if(!id)return;
   const cur=document.querySelector('.page.on');
   if(cur&&cur.id!==id)prevPage=cur.id;
   document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
   const pg=document.getElementById(id);if(pg)pg.classList.add('on');
-  document.querySelectorAll('[data-goto]').forEach(el=>{
-    el.classList.toggle('on',el.getAttribute('data-goto')===id);
-    if(el.classList.contains('mob-item'))el.classList.toggle('on',el.getAttribute('data-goto')===id);
-    if(el.classList.contains('sb-item'))el.classList.toggle('on',el.getAttribute('data-goto')===id);
-  });
+  document.querySelectorAll('[data-goto]').forEach(el=>el.classList.toggle('on',el.getAttribute('data-goto')===id));
   closeSB();
   if(id==='pgLeaderboard')loadLB();
   if(id==='pgHistory')loadHistory();
   if(id==='pgChecks')loadMyChecks();
   if(id==='pgSupport')loadReports();
   if(id==='pgAdmin')loadAdminData();
+  if(id==='pgDeposit')loadMyDeposits();
   if(id==='pgWallet'){loadRecentTx();loadHomeAssets();}
   if(id==='pgAssets')loadAssets();
+  if(id==='pgShop')loadShopState();
 }
-window.goBack=function(){if(prevPage)goto(prevPage);else goto('pgWallet')};
+window.goBack=function(){goto(prevPage||'pgWallet')};
 window.nav=goto;
 document.querySelectorAll('[data-goto]').forEach(el=>el.addEventListener('click',()=>goto(el.getAttribute('data-goto'))));
 
@@ -976,7 +863,6 @@ document.getElementById('mobMenuBtn').addEventListener('click',()=>{document.get
 document.getElementById('sbOverlay').addEventListener('click',closeSB);
 document.getElementById('btnLogout').addEventListener('click',()=>signOut(auth).then(()=>toast('Вышли из аккаунта','i')));
 
-// AUTH
 function showAuth(id){['pgLogin','pgReg','pgUname'].forEach(p=>document.getElementById(p).style.display=p===id?'flex':'none');document.getElementById('authScreen').style.display='flex';document.getElementById('app').style.display='none'}
 document.getElementById('toReg').addEventListener('click',()=>showAuth('pgReg'));
 document.getElementById('toLg').addEventListener('click',()=>showAuth('pgLogin'));
@@ -984,24 +870,20 @@ document.getElementById('toLg').addEventListener('click',()=>showAuth('pgLogin')
 document.getElementById('btnLogin').addEventListener('click',async()=>{
   if(Date.now()<loginAttempts.until)return toast(`Подождите ${Math.ceil((loginAttempts.until-Date.now())/1000)}с`,'e');
   const e=document.getElementById('lEmail').value.trim(),p=document.getElementById('lPass').value;
-  if(!e||!p)return toast('Заполните все поля','w');
+  if(!e||!p)return toast('Заполните поля','w');
   try{await signInWithEmailAndPassword(auth,e,p);loginAttempts.n=0;}
   catch{loginAttempts.n++;if(loginAttempts.n>=5){loginAttempts.until=Date.now()+60000;loginAttempts.n=0;}toast('Неверный email или пароль','e');}
 });
-
 document.getElementById('btnReg').addEventListener('click',async()=>{
   const e=document.getElementById('rEmail').value.trim(),p=document.getElementById('rPass').value,p2=document.getElementById('rPass2').value;
   if(!e||!p)return toast('Заполните поля','w');
   if(p!==p2)return toast('Пароли не совпадают','e');
   if(p.length<6)return toast('Мин. 6 символов','w');
-  try{await createUserWithEmailAndPassword(auth,e,p);}
-  catch(err){toast(err.code==='auth/email-already-in-use'?'Email занят':'Ошибка регистрации','e');}
+  try{await createUserWithEmailAndPassword(auth,e,p);}catch(err){toast(err.code==='auth/email-already-in-use'?'Email занят':'Ошибка','e');}
 });
-
 async function goo(){try{await signInWithPopup(auth,new GoogleAuthProvider());}catch{toast('Ошибка Google','e');}}
 document.getElementById('btnGoo1').addEventListener('click',goo);
 document.getElementById('btnGoo2').addEventListener('click',goo);
-
 document.getElementById('btnUname').addEventListener('click',async()=>{
   const n=document.getElementById('unameI').value.trim();
   if(n.length<2)return toast('Мин. 2 символа','w');
@@ -1010,10 +892,9 @@ document.getElementById('btnUname').addEventListener('click',async()=>{
   await updateDoc(doc(db,'wallets',CU.uid),{username:n});
 });
 
-// AUTH STATE
 onAuthStateChanged(auth,async user=>{
   document.getElementById('loader').style.display='none';
-  if(!user){CU=null;UD=null;if(UNS){UNS();UNS=null;}document.getElementById('app').style.display='none';showAuth('pgLogin');return;}
+  if(!user){CU=null;UD=null;document.getElementById('app').style.display='none';showAuth('pgLogin');return;}
   CU=user;
   const wRef=doc(db,'wallets',user.uid);
   const wSnap=await getDoc(wRef);
@@ -1022,31 +903,34 @@ onAuthStateChanged(auth,async user=>{
   document.getElementById('authScreen').style.display='none';
   if(!UD.username){showAuth('pgUname');return;}
   document.getElementById('app').style.display='flex';
-  renderSidebar();
-  loadHomeAssets();
-  loadRecentTx();
-  applyTheme();
-  renderColorSwatches();
+  renderSidebar();loadHomeAssets();loadRecentTx();applyTheme();applyUiTheme();renderColorSwatches();
   if(localStorage.getItem('bv_pin'))showPinWall('verify');
+  checkDepositNotifications();
 });
 
-// PIN
-let pinBuf='',pinMode='verify',pinRes=null;
+// Persist avatar reliably - reload from DB periodically to avoid losing on tab switch
+async function refreshUserData(){
+  if(!CU)return;
+  try{
+    const snap=await getDoc(doc(db,'wallets',CU.uid));
+    if(snap.exists()){UD=snap.data();renderSidebar();}
+  }catch(e){}
+}
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshUserData();});
+
+let pinBuf='',pinMode='verify';
 function showPinWall(mode){pinBuf='';pinMode=mode;updatePinDots();document.getElementById('pinWall').classList.add('show');document.getElementById('pinErr').textContent='';}
 function hidePinWall(){document.getElementById('pinWall').classList.remove('show');}
 function updatePinDots(){for(let i=0;i<4;i++)document.getElementById('pd'+i).classList.toggle('on',i<pinBuf.length);}
-document.querySelectorAll('.pin-k').forEach(k=>k.addEventListener('click',()=>{
+document.querySelectorAll('.pin-k[data-v]').forEach(k=>k.addEventListener('click',()=>{
   const v=k.getAttribute('data-v');
-  if(v==='del')pinBuf=pinBuf.slice(0,-1);
-  else if(v==='bio'){}
-  else if(pinBuf.length<4)pinBuf+=v;
-  updatePinDots();
-  if(pinBuf.length===4)handlePinInput();
+  if(v==='del')pinBuf=pinBuf.slice(0,-1);else if(pinBuf.length<4)pinBuf+=v;
+  updatePinDots();if(pinBuf.length===4)handlePinInput();
 }));
 async function handlePinInput(){
   if(pinMode==='verify'){
     const h=await sha(pinBuf+CU.uid);
-    if(h===localStorage.getItem('bv_pin')){hidePinWall();if(pinRes)pinRes();}
+    if(h===localStorage.getItem('bv_pin'))hidePinWall();
     else{document.getElementById('pinErr').textContent='Неверный PIN';pinBuf='';updatePinDots();}
   }else{
     const h=await sha(pinBuf+CU.uid);localStorage.setItem('bv_pin',h);hidePinWall();
@@ -1063,13 +947,10 @@ document.getElementById('btnSetPin').addEventListener('click',()=>{
   sha(p+CU.uid).then(h=>{localStorage.setItem('bv_pin',h);document.getElementById('pinToggle').classList.add('on');document.getElementById('pinSetRow').style.display='none';toast('PIN установлен','s');});
 });
 
-// RENDER SIDEBAR
 function renderSidebar(){
   if(!UD)return;
   const init=UD.username.charAt(0).toUpperCase();
-  const sbAv=document.getElementById('sbAv');
-  const sbAvT=document.getElementById('sbAvT');
-  const sbAvI=document.getElementById('sbAvI');
+  const sbAvT=document.getElementById('sbAvT'),sbAvI=document.getElementById('sbAvI');
   if(UD.avatarUrl){sbAvT.style.display='none';sbAvI.src=UD.avatarUrl;sbAvI.style.display='block';}
   else{sbAvT.textContent=init;sbAvT.style.display='block';sbAvI.style.display='none';}
   document.getElementById('sbName').textContent=UD.username;
@@ -1077,19 +958,16 @@ function renderSidebar(){
   document.getElementById('sbRoleBadge').innerHTML=roleBadge(UD);
   const isStaff=UD.isOwner||UD.role==='admin'||UD.role==='helper';
   document.getElementById('sbAdminGroup').style.display=isStaff?'block':'none';
-  // Home page badges
   document.getElementById('homeGreet').textContent='Привет, '+UD.username+' 👋';
   document.getElementById('homeDate').textContent=new Date().toLocaleDateString('ru-RU',{weekday:'long',day:'numeric',month:'long'});
   document.getElementById('homeBadge').innerHTML=roleBadge(UD);
   document.getElementById('homeBlockedBanner').style.display=(UD.blocked||UD.frozen)?'block':'none';
   document.getElementById('wCodeTxt').textContent=UD.code;
-  // Settings
   document.getElementById('setUname').textContent=UD.username;
   document.getElementById('setCode').textContent=UD.code;
   document.getElementById('setRoleBadge').innerHTML=roleBadge(UD);
   if(UD.tg&&UD.tgVerified)document.getElementById('setSocialsHint').textContent='TG: '+UD.tg;
   document.getElementById('pinToggle').classList.toggle('on',!!localStorage.getItem('bv_pin'));
-  // Edit profile pre-fill
   document.getElementById('editUname').value=UD.username||'';
   document.getElementById('editBio').value=UD.bio||'';
   if(UD.tg)document.getElementById('tgIn').value=UD.tg;
@@ -1098,75 +976,46 @@ function renderSidebar(){
   else if(UD.tgPending)document.getElementById('tgHint').textContent='⏳ Ожидание проверки';
 }
 
-// HOME ASSETS
 function loadHomeAssets(){
   if(!UD)return;
-  const b=UD.balances||{};
-  const tot=toUSD(b);
-  const[intPart,decPart]=(tot.toFixed(2)).split('.');
+  const b=UD.balances||{};const tot=toUSD(b);
+  const[intPart,decPart]=tot.toFixed(2).split('.');
   document.getElementById('wBalInt').textContent=intPart.replace(/\B(?=(\d{3})+(?!\d))/g,' ');
   document.getElementById('wBalDec').textContent='.'+decPart;
   document.getElementById('wSub').textContent=UD.isOwner?'👑 Владелец':'BlackVault';
-
   const el=document.getElementById('homeAssets');
   const topCoins=Object.entries(COINS).filter(([k])=>(b[k]||0)>0).slice(0,4);
   if(!topCoins.length){el.innerHTML='<div class="empty-state" style="padding:20px"><span class="emo">💎</span>Пополните кошелёк</div>';return;}
-  el.innerHTML=topCoins.map(([k,c])=>{
-    const amt=b[k]||0,usdV=amt*(RATES[k]||1)/RATES.USD;
-    return`<div class="asset-row" onclick="nav('pgAssets')"><div class="asset-ico" style="background:${c.col}20;color:${c.col}">${c.ico}</div><div class="asset-info"><div class="asset-name">${c.n}</div><div class="asset-sym">${k}</div></div><div class="asset-right"><div class="asset-bal">${fmtBal(amt,k)}</div><div class="asset-usd">$${fmtNum(usdV,2)}</div></div></div>`;
-  }).join('');
+  el.innerHTML=topCoins.map(([k,c])=>{const amt=b[k]||0,usdV=amt*(RATES[k]||1)/RATES.USD;return`<div class="asset-row" onclick="nav('pgAssets')"><div class="asset-ico" style="background:${c.col}20;color:${c.col}">${c.ico}</div><div class="asset-info"><div class="asset-name">${c.n}</div><div class="asset-sym">${k}</div></div><div class="asset-right"><div class="asset-bal">${fmtBal(amt,k)}</div><div class="asset-usd">$${fmtNum(usdV,2)}</div></div></div>`;}).join('');
 }
-
 function loadAssets(){
-  if(!UD)return;
-  const b=UD.balances||{};
-  const el=document.getElementById('assetsList');
-  el.innerHTML=Object.entries(COINS).map(([k,c])=>{
-    const amt=b[k]||0,usdV=amt*(RATES[k]||1)/RATES.USD;
-    const rate1=RATES[k]/RATES.USD;
-    return`<div class="asset-row"><div class="asset-ico" style="background:${c.col}20;color:${c.col};font-size:24px">${c.ico}</div><div class="asset-info"><div class="asset-name">${c.n}</div><div class="asset-sym">1 ${k} = $${fmtNum(rate1,k==='BTC'?2:4)}</div></div><div class="asset-right"><div class="asset-bal">${fmtBal(amt,k)}</div><div class="asset-usd">${k!=='USD'?'$'+fmtNum(usdV,2):''}</div></div></div>`;
-  }).join('');
+  if(!UD)return;const b=UD.balances||{};
+  document.getElementById('assetsList').innerHTML=Object.entries(COINS).map(([k,c])=>{const amt=b[k]||0,usdV=amt*(RATES[k]||1)/RATES.USD,rate1=RATES[k]/RATES.USD;return`<div class="asset-row"><div class="asset-ico" style="background:${c.col}20;color:${c.col};font-size:24px">${c.ico}</div><div class="asset-info"><div class="asset-name">${c.n}</div><div class="asset-sym">1 ${k} = $${fmtNum(rate1,k==='BTC'?2:4)}</div></div><div class="asset-right"><div class="asset-bal">${fmtBal(amt,k)}</div><div class="asset-usd">${k!=='USD'?'$'+fmtNum(usdV,2):''}</div></div></div>`;}).join('');
 }
 
-// RECENT TX
 async function loadRecentTx(){
   if(!CU)return;
   const[s1,s2]=await Promise.all([getDocs(query(collection(db,'transactions'),where('fromUid','==',CU.uid),limit(10))),getDocs(query(collection(db,'transactions'),where('toUid','==',CU.uid),limit(10)))]);
   const map=new Map();s1.forEach(d=>map.set(d.id,d.data()));s2.forEach(d=>map.set(d.id,d.data()));
   let txs=[...map.values()].sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0)).slice(0,6);
-  const el=document.getElementById('homeTx');
-  if(!txs.length){el.innerHTML='<div class="empty-state"><span class="emo">📭</span>Нет операций</div>';return;}
-  el.innerHTML='<div>'+txs.map(tx=>txRow(tx)).join('')+'</div>';
+  document.getElementById('homeTx').innerHTML=txs.length?'<div>'+txs.map(txRow).join('')+'</div>':'<div class="empty-state"><span class="emo">📭</span>Нет операций</div>';
 }
-
 async function loadHistory(){
   if(!CU)return;
   const[s1,s2]=await Promise.all([getDocs(query(collection(db,'transactions'),where('fromUid','==',CU.uid),limit(50))),getDocs(query(collection(db,'transactions'),where('toUid','==',CU.uid),limit(50)))]);
   const map=new Map();s1.forEach(d=>map.set(d.id,d.data()));s2.forEach(d=>map.set(d.id,d.data()));
   let txs=[...map.values()].sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
-  const el=document.getElementById('histWrap');
-  if(!txs.length){el.innerHTML='<div class="empty-state"><span class="emo">📭</span>Нет операций</div>';return;}
-  el.innerHTML='<div>'+txs.map(tx=>txRow(tx)).join('')+'</div>';
+  document.getElementById('histWrap').innerHTML=txs.length?'<div>'+txs.map(txRow).join('')+'</div>':'<div class="empty-state"><span class="emo">📭</span>Нет операций</div>';
 }
-
 function txRow(tx){
   const out=tx.fromUid===CU?.uid&&tx.type!=='exchange';
   const isSwap=tx.type==='exchange';
-  const ico=isSwap?'💱':out?'↗️':'↙️';
-  const cls=isSwap?'swap':out?'out':'in';
-  const sign=isSwap?'':out?'-':'+';
+  const ico=isSwap?'💱':out?'↗️':'↙️';const cls=isSwap?'swap':out?'out':'in';const sign=isSwap?'':out?'-':'+';
   const who=isSwap?`${tx.currency}→${tx.toCurrency||'?'}`:out?(tx.toUsername||tx.toCode||'—'):(tx.fromUsername||tx.fromCode||'—');
   return`<div class="tx-row"><div class="tx-ico ${cls}">${ico}</div><div class="tx-info"><div class="tx-who">${esc(who)}${tx.comment?' · '+esc(tx.comment):''}</div><div class="tx-when">${fmtDate(tx.createdAt)}</div></div><div class="tx-right"><div class="tx-amount ${cls}">${sign}${fmtBal(tx.amount,tx.currency)}</div><div class="tx-cur">${tx.currency}</div></div></div>`;
 }
 
-// TRANSFER
-document.getElementById('trCur').addEventListener('change',e=>{
-  if(!UD)return;
-  const cur=e.target.value;
-  const bal=UD.balances?.[cur]||0;
-  document.getElementById('trBalHint').textContent='Доступно: '+fmtBal(bal,cur);
-});
-
+document.getElementById('trCur').addEventListener('change',e=>{if(!UD)return;const cur=e.target.value;document.getElementById('trBalHint').textContent='Доступно: '+fmtBal(UD.balances?.[cur]||0,cur);});
 document.getElementById('btnTransfer').addEventListener('click',async()=>{
   if(!UD||UD.blocked||UD.frozen)return toast('Кошелёк недоступен','e');
   const to=document.getElementById('trTo').value.trim();
@@ -1176,7 +1025,6 @@ document.getElementById('btnTransfer').addEventListener('click',async()=>{
   if(!to)return toast('Введите получателя','w');
   if(!amt||amt<=0)return toast('Введите сумму','w');
   if(amt>(UD.balances?.[cur]||0))return toast('Недостаточно '+cur,'e');
-
   let rSnap;
   if(to.toUpperCase().startsWith('BV-'))rSnap=await getDocs(query(collection(db,'wallets'),where('code','==',to.toUpperCase())));
   else rSnap=await getDocs(query(collection(db,'wallets'),where('username','==',to.replace('@',''))));
@@ -1184,43 +1032,32 @@ document.getElementById('btnTransfer').addEventListener('click',async()=>{
   const rDoc=rSnap.docs[0];const rD=rDoc.data();
   if(rDoc.id===CU.uid)return toast('Нельзя себе','w');
   if(rD.blocked||rD.frozen)return toast('Кошелёк получателя недоступен','e');
-
   const btn=document.getElementById('btnTransfer');btn.disabled=true;
   const pb=document.getElementById('trPending');pb.style.display='block';
   const bar=document.getElementById('trBar');let p=0;
   const iv=setInterval(()=>{p+=2;bar.style.width=Math.min(p,99)+'%';if(p>=100)clearInterval(iv);},100);
   await new Promise(r=>setTimeout(r,5000));
   clearInterval(iv);bar.style.width='100%';pb.style.display='none';btn.disabled=false;
-
   const batch=writeBatch(db);
   batch.update(doc(db,'wallets',CU.uid),{[`balances.${cur}`]:increment(-amt)});
   batch.update(doc(db,'wallets',rDoc.id),{[`balances.${cur}`]:increment(amt)});
   batch.set(doc(collection(db,'transactions')),{fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,toUid:rDoc.id,toCode:rD.code,toUsername:rD.username,currency:cur,amount:amt,comment,type:'transfer',createdAt:serverTimestamp()});
   await batch.commit();
-  UD.balances[cur]=(UD.balances[cur]||0)-amt;
-  renderSidebar();loadHomeAssets();
+  UD.balances[cur]=(UD.balances[cur]||0)-amt;renderSidebar();loadHomeAssets();
   toast('Переведено '+fmtBal(amt,cur)+' → '+rD.username,'s');
-  document.getElementById('trTo').value='';document.getElementById('trAmt').value='';document.getElementById('trComment').value='';
-  bar.style.width='0%';
+  document.getElementById('trTo').value='';document.getElementById('trAmt').value='';document.getElementById('trComment').value='';bar.style.width='0%';
 });
 
-// EXCHANGE
 function calcEx(){
   const f=document.getElementById('exFrom').value,t=document.getElementById('exTo').value;
   const amt=parseFloat(document.getElementById('exAmt').value)||0;
   if(!amt){document.getElementById('exOut').value='';return;}
-  const usd=amt*(RATES[f]||1)/RATES.USD;
-  const res=usd*RATES.USD/(RATES[t]||1);
-  const decs=t==='BTC'?8:t==='ETH'?6:2;
-  document.getElementById('exOut').value=res.toFixed(decs);
-  document.getElementById('exRateInfo').textContent=`1 ${f} = ${fmtNum((RATES[f]/RATES[t]),t==='BTC'?8:4)} ${t}`;
+  const usd=amt*(RATES[f]||1)/RATES.USD;const res=usd*RATES.USD/(RATES[t]||1);
+  document.getElementById('exOut').value=res.toFixed(t==='BTC'?8:t==='ETH'?6:2);
+  document.getElementById('exRateInfo').textContent=`1 ${f} = ${fmtNum(RATES[f]/RATES[t],t==='BTC'?8:4)} ${t}`;
 }
 ['exFrom','exTo','exAmt'].forEach(id=>document.getElementById(id).addEventListener('input',calcEx));
-document.getElementById('btnSwapEx').addEventListener('click',()=>{
-  const f=document.getElementById('exFrom'),t=document.getElementById('exTo');
-  [f.value,t.value]=[t.value,f.value];calcEx();
-});
-
+document.getElementById('btnSwapEx').addEventListener('click',()=>{const f=document.getElementById('exFrom'),t=document.getElementById('exTo');[f.value,t.value]=[t.value,f.value];calcEx();});
 document.getElementById('btnExchange').addEventListener('click',async()=>{
   if(!UD||UD.blocked||UD.frozen)return toast('Кошелёк недоступен','e');
   const f=document.getElementById('exFrom').value,t=document.getElementById('exTo').value;
@@ -1228,7 +1065,6 @@ document.getElementById('btnExchange').addEventListener('click',async()=>{
   if(!amt||amt<=0)return toast('Введите сумму','w');
   if(f===t)return toast('Разные валюты','w');
   if(amt>(UD.balances?.[f]||0))return toast('Недостаточно '+f,'e');
-
   const btn=document.getElementById('btnExchange');btn.disabled=true;
   const pb=document.getElementById('exPending');pb.style.display='block';
   const bar=document.getElementById('exBar');let p=0;
@@ -1236,9 +1072,7 @@ document.getElementById('btnExchange').addEventListener('click',async()=>{
   toast('Обмен запущен (~1 мин)','i',60000);
   await new Promise(r=>setTimeout(r,60000));
   clearInterval(iv);bar.style.width='100%';
-
-  const usd=amt*(RATES[f]||1)/RATES.USD;
-  const res=usd*RATES.USD/(RATES[t]||1);
+  const usd=amt*(RATES[f]||1)/RATES.USD;const res=usd*RATES.USD/(RATES[t]||1);
   await updateDoc(doc(db,'wallets',CU.uid),{[`balances.${f}`]:increment(-amt),[`balances.${t}`]:increment(res)});
   await addDoc(collection(db,'transactions'),{fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,toUid:CU.uid,toCode:UD.code,toUsername:UD.username,currency:f,toCurrency:t,amount:amt,toAmount:res,type:'exchange',createdAt:serverTimestamp()});
   pb.style.display='none';btn.disabled=false;bar.style.width='0%';
@@ -1246,26 +1080,123 @@ document.getElementById('btnExchange').addEventListener('click',async()=>{
   toast('Обменяно '+fmtBal(amt,f)+' → '+fmtBal(res,t),'s');
 });
 
-// DEPOSIT
-window.showDepForm=function(type){
-  const el=document.getElementById('depFormWrap');el.style.display='block';
-  const titles={crypto:'🔐 Пополнение криптой',steam:'🎮 Пополнение Steam',fiat:'💳 Пополнение UAH/RUB/USD'};
-  document.getElementById('depTitle').textContent=titles[type];
-  document.getElementById('depTarget').value=UD?.code||'';
-};
-window.submitDep=async function(){
-  const target=document.getElementById('depTarget').value.trim();
-  const amt=document.getElementById('depAmt').value;
-  if(!target)return toast('Введите код или ник','w');
-  await addDoc(collection(db,'depositRequests'),{uid:CU.uid,username:UD.username,target,amount:amt,status:'pending',createdAt:serverTimestamp()});
-  toast('Заявка отправлена! Ожидайте администратора','s',5000);
-  document.getElementById('depFormWrap').style.display='none';
-};
-
-// COPY CODE
+// ===== DEPOSIT SYSTEM (chat-based) =====
 window.copyCode=function(){navigator.clipboard.writeText(UD?.code||'').then(()=>toast('Код скопирован','s'))};
 
-// CHECKS
+document.getElementById('btnNewDeposit').addEventListener('click',()=>openSheet('sheetNewDeposit'));
+document.getElementById('btnSubmitDeposit').addEventListener('click',async()=>{
+  const method=document.getElementById('ndMethod').value;
+  const cur=document.getElementById('ndCur').value;
+  const amt=parseFloat(document.getElementById('ndAmt').value);
+  if(!amt||amt<=0)return toast('Введите сумму','w');
+  const methodNames={crypto:'🔐 Крипто',steam:'🎮 Steam',fiat:'💳 Фиат'};
+  await addDoc(collection(db,'depositRequests'),{
+    uid:CU.uid,username:UD.username,code:UD.code,method,methodName:methodNames[method],
+    currency:cur,amount:amt,status:'pending',
+    messages:[{uid:'system',username:'Система',text:`Заявка на пополнение ${fmtBal(amt,cur)} (${methodNames[method]}) создана`,ts:Date.now(),sys:true}],
+    createdAt:serverTimestamp(),updatedAt:serverTimestamp()
+  });
+  closeSheet('sheetNewDeposit');
+  document.getElementById('ndAmt').value='';
+  toast('Заявка отправлена! Ожидайте администратора','s',5000);
+  loadMyDeposits();
+});
+
+async function loadMyDeposits(){
+  if(!CU)return;
+  const isStaff=UD?.isOwner||UD?.role==='admin'||UD?.role==='helper';
+  let snap;
+  if(isStaff)snap=await getDocs(query(collection(db,'depositRequests'),limit(50)));
+  else snap=await getDocs(query(collection(db,'depositRequests'),where('uid','==',CU.uid),limit(20)));
+  const el=document.getElementById('depRequestsWrap');
+  if(snap.empty){el.innerHTML='<div class="empty-state"><span class="emo">📥</span>Нет заявок</div>';return;}
+  let rows=[];snap.forEach(d=>rows.push({...d.data(),_id:d.id}));
+  rows.sort((a,b)=>(b.updatedAt?.seconds||b.createdAt?.seconds||0)-(a.updatedAt?.seconds||a.createdAt?.seconds||0));
+  const statusMap={pending:{t:'Ожидание',c:'badge-yellow',d:'dot-open'},inprogress:{t:'В работе',c:'badge-purple',d:'dot-prog'},completed:{t:'Завершено',c:'badge-green',d:'dot-closed'},cancelled:{t:'Отменено',c:'badge-red',d:'dot-closed'}};
+  el.innerHTML='<div>'+rows.map(r=>{
+    const st=statusMap[r.status]||statusMap.pending;
+    return`<div class="report-item" onclick="openDepChat('${r._id}')"><div class="report-dot ${st.d}"></div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">${fmtBal(r.amount,r.currency)} · ${esc(r.methodName||'')}</div><div style="font-size:12px;color:var(--c-text2);margin-top:2px">${esc(r.username)} · ${fmtDate(r.createdAt)}</div></div><span class="badge ${st.c}">${st.t}</span></div>`;
+  }).join('')+'</div>';
+}
+
+window.openDepChat=async function(id){
+  curDepId=id;
+  const snap=await getDoc(doc(db,'depositRequests',id));
+  if(!snap.exists())return;
+  const r=snap.data();
+  const isStaff=UD?.isOwner||UD?.role==='admin'||UD?.role==='helper';
+  document.getElementById('depChatTitle').textContent=`${fmtBal(r.amount,r.currency)} · ${r.methodName||''}`;
+  const statusText={pending:'🟠 Ожидание','inprogress':'🔵 В работе',completed:'🟢 Завершено',cancelled:'🔴 Отменено'};
+  document.getElementById('depChatStatus').textContent=(statusText[r.status]||'')+' · '+r.username;
+
+  const actionsEl=document.getElementById('depChatActions');
+  actionsEl.innerHTML='';
+  if(isStaff&&(r.status==='pending'||r.status==='inprogress')){
+    const completeBtn=document.createElement('button');completeBtn.className='btn btn-primary btn-sm';completeBtn.textContent='✅ Завершить';
+    completeBtn.onclick=()=>completeDeposit(id);
+    const cancelBtn=document.createElement('button');cancelBtn.className='btn btn-danger btn-sm';cancelBtn.textContent='❌ Отменить';
+    cancelBtn.onclick=()=>cancelDeposit(id);
+    actionsEl.appendChild(completeBtn);actionsEl.appendChild(cancelBtn);
+  }
+  const closeBtn=document.createElement('button');closeBtn.className='sheet-close';closeBtn.textContent='✕';closeBtn.onclick=()=>closeSheet('sheetDepositChat');
+  actionsEl.appendChild(closeBtn);
+
+  document.getElementById('depChatBar').style.display=(r.status==='completed'||r.status==='cancelled')?'none':'flex';
+
+  loadDepChatMsgs(id);
+  if(isStaff&&r.status==='pending')updateDoc(doc(db,'depositRequests',id),{status:'inprogress'}).catch(()=>{});
+  openSheet('sheetDepositChat');
+};
+
+async function loadDepChatMsgs(id){
+  const snap=await getDoc(doc(db,'depositRequests',id));
+  if(!snap.exists())return;
+  const msgs=snap.data().messages||[];
+  const el=document.getElementById('depChatMsgs');
+  el.innerHTML=msgs.map(m=>{
+    if(m.sys)return`<div class="msg-bubble sys">${esc(m.text)}</div>`;
+    return`<div class="msg-bubble ${m.uid===CU.uid?'mine':'theirs'}"><div>${esc(m.text)}</div><div class="msg-meta">${esc(m.username)} · ${m.ts?new Date(m.ts).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''}</div></div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+document.getElementById('btnSendDepChat').addEventListener('click',async()=>{
+  const text=document.getElementById('depChatIn').value.trim().slice(0,500);
+  if(!text||!curDepId)return;
+  await updateDoc(doc(db,'depositRequests',curDepId),{messages:arrayUnion({uid:CU.uid,username:UD.username,text,ts:Date.now()}),updatedAt:serverTimestamp()});
+  document.getElementById('depChatIn').value='';loadDepChatMsgs(curDepId);
+});
+document.getElementById('depChatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();document.getElementById('btnSendDepChat').click();}});
+
+async function completeDeposit(id){
+  const snap=await getDoc(doc(db,'depositRequests',id));
+  if(!snap.exists())return;
+  const r=snap.data();
+  if(r.status==='completed')return toast('Уже завершено','w');
+  await updateDoc(doc(db,'wallets',r.uid),{[`balances.${r.currency}`]:increment(r.amount)});
+  await addDoc(collection(db,'transactions'),{fromUid:'system',fromCode:'SYSTEM',fromUsername:'Пополнение',toUid:r.uid,toCode:r.code,toUsername:r.username,currency:r.currency,amount:r.amount,type:'deposit',createdAt:serverTimestamp()});
+  await updateDoc(doc(db,'depositRequests',id),{status:'completed',messages:arrayUnion({uid:'system',username:'Система',text:`✅ Пополнение завершено! Зачислено ${fmtBal(r.amount,r.currency)}`,ts:Date.now(),sys:true}),completedAt:serverTimestamp(),updatedAt:serverTimestamp()});
+  toast('Пополнение завершено, средства зачислены','s');
+  loadDepChatMsgs(id);loadMyDeposits();if(UD?.isOwner||UD?.role==='admin'||UD?.role==='helper')loadAdminData();
+  openDepChat(id);
+}
+async function cancelDeposit(id){
+  await updateDoc(doc(db,'depositRequests',id),{status:'cancelled',messages:arrayUnion({uid:'system',username:'Система',text:'❌ Заявка отменена администратором',ts:Date.now(),sys:true}),updatedAt:serverTimestamp()});
+  toast('Заявка отменена','w');
+  loadDepChatMsgs(id);loadMyDeposits();if(UD?.isOwner||UD?.role==='admin'||UD?.role==='helper')loadAdminData();
+  openDepChat(id);
+}
+window.completeDeposit=completeDeposit;window.cancelDeposit=cancelDeposit;
+
+async function checkDepositNotifications(){
+  if(!CU)return;
+  const snap=await getDocs(query(collection(db,'depositRequests'),where('uid','==',CU.uid),limit(10)));
+  let hasActive=false;
+  snap.forEach(d=>{const r=d.data();if(r.status==='pending'||r.status==='inprogress')hasActive=true;});
+  document.getElementById('depDot').classList.toggle('show',hasActive);
+}
+
+// ===== CHECKS =====
 document.getElementById('btnOpenCheck').addEventListener('click',()=>openSheet('sheetCreateCheck'));
 document.getElementById('btnCreateChk').addEventListener('click',async()=>{
   if(!UD||UD.blocked||UD.frozen)return toast('Кошелёк недоступен','e');
@@ -1280,7 +1211,6 @@ document.getElementById('btnCreateChk').addEventListener('click',async()=>{
   closeSheet('sheetCreateCheck');document.getElementById('chkAmt').value='';document.getElementById('chkDesc').value='';
   toast('Чек создан! ID: '+cid,'s',7000);loadMyChecks();
 });
-
 document.getElementById('btnPayChk').addEventListener('click',async()=>{
   if(!UD||UD.blocked||UD.frozen)return toast('Кошелёк недоступен','e');
   const cid=document.getElementById('payChkId').value.trim().toUpperCase();
@@ -1298,14 +1228,12 @@ document.getElementById('btnPayChk').addEventListener('click',async()=>{
   toast('Оплачено! '+fmtBal(ch.amount,ch.currency)+' → '+ch.fromUsername,'s');
   document.getElementById('payChkId').value='';
 });
-
 window.chkTab=function(t){
   document.getElementById('myChecksWrap').style.display=t==='my'?'block':'none';
   document.getElementById('payCheckWrap').style.display=t==='pay'?'block':'none';
   document.getElementById('chkTabMy').className='btn btn-'+(t==='my'?'primary':'secondary')+' btn-sm';
   document.getElementById('chkTabPay').className='btn btn-'+(t==='pay'?'primary':'secondary')+' btn-sm';
 };
-
 async function loadMyChecks(){
   if(!CU)return;
   const snap=await getDocs(query(collection(db,'checks'),where('fromUid','==',CU.uid),limit(20)));
@@ -1316,7 +1244,7 @@ async function loadMyChecks(){
   el.innerHTML=rows.map(c=>`<div class="check-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><div class="check-amount">${fmtBal(c.amount,c.currency)}</div>${c.description?`<div style="font-size:13px;color:var(--c-text2);margin-top:5px">${esc(c.description)}</div>`:''}<div style="font-family:monospace;font-size:11px;color:var(--c-text3);margin-top:6px">ID: ${c.id}</div><div style="font-size:11px;color:var(--c-text3);margin-top:2px">${fmtDate(c.createdAt)}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:7px"><span class="badge ${c.status==='active'?'badge-green':'badge-purple'}">${c.status==='active'?'Активен':'Оплачен'}</span><button class="btn btn-secondary btn-sm" onclick="navigator.clipboard.writeText('${c.id}').then(()=>toast('Скопировано','s'))">📋</button></div></div></div>`).join('');
 }
 
-// LEADERBOARD
+// ===== LEADERBOARD =====
 async function loadLB(){
   const snap=await getDocs(query(collection(db,'wallets'),limit(200)));
   let users=[];snap.forEach(d=>users.push({...d.data(),_id:d.id}));
@@ -1325,40 +1253,141 @@ async function loadLB(){
   const el=document.getElementById('lbWrap');
   if(!users.length){el.innerHTML='<div class="empty-state"><span class="emo">🏆</span>Нет данных</div>';return;}
   el.innerHTML='<div>'+users.map((u,i)=>{
-    const r=i+1,me=u._id===CU?.uid;
-    const rc=r===1?'rk-1':r===2?'rk-2':r===3?'rk-3':'rk-n';
-    const med=medals[i]||r;
-    const av=u.avatarUrl?`<img src="${u.avatarUrl}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0"/>`:`<div class="sb-av" style="width:38px;height:38px;font-size:14px;background:linear-gradient(145deg,#5B4FE9,#9B8FFF);flex-shrink:0"><span>${u.username.charAt(0).toUpperCase()}</span></div>`;
-    const isRainbow=u.rainbowProfile;
-    return`<div class="lb-row" style="${me?'background:rgba(108,92,231,.08);':''}"><div class="lb-rank ${rc}">${med}</div>${av}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span style="font-size:14px;font-weight:700;${isRainbow?'background:linear-gradient(90deg,#FF4757,#FF8800,#F5A623,#2ED573,#6C5CE7,#C040FF);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text':''};">${esc(u.username)}</span>${me?'<span style="font-size:11px;color:var(--c-text3)">(Вы)</span>':''}${roleBadge(u)}</div><div style="font-size:11px;color:var(--c-text3)">${u.code}</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:800;color:var(--c-gold);letter-spacing:-.4px">$${fmtNum(u.tot,2)}</div></div></div>`;
+    const r=i+1,me=u._id===CU?.uid;const rc=r===1?'rk-1':r===2?'rk-2':r===3?'rk-3':'rk-n';const med=medals[i]||r;
+    const av=u.avatarUrl?`<img src="${u.avatarUrl}" style="width:38px;height:38px;border-radius:50%;object-fit:cover;flex-shrink:0"/>`:`<div class="sb-av" style="width:38px;height:38px;font-size:14px;flex-shrink:0"><span>${u.username.charAt(0).toUpperCase()}</span></div>`;
+    return`<div class="lb-row" style="${me?'background:rgba(108,92,231,.08);':''}" onclick="showProfile('${u._id}')"><div class="lb-rank ${rc}">${med}</div>${av}<div style="flex:1;min-width:0"><div style="display:flex;align-items:center;gap:7px;flex-wrap:wrap"><span style="font-size:14px;font-weight:700">${esc(u.username)}</span>${me?'<span style="font-size:11px;color:var(--c-text3)">(Вы)</span>':''}${roleBadge(u)}</div><div style="font-size:11px;color:var(--c-text3)">${u.code}</div></div><div style="text-align:right"><div style="font-size:15px;font-weight:800;color:var(--c-gold)">$${fmtNum(u.tot,2)}</div></div></div>`;
   }).join('')+'</div>';
 }
 
-// PROFILE VIEW
 window.showProfile=async function(uid){
   const snap=await getDoc(doc(db,'wallets',uid));
   if(!snap.exists())return toast('Не найден','e');
   const u=snap.data();
   const b=document.getElementById('pvBanner');
-  if(u.bannerUrl){b.innerHTML=`<img src="${u.bannerUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:inherit"/>`;} else{b.innerHTML='';b.style.background='linear-gradient(135deg,#1E1848,#16213E,#0D1B2A)';}
+  if(u.bannerUrl)b.innerHTML=`<img src="${u.bannerUrl}" style="width:100%;height:100%;object-fit:cover"/>`;
+  else{b.innerHTML='';b.style.background='linear-gradient(135deg,#1E1848,#16213E,#0D1B2A)';}
   const pvAvaImg=document.getElementById('pvAvaImg'),pvAvaTxt=document.getElementById('pvAvaTxt');
   if(u.avatarUrl){pvAvaImg.src=u.avatarUrl;pvAvaImg.style.display='block';pvAvaTxt.style.display='none';}
   else{pvAvaTxt.textContent=u.username.charAt(0).toUpperCase();pvAvaTxt.style.display='flex';pvAvaImg.style.display='none';}
-  const isRainbow=u.rainbowProfile;
-  document.getElementById('pvName').innerHTML=`${isRainbow?`<span class="rainbow">${esc(u.username)}</span>`:esc(u.username)} ${roleBadge(u)}`;
+  document.getElementById('pvName').innerHTML=`${esc(u.username)} ${roleBadge(u)}`;
   document.getElementById('pvCode').textContent=u.code;
   document.getElementById('pvBio').textContent=u.bio||'';
   let links='';
   if(u.tg&&u.tgVerified)links+=`<a href="https://t.me/${u.tg.replace('@','')}" target="_blank" class="profile-link">💬 ${esc(u.tg)}</a>`;
-  if(u.dc&&u.dcVerified)links+=`<span class="profile-link" style="cursor:default;color:var(--c-text2)">🎮 ${esc(u.dc)}</span>`;
+  if(u.dc&&u.dcVerified)links+=`<span class="profile-link" style="cursor:default">🎮 ${esc(u.dc)}</span>`;
   document.getElementById('pvLinks').innerHTML=links;
   const tot=toUSD(u.balances);
   document.getElementById('pvStats').innerHTML=`<div class="profile-stat"><div class="profile-stat-label">Баланс</div><div class="profile-stat-val" style="color:var(--c-gold)">$${fmtNum(tot,2)}</div></div>`;
   prevPage=document.querySelector('.page.on')?.id||'pgLeaderboard';
-  goto('pgProfile',false);
+  goto('pgProfile');
 };
 
-// SUPPORT
+// ===== SHOP - tags & UI =====
+function renderTagColorPicker(elId,onSelect){
+  const el=document.getElementById(elId);
+  el.innerHTML=TAG_COLORS.map((c,i)=>`<div class="swatch${i===0?' sel':''}" style="background:${c.v}" data-c="${c.v}" title="${c.n}"></div>`).join('');
+  el.querySelectorAll('.swatch').forEach(s=>s.addEventListener('click',()=>{
+    el.querySelectorAll('.swatch').forEach(x=>x.classList.remove('sel'));s.classList.add('sel');
+    onSelect(s.getAttribute('data-c'));
+  }));
+}
+
+async function loadShopState(){
+  const el=document.getElementById('myTagInfo');
+  if(UD.customTag){
+    el.innerHTML=`<div style="font-size:13px;color:var(--c-text2)">Ваш тег: ${roleBadge(UD)}</div>`;
+    document.getElementById('btnShowCreateTag').textContent='Изменить тег (новая покупка)';
+  }else{
+    el.innerHTML='';
+  }
+}
+
+document.getElementById('btnBuyTag').addEventListener('click',async()=>{
+  const name=document.getElementById('ctName').value.trim();
+  if(!name||name.length<2)return toast('Введите название (мин 2 символа)','w');
+  if(name.length>16)return toast('Максимум 16 символов','w');
+  const forbidden=['admin','owner','helper','админ','владелец','хелпер','owner','модератор','moderator'];
+  if(forbidden.some(f=>name.toLowerCase().includes(f)))return toast('Это название зарезервировано для персонала','e');
+  if((UD.balances?.UAH||0)<50)return toast('Недостаточно средств. Нужно 50 ₴ на балансе UAH','e');
+  await updateDoc(doc(db,'wallets',CU.uid),{[`balances.UAH`]:increment(-50),customTag:{name,color:selectedCtColor}});
+  await addDoc(collection(db,'transactions'),{fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,toUid:'shop',toCode:'SHOP',toUsername:'Магазин',currency:'UAH',amount:50,type:'shop_tag',createdAt:serverTimestamp()});
+  UD.balances.UAH-=50;UD.customTag={name,color:selectedCtColor};
+  toast('Тег создан! 🏷','s');renderSidebar();closeSheet('sheetCreateTag');
+});
+
+function setupCustomizeTagSheet(){
+  const notice=document.getElementById('custTagNotice');
+  const isStaff=UD.isOwner||UD.role==='admin'||UD.role==='helper';
+  if(isStaff){
+    notice.textContent='Вы можете менять только цвет и эффект своего служебного тега (название изменить нельзя)';
+    document.getElementById('custEffect').style.display='block';
+  }else if(UD.customTag){
+    notice.textContent='Вы измените цвет своего тега "'+UD.customTag.name+'"';
+    document.getElementById('custEffect').parentElement.style.display='none';
+  }else{
+    notice.textContent='Сначала создайте тег в разделе выше';
+  }
+  renderTagColorPicker('custColors',c=>selectedCustColor=c);
+}
+document.getElementById('btnBuyCustomize').addEventListener('click',async()=>{
+  const isStaff=UD.isOwner||UD.role==='admin'||UD.role==='helper';
+  if(!isStaff&&!UD.customTag)return toast('Сначала создайте тег','w');
+  if((UD.balances?.UAH||0)<200)return toast('Недостаточно средств. Нужно 200 ₴','e');
+  const effect=document.getElementById('custEffect').value;
+  const upd={[`balances.UAH`]:increment(-200)};
+  if(isStaff){upd.tagColor=selectedCustColor;upd.tagEffect=effect;}
+  else{upd.customTag={...UD.customTag,color:selectedCustColor};}
+  await updateDoc(doc(db,'wallets',CU.uid),upd);
+  await addDoc(collection(db,'transactions'),{fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,toUid:'shop',toCode:'SHOP',toUsername:'Магазин',currency:'UAH',amount:200,type:'shop_customize',createdAt:serverTimestamp()});
+  UD.balances.UAH-=200;
+  if(isStaff){UD.tagColor=selectedCustColor;UD.tagEffect=effect;}else{UD.customTag={...UD.customTag,color:selectedCustColor};}
+  toast('Тег кастомизирован! 🎨','s');renderSidebar();closeSheet('sheetCustomizeTag');
+});
+
+function setupUiSheet(){
+  renderTagColorPicker('uiColors1',c=>selectedUi1=c);
+  renderTagColorPicker('uiColors2',c=>selectedUi2=c);
+  if(UD.themeCode){
+    document.getElementById('myThemeCodeWrap').style.display='block';
+    document.getElementById('myThemeCode').value=UD.themeCode;
+  }
+}
+document.getElementById('btnBuyUI').addEventListener('click',async()=>{
+  if((UD.balances?.UAH||0)<50)return toast('Недостаточно средств. Нужно 50 ₴','e');
+  const themeCode=genThemeCode();
+  const themeData={btn1:selectedUi1,btn2:selectedUi2};
+  await updateDoc(doc(db,'wallets',CU.uid),{[`balances.UAH`]:increment(-50),themeCode,themeData});
+  await setDoc(doc(db,'themes',themeCode),{...themeData,creatorUid:CU.uid,createdAt:serverTimestamp()});
+  await addDoc(collection(db,'transactions'),{fromUid:CU.uid,fromCode:UD.code,fromUsername:UD.username,toUid:'shop',toCode:'SHOP',toUsername:'Магазин',currency:'UAH',amount:50,type:'shop_ui',createdAt:serverTimestamp()});
+  UD.balances.UAH-=50;UD.themeCode=themeCode;UD.themeData=themeData;
+  applyUiTheme();
+  document.getElementById('myThemeCodeWrap').style.display='block';
+  document.getElementById('myThemeCode').value=themeCode;
+  toast('Интерфейс обновлён! 🖌','s');
+});
+window.copyThemeCode=function(){navigator.clipboard.writeText(document.getElementById('myThemeCode').value).then(()=>toast('Код скопирован','s'))};
+
+document.getElementById('btnUseTheme').addEventListener('click',async()=>{
+  const code=document.getElementById('useThemeCodeIn').value.trim().toUpperCase();
+  if(!code)return toast('Введите код','w');
+  const snap=await getDoc(doc(db,'themes',code));
+  if(!snap.exists())return toast('Код не найден','e');
+  const t=snap.data();
+  await updateDoc(doc(db,'wallets',CU.uid),{themeCode:code,themeData:{btn1:t.btn1,btn2:t.btn2}});
+  UD.themeCode=code;UD.themeData={btn1:t.btn1,btn2:t.btn2};
+  applyUiTheme();
+  toast('Тема применена! 🎨','s');closeSheet('sheetUseTheme');
+});
+
+function applyUiTheme(){
+  if(UD?.themeData){
+    document.documentElement.style.setProperty('--btn1',UD.themeData.btn1);
+    document.documentElement.style.setProperty('--btn2',UD.themeData.btn2);
+    document.documentElement.style.setProperty('--c-acc',UD.themeData.btn1);
+  }
+}
+
+// ===== SUPPORT =====
 document.getElementById('btnNewReport').addEventListener('click',()=>openSheet('sheetNewReport'));
 document.getElementById('btnSendReport').addEventListener('click',async()=>{
   const type=document.getElementById('repType').value;
@@ -1369,7 +1398,6 @@ document.getElementById('btnSendReport').addEventListener('click',async()=>{
   closeSheet('sheetNewReport');document.getElementById('repSubj').value='';document.getElementById('repBody').value='';
   toast('Обращение отправлено','s');loadReports();
 });
-
 async function loadReports(){
   if(!CU)return;
   const isStaff=UD?.isOwner||UD?.role==='admin'||UD?.role==='helper';
@@ -1383,7 +1411,6 @@ async function loadReports(){
   const tL={question:'❓',report:'🚨',request:'📋',unban:'🔓'};
   el.innerHTML='<div class="sec">'+rows.map(r=>`<div class="report-item" onclick="openTicket('${r._id}','${esc(r.subject)}','${r.status}')"><div class="report-dot ${r.status==='open'?'dot-open':r.status==='inprogress'?'dot-prog':'dot-closed'}"></div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">${esc(r.subject)}</div><div style="font-size:12px;color:var(--c-text2);margin-top:2px">${tL[r.type]||''} · ${esc(r.username)} · ${fmtDate(r.createdAt)}</div></div><span class="badge ${r.status==='open'?'badge-yellow':r.status==='inprogress'?'badge-purple':'badge-red'}">${r.status==='open'?'Открыт':r.status==='inprogress'?'В работе':'Закрыт'}</span></div>`).join('')+'</div>';
 }
-
 window.openTicket=async function(id,subject,status){
   curTicketId=id;
   document.getElementById('chatTitle').textContent=subject;
@@ -1395,16 +1422,12 @@ window.openTicket=async function(id,subject,status){
   if(isStaff&&status==='open')updateDoc(doc(db,'reports',id),{status:'inprogress'}).catch(()=>{});
   openSheet('sheetReportChat');
 };
-
 async function loadChatMsgs(id){
-  const snap=await getDoc(doc(db,'reports',id));
-  if(!snap.exists())return;
+  const snap=await getDoc(doc(db,'reports',id));if(!snap.exists())return;
   const msgs=snap.data().messages||[];
-  const el=document.getElementById('chatMsgs');
-  el.innerHTML=msgs.map(m=>`<div class="msg-bubble ${m.uid===CU.uid?'mine':'theirs'}"><div>${esc(m.text)}</div><div class="msg-meta">${esc(m.username)} · ${m.ts?new Date(m.ts).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''}</div></div>`).join('');
-  el.scrollTop=el.scrollHeight;
+  document.getElementById('chatMsgs').innerHTML=msgs.map(m=>`<div class="msg-bubble ${m.uid===CU.uid?'mine':'theirs'}"><div>${esc(m.text)}</div><div class="msg-meta">${esc(m.username)} · ${m.ts?new Date(m.ts).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}):''}</div></div>`).join('');
+  document.getElementById('chatMsgs').scrollTop=9999;
 }
-
 document.getElementById('btnSendChat').addEventListener('click',async()=>{
   const text=document.getElementById('chatIn').value.trim().slice(0,500);
   if(!text||!curTicketId)return;
@@ -1412,37 +1435,34 @@ document.getElementById('btnSendChat').addEventListener('click',async()=>{
   document.getElementById('chatIn').value='';loadChatMsgs(curTicketId);
 });
 document.getElementById('chatIn').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();document.getElementById('btnSendChat').click();}});
-
 document.getElementById('btnCloseTicket').addEventListener('click',async()=>{
   if(!curTicketId)return;
   await updateDoc(doc(db,'reports',curTicketId),{status:'closed',closedAt:serverTimestamp()});
-  document.getElementById('chatStatus').textContent='⚫ Закрыт';
-  document.getElementById('chatBar').style.display='none';
-  document.getElementById('btnCloseTicket').style.display='none';
+  document.getElementById('chatStatus').textContent='⚫ Закрыт';document.getElementById('chatBar').style.display='none';document.getElementById('btnCloseTicket').style.display='none';
   toast('Тикет закрыт','s');loadReports();if(UD?.isOwner||UD?.role==='admin'||UD?.role==='helper')loadAdminData();
 });
 
-// ADMIN
+// ===== ADMIN =====
 function admTab(t){
-  ['wallets','tx','reports','tgreq','give','staff'].forEach(id=>{
+  ['wallets','deposits','tx','reports','tgreq','give','staff'].forEach(id=>{
     const el=document.getElementById('adm'+id.charAt(0).toUpperCase()+id.slice(1));
     if(el)el.style.display=id===t?'block':'none';
   });
-  document.querySelectorAll('#adminTabs .btn').forEach(b=>{b.className='btn btn-secondary btn-sm';});
+  document.querySelectorAll('#adminTabs .btn').forEach(b=>b.className='btn btn-secondary btn-sm');
   const actBtn=document.querySelector(`#adminTabs .btn[onclick*="'${t}'"]`);
   if(actBtn)actBtn.className='btn btn-primary btn-sm';
 }
+window.admTab=admTab;
 
 async function loadAdminData(){
   if(!UD)return;
-  const isOwner=UD.isOwner,isAdmin=UD.role==='admin',isHelper=UD.role==='helper';
+  const isOwner=UD.isOwner,isAdmin=UD.role==='admin';
   document.getElementById('adminRoleSub').textContent=isOwner?'Владелец проекта':isAdmin?'Администратор':'Хелпер';
   document.getElementById('adminTopBadge').innerHTML=roleBadge(UD);
   document.getElementById('admGiveTabBtn').style.display=isOwner||isAdmin?'flex':'none';
   document.getElementById('admStaffTabBtn').style.display=isOwner?'flex':'none';
   admTab('wallets');
 
-  // Wallets
   const snap=await getDocs(collection(db,'wallets'));
   const tb=document.getElementById('admWalletsTb');
   tb.innerHTML=snap.docs.map(d=>{
@@ -1454,45 +1474,44 @@ async function loadAdminData(){
       acts+=`<button class="btn btn-ghost btn-sm" onclick="admToggle('${d.id}','frozen',${!u.frozen})">${u.frozen?'☀️':'❄️'}</button>`;
     }
     if(isOwner)acts+=`<button class="btn btn-danger btn-sm" onclick="openDeleteSheet('${d.id}','${esc(u.username)}')">🗑</button>`;
-    acts+=`<button class="btn btn-ghost btn-sm" onclick="showProfile('${d.id}')">👁</button>`;
-    acts+='</div>';
+    acts+=`<button class="btn btn-ghost btn-sm" onclick="showProfile('${d.id}')">👁</button></div>`;
     return`<tr><td><div style="font-weight:600">${esc(u.username)}</div><div style="font-size:11px;color:var(--c-text3)">${esc(u.email||'')}</div></td><td><code style="font-size:11px">${u.code}</code></td><td>$${tot}</td><td>${st}</td><td>${roleBadge(u)||'—'}</td><td>${acts}</td></tr>`;
   }).join('')||'<tr><td colspan="6" class="empty-state">Нет</td></tr>';
 
-  // TX
+  // Deposits
+  const depSnap=await getDocs(query(collection(db,'depositRequests'),limit(50)));
+  let depRows=[];depSnap.forEach(d=>depRows.push({...d.data(),_id:d.id}));
+  depRows.sort((a,b)=>(b.updatedAt?.seconds||0)-(a.updatedAt?.seconds||0));
+  const pendingCount=depRows.filter(r=>r.status==='pending').length;
+  document.getElementById('admDepCount').innerHTML=pendingCount?`<span class="badge badge-red">${pendingCount}</span>`:'';
+  const statusMap={pending:{t:'Ожидание',c:'badge-yellow',d:'dot-open'},inprogress:{t:'В работе',c:'badge-purple',d:'dot-prog'},completed:{t:'Завершено',c:'badge-green',d:'dot-closed'},cancelled:{t:'Отменено',c:'badge-red',d:'dot-closed'}};
+  document.getElementById('admDepositsList').innerHTML=depRows.length?'<div>'+depRows.map(r=>{const st=statusMap[r.status]||statusMap.pending;return`<div class="report-item" onclick="openDepChat('${r._id}')"><div class="report-dot ${st.d}"></div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">${fmtBal(r.amount,r.currency)} · ${esc(r.methodName||'')}</div><div style="font-size:12px;color:var(--c-text2)">${esc(r.username)} · ${fmtDate(r.createdAt)}</div></div><span class="badge ${st.c}">${st.t}</span></div>`;}).join('')+'</div>':'<div class="empty-state"><span class="emo">📥</span>Нет заявок</div>';
+
   const ts=await getDocs(query(collection(db,'transactions'),limit(50)));
   let txrows=[];ts.forEach(d=>txrows.push(d.data()));
   txrows.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
   document.getElementById('admTxTb').innerHTML=txrows.map(t=>`<tr><td>${esc(t.fromUsername||t.fromCode||'—')}</td><td>${esc(t.toUsername||t.toCode||'—')}</td><td>${fmtBal(t.amount,t.currency)}</td><td style="font-size:11px">${t.type}</td><td style="font-size:11px">${fmtDate(t.createdAt)}</td></tr>`).join('')||'<tr><td colspan="5" class="empty-state">Нет</td></tr>';
 
-  // Reports
   const rs=await getDocs(query(collection(db,'reports'),limit(50)));
   let rrows=[];rs.forEach(d=>rrows.push({...d.data(),_id:d.id}));
   rrows.sort((a,b)=>(b.updatedAt?.seconds||0)-(a.updatedAt?.seconds||0));
   const tL={question:'❓',report:'🚨',request:'📋',unban:'🔓'};
   document.getElementById('admReportsList').innerHTML=rrows.length?'<div>'+rrows.map(r=>`<div class="report-item" onclick="openTicket('${r._id}','${esc(r.subject)}','${r.status}')"><div class="report-dot ${r.status==='open'?'dot-open':r.status==='inprogress'?'dot-prog':'dot-closed'}"></div><div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:600">${esc(r.subject)}</div><div style="font-size:12px;color:var(--c-text2)">${tL[r.type]||''} · ${esc(r.username)}</div></div><span class="badge ${r.status==='open'?'badge-yellow':r.status==='inprogress'?'badge-purple':'badge-red'}">${r.status==='open'?'Открыт':r.status==='inprogress'?'В работе':'Закрыт'}</span></div>`).join('')+'</div>':'<div class="empty-state"><span class="emo">🎧</span>Нет</div>';
 
-  // TG Requests
   const tgR=await getDocs(query(collection(db,'tgRequests'),limit(30)));
   let tgRows=[];tgR.forEach(d=>tgRows.push({...d.data(),_id:d.id}));
-  document.getElementById('admTgReqList').innerHTML=tgRows.length?'<div>'+tgRows.map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--c-border);gap:12px"><div><div style="font-weight:600">${esc(r.username)} → <span style="color:var(--c-acc)">${esc(r.tg||r.dc||'')}</span> <span style="font-size:11px;color:var(--c-text3)">${r.platform}</span></div><div style="font-size:12px;color:var(--c-text2);margin-top:2px">Статус: <span style="color:${r.status==='pending'?'var(--c-gold)':r.status==='approved'?'var(--c-green)':'var(--c-red)'}">${r.status==='pending'?'⏳ Ожидание':r.status==='approved'?'✅ Одобрено':'❌ Отклонено'}</span></div></div>${r.status==='pending'&&(isOwner||isAdmin)?`<div style="display:flex;gap:6px"><button class="btn btn-primary btn-sm" onclick="approveTg('${r._id}','${r.uid}','${r.tg||''}','${r.dc||''}','${r.platform}')">✅</button><button class="btn btn-danger btn-sm" onclick="denyTg('${r._id}')">❌</button></div>`:''}</div>`).join('')+'</div>':'<div class="empty-state"><span class="emo">📱</span>Нет заявок</div>';
+  document.getElementById('admTgReqList').innerHTML=tgRows.length?'<div>'+tgRows.map(r=>`<div style="display:flex;align-items:center;justify-content:space-between;padding:13px 16px;border-bottom:1px solid var(--c-border);gap:12px"><div><div style="font-weight:600">${esc(r.username)} → <span style="color:var(--c-acc)">${esc(r.tg||r.dc||'')}</span></div><div style="font-size:12px;color:var(--c-text2)">Статус: ${r.status}</div></div>${r.status==='pending'&&(isOwner||isAdmin)?`<div style="display:flex;gap:6px"><button class="btn btn-primary btn-sm" onclick="approveTg('${r._id}','${r.uid}','${r.tg||''}','${r.dc||''}','${r.platform}')">✅</button><button class="btn btn-danger btn-sm" onclick="denyTg('${r._id}')">❌</button></div>`:''}</div>`).join('')+'</div>':'<div class="empty-state"><span class="emo">📱</span>Нет</div>';
 
-  // Staff list
   if(isOwner){
     const ss=await getDocs(query(collection(db,'wallets'),where('role','in',['admin','helper'])));
     let staffRows=[];ss.forEach(d=>staffRows.push({...d.data(),_id:d.id}));
     document.getElementById('staffListWrap').innerHTML=staffRows.length?'<div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Роль</th><th>Действие</th></tr></thead><tbody>'+staffRows.map(u=>`<tr><td><strong>${esc(u.username)}</strong> <code style="font-size:10px">${u.code}</code></td><td>${roleBadge(u)}</td><td><button class="btn btn-danger btn-sm" onclick="setStaff('${u._id}','user')">Снять</button></td></tr>`).join('')+'</tbody></table></div>':'<div class="empty-state"><span class="emo">👥</span>Нет персонала</div>';
   }
 }
-
 window.admToggle=async function(uid,f,v){await updateDoc(doc(db,'wallets',uid),{[f]:v});toast(v?(f==='blocked'?'Заблокирован':'Заморожен'):(f==='blocked'?'Разблокирован':'Разморожен'),v?'w':'s');loadAdminData();};
-
 window.openDeleteSheet=function(uid,uname){
-  document.getElementById('delNick').value=uname;
-  document.getElementById('delReason').value='';
-  document.getElementById('delAdminNick').value=UD?.username||'';
-  document.getElementById('btnConfirmDelete').setAttribute('data-uid',uid);
-  openSheet('sheetDeleteConfirm');
+  document.getElementById('delNick').value=uname;document.getElementById('delReason').value='';document.getElementById('delAdminNick').value=UD?.username||'';
+  document.getElementById('btnConfirmDelete').setAttribute('data-uid',uid);openSheet('sheetDeleteConfirm');
 };
 document.getElementById('btnConfirmDelete').addEventListener('click',async function(){
   const uid=this.getAttribute('data-uid');
@@ -1507,8 +1526,6 @@ document.getElementById('btnConfirmDelete').addEventListener('click',async funct
   await deleteDoc(doc(db,'wallets',uid));
   closeSheet('sheetDeleteConfirm');toast('Аккаунт удалён','s');loadAdminData();
 });
-
-// Staff
 document.getElementById('btnSetStaff').addEventListener('click',async()=>{
   if(!UD?.isOwner)return toast('Только владелец','e');
   const target=document.getElementById('stTarget').value.trim();
@@ -1522,17 +1539,13 @@ document.getElementById('btnSetStaff').addEventListener('click',async()=>{
   if(tD.isOwner)return toast('Нельзя изменить роль владельца','e');
   await updateDoc(doc(db,'wallets',tDoc.id),{role});
   toast(role==='user'?`Должность снята у ${tD.username}`:role==='admin'?`${tD.username} → Администратор`:`${tD.username} → Хелпер`,'s');
-  document.getElementById('stTarget').value='';
-  loadAdminData();
+  document.getElementById('stTarget').value='';loadAdminData();
 });
 window.setStaff=async function(uid,role){
   const snap=await getDoc(doc(db,'wallets',uid));if(!snap.exists())return;
   const u=snap.data();if(u.isOwner)return toast('Нельзя','e');
-  await updateDoc(doc(db,'wallets',uid),{role});
-  toast(`Должность снята у ${u.username}`,'s');loadAdminData();
+  await updateDoc(doc(db,'wallets',uid),{role});toast(`Должность снята у ${u.username}`,'s');loadAdminData();
 };
-
-// Admin give
 document.getElementById('btnAdmGive').addEventListener('click',async()=>{
   if(!UD?.isOwner&&UD?.role!=='admin')return toast('Нет прав','e');
   const target=document.getElementById('agTo').value.trim();
@@ -1549,8 +1562,6 @@ document.getElementById('btnAdmGive').addEventListener('click',async()=>{
   toast('Выдано '+fmtBal(amt,cur)+' → '+tD.username,'s');
   document.getElementById('agTo').value='';document.getElementById('agAmt').value='';
 });
-
-// TG/DC
 window.approveTg=async function(reqId,uid,tg,dc,platform){
   await updateDoc(doc(db,'tgRequests',reqId),{status:'approved'});
   if(platform==='telegram')await updateDoc(doc(db,'wallets',uid),{tg,tgVerified:true,tgPending:false});
@@ -1574,49 +1585,48 @@ document.getElementById('btnDc').addEventListener('click',async()=>{
   toast('Заявка отправлена','s');
 });
 
-// SETTINGS - Profile edit
+// ===== SETTINGS =====
 document.getElementById('btnSaveProfile').addEventListener('click',async()=>{
   const n=document.getElementById('editUname').value.trim();
   const bio=document.getElementById('editBio').value.trim().slice(0,200);
   if(n&&(n.length<2||n.length>24))return toast('Ник 2-24 символа','w');
   const upd={bio};if(n)upd.username=n;
   await updateDoc(doc(db,'wallets',CU.uid),upd);
-  UD={...UD,...upd};renderSidebar();
-  toast('Профиль сохранён','s');closeSheet('sheetEditProfile');
+  UD={...UD,...upd};renderSidebar();toast('Профиль сохранён','s');closeSheet('sheetEditProfile');
 });
-
 document.getElementById('bannerIn').addEventListener('change',e=>{
-  const f=e.target.files[0];if(!f)return;
-  if(f.size>3*1024*1024)return toast('Макс 3MB','w');
-  const r=new FileReader();r.onload=async ev=>{await updateDoc(doc(db,'wallets',CU.uid),{bannerUrl:ev.target.result});toast('Баннер обновлён','s');};r.readAsDataURL(f);e.target.value='';
+  const f=e.target.files[0];if(!f)return;if(f.size>3*1024*1024)return toast('Макс 3MB','w');
+  const r=new FileReader();r.onload=async ev=>{await updateDoc(doc(db,'wallets',CU.uid),{bannerUrl:ev.target.result});UD.bannerUrl=ev.target.result;toast('Баннер обновлён','s');};r.readAsDataURL(f);e.target.value='';
 });
 
-// AVATAR
+// FIXED AVATAR PERSISTENCE
 document.getElementById('avIn').addEventListener('change',e=>{
   const f=e.target.files[0];if(!f)return;
   if(f.size>2*1024*1024)return toast('Макс 2MB','w');
-  const r=new FileReader();r.onload=async ev=>{
+  const r=new FileReader();
+  r.onload=async ev=>{
     const b64=ev.target.result;
     let hist=[b64,...(UD.avatarHistory||[])].filter((v,i,a)=>a.indexOf(v)===i).slice(0,8);
-    await updateDoc(doc(db,'wallets',CU.uid),{avatarUrl:b64,avatarHistory:hist});
-    UD.avatarUrl=b64;UD.avatarHistory=hist;renderSidebar();
-    renderAvHistory();toast('Аватар обновлён','s');
-  };r.readAsDataURL(f);e.target.value='';
+    try{
+      await updateDoc(doc(db,'wallets',CU.uid),{avatarUrl:b64,avatarHistory:hist});
+      // Re-fetch to confirm persistence
+      const snap=await getDoc(doc(db,'wallets',CU.uid));
+      if(snap.exists())UD=snap.data();
+      renderSidebar();renderAvHistory();toast('Аватар сохранён','s');
+    }catch(err){toast('Ошибка сохранения аватара','e');}
+  };
+  r.readAsDataURL(f);e.target.value='';
 });
-
 function renderAvHistory(){
-  const el=document.getElementById('avHistEl');
-  const h=UD?.avatarHistory||[];
+  const el=document.getElementById('avHistEl');const h=UD?.avatarHistory||[];
   if(!h.length){el.innerHTML='<div style="color:var(--c-text3);font-size:13px">Нет</div>';return;}
   el.innerHTML=h.map(u=>`<img src="${u}" class="av-th${u===UD.avatarUrl?' sel':''}" onclick="selAv('${u}')" title="Выбрать"/>`).join('');
 }
 window.selAv=async function(url){await updateDoc(doc(db,'wallets',CU.uid),{avatarUrl:url});UD.avatarUrl=url;renderSidebar();renderAvHistory();toast('Выбрано','s');};
 
-// THEME
 function renderColorSwatches(){
   const saved=localStorage.getItem('bv_bgc');
-  const el=document.getElementById('colorSwatches');
-  el.innerHTML=BGS.map(c=>`<div class="swatch${saved===c.v?' sel':''}" style="background:${c.v};border-color:${saved===c.v?'var(--c-acc)':'transparent'}" onclick="selColor('${c.v}')" title="${c.n}"></div>`).join('');
+  document.getElementById('colorSwatches').innerHTML=BGS.map(c=>`<div class="swatch${saved===c.v?' sel':''}" style="background:${c.v};border-color:${saved===c.v?'var(--c-acc)':'transparent'}" onclick="selColor('${c.v}')" title="${c.n}"></div>`).join('');
 }
 window.selColor=function(v){localStorage.setItem('bv_bgc',v);localStorage.removeItem('bv_bgi');applyTheme();renderColorSwatches();};
 document.getElementById('bgIn').addEventListener('change',e=>{
@@ -1631,7 +1641,6 @@ function applyTheme(){
   else{document.body.style.background='';document.body.style.backgroundColor='';}
 }
 
-// DELETE SELF
 document.getElementById('btnDeleteSelf').addEventListener('click',()=>{
   if(!confirm('Удалить аккаунт навсегда?'))return;
   if(!confirm('Это действие необратимо. Продолжить?'))return;
@@ -1643,7 +1652,7 @@ applyTheme();
 }catch(err){
   console.error(err);
   document.getElementById('loader').style.display='none';
-  document.body.innerHTML=`<div style="background:#121218;min-height:100vh;padding:40px;font-family:Inter,sans-serif;color:#fff"><h2 style="color:#FF4757;font-size:20px;margin-bottom:12px">⚠️ Ошибка загрузки</h2><pre style="color:#9494B8;font-size:12px;white-space:pre-wrap;line-height:1.8">${err?.message||err}\n\n${err?.stack||''}</pre><button onclick="location.reload()" style="margin-top:20px;padding:12px 24px;background:#6C5CE7;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700">Перезагрузить</button></div>`;
+  document.body.innerHTML=`<div style="background:#0F0F16;min-height:100vh;padding:40px;font-family:Inter,sans-serif;color:#fff"><h2 style="color:#FF4757;font-size:20px;margin-bottom:12px">⚠️ Ошибка загрузки</h2><pre style="color:#9494B8;font-size:12px;white-space:pre-wrap;line-height:1.8">${err?.message||err}\n\n${err?.stack||''}</pre><button onclick="location.reload()" style="margin-top:20px;padding:12px 24px;background:#6C5CE7;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700">Перезагрузить</button></div>`;
 }
 })();
 </script>
