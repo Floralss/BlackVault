@@ -1,0 +1,14 @@
+{
+  "name": "blackvault-functions",
+  "description": "Secure server-side logic for BlackVault wallet",
+  "engines": {
+    "node": "20"
+  },
+  "main": "index.js",
+  "type": "commonjs",
+  "dependencies": {
+    "firebase-admin": "^12.6.0",
+    "firebase-functions": "^5.1.0"
+  },
+  "private": true
+}
