@@ -1,154 +1,128 @@
-# BlackVault — Secure Edition
+rules_version = '2';
 
-## 🔒 Почему это безопасно
+service cloud.firestore {
+  match /databases/{database}/documents {
 
-В предыдущей версии **весь** код (включая проверки "ты владелец?", "хватает ли денег?", выдачу ролей) выполнялся в браузере. Любой человек открывал консоль разработчика (F12) и:
-- вызывал `updateDoc(doc(db,'wallets',myUid), {isOwner: true})` — мгновенно становился владельцем
-- менял себе баланс напрямую
-- разблокировал свой же аккаунт
+    // ============ WALLETS ============
+    // Users can read any wallet (needed for leaderboard, profile, transfers lookup)
+    // Users can ONLY update their own non-sensitive fields.
+    // role, isOwner, blocked, frozen, balances, tagColor, tagEffect, hideRole,
+    // customTags, vipUntil, avatarFrame can NEVER be written by the client directly —
+    // only Cloud Functions (which use the Admin SDK and bypass these rules) can touch them.
+    match /wallets/{uid} {
+      allow read: if request.auth != null;
 
-Это в принципе непочинимо, пока деньгами и ролями управляет код, который выполняется на компьютере пользователя.
+      allow create: if request.auth != null
+                    && request.auth.uid == uid
+                    && request.resource.data.uid == uid
+                    && request.resource.data.isOwner == false
+                    && request.resource.data.role == 'user'
+                    && request.resource.data.blocked == false
+                    && request.resource.data.frozen == false
+                    && request.resource.data.balances.USD == 0
+                    && request.resource.data.balances.UAH == 0
+                    && request.resource.data.balances.RUB == 0
+                    && request.resource.data.balances.TON == 0
+                    && request.resource.data.balances.BTC == 0
+                    && request.resource.data.balances.ETH == 0;
 
-**Решение:** вся логика, которая должна быть доверенной, теперь выполняется на сервере Google (**Cloud Functions**), а **Firestore Security Rules** физически запрещают базе данных принимать прямые изменения баланса/роли/блокировки от клиента — неважно, что введут в консоли.
+      allow update: if request.auth != null
+                    && request.auth.uid == uid
+                    // Protected fields must remain unchanged in any client-side update
+                    && request.resource.data.isOwner == resource.data.isOwner
+                    && request.resource.data.role == resource.data.role
+                    && request.resource.data.blocked == resource.data.blocked
+                    && request.resource.data.frozen == resource.data.frozen
+                    && request.resource.data.balances == resource.data.balances
+                    && request.resource.data.get('tagColor', null) == resource.data.get('tagColor', null)
+                    && request.resource.data.get('tagEffect', null) == resource.data.get('tagEffect', null)
+                    && request.resource.data.get('tagName', null) == resource.data.get('tagName', null)
+                    && request.resource.data.get('hideRole', false) == resource.data.get('hideRole', false)
+                    && request.resource.data.get('customTags', []) == resource.data.get('customTags', [])
+                    && request.resource.data.get('vipUntil', 0) == resource.data.get('vipUntil', 0)
+                    && request.resource.data.get('avatarFrame', '') == resource.data.get('avatarFrame', '')
+                    && request.resource.data.get('themeCode', '') == resource.data.get('themeCode', '')
+                    && request.resource.data.get('themeData', null) == resource.data.get('themeData', null)
+                    && request.resource.data.get('stocks', {}) == resource.data.get('stocks', {});
 
-Owner-код теперь не передаётся на клиент **вообще**, даже в виде хэша — сравнение происходит только на сервере.
+      // Deletion only via Cloud Function (Admin SDK bypasses rules entirely)
+      allow delete: if false;
+    }
 
----
+    // ============ TRANSACTIONS ============
+    // Read-only ledger. Only Cloud Functions create transaction records.
+    match /transactions/{txId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
 
-## 📁 Структура проекта
+    // ============ CHECKS ============
+    // Checks still allow direct client writes for simple create/redeem flow,
+    // but balance changes triggered by checks happen via Cloud Function only.
+    match /checks/{checkId} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
 
-```
-blackvault-secure/
-├── firebase.json          ← конфиг Firebase (hosting + functions + rules)
-├── .firebaserc             ← привязка к твоему проекту blackvault-7a10e
-├── firestore.rules         ← правила безопасности базы данных
-├── functions/
-│   ├── package.json
-│   └── index.js            ← вся серверная логика (деньги, роли, баны, магазин)
-└── public/
-    ├── index.html           ← разметка интерфейса
-    ├── style.css            ← все стили
-    └── app.js               ← клиентский код (вызывает Cloud Functions)
-```
+    // ============ DEPOSIT REQUESTS ============
+    match /depositRequests/{reqId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null
+                    && resource.data.uid == request.auth.uid
+                    && request.resource.data.status == resource.data.status; // user can only append messages, not change status
+      allow delete: if false;
+    }
 
----
+    // ============ REPORTS (support tickets) ============
+    match /reports/{reportId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if request.auth != null; // status changes validated server-side via callable when needed
+      allow delete: if false;
+    }
 
-## 🚀 Деплой — пошагово
+    // ============ TG/DISCORD VERIFICATION REQUESTS ============
+    match /tgRequests/{reqId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update: if false; // only Cloud Function approves/denies
+      allow delete: if false;
+    }
 
-### 1. Установи Firebase CLI (если ещё нет)
-```bash
-npm install -g firebase-tools
-```
+    // ============ DELETE ACCOUNT REQUESTS ============
+    match /deleteRequests/{reqId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null;
+      allow update, delete: if false;
+    }
 
-### 2. Войди в свой Google-аккаунт
-```bash
-firebase login
-```
+    // ============ THEMES (UI customization codes) ============
+    match /themes/{themeCode} {
+      allow read: if request.auth != null;
+      allow write: if false; // only Cloud Function writes after payment validated
+    }
 
-### 3. Перейди в папку проекта
-```bash
-cd blackvault-secure
-```
+    // ============ STOCKS MARKET DATA ============
+    match /stocksMeta/{doc} {
+      allow read: if request.auth != null;
+      allow write: if false;
+    }
 
-### 4. Включи план Blaze (Pay-as-you-go)
-Cloud Functions требуют план Blaze. Это **не значит, что будешь платить** — бесплатный лимит огромный (2 млн вызовов функций в месяц), для проекта с друзьями этого хватит с огромным запасом.
+    // ============ CONTESTS ============
+    match /contests/{contestId} {
+      allow read: if request.auth != null;
+      allow write: if false; // only owner via Cloud Function can create/edit
+    }
+    match /contestEntries/{entryId} {
+      allow read: if request.auth != null;
+      allow create: if request.auth != null && request.resource.data.uid == request.auth.uid;
+      allow update, delete: if false;
+    }
 
-Зайди в [Firebase Console](https://console.firebase.google.com/project/blackvault-7a10e/usage/details) → **Upgrade to Blaze** → привяжи карту.
-
-### 5. Установи зависимости функций
-```bash
-cd functions
-npm install
-cd ..
-```
-
-### 6. Задеплой всё одной командой
-```bash
-firebase deploy
-```
-
-Это одновременно:
-- зальёт `firestore.rules` (защита базы)
-- задеплоит все Cloud Functions
-- зальёт сайт на Firebase Hosting
-
-Через 2-5 минут увидишь ссылку вида `https://blackvault-7a10e.web.app` — это твой готовый сайт.
-
----
-
-## 👑 Активация владельца
-
-Owner-код теперь **нигде не хранится на клиенте**. Чтобы стать владельцем:
-
-1. Открой сайт, зарегистрируйся обычным образом
-2. Открой консоль браузера (F12 → Console)
-3. Вызови (это безопасно — функция сама всё перепроверит на сервере):
-
-```js
-// Получи доступ к функции через девтулз — или просто временно
-// добавь в Settings UI кнопку, если хочешь графический способ.
-```
-
-Самый простой способ — временно вызвать функцию вручную через консоль, используя уже загруженный на странице Firebase SDK:
-
-```js
-import("https://www.gstatic.com/firebasejs/10.12.0/firebase-functions.js").then(async (m) => {
-  const fns = m.getFunctions();
-  const activateOwner = m.httpsCallable(fns, 'activateOwner');
-  const result = await activateOwner({ code: "ТВОЙ_СЕКРЕТНЫЙ_КОД" });
-  console.log(result.data);
-});
-```
-
-Введи свой код вместо `ТВОЙ_СЕКРЕТНЫЙ_КОД` и нажми Enter в консоли. Сервер сам сверит хэш и либо даст права, либо откажет — увидеть сам код или его хэш из браузера невозможно.
-
----
-
-## ⚙️ Что именно защищено Cloud Functions
-
-| Действие | Функция | Кто может вызвать |
-|---|---|---|
-| Активация владельца | `activateOwner` | Любой, но код проверяется на сервере |
-| Назначение/снятие персонала | `setStaffRole` | Только владелец |
-| Блокировка/заморозка | `setWalletStatus` | Владелец, админ |
-| Выдать деньги | `giveMoney` | Владелец, админ |
-| **Изъять деньги (в т.ч. у себя/владельца)** | `takeMoney` | Владелец, админ |
-| Перевод между пользователями | `transferMoney` | Любой авторизованный |
-| Обмен валют | `exchangeCurrency` | Любой авторизованный |
-| Создание/оплата чеков | `createCheck`, `redeemCheck` | Любой авторизованный |
-| Завершить/отменить пополнение | `completeDeposit`, `cancelDeposit` | Владелец, админ |
-| Закрыть тикет поддержки | `closeTicket` | Владелец, админ, хелпер, медиа, спонсор |
-| Удаление аккаунта | `deleteAccount` | Владелец — сразу; админ — через заявку |
-| Покупки в магазине | `buyCustomTag`, `buyUiTheme`, и т.д. | Любой авторизованный, баланс проверяется на сервере |
-| Выдача уникального тега бесплатно | `grantUniqueTag` | Владелец, админ, хелпер, медиа, спонсор |
-| Покупка акций | `buyStock` | Любой авторизованный |
-| Создание/закрытие конкурса | `createContest`, `closeContest` | Только владелец |
-
-Если кто-то откроет консоль и попробует вызвать, например, `giveMoney` без прав — функция на сервере проверит его реальную роль в базе данных и вернёт ошибку `permission-denied`, прежде чем что-либо изменится.
-
----
-
-## 🛠 Локальная разработка (опционально)
-
-Чтобы тестировать без деплоя на прод:
-```bash
-firebase emulators:start
-```
-
----
-
-## 📝 Дальнейшие правки
-
-- **HTML/CSS/верстка** → редактируй `public/index.html` и `public/style.css`
-- **Поведение интерфейса** → `public/app.js`
-- **Любая логика с деньгами/ролями** → **только** `functions/index.js`, никогда не добавляй `updateDoc` для полей `balances`, `role`, `isOwner`, `blocked`, `frozen` напрямую в `app.js` — Firestore Rules всё равно это заблокируют, и просто не будет работать.
-
-После любых правок в `functions/index.js` нужно передеплоить:
-```bash
-firebase deploy --only functions
-```
-
-После правок в `public/` — только хостинг:
-```bash
-firebase deploy --only hosting
-```
+    // Default deny
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
