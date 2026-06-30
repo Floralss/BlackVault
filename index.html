@@ -461,6 +461,7 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
       <div class="sb-list-item" data-goto="pgLeaderboard"><span class="ic">🏆</span>Forbes</div>
       <div class="sb-list-item" data-goto="pgShop"><span class="ic">🛍</span>Магазин</div>
       <div class="sb-list-item" data-goto="pgSupport"><span class="ic">🎧</span>Поддержка<span class="sb-badge" id="sbSupportBadge" style="display:none">!</span></div>
+      <div class="sb-list-item" data-goto="pgDownload"><span class="ic">💻</span>Приложение на ПК</div>
 
       <div id="sbAdminGroup" style="display:none">
         <div class="sb-sep">Управление</div>
@@ -639,6 +640,47 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🎧 Поддержка</div><div class="ph-sub">Обращения и тикеты</div></div>
       <button class="btn btn-primary btn-sm" id="btnNewReport">+ Обращение</button></div></div>
       <div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
+    </div>
+
+    <!-- DOWNLOAD DESKTOP APP -->
+    <div class="page" id="pgDownload">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">💻 Приложение на ПК</div><div class="ph-sub">Полноценный десктоп-клиент BlackVault для Windows</div></div></div></div>
+
+      <div class="wallet-hero" style="text-align:center;padding:40px 28px">
+        <div style="width:84px;height:84px;background:linear-gradient(150deg,#9B7FFF,var(--btn1) 55%,#4A38C9);border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;box-shadow:0 0 60px rgba(124,92,252,.45)">🔐</div>
+        <div style="font-size:24px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:-.5px">BlackVault Desktop</div>
+        <div style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:26px">Версия 1.0.0 · Windows 10/11 · 64-bit</div>
+        <a href="downloads/BlackVault-Setup-1.0.0.exe" download class="btn btn-primary" style="max-width:320px;margin:0 auto;padding:16px 28px;font-size:16px;display:flex">
+          <span style="font-size:20px">⬇️</span> Скачать установщик (.exe)
+        </a>
+        <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:14px">~85 МБ · Бесплатно · Без рекламы</div>
+      </div>
+
+      <div class="sec">
+        <div class="sec-head"><span class="sec-title">Почему стоит установить приложение</span></div>
+        <div style="padding:6px 0">
+          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">⚡ Быстрее браузера</div><div class="settings-row-sub">Запускается отдельным окном, не зависит от вкладок и расширений</div></div></div>
+          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">🔔 Уведомления на рабочий стол</div><div class="settings-row-sub">Узнаёте о пополнениях, переводах и сделках с акциями мгновенно</div></div></div>
+          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">📌 Сворачивается в трей</div><div class="settings-row-sub">Работает в фоне, не занимает панель задач</div></div></div>
+          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">🚀 Автозапуск с системой</div><div class="settings-row-sub">Включается по желанию через меню в трее</div></div></div>
+          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">🎨 Нативный интерфейс</div><div class="settings-row-sub">Свой тайтлбар в стиле приложения, без браузерных панелей</div></div></div>
+        </div>
+      </div>
+
+      <div class="sec card-p">
+        <div style="font-size:14px;font-weight:800;margin-bottom:12px">📋 Как установить</div>
+        <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;color:var(--c-text2);line-height:1.6">
+          <div><strong style="color:var(--c-text)">1.</strong> Скачайте файл <code style="background:var(--c-surface2);padding:2px 7px;border-radius:5px;font-size:12.5px">BlackVault-Setup-1.0.0.exe</code> кнопкой выше</div>
+          <div><strong style="color:var(--c-text)">2.</strong> Запустите установщик и следуйте подсказкам (можно выбрать папку установки)</div>
+          <div><strong style="color:var(--c-text)">3.</strong> Если Windows SmartScreen покажет предупреждение — нажмите «Подробнее» → «Выполнить в любом случае» (приложение не подписано сертификатом, но безопасно)</div>
+          <div><strong style="color:var(--c-text)">4.</strong> После установки войдите в тот же аккаунт, что и на сайте — все данные синхронизированы</div>
+        </div>
+      </div>
+
+      <div style="background:rgba(124,92,252,.07);border:1px solid rgba(124,92,252,.18);border-radius:var(--rs);padding:14px 16px;font-size:13px;color:#D4C5FF;display:flex;gap:10px;align-items:flex-start">
+        <span style="font-size:16px">ℹ️</span>
+        <span>Приложение использует тот же аккаунт и баланс, что и веб-версия. Можно пользоваться и сайтом, и приложением одновременно — данные всегда синхронизированы.</span>
+      </div>
     </div>
 
     <div class="page" id="pgAdmin">
@@ -962,6 +1004,7 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
 
 
 <script type="module">
+
 // ════════════════════════════════════════════════════════════
 //  BlackVault — Single-file GitHub Pages Edition
 //
@@ -1022,11 +1065,11 @@ async function freshSelf() {
   if (!snap.exists()) throw new Error('Кошелёк не найден');
   return snap.data();
 }
-function isStaffRole(u) { return u && (u.isOwner === true && u.role === 'owner' || ['admin', 'helper', 'media', 'sponsor'].includes(u.role)); }
-function isMoneyRole(u) { return u && (u.role === 'owner' && u.isOwner === true || u.role === 'admin'); }
+function isStaffRole(u) { return u && (u.isOwner === true || ['admin', 'helper', 'media', 'sponsor'].includes(u.role)); }
+function isMoneyRole(u) { return u && (u.isOwner === true || u.role === 'admin'); }
 async function requireFreshOwner() {
   const fresh = await freshSelf();
-  if (!(fresh.isOwner === true && fresh.role === 'owner')) throw new Error('Только владелец может это делать');
+  if (fresh.isOwner !== true) throw new Error('Только владелец может это делать');
   return fresh;
 }
 async function requireFreshMoneyRole() {
@@ -1054,14 +1097,47 @@ const COINS = {
 const BGS = [{ n: 'Тёмный', v: '#0D0D13' }, { n: 'Полночь', v: '#070710' }, { n: 'Синий', v: '#050c1a' }, { n: 'Зелёный', v: '#050c08' }, { n: 'Серый', v: '#0c0c10' }];
 const TAG_COLORS = [{ n: 'Фиолет', v: '#7C5CFC' }, { n: 'Золото', v: '#FFB23E' }, { n: 'Красный', v: '#FF4D6A' }, { n: 'Зелёный', v: '#3DDC84' }, { n: 'Бирюза', v: '#00D9B5' }, { n: 'Розовый', v: '#FF6BCB' }, { n: 'Синий', v: '#3498DB' }, { n: 'Оранж', v: '#FF8C00' }];
 const PAY_CURRENCIES = ['UAH', 'RUB', 'USD'];
-const STOCKS = {
-  AAPL: { n: 'Apple Inc.', price: 227.52, change: 1.24, col: '#A2AAAD' },
-  TSLA: { n: 'Tesla Inc.', price: 248.91, change: -2.18, col: '#CC0000' },
-  GOOGL: { n: 'Alphabet Inc.', price: 174.36, change: 0.86, col: '#4285F4' },
-  AMZN: { n: 'Amazon.com', price: 186.43, change: 1.95, col: '#FF9900' },
-  MSFT: { n: 'Microsoft', price: 421.07, change: 0.42, col: '#00A4EF' },
-  NVDA: { n: 'NVIDIA Corp.', price: 135.58, change: 3.41, col: '#76B900' }
+// Live stock prices - simulate real market movement every 30 seconds
+const STOCKS_BASE = {
+  AAPL:  { n: 'Apple Inc.',     basePrice: 227.52, col: '#A2AAAD', sector: 'Технологии' },
+  TSLA:  { n: 'Tesla Inc.',     basePrice: 248.91, col: '#CC0000', sector: 'Авто' },
+  GOOGL: { n: 'Alphabet Inc.',  basePrice: 174.36, col: '#4285F4', sector: 'Технологии' },
+  AMZN:  { n: 'Amazon.com',     basePrice: 186.43, col: '#FF9900', sector: 'Ритейл' },
+  MSFT:  { n: 'Microsoft',      basePrice: 421.07, col: '#00A4EF', sector: 'Технологии' },
+  NVDA:  { n: 'NVIDIA Corp.',   basePrice: 135.58, col: '#76B900', sector: 'Чипы' },
+  META:  { n: 'Meta Platforms', basePrice: 508.33, col: '#0082FB', sector: 'Соцсети' },
+  NFLX:  { n: 'Netflix Inc.',   basePrice: 712.45, col: '#E50914', sector: 'Стриминг' }
 };
+let STOCKS = {};
+// Initialize STOCKS with live-simulated prices
+(function initStocks() {
+  Object.entries(STOCKS_BASE).forEach(([sym, s]) => {
+    const volatility = 0.015; // 1.5% max swing per tick
+    const initialNoise = (Math.random() - 0.5) * 2 * volatility * s.basePrice;
+    STOCKS[sym] = {
+      n: s.n, col: s.col, sector: s.sector,
+      price: parseFloat((s.basePrice + initialNoise).toFixed(2)),
+      prevPrice: s.basePrice,
+      change: parseFloat((initialNoise / s.basePrice * 100).toFixed(2))
+    };
+  });
+})();
+// Tick: update prices every 30 seconds with realistic random walk
+function tickStockPrices() {
+  Object.entries(STOCKS_BASE).forEach(([sym, s]) => {
+    const cur = STOCKS[sym];
+    const vol = 0.012;
+    const drift = (Math.random() - 0.49) * vol; // slight upward bias
+    const newPrice = Math.max(cur.price * (1 + drift), s.basePrice * 0.5);
+    const rounded = parseFloat(newPrice.toFixed(2));
+    const change = parseFloat(((rounded - s.basePrice) / s.basePrice * 100).toFixed(2));
+    STOCKS[sym] = { ...cur, prevPrice: cur.price, price: rounded, change };
+  });
+  // Refresh stocks page if open
+  const pg = document.getElementById('pgStocks');
+  if (pg && pg.classList.contains('on')) loadStocks();
+}
+setInterval(tickStockPrices, 30000);
 
 let CU = null, UD = null, prevPage = null, curTicketId = null, curDepId = null, curStockSym = null, curContestId = null, UNSUB = null;
 const loginAttempts = { n: 0, until: 0 };
@@ -1232,6 +1308,11 @@ onAuthStateChanged(auth, async user => {
     });
   }
   UD = (await getDoc(wRef)).data();
+  // Self-heal isOwner/role desync from older activations
+  if (UD.isOwner === true && UD.role !== 'owner') {
+    await updateDoc(wRef, { role: 'owner' });
+    UD.role = 'owner';
+  }
   document.getElementById('authScreen').style.display = 'none';
   if (!UD.username) { showAuth('pgUname'); return; }
   document.getElementById('app').style.display = 'flex';
@@ -1896,13 +1977,78 @@ function applyUiTheme() {
 // ═══ STOCKS ═══
 function loadStocks() {
   const el = document.getElementById('stocksList');
-  el.innerHTML = Object.entries(STOCKS).map(([sym, s]) => `<div class="stock-row" onclick="openBuyStock('${sym}')"><div class="stock-ico" style="background:${s.col}20;color:${s.col}">${sym.slice(0, 2)}</div><div class="stock-info"><div class="stock-name">${s.n}</div><div class="stock-sym">${sym}</div></div><div class="stock-right"><div class="stock-price">$${fmtNum(s.price, 2)}</div><div class="stock-change ${s.change >= 0 ? 'up' : 'down'}">${s.change >= 0 ? '+' : ''}${s.change}%</div></div></div>`).join('');
+  el.innerHTML = Object.entries(STOCKS).map(([sym, s]) => {
+    const owned = (UD?.stocks?.[sym] || 0);
+    const owndBadge = owned > 0 ? `<span style="font-size:10px;background:rgba(61,220,132,.15);color:var(--c-green);padding:2px 7px;border-radius:10px;font-weight:700;margin-left:6px">У вас: ${fmtNum(owned,4)}</span>` : '';
+    return `<div class="stock-row" onclick="openBuyStock('${sym}')">
+      <div class="stock-ico" style="background:${s.col}20;color:${s.col};font-weight:900;font-size:13px;border-radius:13px">${sym.slice(0,3)}</div>
+      <div class="stock-info">
+        <div class="stock-name">${s.n}${owndBadge}</div>
+        <div class="stock-sym">${sym} · ${s.sector}</div>
+      </div>
+      <div class="stock-right">
+        <div class="stock-price">$${fmtNum(s.price, 2)}</div>
+        <div class="stock-change ${s.change >= 0 ? 'up' : 'down'}">${s.change >= 0 ? '▲' : '▼'} ${Math.abs(s.change)}%</div>
+      </div>
+    </div>`;
+  }).join('');
+
   const myStocks = UD?.stocks || {};
   const owned = Object.entries(myStocks).filter(([, qty]) => qty > 0);
   const myEl = document.getElementById('myStocksList');
   if (!owned.length) { myEl.innerHTML = '<div class="empty-state"><span class="emo">📈</span>У вас пока нет акций</div>'; return; }
-  myEl.innerHTML = owned.map(([sym, qty]) => { const s = STOCKS[sym]; if (!s) return ''; const val = s.price * qty; return `<div class="stock-row"><div class="stock-ico" style="background:${s.col}20;color:${s.col}">${sym.slice(0, 2)}</div><div class="stock-info"><div class="stock-name">${s.n}</div><div class="stock-sym">${fmtNum(qty, 4)} шт.</div></div><div class="stock-right"><div class="stock-price">$${fmtNum(val, 2)}</div></div></div>`; }).join('');
+
+  let totalPortfolio = 0;
+  const rows = owned.map(([sym, qty]) => {
+    const s = STOCKS[sym]; if (!s) return '';
+    const val = s.price * qty;
+    totalPortfolio += val;
+    const change24 = s.prevPrice ? ((s.price - s.prevPrice) / s.prevPrice * 100) : 0;
+    return `<div class="stock-row">
+      <div class="stock-ico" style="background:${s.col}20;color:${s.col};font-weight:900;font-size:13px;border-radius:13px">${sym.slice(0,3)}</div>
+      <div class="stock-info">
+        <div class="stock-name">${s.n}</div>
+        <div class="stock-sym">${fmtNum(qty, 4)} шт · $${fmtNum(s.price,2)} за шт</div>
+      </div>
+      <div class="stock-right">
+        <div class="stock-price">$${fmtNum(val, 2)}</div>
+        <div class="stock-change ${change24 >= 0 ? 'up' : 'down'}">${change24 >= 0 ? '▲' : '▼'} ${Math.abs(change24).toFixed(2)}%</div>
+        <button class="btn btn-danger btn-sm" style="margin-top:5px;font-size:11px;padding:4px 10px" onclick="event.stopPropagation();openSellStock('${sym}')">Продать</button>
+      </div>
+    </div>`;
+  }).join('');
+
+  myEl.innerHTML = `<div style="background:rgba(61,220,132,.06);border:1px solid rgba(61,220,132,.15);border-radius:var(--rs);padding:12px 16px;margin:12px 16px 4px;display:flex;align-items:center;justify-content:space-between"><span style="font-size:13px;color:var(--c-text2);font-weight:600">Портфель:</span><span style="font-size:16px;font-weight:900;color:var(--c-green)">$${fmtNum(totalPortfolio,2)}</span></div><div>${rows}</div>`;
 }
+
+// ─── Sell stock ───
+window.openSellStock = function(sym) {
+  const s = STOCKS[sym];
+  const qty = UD?.stocks?.[sym] || 0;
+  if (!s || qty <= 0) return toast('У вас нет этих акций', 'w');
+  document.getElementById('stockSheetTitle').textContent = 'Продать ' + s.n;
+  document.getElementById('stockInfo').innerHTML = `
+    <div style="display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <div style="font-weight:800;font-size:16px">${s.n}</div>
+        <div style="font-size:12px;color:var(--c-text2)">У вас: ${fmtNum(qty,4)} шт · Цена: $${fmtNum(s.price,2)}</div>
+      </div>
+      <div style="text-align:right">
+        <div style="font-weight:800;font-size:18px;color:var(--c-green)">$${fmtNum(s.price * qty, 2)}</div>
+        <div style="font-size:11px;color:var(--c-text2)">стоимость позиции</div>
+      </div>
+    </div>`;
+  curStockSym = sym;
+  document.getElementById('stockPayCur').value = 'USD';
+  document.getElementById('stockQty').value = '';
+  document.getElementById('stockCostHint').textContent = 'Введите количество для продажи';
+  // Replace Buy button with Sell
+  const btn = document.getElementById('btnBuyStockConfirm');
+  btn.textContent = 'Продать';
+  btn.style.background = 'rgba(255,77,106,.8)';
+  btn._mode = 'sell';
+  openSheet('sheetBuyStock');
+};
 window.openBuyStock = function (sym) {
   curStockSym = sym;
   const s = STOCKS[sym];
@@ -1925,26 +2071,52 @@ document.getElementById('stockPayCur').addEventListener('change', updateStockCos
 document.getElementById('btnBuyStockConfirm').addEventListener('click', async () => {
   const qty = parseFloat(document.getElementById('stockQty').value);
   const cur = document.getElementById('stockPayCur').value;
+  const mode = document.getElementById('btnBuyStockConfirm')._mode || 'buy';
   if (!qty || qty <= 0) return toast('Введите количество', 'w');
   try {
     const user = await freshSelf();
     if (user.blocked || user.frozen) throw new Error('Кошелёк заблокирован');
-    const usdCost = STOCKS[curStockSym].price * qty;
-    const cost = cur === 'USD' ? usdCost : usdCost / RATES[cur];
-    const bal = (user.balances && user.balances[cur]) || 0;
-    if (bal < cost) throw new Error('Недостаточно средств');
 
-    await updateDoc(doc(db, 'wallets', CU.uid), {
-      [`balances.${cur}`]: increment(-cost),
-      [`stocks.${curStockSym}`]: increment(qty)
-    });
-    await addDoc(collection(db, 'transactions'), {
-      fromUid: CU.uid, fromCode: user.code, fromUsername: user.username,
-      toUid: 'market', toCode: 'MARKET', toUsername: 'Биржа',
-      currency: cur, amount: cost, type: 'stock_buy', stockSymbol: curStockSym, stockQty: qty,
-      createdAt: serverTimestamp()
-    });
-    toast(`Куплено ${fmtNum(qty, 4)} ${curStockSym} за ${fmtBal(cost, cur)}`, 's');
+    if (mode === 'sell') {
+      // SELL: convert stocks back to USD (always), then into chosen currency
+      const currentQty = (user.stocks && user.stocks[curStockSym]) || 0;
+      if (qty > currentQty) throw new Error(`У вас только ${fmtNum(currentQty,4)} ${curStockSym}`);
+      const usdRevenue = STOCKS[curStockSym].price * qty;
+      const revenue = cur === 'USD' ? usdRevenue : usdRevenue * RATES[cur];
+      await updateDoc(doc(db, 'wallets', CU.uid), {
+        [`balances.${cur}`]: increment(revenue),
+        [`stocks.${curStockSym}`]: increment(-qty)
+      });
+      await addDoc(collection(db, 'transactions'), {
+        fromUid: 'market', fromCode: 'MARKET', fromUsername: 'Биржа',
+        toUid: CU.uid, toCode: user.code, toUsername: user.username,
+        currency: cur, amount: revenue, type: 'stock_sell',
+        stockSymbol: curStockSym, stockQty: qty, createdAt: serverTimestamp()
+      });
+      toast(`Продано ${fmtNum(qty,4)} ${curStockSym} → ${fmtBal(revenue, cur)} 📤`, 's');
+      window.electronAPI?.showNotification('BlackVault', `Акции проданы! +${fmtBal(revenue, cur)}`);
+    } else {
+      // BUY
+      const usdCost = STOCKS[curStockSym].price * qty;
+      const cost = cur === 'USD' ? usdCost : usdCost / RATES[cur];
+      const bal = (user.balances && user.balances[cur]) || 0;
+      if (bal < cost) throw new Error('Недостаточно средств');
+      await updateDoc(doc(db, 'wallets', CU.uid), {
+        [`balances.${cur}`]: increment(-cost),
+        [`stocks.${curStockSym}`]: increment(qty)
+      });
+      await addDoc(collection(db, 'transactions'), {
+        fromUid: CU.uid, fromCode: user.code, fromUsername: user.username,
+        toUid: 'market', toCode: 'MARKET', toUsername: 'Биржа',
+        currency: cur, amount: cost, type: 'stock_buy',
+        stockSymbol: curStockSym, stockQty: qty, createdAt: serverTimestamp()
+      });
+      toast(`Куплено ${fmtNum(qty,4)} ${curStockSym} за ${fmtBal(cost, cur)} 📊`, 's');
+      window.electronAPI?.showNotification('BlackVault', `Акции куплены! ${fmtNum(qty,4)} ${curStockSym}`);
+    }
+    // Reset button
+    const btn = document.getElementById('btnBuyStockConfirm');
+    btn.textContent = 'Купить'; btn.style.background = '';  btn._mode = 'buy';
     closeSheet('sheetBuyStock'); loadStocks();
   } catch (err) { toast(cfError(err), 'e'); }
 });
@@ -2179,7 +2351,7 @@ document.getElementById('btnConfirmDelete').addEventListener('click', async func
     const caller = await freshSelf();
     const { id: targetId, data: targetData } = await findUserByCodeOrName(target);
 
-    if (caller.isOwner && caller.role === 'owner') {
+    if (caller.isOwner === true) {
       await deleteDoc(doc(db, 'wallets', targetId));
       closeSheet('sheetDeleteConfirm');
       toast('Аккаунт удалён', 's');
@@ -2249,7 +2421,7 @@ document.getElementById('btnAdmTake').addEventListener('click', async () => {
     const caller = await requireFreshMoneyRole();
     const { id: targetId, data: targetData } = await findUserByCodeOrName(target);
     // Non-owner admins cannot take from the owner; owner can take from anyone, including self
-    if (targetData.isOwner && !(caller.isOwner && caller.role === 'owner')) {
+    if (targetData.isOwner && caller.isOwner !== true) {
       throw new Error('Только владелец может изъять средства у владельца');
     }
     const currentBal = (targetData.balances && targetData.balances[cur]) || 0;
@@ -2407,6 +2579,19 @@ window.bvOwner = async function (code) {
   toast('👑 Статус владельца активирован!', 's', 5000);
 };
 
+// ═══ ELECTRON: window controls ═══
+window.toggleMax = async function () {
+  if (window.electronAPI) {
+    await window.electronAPI.maximize();
+    const isMax = await window.electronAPI.isMaximized();
+    const btn = document.getElementById('tbMaxBtn');
+    if (btn) btn.textContent = isMax ? '❐' : '□';
+  }
+};
+if (window.electronAPI) {
+  window.electronAPI.getVersion().then(v => console.log('BlackVault Desktop v' + v));
+}
+
 applyTheme();
 
 
@@ -2426,6 +2611,7 @@ setTimeout(() => {
     document.body.insertAdjacentHTML('beforeend', `<div style="position:fixed;inset:0;background:#0D0D13;z-index:99999;padding:40px;font-family:Inter,sans-serif;color:#fff;overflow:auto"><h2 style="color:#FFB23E;font-size:20px;margin-bottom:12px">⏳ Загрузка занимает дольше обычного</h2><p style="color:#9C9CC0;font-size:14px;line-height:1.6;margin-bottom:16px">Проверьте интернет-соединение или попробуйте перезагрузить страницу. Если проблема повторяется — возможно, временно недоступен Firebase.</p><button onclick="location.reload()" style="padding:12px 24px;background:#7C5CFC;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700">Перезагрузить</button></div>`);
   }
 }, 12000);
+
 
 </script>
 </body>
