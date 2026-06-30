@@ -650,7 +650,7 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
         <div style="width:84px;height:84px;background:linear-gradient(150deg,#9B7FFF,var(--btn1) 55%,#4A38C9);border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;box-shadow:0 0 60px rgba(124,92,252,.45)">🔐</div>
         <div style="font-size:24px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:-.5px">BlackVault Desktop</div>
         <div style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:26px">Версия 1.0.0 · Windows 10/11 · 64-bit</div>
-        <a href="downloads/BlackVault-Setup-1.0.0.exe" download class="btn btn-primary" style="max-width:320px;margin:0 auto;padding:16px 28px;font-size:16px;display:flex">
+        <a href="downloads/BlackVault-Setup-1.0.0.zip" download class="btn btn-primary" style="max-width:320px;margin:0 auto;padding:16px 28px;font-size:16px;display:flex">
           <span style="font-size:20px">⬇️</span> Скачать установщик (.exe)
         </a>
         <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:14px">~85 МБ · Бесплатно · Без рекламы</div>
@@ -1267,17 +1267,11 @@ document.getElementById('btnUname').addEventListener('click', async () => {
 });
 
 // ═══ UPDATE LOG ═══
-const CURRENT_VERSION = '7.0-secure';
+const CURRENT_VERSION = '7.1-secure';
 const UPDATE_LOG = [
-  'Архитектура полностью переработана: вся логика денег, ролей и банов теперь выполняется на защищённом сервере (Cloud Functions) — взлом через консоль браузера больше невозможен',
-  'Firestore Security Rules защищают базу данных от прямой записи в баланс, роли и статус блокировки',
-  'Добавлены акции (Apple, Tesla, Google и др.) по реальным ценам',
-  'Новый раздел «Конкурсы» — задания и инвестиционные конкурсы от владельца',
-  'Изъятие денег у пользователей (включая владельца) работает корректно',
-  'Несколько уникальных тегов одновременно, новые роли Медиа и Спонсор',
-  'Функция скрытия должности администратора/владельца',
-  'Исправлен баг с аватаркой под баннером профиля',
-  'Полностью адаптивный интерфейс под телефоны'
+  'Добавлена вкладка для установки нашего приложение кошелька на пк!',
+  'Появилось приложение нашего кошелька на пк!',
+
 ];
 function maybeShowUpdateLog() {
   const seen = localStorage.getItem('bv_update_seen');
