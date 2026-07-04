@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Black — вход</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="auth-shell">
+
+  <!-- Левая визуальная панель -->
+  <div class="auth-visual">
+    <div class="ring"></div>
+    <div class="ring r2"></div>
+    <div class="brand"><span class="seal">B</span> Black</div>
+    <div class="tagline">
+      <h2>Соцсеть, вход в которую нужно заслужить.</h2>
+      <p>Приватные каналы, личные группы и переписка, защищённая настройками приватности до последней детали. Ваш номер и аватар видят только те, кому вы разрешили.</p>
+    </div>
+  </div>
+
+  <!-- Форма -->
+  <div class="auth-form-wrap">
+    <div class="auth-card">
+      <div class="brand-mobile"><span class="seal">B</span> Black</div>
+
+      <div class="tabs">
+        <button id="tabLogin" class="active" onclick="setMode('login')">Вход</button>
+        <button id="tabRegister" onclick="setMode('register')">Регистрация</button>
+      </div>
+
+      <!-- переключатель email / телефон -->
+      <div class="tabs" style="margin-bottom:22px;">
+        <button id="tabEmail" class="active" onclick="setChannel('email')">Почта</button>
+        <button id="tabPhone" onclick="setChannel('phone')">Телефон</button>
+      </div>
+
+      <h1 id="formTitle">С возвращением</h1>
+      <p class="sub" id="formSub">Войдите, чтобы продолжить общение</p>
+
+      <form id="authForm" onsubmit="return false;">
+
+        <div id="nameField" class="field hidden">
+          <label>Имя пользователя</label>
+          <input type="text" id="displayName" placeholder="Как вас будут видеть другие" autocomplete="name">
+        </div>
+
+        <div id="emailField" class="field">
+          <label>Электронная почта</label>
+          <input type="email" id="email" placeholder="you@mail.com" autocomplete="email">
+        </div>
+
+        <div id="phoneField" class="field hidden">
+          <label>Номер телефона</label>
+          <input type="tel" id="phone" placeholder="+380 00 000 00 00" autocomplete="tel">
+        </div>
+
+        <div id="passField" class="field">
+          <label>Пароль</label>
+          <input type="password" id="password" placeholder="Минимум 8 символов" autocomplete="current-password">
+        </div>
+
+        <div id="recaptcha-container"></div>
+
+        <div id="codeField" class="field hidden">
+          <label>Код из SMS</label>
+          <input type="text" id="smsCode" placeholder="000000" inputmode="numeric">
+        </div>
+
+        <div class="error-text" id="authError"></div>
+
+        <button class="btn btn-gold btn-block" id="submitBtn" onclick="handleSubmit()">Продолжить</button>
+      </form>
+
+      <div class="switch-mode" id="switchModeText">
+        Нет аккаунта? <a onclick="setMode('register')">Создать</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="toast"></div>
+
+<!-- Firebase SDK (compat-сборка — проще подключать без бандлера) -->
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-storage-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-analytics-compat.js"></script>
+
+<script src="js/firebase-config.js"></script>
+<script src="js/auth.js"></script>
+</body>
+</html>
