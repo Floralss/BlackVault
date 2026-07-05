@@ -4,23 +4,38 @@ service cloud.firestore {
 
     function signedIn() { return request.auth != null; }
     function isMe(uid) { return signedIn() && request.auth.uid == uid; }
-    // ⚠️ Продублируйте сюда те же UID, что в js/firebase-config.js (ADMIN_UIDS).
-    // Лучше заменить на custom claims: request.auth.token.admin == true
-    function isAdmin() {
-      return signedIn() && request.auth.uid in [
-        // "UID_АДМИНА_1"
-      ];
+
+    // Бутстрап-админ: постоянный доступ по email/UID, даже если в базе
+    // ещё нет документа с ролью. Продублируйте здесь то же, что в
+    // js/firebase-config.js (ADMIN_EMAILS / ADMIN_UIDS).
+    function isBootstrapAdmin() {
+      return signedIn() && (
+        request.auth.token.email in ["strepoomich27@gmail.com"] ||
+        request.auth.uid in []
+      );
     }
 
+    // Динамическая роль хранится в собственном документе пользователя —
+    // её можно менять через Админ-панель без переразвёртывания правил.
+    function myRole() {
+      return signedIn()
+        ? get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role
+        : null;
+    }
+    function isAdmin()  { return isBootstrapAdmin() || myRole() == "admin"; }
+    function isHelper() { return isAdmin() || myRole() == "helper"; }
+
     match /users/{uid} {
-      allow read: if signedIn();          // профиль читают все (приватность полей — на уровне приложения/Cloud Functions)
+      allow read: if signedIn();
       allow create: if isMe(uid);
-      allow update: if isMe(uid) && !("premium" in request.resource.data.diff(resource.data).affectedKeys());
-      // поле "premium" нельзя менять напрямую из браузера — только через
-      // Cloud Function после подтверждённой оплаты. Это ключевая защита
-      // от "взлома", о которой просили в задании: деньги/права не должны
-      // выставляться клиентским JS.
-      allow delete: if false;
+
+      // Обычный пользователь может менять свои поля, КРОМЕ premium/role/banned —
+      // это и есть защита от "накрутки" премиума или самоназначения себя админом.
+      allow update: if isAdmin()
+        || (isHelper() && !isMe(uid) && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["banned"]))
+        || (isMe(uid) && !request.resource.data.diff(resource.data).affectedKeys().hasAny(["premium","role","banned"]));
+
+      allow delete: if isAdmin();
     }
 
     match /chats/{chatId} {
@@ -32,7 +47,10 @@ service cloud.firestore {
         allow create: if signedIn()
           && request.resource.data.senderId == request.auth.uid
           && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.members;
-        allow update, delete: if false;
+        allow update: if signedIn()
+          && request.auth.uid in get(/databases/$(database)/documents/chats/$(chatId)).data.members
+          && request.resource.data.diff(resource.data).affectedKeys().hasOnly(["read"]);
+        allow delete: if false;
       }
     }
 
@@ -40,8 +58,8 @@ service cloud.firestore {
     match /groups/{id}   { allow read: if signedIn(); allow write: if isAdmin(); }
 
     match /plans/{id} {
-      allow read: if true;        // тарифы видны даже неавторизованным на лендинге
-      allow write: if isAdmin();  // цены редактирует только админ — проверка на сервере, а не в интерфейсе
+      allow read: if true;
+      allow write: if isAdmin();
     }
   }
 }
