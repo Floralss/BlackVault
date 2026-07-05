@@ -15,12 +15,13 @@
   <!-- ================= NAV RAIL ================= -->
   <nav class="nav-rail">
     <div class="brand"><span class="seal">B</span></div>
-    <button class="nav-item active" data-view="chats" onclick="goView('chats')" title="Чаты">💬</button>
-    <button class="nav-item" data-view="search" onclick="goView('search')" title="Поиск">🔎</button>
-    <button class="nav-item" data-view="profile" onclick="goView('profile')" title="Профиль">👤</button>
-    <button class="nav-item" data-view="premium" onclick="goView('premium')" title="Black Premium">💎</button>
-    <button class="nav-item" data-view="settings" onclick="goView('settings')" title="Настройки">⚙️</button>
-    <button class="nav-item hidden" id="adminNavBtn" data-view="admin" onclick="goView('admin')" title="Админка">🛠</button>
+    <button class="nav-item active" data-view="chats" onclick="goView('chats')" title="Чаты"><img class="icon" src="icons/chats.svg" alt="Чаты"></button>
+    <button class="nav-item" data-view="search" onclick="goView('search')" title="Поиск"><img class="icon" src="icons/search.svg" alt="Поиск"></button>
+    <button class="nav-item" data-view="profile" onclick="goView('profile')" title="Профиль"><img class="icon" src="icons/profile.svg" alt="Профиль"></button>
+    <button class="nav-item" data-view="premium" onclick="goView('premium')" title="Black Premium"><img class="icon" src="icons/premium.svg" alt="Premium"></button>
+    <button class="nav-item" data-view="settings" onclick="goView('settings')" title="Настройки"><img class="icon" src="icons/settings.svg" alt="Настройки"></button>
+    <button class="nav-item hidden" id="helperNavBtn" data-view="helper" onclick="goView('helper')" title="Панель хелпера"><img class="icon" src="icons/helper.svg" alt="Хелпер"></button>
+    <button class="nav-item hidden" id="adminNavBtn" data-view="admin" onclick="goView('admin')" title="Админка"><img class="icon" src="icons/admin.svg" alt="Админка"></button>
     <div class="spacer"></div>
     <img id="navAvatar" class="nav-avatar" src="" alt="" onclick="goView('profile')">
   </nav>
@@ -30,7 +31,7 @@
     <div class="list-header">
       <h2 id="listTitle">Чаты</h2>
       <div class="search-box">
-        <span class="ic">🔎</span>
+        <img class="icon icon-sm ic" src="icons/search.svg" alt="">
         <input id="listSearchInput" placeholder="Найти человека, канал, группу…" oninput="onSearchInput(this.value)">
       </div>
       <div class="filters" id="searchFilters" style="display:none;">
@@ -46,6 +47,9 @@
         <p>Загружаем ваши чаты…</p>
       </div>
     </div>
+    <button class="fab" id="newChatFab" onclick="goView('search')" title="Новый чат">
+      <img class="icon" src="icons/plus.svg" alt="">
+    </button>
   </section>
 
   <!-- ================= MAIN COLUMN ================= -->
@@ -62,6 +66,7 @@
 
     <div class="view" id="view-chat-open">
       <div class="chat-header">
+        <button class="btn btn-ghost btn-sm mobile-back" onclick="closeChatMobile()" style="padding:8px;"><img class="icon icon-sm" src="icons/back.svg" alt="Назад"></button>
         <img class="avatar" id="chatAvatar" style="width:40px;height:40px;">
         <div>
           <div class="li-name" id="chatName"></div>
@@ -71,10 +76,10 @@
       <div class="chat-body" id="chatBody"></div>
       <div class="chat-input" id="chatInputRow">
         <input id="chatMessageInput" placeholder="Написать сообщение…" onkeydown="if(event.key==='Enter')sendMessage()">
-        <button class="btn btn-gold btn-sm" onclick="sendMessage()">→</button>
+        <button class="btn btn-gold btn-sm" onclick="sendMessage()"><img class="icon icon-sm" src="icons/send.svg" alt="Отправить"></button>
       </div>
       <div class="premium-lock hidden" id="chatPremiumLock">
-        <div class="seal">💎</div>
+        <div class="seal"><img class="icon icon-sm" src="icons/premium.svg" alt="" style="filter:brightness(0.15);"></div>
         <h3>Только для Black Premium</h3>
         <p>Этот пользователь принимает сообщения только от подписчиков Black Premium.</p>
         <button class="btn btn-gold" onclick="goView('premium')">Оформить Premium</button>
@@ -84,7 +89,7 @@
     <!-- ---- SEARCH (пустое состояние справа, когда список — результаты) ---- -->
     <div class="view" id="view-search">
       <div class="empty-state" style="margin:auto;">
-        <div class="seal">🔎</div>
+        <div class="seal"><img class="icon icon-sm" src="icons/search.svg" alt="" style="filter:brightness(0.15);"></div>
         <h3>Ищите людей, каналы и группы</h3>
         <p>Начните вводить имя слева — Black покажет похожие совпадения.</p>
       </div>
@@ -95,14 +100,17 @@
       <div class="cover"></div>
       <div class="profile-head">
         <img class="avatar-big" id="profileAvatarBig" src="">
-        <div style="flex:1; display:flex; justify-content:flex-end; padding-bottom:14px;">
-          <button class="btn btn-ghost btn-sm" onclick="openAvatarPicker()">Сменить фото</button>
+        <div class="head-actions">
+          <button class="btn btn-ghost btn-sm" onclick="openAvatarPicker()"><img class="icon icon-sm" src="icons/camera.svg" alt=""> Сменить фото</button>
         </div>
       </div>
       <div class="profile-info">
-        <h2 id="profileName">—</h2>
-        <p class="handle" id="profileHandle">—</p>
-        <p class="bio" id="profileBio">—</p>
+        <h2 id="profileName">Загрузка…</h2>
+        <p class="handle" id="profileHandle"></p>
+        <div class="field" style="max-width:420px; margin:10px 0 0;">
+          <input id="nameInput" placeholder="Ваше имя" onchange="saveName(this.value)">
+        </div>
+        <p class="bio" id="profileBio"></p>
       </div>
 
       <div class="profile-section">
@@ -116,7 +124,7 @@
         <div id="trackDisplay"></div>
         <div style="height:12px;"></div>
         <label class="upload-drop">
-          🎵 Загрузить трек с компьютера или телефона (mp3/ogg)
+          <img class="icon icon-sm" src="icons/music.svg" alt=""> Загрузить трек с компьютера или телефона (mp3/ogg)
           <input type="file" id="musicFile" accept="audio/*" class="hidden" onchange="uploadMusic(this.files[0])">
         </label>
       </div>
@@ -153,11 +161,11 @@
       <div class="setting-row" style="border-bottom:none; flex-direction:column; align-items:flex-start; gap:14px;">
         <div class="st-title">Акцентный цвет</div>
         <div class="theme-swatches">
-          <div class="swatch active" style="background:#c6a15b" onclick="setAccent('#c6a15b','#e4c98a')" title="Золото"></div>
-          <div class="swatch" style="background:#5c1a2b" onclick="setAccent('#b8546c','#d98aa0')" title="Вино"></div>
-          <div class="swatch" style="background:#3a6b5c" onclick="setAccent('#4f9c85','#7fc9b3')" title="Изумруд"></div>
-          <div class="swatch" style="background:#3a4a6b" onclick="setAccent('#5b7cc6','#8aa8e4')" title="Сапфир"></div>
-          <div class="swatch" style="background:#8a8a8a" onclick="setAccent('#b0b0b0','#d8d8d8')" title="Серебро"></div>
+          <div class="swatch active" style="background:#d4af6a" onclick="setAccent('#d4af6a','#f0d59a')" title="Золото"></div>
+          <div class="swatch" style="background:#90304a" onclick="setAccent('#c85a76','#e8a3b6')" title="Вино"></div>
+          <div class="swatch" style="background:#3a8a6b" onclick="setAccent('#54b591','#8fd9bb')" title="Изумруд"></div>
+          <div class="swatch" style="background:#4a5f9c" onclick="setAccent('#7089c9','#a3b5e8')" title="Сапфир"></div>
+          <div class="swatch" style="background:#9a9284" onclick="setAccent('#c2baac','#e2dcd2')" title="Серебро"></div>
         </div>
       </div>
       <div class="setting-row" style="border-bottom:none; flex-direction:column; align-items:flex-start; gap:8px;">
@@ -169,16 +177,49 @@
       <button class="btn btn-danger" onclick="logout()">Выйти из аккаунта</button>
     </div>
 
-    <!-- ---- ADMIN VIEW (управление тарифами Premium) ---- -->
+    <!-- ---- ADMIN VIEW ---- -->
     <div class="view" id="view-admin" style="overflow-y:auto; padding:32px;">
-      <h2>Админ-панель Black Premium</h2>
-      <p class="hint">Здесь вы редактируете тарифы, которые видят все пользователи на вкладке Premium.</p>
-      <table class="admin-table" id="adminPlansTable">
-        <thead><tr><th>Название</th><th>Цена</th><th>Период</th><th>Описание</th><th>Топ</th><th></th></tr></thead>
-        <tbody id="adminPlansBody"></tbody>
-      </table>
-      <button class="btn btn-gold btn-sm" style="margin-top:14px;" onclick="addPlanRow()">+ Добавить тариф</button>
-      <div style="margin-top:10px;"><button class="btn btn-ghost btn-sm" onclick="savePlans()">Сохранить все изменения</button></div>
+      <h2>Админ-панель</h2>
+      <div class="tabs" style="max-width:360px;">
+        <button id="adminTabPlans" class="active" onclick="setAdminTab('plans')">Тарифы</button>
+        <button id="adminTabTeam" onclick="setAdminTab('team')">Команда</button>
+      </div>
+
+      <div id="adminPanePlans">
+        <p class="hint">Здесь вы редактируете тарифы, которые видят все пользователи на вкладке Premium.</p>
+        <table class="admin-table" id="adminPlansTable">
+          <thead><tr><th>Название</th><th>Цена</th><th>Период</th><th>Описание</th><th>Топ</th><th></th></tr></thead>
+          <tbody id="adminPlansBody"></tbody>
+        </table>
+        <button class="btn btn-gold btn-sm" style="margin-top:14px;" onclick="addPlanRow()">+ Добавить тариф</button>
+        <div style="margin-top:10px;"><button class="btn btn-ghost btn-sm" onclick="savePlans()">Сохранить все изменения</button></div>
+      </div>
+
+      <div id="adminPaneTeam" class="hidden">
+        <p class="hint">Найдите пользователя по email и назначьте роль. Хелперы получают отдельную панель поддержки, админы — полный доступ.</p>
+        <div class="field" style="max-width:420px;">
+          <label>Email пользователя</label>
+          <div class="row gap-8"><input id="teamSearchEmail" placeholder="user@mail.com"><button class="btn btn-sm" onclick="findUserByEmail()">Найти</button></div>
+        </div>
+        <div id="teamSearchResult"></div>
+
+        <h3 style="font-size:14px;color:var(--gold-soft);margin:26px 0 10px;">Текущая команда</h3>
+        <table class="admin-table" id="teamTable">
+          <thead><tr><th>Имя</th><th>Email</th><th>Роль</th><th></th></tr></thead>
+          <tbody id="teamTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ---- HELPER VIEW ---- -->
+    <div class="view" id="view-helper" style="overflow-y:auto; padding:32px;">
+      <h2>Панель хелпера</h2>
+      <p class="hint">Найдите пользователя, чтобы посмотреть профиль или ограничить доступ в случае нарушения.</p>
+      <div class="field" style="max-width:420px;">
+        <label>Email пользователя</label>
+        <div class="row gap-8"><input id="helperSearchEmail" placeholder="user@mail.com"><button class="btn btn-sm" onclick="helperFindUser()">Найти</button></div>
+      </div>
+      <div id="helperSearchResult"></div>
     </div>
 
   </section>
@@ -202,5 +243,6 @@
 <script src="js/settings.js"></script>
 <script src="js/premium.js"></script>
 <script src="js/admin.js"></script>
+<script src="js/team.js"></script>
 </body>
 </html>
