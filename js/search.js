@@ -57,16 +57,16 @@ async function runSearch(qRaw){
 
   wrap.innerHTML = results.map(r => {
     const d = r.data;
-    const icon = r.type === "channel" ? "📣" : r.type === "group" ? "👥" : null;
-    const avatar = icon
-      ? `<div class="avatar">${icon}</div>`
+    const iconSrc = r.type === "channel" ? "icons/channel.svg" : r.type === "group" ? "icons/group.svg" : null;
+    const avatar = iconSrc
+      ? `<div class="avatar"><img class="icon icon-sm" src="${iconSrc}" alt=""></div>`
       : `<img class="avatar" src="${avatarFallback(d)}">`;
     const sub = r.type === "person" ? (d.handle || "") : `${r.type === "channel" ? "Канал" : "Группа"} • ${d.membersCount || 0} участников`;
     return `
       <div class="list-item" onclick="openSearchResult('${r.type}','${r.id}')">
         ${avatar}
         <div class="li-body">
-          <div class="li-name">${escapeHtml(d.name)} ${d.premium ? '<span class="seal small">✓</span>' : ""}</div>
+          <div class="li-name">${escapeHtml(d.name)} ${d.premium ? '<img class="icon icon-sm" src="icons/verified.svg" alt="Premium">' : ""}</div>
           <div class="li-sub">${escapeHtml(sub)}</div>
         </div>
       </div>`;
