@@ -149,9 +149,17 @@ function translateAuthError(e){
   return map[e.code] || (e.message || "Что-то пошло не так.");
 }
 
-// если уже залогинен — сразу в приложение
+// если уже залогинен — сразу в приложение (работает в любой подпапке сайта)
 auth.onAuthStateChanged(user => {
-  if (user && window.location.pathname.endsWith("index.html") || (user && window.location.pathname==="/")) {
+  if (user && !window.location.pathname.endsWith("app.html")) {
     window.location.href = "app.html";
   }
+});
+
+window.addEventListener("error", (e) => {
+  showError("Ошибка в скрипте: " + (e.message || "неизвестно"));
+});
+window.addEventListener("unhandledrejection", (e) => {
+  const msg = (e.reason && (e.reason.message || e.reason.code)) || String(e.reason);
+  showError("Ошибка: " + msg);
 });
