@@ -24,11 +24,28 @@ const auth = firebase.auth();
 const db = firebase.firestore();
 const storage = firebase.storage();
 
-// Список UID администраторов, которым доступна /admin (панель тарифов Premium).
-// В боевой версии лучше заменить на Firebase Custom Claims (см. README),
-// потому что любой список во фронтенде виден в devtools — он не даёт прав
-// сам по себе, реальная защита — правило в firestore.rules,
-// которое проверяет этот же UID на сервере.
-const ADMIN_UIDS = [
-  // "СЮДА_ВСТАВИТЬ_UID_АДМИНА_ИЗ_FIREBASE_AUTH"
+/* =========================================================
+   РОЛИ
+   Есть два способа стать админом:
+   1) "Бутстрап-админ" — email или UID из списков ниже.
+      Это тот, кто всегда имеет доступ, даже до того как в
+      Firestore появится документ с ролью (например, самый
+      первый запуск проекта). Уже вписан ваш email.
+   2) Динамическая роль — поле role:"admin" / "helper" в
+      документе users/{uid}. Её можно выдавать прямо из
+      Админ-панели → вкладка "Команда", без правок кода.
+   И то и другое ОБЯЗАТЕЛЬНО должно быть продублировано в
+   firestore.rules — иначе это будет работать только "на вид"
+   в интерфейсе, а не по-настоящему (см. README).
+   ========================================================= */
+const ADMIN_EMAILS = [
+  "strepoomich27@gmail.com"
 ];
+const ADMIN_UIDS = [
+  // "МОЖНО_ТАКЖЕ_ВСТАВИТЬ_UID_ИЗ_FIREBASE_AUTH_ДЛЯ_НАДЁЖНОСТИ"
+];
+
+function isBootstrapAdmin(user){
+  if (!user) return false;
+  return ADMIN_UIDS.includes(user.uid) || (user.email && ADMIN_EMAILS.includes(user.email));
+}
