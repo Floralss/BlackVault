@@ -118,6 +118,7 @@ async function createUserDocument(user, extra){
     name: finalName,
     nameLower: finalName.toLowerCase(),
     handle: "@" + (user.uid.slice(0,8)),
+    role: "user",
     email: extra.email || user.email || null,
     phone: extra.phone || user.phoneNumber || null,
     bio: "",
