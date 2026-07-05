@@ -6,8 +6,9 @@ function renderProfile(){
   const u = currentUserData;
   document.getElementById("profileAvatarBig").src = avatarFallback(u);
   document.getElementById("profileName").innerHTML =
-    escapeHtml(u.name || "Без имени") + (u.premium ? ' <span class="seal small">✓</span>' : "");
+    escapeHtml(u.name || "Без имени") + (u.premium ? ' <img class="icon icon-sm" src="icons/verified.svg" alt="Premium">' : "");
   document.getElementById("profileHandle").textContent = u.handle || "";
+  document.getElementById("nameInput").value = u.name || "";
   document.getElementById("profileBio").textContent = u.bio || "Пользователь пока ничего не написал о себе.";
   document.getElementById("bioInput").value = u.bio || "";
   renderTrack(u);
@@ -21,7 +22,7 @@ function renderTrack(u){
   }
   box.innerHTML = `
     <div class="track-row">
-      <button class="play-btn" onclick="togglePlay('${u.musicUrl}', this)">▶</button>
+      <button class="play-btn" onclick="togglePlay('${u.musicUrl}', this)"><img class="icon icon-sm" src="icons/play.svg" alt="Играть"></button>
       <div class="track-meta">
         <div class="t">${escapeHtml(u.musicTitle || "Трек профиля")}</div>
         <div class="a">Музыка профиля • ${escapeHtml(u.name || "")}</div>
@@ -33,12 +34,12 @@ function togglePlay(url, btn){
   const player = document.getElementById("audioPlayer");
   if (player.src === url && !player.paused){
     player.pause();
-    btn.textContent = "▶";
+    btn.innerHTML = '<img class="icon icon-sm" src="icons/play.svg" alt="Играть">';
   } else {
     player.src = url;
     player.play();
-    btn.textContent = "❚❚";
-    player.onended = () => btn.textContent = "▶";
+    btn.innerHTML = '<img class="icon icon-sm" src="icons/pause.svg" alt="Пауза">';
+    player.onended = () => btn.innerHTML = '<img class="icon icon-sm" src="icons/play.svg" alt="Играть">';
   }
 }
 
