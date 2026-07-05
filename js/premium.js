@@ -16,7 +16,7 @@ async function loadPlans(){
     const p = d.data();
     return `
       <div class="plan-card ${p.featured ? "featured" : ""}">
-        ${p.featured ? '<span class="seal small" style="position:absolute;top:18px;right:18px;">★</span>' : ""}
+        ${p.featured ? '<img class="icon icon-sm" src="icons/star.svg" alt="Топ" style="position:absolute;top:18px;right:18px;">' : ""}
         <div class="li-name">${escapeHtml(p.name)}</div>
         <div class="price">${escapeHtml(p.price)} <span>/ ${escapeHtml(p.period || "мес")}</span></div>
         <ul>${(p.features || []).map(f => `<li>${escapeHtml(f)}</li>`).join("")}</ul>
