@@ -9,7 +9,7 @@
 let adminPlansCache = [];
 
 async function loadAdminPlans(){
-  if (!ADMIN_UIDS.includes(currentUser.uid)){
+  if (!isAdminClient()){
     document.getElementById("view-admin").innerHTML = `<div class="empty-state" style="margin:auto;"><p>Нет доступа.</p></div>`;
     return;
   }
@@ -27,7 +27,7 @@ function renderAdminPlans(){
       <td><input value="${escapeAttr(p.period||'мес')}" oninput="adminPlansCache[${i}].period=this.value"></td>
       <td><textarea rows="2" oninput="adminPlansCache[${i}].features=this.value.split('\\n')">${escapeAttr((p.features||[]).join("\n"))}</textarea></td>
       <td style="text-align:center;"><input type="checkbox" ${p.featured?"checked":""} onchange="adminPlansCache[${i}].featured=this.checked"></td>
-      <td><button class="btn btn-danger btn-sm" onclick="removePlanRow(${i})">✕</button></td>
+      <td><button class="btn btn-danger btn-sm" onclick="removePlanRow(${i})"><img class="icon icon-sm" src="icons/close.svg" alt="Удалить"></button></td>
     </tr>`).join("");
 }
 
