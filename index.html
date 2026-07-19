@@ -759,9 +759,21 @@ async function loadIncomeStats(){
 
 // Close overlays on backdrop click
 document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o){if(o.id==='qrModal')closeQRModal();else o.classList.remove('on');}}));
-
-// Error safety net
-setTimeout(()=>{const l=document.getElementById('loader');if(l&&l.style.display!=='none'){l.style.display='none';toast('Ошибка загрузки — обновите страницу','e',8000);}},10000);
 </script>
+
+<script>
+setTimeout(() => {
+  const loader = document.getElementById('loader');
+  if (loader && loader.style.display !== 'none') {
+    loader.style.display = 'none';
+    if (window.toast) {
+      window.toast('Загрузка Firebase заняла слишком много времени. Проверьте консоль.', 'e', 8000);
+    } else {
+      alert('Ошибка: Приложение не смогло подключить внешние базы данных Firebase. Если у вас включен VPN или блокировщик рекламы (AdBlock), отключите их для этого сайта и обновите страницу.');
+    }
+  }
+}, 4000);
+</script>
+
 </body>
 </html>
