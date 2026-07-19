@@ -1,275 +1,789 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<title>🛒 БРОСКАССА • BlackVault Market</title>
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>BlackVault Касса</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2300C07A'/><text y='.85em' font-size='60' x='18'>🏪</text></svg>"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
-    :root {
-        --bg: #0D0D13;
-        --surface: #17171F;
-        --accent: #7C5CFC;
-        --green: #3DDC84;
-    }
-    * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-        font-family: 'Inter', system-ui, sans-serif;
-        background: var(--bg);
-        color: #F5F5FC;
-        height: 100vh;
-        display: flex;
-        flex-direction: column;
-        overflow: hidden;
-    }
-    header {
-        background: var(--surface);
-        padding: 15px 20px;
-        border-bottom: 1px solid rgba(255,255,255,0.1);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        font-weight: 800;
-        font-size: 22px;
-    }
-    .main { flex: 1; display: flex; overflow: hidden; }
-    .catalog { width: 340px; background: var(--surface); border-right: 1px solid rgba(255,255,255,0.08); padding: 20px; overflow-y: auto; }
-    .cart { flex: 1; padding: 20px; overflow-y: auto; background: #0D0D13; }
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0B0F0E;--surface:#131A18;--surface2:#1A2320;--surface3:#212E2A;
+  --border:rgba(255,255,255,.07);--border2:rgba(255,255,255,.14);
+  --text:#F0FAF6;--text2:#8AADA0;--text3:#4A6B5E;
+  --acc:#00C07A;--acc2:#00E090;--red:#FF4D6A;--gold:#FFB23E;
+  --f:'Inter',sans-serif;--r:16px;--rs:12px;
+}
+html,body{height:100%;overflow:hidden}
+body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;flex-direction:column;-webkit-font-smoothing:antialiased}
+::-webkit-scrollbar{width:4px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(0,192,122,.35);border-radius:4px}
 
-    .product {
-        background: #1F1F2A;
-        padding: 14px;
-        margin-bottom: 12px;
-        border-radius: 16px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 14px;
-    }
-    .product:hover { background: #262633; transform: translateY(-3px); }
+#loader{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;z-index:9000}
+.ld-ico{width:72px;height:72px;background:linear-gradient(150deg,#00E090,#00C07A);border-radius:22px;display:flex;align-items:center;justify-content:center;font-size:32px;box-shadow:0 0 50px rgba(0,192,122,.45);animation:pulse 2s ease-in-out infinite}
+@keyframes pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.07)}}
+.ld-name{font-size:20px;font-weight:800;letter-spacing:-.4px;background:linear-gradient(135deg,#fff,#00E090);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.ld-dots{display:flex;gap:6px}.ld-dots i{width:6px;height:6px;border-radius:50%;background:var(--acc);animation:dot 1.2s infinite ease-in-out both}
+.ld-dots i:nth-child(1){animation-delay:-.24s}.ld-dots i:nth-child(2){animation-delay:-.12s}
+@keyframes dot{0%,80%,100%{transform:scale(0);opacity:.3}40%{transform:scale(1);opacity:1}}
 
-    .cart-item {
-        background: #1F1F2A;
-        padding: 14px 18px;
-        border-radius: 14px;
-        margin-bottom: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-    }
-    .total-bar {
-        position: sticky;
-        bottom: 0;
-        background: var(--surface);
-        padding: 20px;
-        border-top: 2px solid var(--accent);
-        margin: 20px -20px -20px;
-    }
-    button {
-        padding: 14px 24px;
-        font-size: 17px;
-        font-weight: 800;
-        border: none;
-        border-radius: 14px;
-        cursor: pointer;
-    }
-    .btn-pay {
-        background: linear-gradient(150deg, #7C5CFC, #A78BFA);
-        color: white;
-        width: 100%;
-        margin-top: 10px;
-    }
+#toastRoot{position:fixed;top:16px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;flex-direction:column;gap:8px;align-items:center;pointer-events:none;width:min(360px,90vw)}
+.tst{background:rgba(19,26,24,.97);border:1px solid var(--border2);backdrop-filter:blur(20px);border-radius:13px;padding:12px 16px;display:flex;align-items:center;gap:10px;font-size:13px;font-weight:600;box-shadow:0 10px 32px rgba(0,0,0,.5);animation:tin .3s cubic-bezier(.34,1.56,.64,1);transition:opacity .3s}
+@keyframes tin{from{opacity:0;transform:translateY(-12px) scale(.9)}to{opacity:1;transform:translateY(0) scale(1)}}
+.tst.s{border-left:3px solid var(--acc)}.tst.e{border-left:3px solid var(--red)}.tst.w{border-left:3px solid var(--gold)}.tst.i{border-left:3px solid #60a5fa}
 
-    /* Модалки */
-    .modal {
-        position: fixed;
-        inset: 0;
-        background: rgba(0,0,0,0.95);
-        display: none;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-    }
-    .modal-content {
-        background: var(--surface);
-        border-radius: 24px;
-        width: 90%;
-        max-width: 420px;
-        padding: 30px;
-    }
+/* AUTH */
+#authScreen{position:fixed;inset:0;background:var(--bg);display:none;align-items:center;justify-content:center;padding:24px;z-index:7000;overflow-y:auto}
+#authScreen.show{display:flex}
+.auth-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--border);border-radius:24px;padding:36px 28px;box-shadow:0 30px 80px rgba(0,0,0,.6)}
+.auth-logo{display:flex;align-items:center;gap:11px;justify-content:center;margin-bottom:26px}
+.auth-logo-ico{width:46px;height:46px;background:linear-gradient(150deg,#00E090,#00C07A);border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px}
+.auth-logo-name{font-size:21px;font-weight:900;letter-spacing:-.4px}
+.auth-title{font-size:22px;font-weight:900;margin-bottom:5px;letter-spacing:-.4px}
+.auth-sub{font-size:13.5px;color:var(--text2);margin-bottom:22px}
+.form-group{margin-bottom:14px}
+.form-label{font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;display:block;margin-bottom:7px}
+.form-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:12px 14px;color:var(--text);font-size:14.5px;font-family:var(--f);outline:none;transition:all .2s}
+.form-input:focus{border-color:rgba(0,192,122,.5);background:rgba(0,192,122,.06);box-shadow:0 0 0 3px rgba(0,192,122,.12)}
+.form-input::placeholder{color:var(--text3)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:13px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-size:14.5px;font-weight:800;font-family:var(--f);transition:all .18s;white-space:nowrap;letter-spacing:-.2px}
+.btn:active{transform:scale(.97)}
+.btn-primary{background:linear-gradient(150deg,#00E090,#00C07A);color:#001A0F;width:100%;box-shadow:0 6px 22px rgba(0,192,122,.35)}
+.btn-primary:hover{filter:brightness(1.08);transform:translateY(-1px)}
+.btn-secondary{background:var(--surface2);border:1px solid var(--border);color:var(--text);width:100%}
+.btn-secondary:hover{background:var(--surface3)}
+.btn-danger{background:rgba(255,77,106,.15);border:1px solid rgba(255,77,106,.3);color:#FF8FA3}
+.btn-sm{padding:8px 14px;font-size:13px;border-radius:10px;width:auto}
+.btn-ghost{background:transparent;border:1px solid var(--border);color:var(--text2)}
+.btn-ghost:hover{border-color:var(--border2);color:var(--text)}
+.divider{display:flex;align-items:center;gap:12px;color:var(--text3);font-size:12px;margin:14px 0;font-weight:600}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--border)}
+.auth-foot{text-align:center;margin-top:14px;font-size:13px;color:var(--text2)}
+.auth-foot a{color:var(--acc);font-weight:800;cursor:pointer}
+.auth-access-denied{background:rgba(255,178,62,.08);border:1px solid rgba(255,178,62,.2);border-radius:var(--rs);padding:14px 16px;font-size:13.5px;color:var(--gold);text-align:center;margin-top:16px;display:none}
+.auth-access-denied.show{display:block}
 
-    /* BlackVault Login */
-    #bv-login-screen {
-        background: radial-gradient(ellipse at top, #1A1430, #0D0D13);
-    }
+/* MAIN LAYOUT */
+#app{flex:1;display:flex;overflow:hidden}
+#sidebar{width:72px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;align-items:center;padding:16px 0;gap:4px}
+.sb-icon{width:48px;height:48px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:22px;cursor:pointer;transition:all .18s;color:var(--text3)}
+.sb-icon:hover{background:var(--surface2);color:var(--text)}
+.sb-icon.on{background:rgba(0,192,122,.15);color:var(--acc)}
+.sb-icon.brand{background:linear-gradient(150deg,#00E090,#00C07A);color:#001A0F;margin-bottom:8px;pointer-events:none}
+.sb-divider{width:36px;height:1px;background:var(--border);margin:4px 0}
+
+#main{flex:1;display:flex;overflow:hidden}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.page.on{display:flex}
+
+/* CATALOG PAGE */
+#catalogPage{display:flex;flex:1;overflow:hidden}
+.catalog-sidebar{width:260px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.catalog-search{padding:14px}
+.search-input{width:100%;background:var(--surface2);border:1px solid var(--border);border-radius:var(--rs);padding:10px 13px;color:var(--text);font-size:13.5px;font-family:var(--f);outline:none}
+.search-input:focus{border-color:rgba(0,192,122,.4)}
+.search-input::placeholder{color:var(--text3)}
+.cat-list{flex:1;overflow-y:auto;padding:4px 10px 10px}
+.cat-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;font-size:13.5px;font-weight:500;color:var(--text2);margin-bottom:2px;transition:all .15s}
+.cat-item:hover{background:var(--surface2);color:var(--text)}
+.cat-item.on{background:rgba(0,192,122,.12);color:var(--acc);font-weight:700}
+
+.catalog-main{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.catalog-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;gap:12px}
+.catalog-title{font-size:16px;font-weight:800}
+.products-grid{flex:1;overflow-y:auto;padding:16px;display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.product-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:14px;cursor:pointer;transition:all .18s;position:relative}
+.product-card:hover{border-color:rgba(0,192,122,.35);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
+.product-card.in-cart{border-color:rgba(0,192,122,.5);background:rgba(0,192,122,.06)}
+.product-ico{font-size:28px;margin-bottom:9px;display:block}
+.product-name{font-size:13px;font-weight:700;margin-bottom:5px;line-height:1.3}
+.product-price{font-size:14.5px;font-weight:900;color:var(--acc)}
+.product-usd{font-size:11px;color:var(--text3);margin-top:1px}
+.product-add-btn{position:absolute;top:10px;right:10px;width:26px;height:26px;border-radius:8px;background:var(--acc);border:none;color:#001A0F;font-size:15px;font-weight:900;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:0;transition:all .18s}
+.product-card:hover .product-add-btn{opacity:1}
+.product-badge{position:absolute;top:8px;right:8px;background:var(--acc);color:#001A0F;border-radius:8px;font-size:11px;font-weight:900;padding:2px 7px}
+
+/* CART PANEL */
+.cart-panel{width:320px;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column}
+.cart-header{padding:16px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.cart-title{font-size:15px;font-weight:800}
+.cart-count{background:var(--acc);color:#001A0F;border-radius:8px;font-size:11px;font-weight:900;padding:2px 8px}
+.cart-items{flex:1;overflow-y:auto;padding:10px}
+.cart-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:var(--rs);background:var(--surface2);margin-bottom:8px}
+.cart-item-ico{font-size:20px;flex-shrink:0;width:34px;text-align:center}
+.cart-item-info{flex:1;min-width:0}
+.cart-item-name{font-size:12.5px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cart-item-price{font-size:12px;color:var(--acc);font-weight:700}
+.cart-item-controls{display:flex;align-items:center;gap:6px;flex-shrink:0}
+.qty-btn{width:24px;height:24px;border-radius:7px;border:none;cursor:pointer;font-size:14px;font-weight:900;display:flex;align-items:center;justify-content:center;background:var(--surface3);color:var(--text);transition:all .15s}
+.qty-btn:hover{background:var(--acc);color:#001A0F}
+.cart-empty{flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:10px;color:var(--text3);font-size:13.5px}
+
+.cart-footer{padding:14px 18px;border-top:1px solid var(--border)}
+.cart-total-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px}
+.cart-total-label{font-size:12px;color:var(--text2);font-weight:600}
+.cart-total-val{font-size:20px;font-weight:900}
+.cart-total-uah{color:var(--acc)}
+.cart-fee-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px}
+.cart-fee-label{font-size:11px;color:var(--text3)}
+.cart-fee-val{font-size:11px;color:var(--text3)}
+.pay-btns{display:flex;gap:8px}
+
+/* PAYMENT MODAL */
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.72);backdrop-filter:blur(14px);z-index:2000;display:flex;align-items:center;justify-content:center;padding:24px;opacity:0;pointer-events:none;transition:opacity .25s}
+.overlay.on{opacity:1;pointer-events:all}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:22px;width:100%;max-width:440px;max-height:90vh;overflow-y:auto;padding:28px;box-shadow:0 30px 80px rgba(0,0,0,.65)}
+.modal-title{font-size:20px;font-weight:900;margin-bottom:4px}
+.modal-sub{font-size:13px;color:var(--text2);margin-bottom:22px}
+.qr-wrap{background:var(--surface2);border-radius:16px;padding:20px;display:flex;align-items:center;justify-content:center;margin-bottom:16px}
+.qr-wrap canvas, .qr-wrap img{border-radius:8px}
+.pay-amount-big{font-size:32px;font-weight:900;color:var(--acc);text-align:center;margin-bottom:4px}
+.pay-amount-sub{font-size:13px;color:var(--text2);text-align:center;margin-bottom:18px}
+.pay-status{display:flex;align-items:center;gap:8px;background:rgba(0,192,122,.08);border:1px solid rgba(0,192,122,.2);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--acc);font-weight:600;margin-bottom:16px}
+.pay-status.pending{border-color:rgba(255,178,62,.25);background:rgba(255,178,62,.08);color:var(--gold)}
+.pay-status.success{border-color:rgba(0,192,122,.35);background:rgba(0,192,122,.12);color:var(--acc)}
+.pay-status.error{border-color:rgba(255,77,106,.25);background:rgba(255,77,106,.08);color:var(--red)}
+
+/* ADMIN / PRODUCTS / INCOME PAGES */
+.page-inner{flex:1;overflow-y:auto;padding:24px}
+.page-header{margin-bottom:22px}
+.page-title{font-size:22px;font-weight:900;letter-spacing:-.5px}
+.page-sub{font-size:13px;color:var(--text2);margin-top:3px}
+.sec{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);overflow:hidden;margin-bottom:16px}
+.sec-head{padding:15px 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.sec-title{font-size:14px;font-weight:800}
+
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px;margin-bottom:18px}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:18px}
+.stat-label{font-size:11px;color:var(--text3);font-weight:800;text-transform:uppercase;letter-spacing:.7px;margin-bottom:7px}
+.stat-val{font-size:24px;font-weight:900}
+.stat-val.green{color:var(--acc)}
+.stat-change{font-size:12px;color:var(--text2);margin-top:3px}
+
+.income-row{display:flex;align-items:center;justify-content:space-between;padding:13px 17px;border-bottom:1px solid var(--border)}
+.income-row:last-child{border-bottom:none}
+.income-date{font-size:13px;font-weight:600}
+.income-amount{font-size:14.5px;font-weight:800;color:var(--acc)}
+.income-txs{font-size:11px;color:var(--text3);margin-top:1px}
+
+.product-row{display:flex;align-items:center;gap:13px;padding:12px 17px;border-bottom:1px solid var(--border)}
+.product-row:last-child{border-bottom:none}
+.product-row-ico{width:40px;height:40px;border-radius:11px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.product-row-name{flex:1;font-size:14px;font-weight:700}
+.product-row-price{font-size:13.5px;font-weight:800;color:var(--acc)}
+.product-row-cat{font-size:11px;color:var(--text3)}
+
+.empty-state{padding:40px;text-align:center;color:var(--text3);font-size:14px}
+.empty-state .emo{font-size:36px;display:block;margin-bottom:10px;opacity:.5}
+
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:800}
+.badge-green{background:rgba(0,192,122,.15);color:var(--acc)}
+.badge-red{background:rgba(255,77,106,.15);color:#FF8FA3}
+
+@media(max-width:768px){
+  .catalog-sidebar{display:none}
+  .cart-panel{width:280px}
+  .products-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+}
+@media(max-width:540px){
+  #catalogPage{flex-direction:column}
+  .cart-panel{width:100%;height:220px;border-left:none;border-top:1px solid var(--border)}
+}
 </style>
 </head>
 <body>
 
-<header>
-    <div>🛒 БРОСКАССА</div>
-    <div style="font-size:15px;color:#9C9CC0">BlackVault Market</div>
-</header>
+<div id="loader"><div class="ld-ico">🏪</div><div class="ld-name">BlackVault Касса</div><div class="ld-dots"><i></i><i></i><i></i></div></div>
+<div id="toastRoot"></div>
 
-<div class="main">
-    <div class="catalog">
-        <h2 style="margin-bottom:20px;color:var(--accent)">📦 Товары</h2>
-        <div id="products"></div>
+<!-- AUTH -->
+<div id="authScreen">
+  <div class="auth-card">
+    <div class="auth-logo"><div class="auth-logo-ico">🏪</div><span class="auth-logo-name">BlackVault Касса</span></div>
+    <div id="authWelcome">
+      <div class="auth-title">Вход в кассу</div>
+      <div class="auth-sub">Войдите с аккаунтом BlackVault-кошелька</div>
+      <div class="form-group"><label class="form-label">Email</label><input id="aEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label class="form-label">Пароль</label><input id="aPass" class="form-input" type="password" placeholder="••••••••"/></div>
+      <button class="btn btn-primary" id="btnLogin">Войти</button>
+      <div class="divider">или</div>
+      <button class="btn btn-secondary" id="btnGoo">🔐 Войти через Google</button>
+      <div class="auth-foot">Нет аккаунта? <a id="toReg">Зарегистрироваться</a></div>
+      <div class="auth-access-denied" id="accessDenied">
+        ⚠️ У вас нет доступа к кассе. Купите лицензию в магазине BlackVault-кошелька (от 2000 ₴) и вернитесь сюда.
+      </div>
     </div>
-
-    <div class="cart">
-        <h2>🛍 Корзина</h2>
-        <div id="cartItems" style="min-height:400px"></div>
-        
-        <div class="total-bar">
-            <div style="display:flex;justify-content:space-between;margin-bottom:8px">
-                <span style="color:#9C9CC0">Итого:</span>
-                <span id="subtotal" style="font-size:28px;font-weight:900;color:#FFB23E">0 ₴</span>
-            </div>
-            <button class="btn-pay" onclick="openPaymentModal()">💳 ОПЛАТИТЬ</button>
-        </div>
+    <div id="authRegForm" style="display:none">
+      <div class="auth-title">Регистрация</div>
+      <div class="auth-sub">Создайте аккаунт BlackVault</div>
+      <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов"/></div>
+      <div class="form-group"><label class="form-label">Имя кассы</label><input id="rName" class="form-input" placeholder="Моя кофейня"/></div>
+      <button class="btn btn-primary" id="btnReg">Создать аккаунт</button>
+      <div class="auth-foot"><a id="toLg">← Назад</a></div>
     </div>
+  </div>
 </div>
 
-<!-- Оплата -->
-<div class="modal" id="paymentModal">
-    <div class="modal-content">
-        <h2 style="text-align:center;margin-bottom:25px">Способ оплаты</h2>
-        
-        <div onclick="payCash()" style="background:#1F1F2A;padding:20px;border-radius:16px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:16px">
-            <span style="font-size:40px">💵</span>
-            <div><b>Наличными</b><br><small style="color:#9C9CC0">Сдача сразу</small></div>
+<!-- APP -->
+<div id="app" style="display:none">
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+    <div class="sb-icon brand" title="BlackVault Касса">🏪</div>
+    <div class="sb-icon on" id="navCatalog" onclick="showPage('catalog')" title="Касса">🛒</div>
+    <div class="sb-icon" id="navProducts" onclick="showPage('products')" title="Товары">📦</div>
+    <div class="sb-icon" id="navIncome" onclick="showPage('income')" title="Доходы">💰</div>
+    <div class="sb-divider"></div>
+    <div class="sb-icon" onclick="signOutUser()" title="Выйти" style="margin-top:auto;color:var(--red)">⬅️</div>
+  </div>
+
+  <!-- MAIN -->
+  <div id="main">
+
+    <!-- CATALOG / POS -->
+    <div class="page on" id="pgCatalog">
+      <div id="catalogPage">
+        <!-- Left: categories + search -->
+        <div class="catalog-sidebar">
+          <div class="catalog-search">
+            <input class="search-input" id="searchInput" placeholder="🔍 Поиск товаров..." oninput="filterProducts()"/>
+          </div>
+          <div class="cat-list" id="catList">
+            <div class="cat-item on" data-cat="all" onclick="selectCat('all')">🏷 Все товары</div>
+          </div>
         </div>
-        
-        <div onclick="startBlackVaultPayment()" style="background:#1F1F2A;padding:20px;border-radius:16px;cursor:pointer;display:flex;align-items:center;gap:16px">
-            <span style="font-size:40px">🔐</span>
-            <div><b>BlackVault Карта</b><br><small style="color:#9C9CC0">Мгновенный перевод</small></div>
+        <!-- Center: product grid -->
+        <div class="catalog-main">
+          <div class="catalog-header">
+            <div class="catalog-title" id="catalogTitle">Все товары</div>
+            <button class="btn btn-sm btn-secondary" onclick="showPage('products')">+ Добавить товар</button>
+          </div>
+          <div class="products-grid" id="productsGrid">
+            <div class="empty-state"><span class="emo">📦</span>Добавьте товары во вкладке «Товары»</div>
+          </div>
         </div>
-        
-        <button onclick="closeModal()" style="margin-top:20px;width:100%;background:#333;color:white">Отмена</button>
+        <!-- Right: cart -->
+        <div class="cart-panel">
+          <div class="cart-header">
+            <span class="cart-title">🛒 Корзина</span>
+            <span class="cart-count" id="cartCount">0</span>
+          </div>
+          <div id="cartItems" style="flex:1;overflow-y:auto;padding:10px">
+            <div class="cart-empty"><span style="font-size:36px;opacity:.4">🛒</span><span>Корзина пуста</span></div>
+          </div>
+          <div class="cart-footer">
+            <div class="cart-total-row"><span class="cart-total-label">Итого:</span><span class="cart-total-val cart-total-uah" id="cartTotal">0 ₴</span></div>
+            <div class="cart-fee-row"><span class="cart-fee-label">Комиссия сервиса (7%):</span><span class="cart-fee-val" id="cartFee">0 ₴</span></div>
+            <div class="pay-btns">
+              <button class="btn btn-secondary btn-sm" style="flex:1" onclick="payCash()">💵 Наличные</button>
+              <button class="btn btn-primary btn-sm" style="flex:1" onclick="payQR()">📱 QR-оплата</button>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+
+    <!-- PRODUCTS MANAGEMENT -->
+    <div class="page" id="pgProducts">
+      <div class="page-inner">
+        <div class="page-header"><div class="page-title">📦 Мои товары</div><div class="page-sub">Управление каталогом кассы</div></div>
+        <div class="sec" style="max-width:560px;margin-bottom:20px">
+          <div class="sec-head"><span class="sec-title">➕ Новый товар</span></div>
+          <div style="padding:16px">
+            <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="pName" placeholder="Кофе Американо"/></div>
+            <div class="form-group"><label class="form-label">Категория</label><input class="form-input" id="pCat" placeholder="Напитки"/></div>
+            <div class="form-group"><label class="form-label">Эмодзи (иконка товара)</label><input class="form-input" id="pIco" placeholder="☕" maxlength="4" style="width:80px"/></div>
+            <div class="form-group"><label class="form-label">Цена (₴)</label><input class="form-input" id="pPrice" type="number" placeholder="0.00" style="max-width:180px"/></div>
+            <button class="btn btn-primary" id="btnAddProduct">Добавить товар</button>
+          </div>
+        </div>
+        <div class="sec"><div class="sec-head"><span class="sec-title">Все товары</span><span id="totalProductsCount" style="font-size:12px;color:var(--text2)"></span></div><div id="productsList"><div class="empty-state"><span class="emo">📦</span>Товаров пока нет</div></div></div>
+      </div>
+    </div>
+
+    <!-- INCOME -->
+    <div class="page" id="pgIncome">
+      <div class="page-inner">
+        <div class="page-header"><div class="page-title">💰 Доходы</div><div class="page-sub">Ваши заработки через кассу</div></div>
+        <div class="stat-grid" id="incomeStats">
+          <div class="stat-card"><div class="stat-label">Сегодня</div><div class="stat-val green" id="statToday">0 ₴</div><div class="stat-change" id="statTodayTx">— транзакций</div></div>
+          <div class="stat-card"><div class="stat-label">За 7 дней</div><div class="stat-val green" id="statWeek">0 ₴</div></div>
+          <div class="stat-card"><div class="stat-label">Всего</div><div class="stat-val green" id="statTotal">0 ₴</div></div>
+          <div class="stat-card"><div class="stat-label">На кошельке (UAH)</div><div class="stat-val" id="statWallet">0 ₴</div><div class="stat-change">Ваш текущий баланс</div></div>
+        </div>
+        <div class="sec"><div class="sec-head"><span class="sec-title">История продаж</span></div><div id="incomeList"><div class="empty-state"><span class="emo">💰</span>Продаж ещё нет</div></div></div>
+      </div>
+    </div>
+
+  </div>
 </div>
 
-<!-- BlackVault Login + Оплата -->
-<div class="modal" id="bvModal">
-    <div class="modal-content" id="bv-login-screen">
-        <div style="text-align:center;margin-bottom:20px">
-            <div style="font-size:48px">🔐</div>
-            <h2>BlackVault</h2>
-            <p id="bvStatus">Войдите в аккаунт для оплаты</p>
-        </div>
-
-        <input id="bvEmail" type="text" placeholder="Email или код BV-XXXXXX" style="width:100%;padding:14px;background:#1F1F2A;border:1px solid #444;border-radius:12px;color:white;margin-bottom:12px">
-        <input id="bvPin" type="password" placeholder="PIN-код (4 цифры)" maxlength="4" style="width:100%;padding:14px;background:#1F1F2A;border:1px solid #444;border-radius:12px;color:white;margin-bottom:20px">
-
-        <button onclick="confirmBVLogin()" style="width:100%;padding:16px;background:linear-gradient(150deg,#7C5CFC,#A78BFA);color:white;border:none;border-radius:14px;font-weight:800">
-            Войти и оплатить
-        </button>
-        <button onclick="closeBVModal()" style="margin-top:10px;width:100%;background:#333;color:white">Отмена</button>
+<!-- QR PAYMENT MODAL -->
+<div class="overlay" id="qrModal">
+  <div class="modal">
+    <div id="qrStep1">
+      <div class="modal-title">📱 Оплата по QR</div>
+      <div class="modal-sub">Покупатель сканирует QR-код через кошелёк BlackVault</div>
+      <div class="pay-amount-big" id="qrAmount">0 ₴</div>
+      <div class="pay-amount-sub" id="qrAmountSub">Покупатель получит запрос на оплату</div>
+      <div class="qr-wrap" id="qrWrap"></div>
+      <div class="pay-status pending" id="qrStatus">⏳ Ожидаем оплату...</div>
+      <div style="display:flex;gap:8px;margin-top:14px">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="closeQRModal()">Отмена</button>
+        <button class="btn btn-primary btn-sm" style="flex:1" id="btnConfirmPayment" onclick="confirmPaymentReceived()">✅ Подтвердить вручную</button>
+      </div>
     </div>
+    <div id="qrStep2" style="display:none">
+      <div style="text-align:center;padding:24px 0">
+        <div style="font-size:56px;margin-bottom:14px">✅</div>
+        <div style="font-size:22px;font-weight:900;margin-bottom:6px">Оплата принята!</div>
+        <div style="font-size:14px;color:var(--text2);margin-bottom:20px" id="qrSuccessText"></div>
+        <button class="btn btn-primary" onclick="closeQRModal()">Готово</button>
+      </div>
+    </div>
+  </div>
 </div>
 
-<script>
-// Товары
-const products = [
-    { name: "Чипсы Lays", price: 55, emoji: "🥔" },
-    { name: "Cola 0.5л", price: 45, emoji: "🥤" },
-    { name: "Red Bull", price: 65, emoji: "⚡" },
-    { name: "Пицца", price: 120, emoji: "🍕" },
-    { name: "Сникерс", price: 35, emoji: "🍫" },
-    { name: "Вода", price: 25, emoji: "💧" }
-];
+<!-- CASH PAYMENT MODAL -->
+<div class="overlay" id="cashModal">
+  <div class="modal">
+    <div style="text-align:center;padding:8px 0">
+      <div style="font-size:48px;margin-bottom:14px">💵</div>
+      <div class="modal-title" style="text-align:center">Оплата наличными</div>
+      <div style="font-size:32px;font-weight:900;color:var(--acc);margin:14px 0" id="cashAmount"></div>
+      <div style="font-size:13.5px;color:var(--text2);margin-bottom:22px">Примите наличные от покупателя и нажмите «Готово»</div>
+      <div style="display:flex;gap:8px">
+        <button class="btn btn-ghost btn-sm" style="flex:1" onclick="closeCashModal()">Отмена</button>
+        <button class="btn btn-primary btn-sm" style="flex:1" onclick="completeCashPayment()">✅ Готово, деньги приняты</button>
+      </div>
+    </div>
+  </div>
+</div>
 
-let cart = [];
-let currentTotal = 0;
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, getDocs, limit, orderBy, serverTimestamp, increment, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
-// Рендер товаров
-function renderProducts() {
-    document.getElementById('products').innerHTML = products.map((p,i) => `
-        <div class="product" onclick="addToCart(${i})">
-            <span style="font-size:32px">${p.emoji}</span>
-            <div style="flex:1">
-                <div style="font-weight:700">${p.name}</div>
-                <div style="color:#FFB23E">${p.price} ₴</div>
-            </div>
-        </div>
-    `).join('');
+const fba = initializeApp({
+  apiKey:"AIzaSyCmXswh7MgI1tOcPCWl0AHBABY636gOczk",
+  authDomain:"blackvault-7a10e.firebaseapp.com",
+  projectId:"blackvault-7a10e",
+  storageBucket:"blackvault-7a10e.firebasestorage.app",
+  messagingSenderId:"1061227024519",
+  appId:"1:1061227024519:web:d7fb72171bc26f5e4ce822"
+});
+const auth = getAuth(fba);
+const db = getFirestore(fba);
+
+// ════ CONSTANTS ════
+const SERVICE_FEE = 0.07; // 7% commission
+const UAH_TO_USD = 41.5;
+
+// ════ STATE ════
+let CU = null, UD = null, KASSA = null;
+let cart = {}; // { productId: { ...product, qty } }
+let allProducts = [];
+let currentCat = 'all';
+let currentPaymentId = null;
+let paymentCheckInterval = null;
+
+function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
+function fmtUAH(n){return(parseFloat(n)||0).toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g,' ')+' ₴'}
+function fmtDate(ts){if(!ts)return'—';try{const d=ts.toDate?ts.toDate():new Date(ts);return d.toLocaleString('ru-RU',{day:'2-digit',month:'2-digit',hour:'2-digit',minute:'2-digit'});}catch{return'—'}}
+
+window.toast = function(msg,t,dur){
+  t=t||'i';dur=dur||3500;
+  const icons={s:'✅',e:'❌',i:'ℹ️',w:'⚠️'};
+  const el=document.createElement('div');el.className='tst '+t;
+  el.innerHTML='<span style="font-size:16px">'+icons[t]+'</span><span style="flex:1">'+msg+'</span>';
+  document.getElementById('toastRoot').appendChild(el);
+  setTimeout(()=>el.style.opacity='0',dur-300);
+  setTimeout(()=>el.remove(),dur);
+};
+
+// ════ AUTH ════
+document.getElementById('toReg').onclick=()=>{document.getElementById('authWelcome').style.display='none';document.getElementById('authRegForm').style.display='block';};
+document.getElementById('toLg').onclick=()=>{document.getElementById('authWelcome').style.display='block';document.getElementById('authRegForm').style.display='none';};
+
+document.getElementById('btnLogin').onclick = async()=>{
+  const e=document.getElementById('aEmail').value.trim(), p=document.getElementById('aPass').value;
+  if(!e||!p)return toast('Заполните поля','w');
+  try{await signInWithEmailAndPassword(auth,e,p);}catch{toast('Неверный email или пароль','e');}
+};
+document.getElementById('btnGoo').onclick = async()=>{
+  try{await signInWithPopup(auth,new GoogleAuthProvider());}catch{toast('Ошибка Google','e');}
+};
+document.getElementById('btnReg').onclick = async()=>{
+  const e=document.getElementById('rEmail').value.trim(), p=document.getElementById('rPass').value, name=document.getElementById('rName').value.trim();
+  if(!e||!p)return toast('Заполните поля','w');
+  if(p.length<6)return toast('Пароль мин. 6 символов','w');
+  try{await createUserWithEmailAndPassword(auth,e,p);}catch(err){toast(err.code==='auth/email-already-in-use'?'Email занят':'Ошибка','e');}
+  // kassaName will be set in onAuthStateChanged after wallet check
+};
+window.signOutUser=()=>signOut(auth);
+
+onAuthStateChanged(auth, async user=>{
+  document.getElementById('loader').style.display='none';
+  if(!user){
+    CU=null;UD=null;KASSA=null;
+    document.getElementById('app').style.display='none';
+    document.getElementById('authScreen').classList.add('show');
+    document.getElementById('accessDenied').classList.remove('show');
+    return;
+  }
+  CU=user;
+  // Load wallet
+  const wSnap = await getDoc(doc(db,'wallets',user.uid));
+  if(!wSnap.exists()){
+    // Create wallet
+    await setDoc(doc(db,'wallets',user.uid),{
+      uid:user.uid,email:user.email,username:'',
+      code:'BV-'+Array.from({length:6},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[~~(Math.random()*34)]).join(''),
+      balances:{USD:0,UAH:0,RUB:0,TON:0,BTC:0,ETH:0},role:'user',isOwner:false,blocked:false,frozen:false,
+      kassaAccess:false,createdAt:serverTimestamp()
+    });
+    UD = (await getDoc(doc(db,'wallets',user.uid))).data();
+  } else {
+    UD = wSnap.data();
+  }
+
+  // Check kassa access (bought in shop)
+  if(!UD.kassaAccess && !UD.isOwner){
+    document.getElementById('app').style.display='none';
+    document.getElementById('authScreen').classList.add('show');
+    document.getElementById('accessDenied').classList.add('show');
+    return;
+  }
+
+  // Load or create kassa profile
+  const kSnap = await getDoc(doc(db,'kassas',user.uid));
+  if(!kSnap.exists()){
+    const kassaName = document.getElementById('rName')?.value?.trim()||'Моя касса';
+    await setDoc(doc(db,'kassas',user.uid),{
+      uid:user.uid,username:UD.username||user.email,kassaName,
+      totalRevenue:0,totalTransactions:0,createdAt:serverTimestamp()
+    });
+    KASSA = (await getDoc(doc(db,'kassas',user.uid))).data();
+  } else {
+    KASSA = kSnap.data();
+  }
+
+  document.getElementById('authScreen').classList.remove('show');
+  document.getElementById('app').style.display='flex';
+  await loadProducts();
+  await loadIncomeStats();
+  showPage('catalog');
+});
+
+// ════ NAVIGATION ════
+window.showPage = function(page){
+  ['pgCatalog','pgProducts','pgIncome'].forEach(p=>document.getElementById(p).classList.remove('on'));
+  ['navCatalog','navProducts','navIncome'].forEach(n=>document.getElementById(n).classList.remove('on'));
+  document.getElementById('pg'+page.charAt(0).toUpperCase()+page.slice(1)).classList.add('on');
+  document.getElementById('nav'+page.charAt(0).toUpperCase()+page.slice(1)).classList.add('on');
+  if(page==='income')loadIncomeStats();
+  if(page==='products')renderProductsList();
+};
+
+// ════ PRODUCTS ════
+async function loadProducts(){
+  const snap = await getDocs(query(collection(db,'kassaProducts'),where('uid','==',CU.uid),orderBy('createdAt','asc'),limit(200)));
+  allProducts=[];
+  snap.forEach(d=>allProducts.push({...d.data(),_id:d.id}));
+  renderCategoryList();
+  renderProductsGrid();
+  renderProductsList();
 }
 
-function addToCart(i) {
-    const p = products[i];
-    const exist = cart.find(item => item.name === p.name);
-    if (exist) exist.qty = (exist.qty||1) + 1;
-    else cart.push({...p, qty:1});
-    renderCart();
+function renderCategoryList(){
+  const cats=['all',...new Set(allProducts.map(p=>p.category).filter(Boolean))];
+  const el=document.getElementById('catList');
+  el.innerHTML=cats.map(c=>`<div class="cat-item${c===currentCat?' on':''}" data-cat="${esc(c)}" onclick="selectCat('${esc(c)}')">${c==='all'?'🏷 Все товары':'📂 '+esc(c)}</div>`).join('');
 }
 
-function renderCart() {
-    currentTotal = cart.reduce((sum, item) => sum + item.price * (item.qty||1), 0);
-    document.getElementById('subtotal').textContent = currentTotal + " ₴";
+window.selectCat = function(cat){
+  currentCat=cat;
+  document.querySelectorAll('.cat-item').forEach(el=>el.classList.toggle('on',el.getAttribute('data-cat')===cat));
+  document.getElementById('catalogTitle').textContent=cat==='all'?'Все товары':cat;
+  renderProductsGrid();
+};
 
-    document.getElementById('cartItems').innerHTML = cart.map((item, i) => `
-        <div class="cart-item">
-            <div>${item.emoji} ${item.name} ${item.qty>1?`×${item.qty}`:''}</div>
-            <div style="text-align:right">
-                ${item.price * (item.qty||1)} ₴
-                <button onclick="removeItem(${i})" style="color:#FF4D6A;background:none;border:none;font-size:12px">✕</button>
-            </div>
-        </div>
-    `).join('') || '<div style="text-align:center;padding:80px 20px;color:#666">Корзина пуста</div>';
+window.filterProducts = function(){
+  renderProductsGrid();
+};
+
+function renderProductsGrid(){
+  const search=document.getElementById('searchInput').value.toLowerCase();
+  const filtered=allProducts.filter(p=>{
+    const matchCat=currentCat==='all'||p.category===currentCat;
+    const matchSearch=!search||p.name.toLowerCase().includes(search)||(p.category||'').toLowerCase().includes(search);
+    return matchCat&&matchSearch;
+  });
+  const el=document.getElementById('productsGrid');
+  if(!filtered.length){el.innerHTML='<div class="empty-state"><span class="emo">📦</span>Товаров не найдено</div>';return;}
+  el.innerHTML=filtered.map(p=>{
+    const inCart=cart[p._id];
+    const usd=(p.price/UAH_TO_USD).toFixed(2);
+    return`<div class="product-card${inCart?' in-cart':''}" onclick="addToCart('${p._id}')">
+      <button class="product-add-btn" onclick="event.stopPropagation();addToCart('${p._id}')">+</button>
+      ${inCart?`<div class="product-badge">${inCart.qty}</div>`:''}
+      <span class="product-ico">${esc(p.icon)||'📦'}</span>
+      <div class="product-name">${esc(p.name)}</div>
+      <div class="product-price">${fmtUAH(p.price)}</div>
+      <div class="product-usd">~$${usd}</div>
+    </div>`;
+  }).join('');
 }
 
-window.removeItem = (i) => { cart.splice(i,1); renderCart(); };
+window.addToCart = function(id){
+  const prod=allProducts.find(p=>p._id===id);
+  if(!prod)return;
+  if(cart[id]){cart[id].qty++;}else{cart[id]={...prod,qty:1};}
+  renderCart();
+  renderProductsGrid();
+};
+window.removeFromCart = function(id){
+  if(!cart[id])return;
+  cart[id].qty--;
+  if(cart[id].qty<=0)delete cart[id];
+  renderCart();
+  renderProductsGrid();
+};
 
-function openPaymentModal() {
-    if (currentTotal === 0) return alert("Корзина пуста!");
-    document.getElementById('paymentModal').style.display = 'flex';
+function renderCart(){
+  const items=Object.values(cart);
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const fee=total*SERVICE_FEE;
+  document.getElementById('cartCount').textContent=items.reduce((s,i)=>s+i.qty,0)||0;
+  document.getElementById('cartTotal').textContent=fmtUAH(total);
+  document.getElementById('cartFee').textContent=fmtUAH(fee);
+  const el=document.getElementById('cartItems');
+  if(!items.length){
+    el.innerHTML='<div class="cart-empty"><span style="font-size:36px;opacity:.4">🛒</span><span>Корзина пуста</span></div>';
+    return;
+  }
+  el.innerHTML=items.map(i=>`<div class="cart-item">
+    <div class="cart-item-ico">${esc(i.icon)||'📦'}</div>
+    <div class="cart-item-info">
+      <div class="cart-item-name">${esc(i.name)}</div>
+      <div class="cart-item-price">${fmtUAH(i.price*i.qty)}</div>
+    </div>
+    <div class="cart-item-controls">
+      <button class="qty-btn" onclick="removeFromCart('${i._id}')">−</button>
+      <span style="font-size:13px;font-weight:700;min-width:18px;text-align:center">${i.qty}</span>
+      <button class="qty-btn" onclick="addToCart('${i._id}')">+</button>
+    </div>
+  </div>`).join('');
 }
 
-function closeModal() {
-    document.getElementById('paymentModal').style.display = 'none';
+// ════ ADD PRODUCT ════
+document.getElementById('btnAddProduct').onclick = async()=>{
+  const name=document.getElementById('pName').value.trim();
+  const cat=document.getElementById('pCat').value.trim()||'Без категории';
+  const icon=document.getElementById('pIco').value.trim()||'📦';
+  const price=parseFloat(document.getElementById('pPrice').value);
+  if(!name)return toast('Введите название','w');
+  if(!price||price<=0)return toast('Введите цену','w');
+  await addDoc(collection(db,'kassaProducts'),{
+    uid:CU.uid,name,category:cat,icon,price,createdAt:serverTimestamp()
+  });
+  document.getElementById('pName').value='';document.getElementById('pCat').value='';
+  document.getElementById('pIco').value='';document.getElementById('pPrice').value='';
+  toast('Товар добавлен!','s');
+  await loadProducts();
+};
+
+window.deleteProduct = async(id)=>{
+  if(!confirm('Удалить товар?'))return;
+  const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
+  await deleteDoc(doc(db,'kassaProducts',id));
+  delete cart[id];
+  toast('Удалено','i');
+  await loadProducts();
+};
+
+function renderProductsList(){
+  const el=document.getElementById('productsList');
+  document.getElementById('totalProductsCount').textContent=allProducts.length+' товаров';
+  if(!allProducts.length){el.innerHTML='<div class="empty-state"><span class="emo">📦</span>Добавьте первый товар выше</div>';return;}
+  const bycat={};
+  allProducts.forEach(p=>{const c=p.category||'Без категории';(bycat[c]||(bycat[c]=[])).push(p);});
+  el.innerHTML=Object.entries(bycat).map(([cat,prods])=>`
+    <div style="padding:10px 17px 4px;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--text3);letter-spacing:1px">${esc(cat)}</div>
+    ${prods.map(p=>`<div class="product-row">
+      <div class="product-row-ico">${esc(p.icon)||'📦'}</div>
+      <div style="flex:1;min-width:0">
+        <div class="product-row-name">${esc(p.name)}</div>
+        <div class="product-row-cat">${esc(p.category)}</div>
+      </div>
+      <div class="product-row-price">${fmtUAH(p.price)}</div>
+      <button class="btn btn-danger btn-sm" style="margin-left:10px" onclick="deleteProduct('${p._id}')">🗑</button>
+    </div>`).join('')}`).join('');
 }
 
-// Наличные
-function payCash() {
-    closeModal();
-    const given = prompt(`К оплате: ${currentTotal} ₴\nСколько наличных?`, currentTotal);
-    if (given) {
-        const change = parseFloat(given) - currentTotal;
-        if (change >= 0) {
-            alert(`✅ ОПЛАЧЕНО НАЛИЧНЫМИ!\nСдача: ${change} ₴`);
-            finishSale();
-        }
+// ════ CASH PAYMENT ════
+window.payCash = async()=>{
+  const items=Object.values(cart);
+  if(!items.length)return toast('Корзина пуста','w');
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
+  document.getElementById('cashAmount').textContent=fmtUAH(total);
+  document.getElementById('cashModal').classList.add('on');
+};
+window.closeCashModal=()=>document.getElementById('cashModal').classList.remove('on');
+window.completeCashPayment = async()=>{
+  const items=Object.values(cart);
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const ownerEarns=total*(1-SERVICE_FEE);
+  await recordSale('cash',total,ownerEarns,null);
+  document.getElementById('cashModal').classList.remove('on');
+  clearCart();
+  toast(`Продажа на ${fmtUAH(total)} записана ✅`,'s',5000);
+};
+
+// ════ QR PAYMENT ════
+window.payQR = async()=>{
+  const items=Object.values(cart);
+  if(!items.length)return toast('Корзина пуста','w');
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0);
+  const ownerEarns=total*(1-SERVICE_FEE);
+  const paymentUAH=total;
+  const paymentId='PAY'+Date.now()+Math.random().toString(36).slice(2,7).toUpperCase();
+
+  // Create payment request in Firestore — wallet will poll this
+  await setDoc(doc(db,'qrPayments',paymentId),{
+    paymentId,kassaUid:CU.uid,kassaName:KASSA.kassaName||'Касса',
+    amount:paymentUAH,amountUAH:paymentUAH,ownerEarns,
+    currency:'UAH',status:'pending',
+    items:items.map(i=>({name:i.name,qty:i.qty,price:i.price})),
+    createdAt:serverTimestamp()
+  });
+  currentPaymentId=paymentId;
+
+  // Show QR
+  document.getElementById('qrAmount').textContent=fmtUAH(paymentUAH);
+  document.getElementById('qrAmountSub').textContent=`Оплата в BlackVault-кошельке · ID: ${paymentId}`;
+  document.getElementById('qrStatus').className='pay-status pending';
+  document.getElementById('qrStatus').textContent='⏳ Ожидаем оплату...';
+  document.getElementById('qrStep1').style.display='block';
+  document.getElementById('qrStep2').style.display='none';
+  document.getElementById('btnConfirmPayment').style.display='flex';
+  document.getElementById('qrModal').classList.add('on');
+
+  // Generate QR
+  document.getElementById('qrWrap').innerHTML='';
+  const qrData=JSON.stringify({type:'bv_payment',paymentId,amount:paymentUAH,currency:'UAH',kassaName:KASSA.kassaName||'Касса'});
+  new QRCode(document.getElementById('qrWrap'),{text:qrData,width:220,height:220,colorDark:'#F0FAF6',colorLight:'#1A2320',correctLevel:QRCode.CorrectLevel.H});
+
+  // Poll for payment completion
+  paymentCheckInterval=setInterval(async()=>{
+    const snap=await getDoc(doc(db,'qrPayments',paymentId));
+    if(!snap.exists())return;
+    const data=snap.data();
+    if(data.status==='completed'){
+      clearInterval(paymentCheckInterval);
+      await onPaymentSuccess(paymentId,data.paidBy,paymentUAH,ownerEarns);
     }
+  },2000);
+};
+
+async function onPaymentSuccess(paymentId,paidByUid,total,ownerEarns){
+  document.getElementById('qrStatus').className='pay-status success';
+  document.getElementById('qrStatus').textContent='✅ Оплата прошла успешно!';
+  document.getElementById('btnConfirmPayment').style.display='none';
+
+  // Credit owner's wallet (UAH)
+  await updateDoc(doc(db,'wallets',CU.uid),{['balances.UAH']:increment(ownerEarns)});
+  await addDoc(collection(db,'transactions'),{
+    fromUid:paidByUid||'unknown',fromCode:'QR',fromUsername:'Покупатель',
+    toUid:CU.uid,toCode:UD.code||'',toUsername:UD.username||'Касса',
+    currency:'UAH',amount:ownerEarns,type:'kassa_sale',paymentId,
+    createdAt:serverTimestamp()
+  });
+  await recordSale('qr',total,ownerEarns,paidByUid);
+
+  setTimeout(()=>{
+    document.getElementById('qrStep1').style.display='none';
+    document.getElementById('qrStep2').style.display='block';
+    document.getElementById('qrSuccessText').textContent=`Получено: ${fmtUAH(ownerEarns)} (после комиссии 7%)`;
+  },600);
+  clearCart();
 }
 
-// BlackVault оплата
-function startBlackVaultPayment() {
-    closeModal();
-    document.getElementById('bvModal').style.display = 'flex';
+window.confirmPaymentReceived = async()=>{
+  // Manual confirm (for cases where QR scanning happened but Firestore wasn't updated)
+  if(!currentPaymentId)return;
+  const items=Object.values(cart).length?Object.values(cart):[];
+  const total=items.reduce((s,i)=>s+i.price*i.qty,0)||0;
+  const ownerEarns=total*(1-SERVICE_FEE);
+  clearInterval(paymentCheckInterval);
+  await updateDoc(doc(db,'qrPayments',currentPaymentId),{status:'completed_manual',completedAt:serverTimestamp()});
+  await updateDoc(doc(db,'wallets',CU.uid),{['balances.UAH']:increment(ownerEarns)});
+  await recordSale('qr_manual',total,ownerEarns,null);
+  document.getElementById('qrStep1').style.display='none';
+  document.getElementById('qrStep2').style.display='block';
+  document.getElementById('qrSuccessText').textContent=`Получено: ${fmtUAH(ownerEarns)} (после комиссии 7%)`;
+  clearCart();
+};
+
+window.closeQRModal=()=>{
+  clearInterval(paymentCheckInterval);
+  document.getElementById('qrModal').classList.remove('on');
+  currentPaymentId=null;
+};
+
+async function recordSale(method,total,ownerEarns,buyerUid){
+  const today=new Date().toISOString().split('T')[0];
+  await addDoc(collection(db,'kassaSales'),{
+    uid:CU.uid,method,total,ownerEarns,buyerUid:buyerUid||null,
+    date:today,createdAt:serverTimestamp()
+  });
+  await updateDoc(doc(db,'kassas',CU.uid),{
+    totalRevenue:increment(ownerEarns),
+    totalTransactions:increment(1)
+  });
 }
 
-function confirmBVLogin() {
-    const email = document.getElementById('bvEmail').value.trim();
-    if (!email) return alert("Введите email или BV-код");
+function clearCart(){cart={};renderCart();renderProductsGrid();}
 
-    alert(`✅ Успешный вход в BlackVault!\n\nСписано: ${currentTotal} ₴\nПереведено на ваш кошелёк`);
-    closeBVModal();
-    finishSale();
+// ════ INCOME ════
+async function loadIncomeStats(){
+  const snap=await getDocs(query(collection(db,'kassaSales'),where('uid','==',CU.uid),orderBy('createdAt','desc'),limit(100)));
+  let sales=[];snap.forEach(d=>sales.push(d.data()));
+  const today=new Date().toISOString().split('T')[0];
+  const week7=new Date(Date.now()-7*86400000).toISOString().split('T')[0];
+  const todaySales=sales.filter(s=>s.date===today);
+  const weekSales=sales.filter(s=>s.date>=week7);
+  const totalAll=sales.reduce((s,i)=>s+i.ownerEarns,0);
+  const todayTotal=todaySales.reduce((s,i)=>s+i.ownerEarns,0);
+  const weekTotal=weekSales.reduce((s,i)=>s+i.ownerEarns,0);
+  document.getElementById('statToday').textContent=fmtUAH(todayTotal);
+  document.getElementById('statTodayTx').textContent=todaySales.length+' транзакций сегодня';
+  document.getElementById('statWeek').textContent=fmtUAH(weekTotal);
+  document.getElementById('statTotal').textContent=fmtUAH(totalAll);
+  const walletSnap=await getDoc(doc(db,'wallets',CU.uid));
+  const walBal=(walletSnap.data()?.balances?.UAH)||0;
+  document.getElementById('statWallet').textContent=fmtUAH(walBal);
+
+  const el=document.getElementById('incomeList');
+  if(!sales.length){el.innerHTML='<div class="empty-state"><span class="emo">💰</span>Продаж ещё нет</div>';return;}
+  const byDate={};
+  sales.forEach(s=>{(byDate[s.date]||(byDate[s.date]=[])).push(s);});
+  el.innerHTML='<div>'+Object.entries(byDate).sort((a,b)=>b[0].localeCompare(a[0])).map(([date,ds])=>{
+    const dayTotal=ds.reduce((s,i)=>s+i.ownerEarns,0);
+    const [y,m,d]=date.split('-');
+    return`<div class="income-row">
+      <div><div class="income-date">${d}.${m}.${y}</div><div class="income-txs">${ds.length} продаж · ${ds.filter(s=>s.method==='qr'||s.method==='qr_manual').length} по QR</div></div>
+      <div class="income-amount">${fmtUAH(dayTotal)}</div>
+    </div>`;}).join('')+'</div>';
 }
 
-function closeBVModal() {
-    document.getElementById('bvModal').style.display = 'none';
-}
+// Close overlays on backdrop click
+document.querySelectorAll('.overlay').forEach(o=>o.addEventListener('click',e=>{if(e.target===o){if(o.id==='qrModal')closeQRModal();else o.classList.remove('on');}}));
 
-function finishSale() {
-    alert("🎉 Продажа завершена! Деньги зачислены в BlackVault.");
-    cart = [];
-    renderCart();
-}
-
-// Инициализация
-renderProducts();
-renderCart();
+// Error safety net
+setTimeout(()=>{const l=document.getElementById('loader');if(l&&l.style.display!=='none'){l.style.display='none';toast('Ошибка загрузки — обновите страницу','e',8000);}},10000);
 </script>
 </body>
 </html>
