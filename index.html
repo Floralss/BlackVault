@@ -10,8 +10,6 @@
         --surface: #17171F;
         --accent: #7C5CFC;
         --green: #3DDC84;
-        --red: #FF4D6A;
-        --gold: #FFB23E;
     }
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -33,45 +31,21 @@
         font-weight: 800;
         font-size: 22px;
     }
-    .logo { display: flex; align-items: center; gap: 12px; }
-    .main {
-        flex: 1;
-        display: flex;
-        overflow: hidden;
-    }
-    .catalog {
-        width: 320px;
-        background: var(--surface);
-        border-right: 1px solid rgba(255,255,255,0.08);
-        padding: 20px;
-        overflow-y: auto;
-    }
-    .cart {
-        flex: 1;
-        padding: 20px;
-        overflow-y: auto;
-        background: #0D0D13;
-    }
+    .main { flex: 1; display: flex; overflow: hidden; }
+    .catalog { width: 340px; background: var(--surface); border-right: 1px solid rgba(255,255,255,0.08); padding: 20px; overflow-y: auto; }
+    .cart { flex: 1; padding: 20px; overflow-y: auto; background: #0D0D13; }
+
     .product {
         background: #1F1F2A;
         padding: 14px;
         margin-bottom: 12px;
         border-radius: 16px;
         cursor: pointer;
-        transition: all 0.2s;
         display: flex;
         align-items: center;
         gap: 14px;
     }
-    .product:hover {
-        transform: translateY(-4px);
-        background: #262633;
-        box-shadow: 0 0 0 3px rgba(124,92,252,0.3);
-    }
-    .product-emoji { font-size: 32px; }
-    .product-info { flex: 1; }
-    .product-name { font-weight: 700; font-size: 17px; }
-    .product-price { color: var(--gold); font-weight: 800; }
+    .product:hover { background: #262633; transform: translateY(-3px); }
 
     .cart-item {
         background: #1F1F2A;
@@ -90,12 +64,6 @@
         border-top: 2px solid var(--accent);
         margin: 20px -20px -20px;
     }
-    .grand-total {
-        font-size: 28px;
-        font-weight: 900;
-        letter-spacing: -1px;
-        color: var(--gold);
-    }
     button {
         padding: 14px 24px;
         font-size: 17px;
@@ -103,21 +71,19 @@
         border: none;
         border-radius: 14px;
         cursor: pointer;
-        transition: all 0.2s;
     }
     .btn-pay {
         background: linear-gradient(150deg, #7C5CFC, #A78BFA);
         color: white;
         width: 100%;
         margin-top: 10px;
-        box-shadow: 0 8px 25px rgba(124,92,252,0.4);
     }
-    .btn-pay:hover { transform: scale(1.03); }
 
+    /* Модалки */
     .modal {
         position: fixed;
         inset: 0;
-        background: rgba(0,0,0,0.9);
+        background: rgba(0,0,0,0.95);
         display: none;
         align-items: center;
         justify-content: center;
@@ -129,26 +95,10 @@
         width: 90%;
         max-width: 420px;
         padding: 30px;
-        border: 1px solid var(--accent);
-    }
-    .payment-option {
-        background: #1F1F2A;
-        padding: 20px;
-        border-radius: 16px;
-        margin-bottom: 12px;
-        cursor: pointer;
-        display: flex;
-        align-items: center;
-        gap: 16px;
-        font-size: 18px;
-        font-weight: 700;
-    }
-    .payment-option:hover {
-        background: rgba(124,92,252,0.2);
     }
 
-    /* BlackVault Payment Simulation */
-    #bv-payment {
+    /* BlackVault Login */
+    #bv-login-screen {
         background: radial-gradient(ellipse at top, #1A1430, #0D0D13);
     }
 </style>
@@ -156,89 +106,65 @@
 <body>
 
 <header>
-    <div class="logo">
-        <span style="font-size:32px">🛒</span>
-        <div>
-            <div>БРОСКАССА</div>
-            <div style="font-size:13px;color:#9C9CC0">BlackVault Market</div>
-        </div>
-    </div>
-    <div id="cashier" style="font-size:15px;color:#9C9CC0">Кассир: Братан</div>
+    <div>🛒 БРОСКАССА</div>
+    <div style="font-size:15px;color:#9C9CC0">BlackVault Market</div>
 </header>
 
 <div class="main">
-    <!-- Каталог товаров -->
     <div class="catalog">
         <h2 style="margin-bottom:20px;color:var(--accent)">📦 Товары</h2>
         <div id="products"></div>
-        
-        <div style="margin-top:30px">
-            <input type="text" id="customName" placeholder="Название товара" style="width:100%;padding:12px;background:#1F1F2A;border:1px solid #333;border-radius:12px;color:white;margin-bottom:8px">
-            <div style="display:flex;gap:8px">
-                <input type="number" id="customPrice" placeholder="Цена" style="flex:1;padding:12px;background:#1F1F2A;border:1px solid #333;border-radius:12px;color:white">
-                <button onclick="addCustomItem()" style="background:var(--accent);color:white">Добавить</button>
-            </div>
-        </div>
     </div>
 
-    <!-- Корзина -->
     <div class="cart">
-        <h2 style="margin-bottom:20px">🛍 Корзина</h2>
+        <h2>🛍 Корзина</h2>
         <div id="cartItems" style="min-height:400px"></div>
         
         <div class="total-bar">
             <div style="display:flex;justify-content:space-between;margin-bottom:8px">
                 <span style="color:#9C9CC0">Итого:</span>
-                <span id="subtotal" class="grand-total">0 ₴</span>
+                <span id="subtotal" style="font-size:28px;font-weight:900;color:#FFB23E">0 ₴</span>
             </div>
             <button class="btn-pay" onclick="openPaymentModal()">💳 ОПЛАТИТЬ</button>
         </div>
     </div>
 </div>
 
-<!-- Модальное окно оплаты -->
+<!-- Оплата -->
 <div class="modal" id="paymentModal">
     <div class="modal-content">
-        <h2 style="text-align:center;margin-bottom:25px">Выберите способ оплаты</h2>
+        <h2 style="text-align:center;margin-bottom:25px">Способ оплаты</h2>
         
-        <div class="payment-option" onclick="payCash()">
+        <div onclick="payCash()" style="background:#1F1F2A;padding:20px;border-radius:16px;margin-bottom:12px;cursor:pointer;display:flex;align-items:center;gap:16px">
             <span style="font-size:40px">💵</span>
-            <div>
-                <div>Наличными</div>
-                <div style="font-size:14px;color:#9C9CC0">Сдача сразу</div>
-            </div>
+            <div><b>Наличными</b><br><small style="color:#9C9CC0">Сдача сразу</small></div>
         </div>
         
-        <div class="payment-option" onclick="payBlackVault()">
+        <div onclick="startBlackVaultPayment()" style="background:#1F1F2A;padding:20px;border-radius:16px;cursor:pointer;display:flex;align-items:center;gap:16px">
             <span style="font-size:40px">🔐</span>
-            <div>
-                <div>BlackVault Карта</div>
-                <div style="font-size:14px;color:#9C9CC0">Мгновенный перевод</div>
-            </div>
+            <div><b>BlackVault Карта</b><br><small style="color:#9C9CC0">Мгновенный перевод</small></div>
         </div>
         
         <button onclick="closeModal()" style="margin-top:20px;width:100%;background:#333;color:white">Отмена</button>
     </div>
 </div>
 
-<!-- BlackVault Payment Screen -->
+<!-- BlackVault Login + Оплата -->
 <div class="modal" id="bvModal">
-    <div class="modal-content" id="bv-payment" style="max-width:460px">
+    <div class="modal-content" id="bv-login-screen">
         <div style="text-align:center;margin-bottom:20px">
-            <div style="font-size:48px;margin-bottom:10px">🔐</div>
-            <div style="font-size:22px;font-weight:900">BlackVault • Оплата</div>
+            <div style="font-size:48px">🔐</div>
+            <h2>BlackVault</h2>
+            <p id="bvStatus">Войдите в аккаунт для оплаты</p>
         </div>
-        
-        <div style="background:#1F1F2A;border-radius:16px;padding:20px;margin-bottom:20px">
-            <div style="color:#9C9CC0;font-size:14px">К оплате</div>
-            <div id="bvAmount" style="font-size:42px;font-weight:900;color:var(--gold)">0 ₴</div>
-            <div id="bvTo" style="color:#9C9CC0;margin-top:8px">БРОСКАССА • BlackVault Market</div>
-        </div>
-        
-        <button onclick="confirmBVPayment()" style="width:100%;padding:18px;background:linear-gradient(150deg,#7C5CFC,#A78BFA);color:white;font-size:18px;font-weight:800;border-radius:16px;margin-bottom:12px">
-            Подтвердить оплату
+
+        <input id="bvEmail" type="text" placeholder="Email или код BV-XXXXXX" style="width:100%;padding:14px;background:#1F1F2A;border:1px solid #444;border-radius:12px;color:white;margin-bottom:12px">
+        <input id="bvPin" type="password" placeholder="PIN-код (4 цифры)" maxlength="4" style="width:100%;padding:14px;background:#1F1F2A;border:1px solid #444;border-radius:12px;color:white;margin-bottom:20px">
+
+        <button onclick="confirmBVLogin()" style="width:100%;padding:16px;background:linear-gradient(150deg,#7C5CFC,#A78BFA);color:white;border:none;border-radius:14px;font-weight:800">
+            Войти и оплатить
         </button>
-        <button onclick="closeBVModal()" style="width:100%;padding:14px;background:#333;color:white">Отмена</button>
+        <button onclick="closeBVModal()" style="margin-top:10px;width:100%;background:#333;color:white">Отмена</button>
     </div>
 </div>
 
@@ -248,90 +174,54 @@ const products = [
     { name: "Чипсы Lays", price: 55, emoji: "🥔" },
     { name: "Cola 0.5л", price: 45, emoji: "🥤" },
     { name: "Red Bull", price: 65, emoji: "⚡" },
-    { name: "Пицца кусок", price: 120, emoji: "🍕" },
+    { name: "Пицца", price: 120, emoji: "🍕" },
     { name: "Сникерс", price: 35, emoji: "🍫" },
-    { name: "Энергетик", price: 70, emoji: "🔋" },
-    { name: "Вода 0.5", price: 25, emoji: "💧" },
-    { name: "Хот-дог", price: 85, emoji: "🌭" }
+    { name: "Вода", price: 25, emoji: "💧" }
 ];
 
 let cart = [];
+let currentTotal = 0;
 
+// Рендер товаров
 function renderProducts() {
-    const container = document.getElementById('products');
-    container.innerHTML = products.map((p, i) => `
+    document.getElementById('products').innerHTML = products.map((p,i) => `
         <div class="product" onclick="addToCart(${i})">
-            <div class="product-emoji">${p.emoji}</div>
-            <div class="product-info">
-                <div class="product-name">${p.name}</div>
-                <div class="product-price">${p.price} ₴</div>
+            <span style="font-size:32px">${p.emoji}</span>
+            <div style="flex:1">
+                <div style="font-weight:700">${p.name}</div>
+                <div style="color:#FFB23E">${p.price} ₴</div>
             </div>
         </div>
     `).join('');
 }
 
-function addToCart(index) {
-    const product = products[index];
-    const existing = cart.find(item => item.name === product.name);
-    if (existing) {
-        existing.qty = (existing.qty || 1) + 1;
-    } else {
-        cart.push({...product, qty: 1});
-    }
+function addToCart(i) {
+    const p = products[i];
+    const exist = cart.find(item => item.name === p.name);
+    if (exist) exist.qty = (exist.qty||1) + 1;
+    else cart.push({...p, qty:1});
     renderCart();
-}
-
-function addCustomItem() {
-    const name = document.getElementById('customName').value.trim();
-    const price = parseFloat(document.getElementById('customPrice').value);
-    if (!name || !price) return alert('Заполните название и цену');
-    
-    cart.push({ name, price, qty: 1, emoji: "📦" });
-    renderCart();
-    document.getElementById('customName').value = '';
-    document.getElementById('customPrice').value = '';
 }
 
 function renderCart() {
-    const container = document.getElementById('cartItems');
-    let html = '';
-    
-    cart.forEach((item, index) => {
-        const total = item.price * (item.qty || 1);
-        html += `
-            <div class="cart-item">
-                <div>
-                    <span style="font-size:24px">${item.emoji}</span>
-                    <span style="margin-left:12px;font-weight:600">${item.name}</span>
-                    ${item.qty > 1 ? `<span style="color:#9C9CC0">×${item.qty}</span>` : ''}
-                </div>
-                <div style="text-align:right">
-                    <div style="font-weight:800">${total} ₴</div>
-                    <button onclick="removeFromCart(${index})" style="background:none;border:none;color:var(--red);font-size:13px;margin-top:4px">удалить</button>
-                </div>
+    currentTotal = cart.reduce((sum, item) => sum + item.price * (item.qty||1), 0);
+    document.getElementById('subtotal').textContent = currentTotal + " ₴";
+
+    document.getElementById('cartItems').innerHTML = cart.map((item, i) => `
+        <div class="cart-item">
+            <div>${item.emoji} ${item.name} ${item.qty>1?`×${item.qty}`:''}</div>
+            <div style="text-align:right">
+                ${item.price * (item.qty||1)} ₴
+                <button onclick="removeItem(${i})" style="color:#FF4D6A;background:none;border:none;font-size:12px">✕</button>
             </div>
-        `;
-    });
-    
-    if (cart.length === 0) {
-        html = `<div style="text-align:center;padding:60px 20px;color:#666;font-size:18px">Корзина пуста<br>Добавляй товары 👆</div>`;
-    }
-    
-    container.innerHTML = html;
-    
-    // Подсчёт итога
-    const total = cart.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
-    document.getElementById('subtotal').textContent = total + ' ₴';
+        </div>
+    `).join('') || '<div style="text-align:center;padding:80px 20px;color:#666">Корзина пуста</div>';
 }
 
-window.removeFromCart = function(index) {
-    cart.splice(index, 1);
-    renderCart();
-}
+window.removeItem = (i) => { cart.splice(i,1); renderCart(); };
 
 function openPaymentModal() {
-    const total = cart.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
-    if (total === 0) return alert('Корзина пуста!');
+    if (currentTotal === 0) return alert("Корзина пуста!");
     document.getElementById('paymentModal').style.display = 'flex';
 }
 
@@ -339,51 +229,47 @@ function closeModal() {
     document.getElementById('paymentModal').style.display = 'none';
 }
 
+// Наличные
 function payCash() {
     closeModal();
-    const total = cart.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
-    const given = prompt(`К оплате: ${total} ₴\nСколько дали наличными?`, total);
+    const given = prompt(`К оплате: ${currentTotal} ₴\nСколько наличных?`, currentTotal);
     if (given) {
-        const change = parseFloat(given) - total;
+        const change = parseFloat(given) - currentTotal;
         if (change >= 0) {
-            alert(`✅ ОПЛАЧЕНО НАЛИЧНЫМИ!\nСдача: ${change.toFixed(0)} ₴\nСпасибо, братан! 🔥`);
+            alert(`✅ ОПЛАЧЕНО НАЛИЧНЫМИ!\nСдача: ${change} ₴`);
             finishSale();
-        } else {
-            alert('Недостаточно денег!');
         }
     }
 }
 
-function payBlackVault() {
+// BlackVault оплата
+function startBlackVaultPayment() {
     closeModal();
-    const total = cart.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
-    document.getElementById('bvAmount').textContent = total + ' ₴';
     document.getElementById('bvModal').style.display = 'flex';
+}
+
+function confirmBVLogin() {
+    const email = document.getElementById('bvEmail').value.trim();
+    if (!email) return alert("Введите email или BV-код");
+
+    alert(`✅ Успешный вход в BlackVault!\n\nСписано: ${currentTotal} ₴\nПереведено на ваш кошелёк`);
+    closeBVModal();
+    finishSale();
 }
 
 function closeBVModal() {
     document.getElementById('bvModal').style.display = 'none';
 }
 
-function confirmBVPayment() {
-    const total = cart.reduce((sum, item) => sum + item.price * (item.qty || 1), 0);
-    alert(`🔐 ОПЛАТА ЧЕРЕЗ BLACKVAULT УСПЕШНА!\n\nСписано: ${total} ₴\nПолучатель: БРОСКАССА\n\n🎉 Платёж подтверждён!`);
-    closeBVModal();
-    finishSale();
-}
-
 function finishSale() {
+    alert("🎉 Продажа завершена! Деньги зачислены в BlackVault.");
     cart = [];
     renderCart();
-    setTimeout(() => {
-        alert("🎮 Продажа завершена! Следующий клиент...");
-    }, 300);
 }
 
 // Инициализация
 renderProducts();
 renderCart();
 </script>
-
 </body>
 </html>
