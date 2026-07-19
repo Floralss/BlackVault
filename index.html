@@ -197,7 +197,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
 <div id="loader"><div class="ld-ico">🏪</div><div class="ld-name">BlackVault Касса</div><div class="ld-dots"><i></i><i></i><i></i></div></div>
 <div id="toastRoot"></div>
 
-<!-- AUTH -->
 <div id="authScreen">
   <div class="auth-card">
     <div class="auth-logo"><div class="auth-logo-ico">🏪</div><span class="auth-logo-name">BlackVault Касса</span></div>
@@ -226,9 +225,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
   </div>
 </div>
 
-<!-- APP -->
 <div id="app" style="display:none">
-  <!-- SIDEBAR -->
   <div id="sidebar">
     <div class="sb-icon brand" title="BlackVault Касса">🏪</div>
     <div class="sb-icon on" id="navCatalog" onclick="showPage('catalog')" title="Касса">🛒</div>
@@ -238,13 +235,10 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
     <div class="sb-icon" onclick="signOutUser()" title="Выйти" style="margin-top:auto;color:var(--red)">⬅️</div>
   </div>
 
-  <!-- MAIN -->
   <div id="main">
 
-    <!-- CATALOG / POS -->
     <div class="page on" id="pgCatalog">
       <div id="catalogPage">
-        <!-- Left: categories + search -->
         <div class="catalog-sidebar">
           <div class="catalog-search">
             <input class="search-input" id="searchInput" placeholder="🔍 Поиск товаров..." oninput="filterProducts()"/>
@@ -253,7 +247,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
             <div class="cat-item on" data-cat="all" onclick="selectCat('all')">🏷 Все товары</div>
           </div>
         </div>
-        <!-- Center: product grid -->
         <div class="catalog-main">
           <div class="catalog-header">
             <div class="catalog-title" id="catalogTitle">Все товары</div>
@@ -263,7 +256,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
             <div class="empty-state"><span class="emo">📦</span>Добавьте товары во вкладке «Товары»</div>
           </div>
         </div>
-        <!-- Right: cart -->
         <div class="cart-panel">
           <div class="cart-header">
             <span class="cart-title">🛒 Корзина</span>
@@ -284,7 +276,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
       </div>
     </div>
 
-    <!-- PRODUCTS MANAGEMENT -->
     <div class="page" id="pgProducts">
       <div class="page-inner">
         <div class="page-header"><div class="page-title">📦 Мои товары</div><div class="page-sub">Управление каталогом кассы</div></div>
@@ -302,7 +293,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
       </div>
     </div>
 
-    <!-- INCOME -->
     <div class="page" id="pgIncome">
       <div class="page-inner">
         <div class="page-header"><div class="page-title">💰 Доходы</div><div class="page-sub">Ваши заработки через кассу</div></div>
@@ -319,7 +309,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
   </div>
 </div>
 
-<!-- QR PAYMENT MODAL -->
 <div class="overlay" id="qrModal">
   <div class="modal">
     <div id="qrStep1">
@@ -345,7 +334,6 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
   </div>
 </div>
 
-<!-- CASH PAYMENT MODAL -->
 <div class="overlay" id="cashModal">
   <div class="modal">
     <div style="text-align:center;padding:8px 0">
@@ -364,7 +352,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, getDocs, limit, orderBy, serverTimestamp, increment, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, getDocs, limit, orderBy, serverTimestamp, increment, deleteDoc } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const fba = initializeApp({
   apiKey:"AIzaSyCmXswh7MgI1tOcPCWl0AHBABY636gOczk",
@@ -420,7 +408,6 @@ document.getElementById('btnReg').onclick = async()=>{
   if(!e||!p)return toast('Заполните поля','w');
   if(p.length<6)return toast('Пароль мин. 6 символов','w');
   try{await createUserWithEmailAndPassword(auth,e,p);}catch(err){toast(err.code==='auth/email-already-in-use'?'Email занят':'Ошибка','e');}
-  // kassaName will be set in onAuthStateChanged after wallet check
 };
 window.signOutUser=()=>signOut(auth);
 
@@ -434,10 +421,9 @@ onAuthStateChanged(auth, async user=>{
     return;
   }
   CU=user;
-  // Load wallet
+
   const wSnap = await getDoc(doc(db,'wallets',user.uid));
   if(!wSnap.exists()){
-    // Create wallet
     await setDoc(doc(db,'wallets',user.uid),{
       uid:user.uid,email:user.email,username:'',
       code:'BV-'+Array.from({length:6},()=>'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'[~~(Math.random()*34)]).join(''),
@@ -449,7 +435,6 @@ onAuthStateChanged(auth, async user=>{
     UD = wSnap.data();
   }
 
-  // Check kassa access (bought in shop)
   if(!UD.kassaAccess && !UD.isOwner){
     document.getElementById('app').style.display='none';
     document.getElementById('authScreen').classList.add('show');
@@ -457,7 +442,6 @@ onAuthStateChanged(auth, async user=>{
     return;
   }
 
-  // Load or create kassa profile
   const kSnap = await getDoc(doc(db,'kassas',user.uid));
   if(!kSnap.exists()){
     const kassaName = document.getElementById('rName')?.value?.trim()||'Моя касса';
@@ -597,7 +581,6 @@ document.getElementById('btnAddProduct').onclick = async()=>{
 
 window.deleteProduct = async(id)=>{
   if(!confirm('Удалить товар?'))return;
-  const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
   await deleteDoc(doc(db,'kassaProducts',id));
   delete cart[id];
   toast('Удалено','i');
@@ -610,6 +593,7 @@ function renderProductsList(){
   if(!allProducts.length){el.innerHTML='<div class="empty-state"><span class="emo">📦</span>Добавьте первый товар выше</div>';return;}
   const bycat={};
   allProducts.forEach(p=>{const c=p.category||'Без категории';(bycat[c]||(bycat[c]=[])).push(p);});
+  
   el.innerHTML=Object.entries(bycat).map(([cat,prods])=>`
     <div style="padding:10px 17px 4px;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--text3);letter-spacing:1px">${esc(cat)}</div>
     ${prods.map(p=>`<div class="product-row">
@@ -651,7 +635,6 @@ window.payQR = async()=>{
   const paymentUAH=total;
   const paymentId='PAY'+Date.now()+Math.random().toString(36).slice(2,7).toUpperCase();
 
-  // Create payment request in Firestore — wallet will poll this
   await setDoc(doc(db,'qrPayments',paymentId),{
     paymentId,kassaUid:CU.uid,kassaName:KASSA.kassaName||'Касса',
     amount:paymentUAH,amountUAH:paymentUAH,ownerEarns,
@@ -661,7 +644,6 @@ window.payQR = async()=>{
   });
   currentPaymentId=paymentId;
 
-  // Show QR
   document.getElementById('qrAmount').textContent=fmtUAH(paymentUAH);
   document.getElementById('qrAmountSub').textContent=`Оплата в BlackVault-кошельке · ID: ${paymentId}`;
   document.getElementById('qrStatus').className='pay-status pending';
@@ -671,12 +653,10 @@ window.payQR = async()=>{
   document.getElementById('btnConfirmPayment').style.display='flex';
   document.getElementById('qrModal').classList.add('on');
 
-  // Generate QR
   document.getElementById('qrWrap').innerHTML='';
   const qrData=JSON.stringify({type:'bv_payment',paymentId,amount:paymentUAH,currency:'UAH',kassaName:KASSA.kassaName||'Касса'});
   new QRCode(document.getElementById('qrWrap'),{text:qrData,width:220,height:220,colorDark:'#F0FAF6',colorLight:'#1A2320',correctLevel:QRCode.CorrectLevel.H});
 
-  // Poll for payment completion
   paymentCheckInterval=setInterval(async()=>{
     const snap=await getDoc(doc(db,'qrPayments',paymentId));
     if(!snap.exists())return;
@@ -693,7 +673,6 @@ async function onPaymentSuccess(paymentId,paidByUid,total,ownerEarns){
   document.getElementById('qrStatus').textContent='✅ Оплата прошла успешно!';
   document.getElementById('btnConfirmPayment').style.display='none';
 
-  // Credit owner's wallet (UAH)
   await updateDoc(doc(db,'wallets',CU.uid),{['balances.UAH']:increment(ownerEarns)});
   await addDoc(collection(db,'transactions'),{
     fromUid:paidByUid||'unknown',fromCode:'QR',fromUsername:'Покупатель',
@@ -712,7 +691,6 @@ async function onPaymentSuccess(paymentId,paidByUid,total,ownerEarns){
 }
 
 window.confirmPaymentReceived = async()=>{
-  // Manual confirm (for cases where QR scanning happened but Firestore wasn't updated)
   if(!currentPaymentId)return;
   const items=Object.values(cart).length?Object.values(cart):[];
   const total=items.reduce((s,i)=>s+i.price*i.qty,0)||0;
