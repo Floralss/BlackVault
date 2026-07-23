@@ -364,7 +364,7 @@ body{font-family:var(--f);background:var(--bg);color:var(--text);display:flex;fl
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, collection, query, where, getDocs, limit, orderBy, serverTimestamp, increment, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+import { getFirestore, doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where, getDocs, limit, serverTimestamp, increment, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 const fba = initializeApp({
   apiKey:"AIzaSyCmXswh7MgI1tOcPCWl0AHBABY636gOczk",
@@ -489,12 +489,18 @@ window.showPage = function(page){
 
 // ════ PRODUCTS ════
 async function loadProducts(){
-  const snap = await getDocs(query(collection(db,'kassaProducts'),where('uid','==',CU.uid),orderBy('createdAt','asc'),limit(200)));
-  allProducts=[];
-  snap.forEach(d=>allProducts.push({...d.data(),_id:d.id}));
-  renderCategoryList();
-  renderProductsGrid();
-  renderProductsList();
+  try {
+    const snap = await getDocs(query(collection(db,'kassaProducts'),where('uid','==',CU.uid),limit(200)));
+    allProducts=[];
+    snap.forEach(d=>allProducts.push({...d.data(),_id:d.id}));
+    allProducts.sort((a,b)=>(a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
+    renderCategoryList();
+    renderProductsGrid();
+    renderProductsList();
+  } catch(e) {
+    console.error('loadProducts error:',e);
+    toast('Ошибка загрузки товаров: '+e.message,'e',6000);
+  }
 }
 
 function renderCategoryList(){
@@ -597,7 +603,6 @@ document.getElementById('btnAddProduct').onclick = async()=>{
 
 window.deleteProduct = async(id)=>{
   if(!confirm('Удалить товар?'))return;
-  const {deleteDoc}=await import("https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js");
   await deleteDoc(doc(db,'kassaProducts',id));
   delete cart[id];
   toast('Удалено','i');
@@ -749,8 +754,9 @@ function clearCart(){cart={};renderCart();renderProductsGrid();}
 
 // ════ INCOME ════
 async function loadIncomeStats(){
-  const snap=await getDocs(query(collection(db,'kassaSales'),where('uid','==',CU.uid),orderBy('createdAt','desc'),limit(100)));
+  const snap=await getDocs(query(collection(db,'kassaSales'),where('uid','==',CU.uid),limit(100)));
   let sales=[];snap.forEach(d=>sales.push(d.data()));
+  sales.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
   const today=new Date().toISOString().split('T')[0];
   const week7=new Date(Date.now()-7*86400000).toISOString().split('T')[0];
   const todaySales=sales.filter(s=>s.date===today);
