@@ -368,6 +368,16 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
 <body>
 
 
+<div id="updateBanner" style="display:none;position:fixed;bottom:20px;right:20px;z-index:8000;background:linear-gradient(135deg,#1A1430,#251A4D);border:1px solid rgba(124,92,252,.4);border-radius:16px;padding:14px 16px;max-width:340px;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+  <div style="display:flex;align-items:flex-start;gap:10px">
+    <div style="font-size:22px;flex-shrink:0">🆕</div>
+    <div style="flex:1">
+      <div style="font-size:13.5px;font-weight:800;margin-bottom:5px">BlackVault v3.0</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6">• QR-оплата через камеру телефона<br>• Раздел «Моя касса» с доходами<br>• Жалобы на пользователей/админов<br>• Кнопки в профилях: блок, заморозка<br>• Telegram-бот для уведомлений<br>• Улучшенная безопасность</div>
+    </div>
+    <button id="btnCloseBanner" style="background:transparent;border:none;color:rgba(255,255,255,.4);font-size:18px;cursor:pointer;padding:2px;line-height:1">✕</button>
+  </div>
+</div>
 <div id="loader"><div class="ld-logo">🔐</div><div class="ld-name">BlackVault</div><div class="ld-dots"><i></i><i></i><i></i></div></div>
 
 <div id="pinWall">
@@ -462,6 +472,7 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
       <div class="sb-list-item" data-goto="pgShop"><span class="ic">🛍</span>Магазин</div>
       <div class="sb-list-item" data-goto="pgSupport"><span class="ic">🎧</span>Поддержка<span class="sb-badge" id="sbSupportBadge" style="display:none">!</span></div>
       <div class="sb-list-item" data-goto="pgDownload"><span class="ic">💻</span>Приложение на ПК</div>
+      <div class="sb-list-item" id="sbKassaItem" style="display:none" data-goto="pgKassa"><span class="ic">🏪</span>Моя касса</div>
 
       <div id="sbAdminGroup" style="display:none">
         <div class="sb-sep">Управление</div>
@@ -660,7 +671,7 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
         <div style="width:84px;height:84px;background:linear-gradient(150deg,#9B7FFF,var(--btn1) 55%,#4A38C9);border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;box-shadow:0 0 60px rgba(124,92,252,.45)">🔐</div>
         <div style="font-size:24px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:-.5px">BlackVault Desktop</div>
         <div style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:26px">Версия 1.0.0 · Windows 10/11 · 64-bit</div>
-        <a href="https://fex.net/ru/s/nonpoac" download class="btn btn-primary" style="max-width:320px;margin:0 auto;padding:16px 28px;font-size:16px;display:flex">
+        <a href="downloads/BlackVault-Setup-1.0.0.exe" download class="btn btn-primary" style="max-width:320px;margin:0 auto;padding:16px 28px;font-size:16px;display:flex">
           <span style="font-size:20px">⬇️</span> Скачать установщик (.exe)
         </a>
         <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:14px">~85 МБ · Бесплатно · Без рекламы</div>
@@ -693,6 +704,90 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
       </div>
     </div>
 
+    <!-- QR PAYMENT PAGE -->
+    <div class="page" id="pgQrPay">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">📱 QR-оплата</div><div class="ph-sub">Сканируйте QR-код кассы камерой</div></div><button class="btn btn-secondary btn-sm" onclick="stopQrScanner();goBack()">✕ Закрыть</button></div></div>
+      <div class="sec card-p" style="max-width:500px;margin:0 auto">
+        <div id="qrScannerWrap" style="width:100%;aspect-ratio:1;background:#000;border-radius:var(--r);overflow:hidden;position:relative;margin-bottom:16px">
+          <video id="qrVideo" style="width:100%;height:100%;object-fit:cover" playsinline autoplay></video>
+          <canvas id="qrCanvas" style="display:none"></canvas>
+          <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;pointer-events:none">
+            <div style="width:200px;height:200px;border:3px solid rgba(124,92,252,.8);border-radius:16px;box-shadow:0 0 0 9999px rgba(0,0,0,.45)"></div>
+          </div>
+          <div id="qrScanStatus" style="position:absolute;bottom:14px;left:0;right:0;text-align:center;color:#fff;font-size:13px;font-weight:700;text-shadow:0 1px 4px #000">Наведите камеру на QR-код</div>
+        </div>
+        <div id="qrPaymentConfirm" style="display:none">
+          <div id="qrPayItems" style="margin-bottom:12px;background:var(--c-surface2);border-radius:var(--rs);padding:10px 13px;max-height:150px;overflow-y:auto"></div>
+          <div class="form-group" style="background:rgba(124,92,252,.08);border:1px solid rgba(124,92,252,.2);border-radius:var(--r);padding:16px;margin-bottom:16px">
+            <div style="font-size:13px;color:var(--c-text2);margin-bottom:4px">Оплата в кассу</div>
+            <div style="font-size:22px;font-weight:900" id="qrPayKassaName">—</div>
+            <div style="font-size:28px;font-weight:900;color:var(--btn1);margin:8px 0" id="qrPayAmount">0 ₴</div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Списать с баланса</label>
+            <select class="form-input" id="qrPayCurrency">
+              <option value="UAH">UAH — Гривна</option>
+              <option value="USD">USD — Доллар</option>
+              <option value="RUB">RUB — Рубль</option>
+            </select>
+            <div style="font-size:12px;color:var(--c-text2);margin-top:6px" id="qrPayBalHint"></div>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-secondary" style="flex:1" onclick="stopQrScanner();goBack()">Отмена</button>
+            <button class="btn btn-primary" style="flex:1" id="btnConfirmQrPay" onclick="confirmQrPayment()">✅ Оплатить</button>
+          </div>
+        </div>
+        <div style="text-align:center;margin-top:14px">
+          <div style="font-size:12px;color:var(--c-text3);margin-bottom:10px">или введите ID платежа вручную</div>
+          <div style="display:flex;gap:8px">
+            <input class="form-input" id="qrManualId" placeholder="PAY123..." style="flex:1;font-family:monospace"/>
+            <button class="btn btn-secondary btn-sm" onclick="loadQrPaymentManual()">Найти</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MY KASSA PAGE -->
+    <div class="page" id="pgKassa">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">🏪 Моя касса</div><div class="ph-sub">Управление, доходы, товары</div></div>
+        <a href="kassa.html" target="_blank" class="btn btn-primary btn-sm">Открыть кассу →</a>
+      </div></div>
+
+      <!-- Stats -->
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 16px 16px">
+        <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">Сегодня</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatToday">0 ₴</div></div>
+        <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">За 7 дней</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatWeek">0 ₴</div></div>
+        <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">Всего</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatTotal">0 ₴</div></div>
+      </div>
+
+      <!-- Products management -->
+      <div class="sec" style="margin:0 16px 16px">
+        <div class="sec-head" style="display:flex;justify-content:space-between;align-items:center">
+          <span class="sec-title">📦 Товары кассы</span>
+          <button class="btn btn-primary btn-sm" onclick="openSheet('sheetAddKassaProduct')">+ Добавить</button>
+        </div>
+        <div id="kassaProductsList"><div class="empty-state"><span class="emo">📦</span>Товаров пока нет</div></div>
+      </div>
+
+      <!-- Sales history -->
+      <div class="sec" style="margin:0 16px 16px">
+        <div class="sec-head"><span class="sec-title">💰 История продаж</span></div>
+        <div id="kassaSalesList"><div class="empty-state"><span class="emo">💰</span>Продаж ещё нет</div></div>
+      </div>
+    </div>
+
+    <!-- ADD PRODUCT SHEET (in wallet) -->
+    <div class="overlay" id="sheetAddKassaProduct">
+      <div class="sheet">
+        <div class="sheet-head"><span class="sheet-title">📦 Новый товар</span><button class="sheet-close" onclick="closeSheet('sheetAddKassaProduct')">✕</button></div>
+        <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="kpName" placeholder="Кофе Американо"/></div>
+        <div class="form-group"><label class="form-label">Категория</label><input class="form-input" id="kpCat" placeholder="Напитки"/></div>
+        <div class="form-group"><label class="form-label">Иконка (эмодзи)</label><input class="form-input" id="kpIco" placeholder="☕" maxlength="4" style="width:80px"/></div>
+        <div class="form-group"><label class="form-label">Цена (₴)</label><input class="form-input" id="kpPrice" type="number" placeholder="0.00"/></div>
+        <button class="btn btn-primary" id="btnAddKassaProduct">Добавить товар</button>
+      </div>
+    </div>
+
     <div class="page" id="pgAdmin">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">👑 Панель</div><div class="ph-sub" id="adminRoleSub">Управление</div></div><div id="adminTopBadge"></div></div></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:19px" id="adminTabs">
@@ -706,6 +801,7 @@ select.form-input{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg
         <button class="btn btn-secondary btn-sm" id="admStaffTabBtn" style="display:none" onclick="admTab('staff')">Персонал</button>
         <button class="btn btn-secondary btn-sm" id="admTagTabBtn" style="display:none" onclick="admTab('grantTag')">Выдать тег</button>
         <button class="btn btn-secondary btn-sm" id="admContestTabBtn" style="display:none" onclick="admTab('contest')">Конкурсы</button>
+        <button class="btn btn-secondary btn-sm" id="admComplaintsTabBtn" style="display:flex" onclick="admTab('complaints');loadComplaints()">⚠️ Жалобы</button>
       </div>
       <div id="admWallets"><div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Роль</th><th>Действия</th></tr></thead><tbody id="admWalletsTb"><tr><td colspan="6" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
       <div id="admDeposits" style="display:none"><div class="sec" id="admDepositsList"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div></div>
@@ -2294,7 +2390,7 @@ document.getElementById('btnCloseTicket').addEventListener('click', async () => 
 
 // ═══ ADMIN PANEL ═══
 function admTab(t) {
-  ['wallets', 'deposits', 'tx', 'reports', 'tgreq', 'give', 'take', 'staff', 'grantTag', 'contest'].forEach(id => {
+  ['wallets', 'deposits', 'tx', 'reports', 'tgreq', 'give', 'take', 'staff', 'grantTag', 'contest', 'complaints'].forEach(id => {
     const el = document.getElementById('adm' + id.charAt(0).toUpperCase() + id.slice(1));
     if (el) el.style.display = id === t ? 'block' : 'none';
   });
@@ -2644,6 +2740,488 @@ if (window.electronAPI) {
 
 applyTheme();
 
+// ════════════════════════════════════════════════════════════
+//  BLACKVAULT v3.0 — SECURITY + QR PAY + KASSA + COMPLAINTS
+// ════════════════════════════════════════════════════════════
+
+// ─── UPDATE BANNER ───
+const BV_VERSION = '3.0';
+function maybeShowUpdateBanner() {
+  if (localStorage.getItem('bv_banner_seen') === BV_VERSION) return;
+  const banner = document.getElementById('updateBanner');
+  if (banner) { banner.style.display = 'flex'; }
+}
+document.getElementById('btnCloseBanner')?.addEventListener('click', () => {
+  localStorage.setItem('bv_banner_seen', BV_VERSION);
+  const b = document.getElementById('updateBanner');
+  if (b) b.style.display = 'none';
+});
+
+// ─── SECURITY: track login IP and detect owner privilege escalation ───
+async function logSecurityEvent(type, details) {
+  if (!CU) return;
+  try {
+    await addDoc(collection(db, 'securityLog'), {
+      uid: CU.uid, type, details: details || '',
+      userAgent: navigator.userAgent.slice(0, 200),
+      ts: serverTimestamp()
+    });
+  } catch(e) { console.warn('secLog:', e); }
+}
+
+// Monitor for suspicious owner activation (someone who wasn't owner just became owner)
+let _wasOwner = false;
+function checkOwnerAlert(newUD) {
+  if (!_wasOwner && newUD.isOwner) {
+    // Owner flag just appeared - log it
+    logSecurityEvent('owner_activated', `uid=${CU?.uid}`);
+  }
+  if (_wasOwner && !newUD.isOwner) {
+    logSecurityEvent('owner_removed', `uid=${CU?.uid}`);
+  }
+  _wasOwner = newUD.isOwner || false;
+}
+
+// ─── SIDEBAR: show Kassa link if user has access ───
+function renderSidebarKassa() {
+  const item = document.getElementById('sbKassaItem');
+  if (item) item.style.display = (UD?.kassaAccess || UD?.isOwner) ? 'flex' : 'none';
+}
+
+// ─── BUY KASSA ACCESS ───
+window.buyKassaAccess = async function() {
+  if (!UD || UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
+  if (UD.kassaAccess || UD.isOwner) { goto('pgKassa'); return; }
+  const price = 2000;
+  const bal = (UD.balances && UD.balances.UAH) || 0;
+  if (bal < price) return toast(`Нужно ${fmtBal(price,'UAH')}, у вас ${fmtBal(bal,'UAH')}`, 'e');
+  try {
+    const user = await freshSelf();
+    if ((user.balances?.UAH || 0) < price) return toast('Недостаточно средств', 'e');
+    await updateDoc(doc(db, 'wallets', CU.uid), {
+      'balances.UAH': increment(-price), kassaAccess: true
+    });
+    await addDoc(collection(db, 'transactions'), {
+      fromUid:CU.uid, fromCode:user.code, fromUsername:user.username,
+      toUid:'shop', toCode:'SHOP', toUsername:'Магазин',
+      currency:'UAH', amount:price, type:'shop_kassa', createdAt:serverTimestamp()
+    });
+    toast('🏪 Доступ к кассе открыт!', 's', 5000);
+    loadShopState(); renderSidebarKassa();
+  } catch(err) { toast(cfError(err), 'e'); }
+};
+
+// ─── KASSA PAGE ───
+async function loadKassaPage() {
+  if (!CU) return;
+  try {
+    const snap = await getDocs(query(collection(db,'kassaProducts'), where('uid','==',CU.uid)));
+    const products = [];
+    snap.forEach(d => products.push({...d.data(), _id: d.id}));
+    products.sort((a,b) => (a.createdAt?.seconds||0)-(b.createdAt?.seconds||0));
+    const pEl = document.getElementById('kassaProductsList');
+    if (pEl) {
+      if (!products.length) {
+        pEl.innerHTML = '<div class="empty-state"><span class="emo">📦</span>Товаров нет — добавьте в кассе</div>';
+      } else {
+        pEl.innerHTML = '<div>' + products.map(p => `
+          <div style="display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--c-border)">
+            <div style="width:38px;height:38px;border-radius:10px;background:var(--c-surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
+              ${p.photo ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover"/>` : `<span style="font-size:20px">${esc(p.icon||'📦')}</span>`}
+            </div>
+            <div style="flex:1"><div style="font-weight:700;font-size:13.5px">${esc(p.name)}</div><div style="font-size:11px;color:var(--c-text2)">${esc(p.category||'')}</div></div>
+            <div style="font-weight:800;color:var(--c-green)">${fmtBal(p.price,'UAH')}</div>
+          </div>`).join('') + '</div>';
+      }
+    }
+  } catch(e) { console.error('kassa products:', e); }
+
+  try {
+    const sSnap = await getDocs(query(collection(db,'kassaSales'), where('uid','==',CU.uid)));
+    const sales = [];
+    sSnap.forEach(d => sales.push(d.data()));
+    sales.sort((a,b) => (b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    const today = new Date().toISOString().split('T')[0];
+    const week7 = new Date(Date.now()-7*86400000).toISOString().split('T')[0];
+    const todayT = sales.filter(s=>s.date===today).reduce((s,i)=>s+i.ownerEarns,0);
+    const weekT = sales.filter(s=>s.date>=week7).reduce((s,i)=>s+i.ownerEarns,0);
+    const allT = sales.reduce((s,i)=>s+i.ownerEarns,0);
+    const el = id => document.getElementById(id);
+    if(el('kassaStatToday')) el('kassaStatToday').textContent = fmtBal(todayT,'UAH');
+    if(el('kassaStatWeek')) el('kassaStatWeek').textContent = fmtBal(weekT,'UAH');
+    if(el('kassaStatTotal')) el('kassaStatTotal').textContent = fmtBal(allT,'UAH');
+    const wSnap = await getDoc(doc(db,'wallets',CU.uid));
+    if(el('kassaStatWallet')) el('kassaStatWallet').textContent = fmtBal(wSnap.data()?.balances?.UAH||0,'UAH');
+    const sEl = document.getElementById('kassaSalesList');
+    if (sEl) {
+      if (!sales.length) {
+        sEl.innerHTML = '<div class="empty-state"><span class="emo">💰</span>Продаж ещё нет</div>';
+      } else {
+        sEl.innerHTML = '<div>' + sales.slice(0,30).map(s =>
+          `<div class="tx-row"><div class="tx-ico in">📱</div>
+           <div class="tx-info"><div class="tx-who">QR-оплата в кассе</div><div class="tx-when">${fmtDate(s.createdAt)}</div></div>
+           <div class="tx-right"><div class="tx-amount in">+${fmtBal(s.ownerEarns,'UAH')}</div></div></div>`
+        ).join('') + '</div>';
+      }
+    }
+  } catch(e) { console.error('kassa sales:', e); }
+}
+
+window.deleteKassaProduct = async(id) => {
+  if (!confirm('Удалить товар?')) return;
+  try { await deleteDoc(doc(db,'kassaProducts',id)); toast('Удалено','i'); loadKassaPage(); }
+  catch(e) { toast(cfError(e),'e'); }
+};
+
+document.getElementById('btnAddKassaProduct')?.addEventListener('click', async() => {
+  const name = document.getElementById('kpName')?.value.trim();
+  const cat = document.getElementById('kpCat')?.value.trim() || 'Без категории';
+  const icon = document.getElementById('kpIco')?.value.trim() || '📦';
+  const price = parseFloat(document.getElementById('kpPrice')?.value);
+  if (!name) return toast('Введите название','w');
+  if (!price||price<=0) return toast('Введите цену','w');
+  try {
+    await addDoc(collection(db,'kassaProducts'),{uid:CU.uid,name,category:cat,icon,price,photo:null,createdAt:serverTimestamp()});
+    toast('Товар добавлен!','s');
+    closeSheet('sheetAddKassaProduct');
+    document.getElementById('kpName').value='';document.getElementById('kpPrice').value='';
+    loadKassaPage();
+  } catch(e) { toast(cfError(e),'e'); }
+});
+
+// ─── QR PAYMENT SCANNER ───
+let _qrStream = null, _qrInterval = null, _curQrPayment = null;
+
+async function startQrScanner() {
+  const video = document.getElementById('qrVideo');
+  const status = document.getElementById('qrScanStatus');
+  document.getElementById('qrPaymentConfirm').style.display = 'none';
+  if (status) status.textContent = 'Запускаем камеру...';
+
+  // Check for payment ID in URL (when wallet opened via QR link)
+  const urlParams = new URLSearchParams(window.location.search);
+  const payId = urlParams.get('pay');
+  if (payId) {
+    history.replaceState({}, '', window.location.pathname);
+    await loadQrPaymentById(payId);
+    return;
+  }
+
+  try {
+    _qrStream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode:'environment', width:{ideal:1280}, height:{ideal:720} }
+    });
+    video.srcObject = _qrStream;
+    await video.play();
+    if (status) status.textContent = 'Наведите камеру на QR-код кассы';
+    _qrInterval = setInterval(() => _scanFrame(video), 300);
+  } catch(e) {
+    if (status) status.textContent = '⚠️ Нет доступа к камере';
+    toast('Разрешите доступ к камере или введите ID вручную','w', 5000);
+  }
+}
+
+function _scanFrame(video) {
+  if (!video.videoWidth) return;
+  const canvas = document.getElementById('qrCanvas');
+  canvas.width = video.videoWidth; canvas.height = video.videoHeight;
+  canvas.getContext('2d').drawImage(video, 0, 0);
+  if (!('BarcodeDetector' in window)) return;
+  new BarcodeDetector({formats:['qr_code']}).detect(canvas).then(codes => {
+    if (codes.length) { clearInterval(_qrInterval); stopQrVideoOnly(); _handleQrData(codes[0].rawValue); }
+  }).catch(()=>{});
+}
+
+async function _handleQrData(raw) {
+  try {
+    // URL format: https://.../?pay=PAYID
+    let payId = null;
+    if (raw.includes('?pay=')) {
+      payId = raw.split('?pay=')[1].split('&')[0];
+    } else {
+      try { const d = JSON.parse(raw); payId = d.paymentId || d.pay; } catch {}
+    }
+    if (!payId) return toast('Нераспознанный QR-код','e');
+    await loadQrPaymentById(payId);
+  } catch(e) { toast('Ошибка чтения QR: '+e.message,'e'); }
+}
+
+async function loadQrPaymentById(payId) {
+  const snap = await getDoc(doc(db,'qrPayments',payId));
+  if (!snap.exists()) return toast('Платёж не найден','e');
+  const payment = snap.data();
+  if (payment.status !== 'pending') return toast('Этот платёж уже оплачен','w');
+  _curQrPayment = {...payment, _id: payId};
+  _showQrConfirm(payment);
+}
+
+function _showQrConfirm(p) {
+  document.getElementById('qrPayKassaName').textContent = p.kassaName || 'Касса';
+  document.getElementById('qrPayAmount').textContent = fmtBal(p.amountUAH || p.amount, 'UAH');
+
+  // Show items list
+  const itemsEl = document.getElementById('qrPayItems');
+  if (itemsEl && p.items?.length) {
+    itemsEl.innerHTML = p.items.map(i =>
+      `<div style="display:flex;justify-content:space-between;font-size:12.5px;padding:4px 0;border-bottom:1px solid var(--c-border)">
+        <span>${esc(i.name)} × ${i.qty}</span>
+        <span style="font-weight:700;color:var(--c-green)">${fmtBal(i.price*i.qty,'UAH')}</span>
+      </div>`).join('');
+  }
+
+  document.getElementById('qrPaymentConfirm').style.display = 'block';
+  const sel = document.getElementById('qrPayCurrency');
+  const hint = document.getElementById('qrPayBalHint');
+  const update = () => {
+    const cur = sel.value;
+    const bal = (UD?.balances?.[cur]) || 0;
+    const needed = cur==='UAH' ? p.amountUAH : (p.amountUAH / (RATES[cur]||1));
+    hint.textContent = `Нужно: ${fmtBal(needed,cur)} · У вас: ${fmtBal(bal,cur)}`;
+    hint.style.color = bal >= needed ? '#3DDC84' : '#FF4D6A';
+  };
+  sel.onchange = update; update();
+}
+
+window.confirmQrPayment = async() => {
+  if (!_curQrPayment) return;
+  const cur = document.getElementById('qrPayCurrency').value;
+  const amtUAH = _curQrPayment.amountUAH || _curQrPayment.amount;
+  const amtCur = cur==='UAH' ? amtUAH : amtUAH / (RATES[cur]||1);
+  try {
+    const user = await freshSelf();
+    if (user.blocked||user.frozen) throw new Error('Кошелёк заблокирован');
+    const bal = (user.balances?.[cur]) || 0;
+    if (bal < amtCur) throw new Error(`Недостаточно ${cur}`);
+
+    const batch = writeBatch(db);
+    batch.update(doc(db,'wallets',CU.uid), {[`balances.${cur}`]: increment(-amtCur)});
+    batch.update(doc(db,'qrPayments',_curQrPayment._id), {
+      status:'completed', paidBy:CU.uid, paidByUsername:user.username, completedAt:serverTimestamp()
+    });
+    batch.set(doc(collection(db,'transactions')), {
+      fromUid:CU.uid, fromCode:user.code, fromUsername:user.username,
+      toUid:_curQrPayment.kassaUid, toCode:'KASSA', toUsername:_curQrPayment.kassaName,
+      currency:cur, amount:amtCur, amountUAH:amtUAH,
+      type:'qr_payment', paymentId:_curQrPayment._id, createdAt:serverTimestamp()
+    });
+    await batch.commit();
+    toast(`✅ Оплачено ${fmtBal(amtCur,cur)} → ${_curQrPayment.kassaName}`, 's', 6000);
+    _curQrPayment = null;
+    stopQrScanner();
+    goBack();
+  } catch(e) { toast(cfError(e),'e'); }
+};
+
+function stopQrVideoOnly() {
+  if (_qrStream) { _qrStream.getTracks().forEach(t=>t.stop()); _qrStream=null; }
+  const v=document.getElementById('qrVideo'); if(v) v.srcObject=null;
+}
+window.stopQrScanner = function() {
+  clearInterval(_qrInterval); _qrInterval=null;
+  stopQrVideoOnly(); _curQrPayment=null;
+};
+window.loadQrPaymentManual = async() => {
+  const id=document.getElementById('qrManualId')?.value.trim().toUpperCase();
+  if(!id) return toast('Введите ID','w');
+  await loadQrPaymentById(id);
+};
+
+// Check URL params on load for QR pay
+(function checkUrlQrPay() {
+  const p = new URLSearchParams(window.location.search).get('pay');
+  if (p) {
+    history.replaceState({}, '', window.location.pathname);
+    // Wait for auth
+    const iv = setInterval(() => {
+      if (CU && UD) { clearInterval(iv); goto('pgQrPay'); setTimeout(()=>loadQrPaymentById(p),300); }
+    }, 300);
+  }
+})();
+
+// ─── COMPLAINTS SYSTEM ───
+const COMPLAINT_REASONS_USER = [
+  'Оскорбления и угрозы',
+  'Мошенничество / обман',
+  'Спам',
+  'Взлом аккаунта',
+  'Выдача себя за администратора',
+  'Другое'
+];
+const COMPLAINT_REASONS_ADMIN = [
+  'Превышение полномочий',
+  'Несправедливая блокировка',
+  'Грубость к пользователям',
+  'Мошенничество',
+  'Другое'
+];
+
+window.openComplaintSheet = function(targetUid, targetUsername, targetRole) {
+  const reasons = (targetRole==='admin'||targetRole==='helper'||targetRole==='media'||targetRole==='sponsor'||targetRole==='owner')
+    ? COMPLAINT_REASONS_ADMIN : COMPLAINT_REASONS_USER;
+  const sheet = document.getElementById('sheetComplaint');
+  document.getElementById('complaintTarget').value = targetUid;
+  document.getElementById('complaintTargetName').textContent = targetUsername;
+  document.getElementById('complaintReasonsList').innerHTML = reasons.map((r,i) =>
+    `<label style="display:flex;align-items:center;gap:10px;padding:10px 0;cursor:pointer;border-bottom:1px solid var(--c-border)">
+      <input type="radio" name="cReason" value="${esc(r)}" style="accent-color:var(--btn1)"/>
+      <span style="font-size:14px">${esc(r)}</span>
+    </label>`
+  ).join('');
+  document.getElementById('complaintDetails').value = '';
+  openSheet('sheetComplaint');
+};
+
+document.getElementById('btnSendComplaint')?.addEventListener('click', async() => {
+  const targetUid = document.getElementById('complaintTarget').value;
+  const reason = document.querySelector('input[name="cReason"]:checked')?.value;
+  const details = document.getElementById('complaintDetails').value.trim().slice(0,500);
+  if (!reason) return toast('Выберите причину','w');
+  try {
+    await addDoc(collection(db,'complaints'),{
+      fromUid:CU.uid, fromUsername:UD.username, fromCode:UD.code,
+      targetUid, reason, details, status:'open',
+      createdAt:serverTimestamp()
+    });
+    toast('Жалоба отправлена. Мы разберёмся.','s',5000);
+    closeSheet('sheetComplaint');
+  } catch(e) { toast(cfError(e),'e'); }
+});
+
+// ─── PROFILE PAGE: block/freeze/edit buttons (for staff viewing someone's profile) ───
+window.showProfile = async function(uid) {
+  const snap = await getDoc(doc(db,'wallets',uid));
+  if (!snap.exists()) return toast('Не найден','e');
+  const u = snap.data();
+
+  // Build profile UI
+  const b = document.getElementById('pvBanner');
+  if (u.bannerUrl) b.innerHTML = `<img src="${u.bannerUrl}" style="width:100%;height:100%;object-fit:cover"/>`;
+  else { b.innerHTML=''; b.style.background='linear-gradient(135deg,#251A4D,#16213E,#0B1729)'; }
+  const pvAvaImg=document.getElementById('pvAvaImg'), pvAvaTxt=document.getElementById('pvAvaTxt');
+  document.getElementById('pvAva').style.boxShadow = avatarFrameStyle(u).replace('box-shadow:','').replace(/;$/,'') || '';
+  if (u.avatarUrl) { pvAvaImg.src=u.avatarUrl; pvAvaImg.style.display='block'; pvAvaTxt.style.display='none'; }
+  else { pvAvaTxt.textContent=u.username.charAt(0).toUpperCase(); pvAvaTxt.style.display='flex'; pvAvaImg.style.display='none'; }
+  document.getElementById('pvName').innerHTML=`${esc(u.username)} ${roleBadge(u)}`;
+  document.getElementById('pvCode').textContent = u.code;
+  document.getElementById('pvBio').textContent = u.bio || '';
+  let links='';
+  if(u.tg&&u.tgVerified) links+=`<a href="https://t.me/${u.tg.replace('@','')}" target="_blank" class="profile-link">💬 ${esc(u.tg)}</a>`;
+  if(u.dc&&u.dcVerified) links+=`<span class="profile-link" style="cursor:default">🎮 ${esc(u.dc)}</span>`;
+  document.getElementById('pvLinks').innerHTML=links;
+  const tot=toUSD(u.balances);
+  document.getElementById('pvStats').innerHTML=`<div class="profile-stat"><div class="profile-stat-label">Баланс</div><div class="profile-stat-val" style="color:var(--c-gold)">$${fmtNum(tot,2)}</div></div>`;
+
+  // Show admin action buttons if viewer is staff
+  const actEl = document.getElementById('pvActions');
+  if (actEl && isStaffUser(UD) && uid !== CU.uid) {
+    const isUserOwner = u.isOwner;
+    const canAct = canManageMoney(UD) && !isUserOwner;
+    actEl.innerHTML = `
+      <div style="display:flex;flex-wrap:wrap;gap:7px;margin-top:14px">
+        ${canAct ? `
+          <button class="btn btn-danger btn-sm" onclick="profileAction('block','${uid}','${esc(u.username)}',${u.blocked})">
+            ${u.blocked?'🔓 Разблокировать':'🔒 Заблокировать'}
+          </button>
+          <button class="btn btn-secondary btn-sm" onclick="profileAction('freeze','${uid}','${esc(u.username)}',${u.frozen})">
+            ${u.frozen?'☀️ Разморозить':'❄️ Заморозить'}
+          </button>` : ''}
+        <button class="btn btn-secondary btn-sm" onclick="openComplaintSheet('${uid}','${esc(u.username)}','${esc(u.role||'user')}')">
+          ⚠️ Пожаловаться
+        </button>
+        ${UD.isOwner ? `<button class="btn btn-secondary btn-sm" onclick="openDeleteSheet('${esc(u.code)}','${esc(u.username)}')">🗑 Удалить</button>` : ''}
+      </div>`;
+    actEl.style.display='block';
+  } else if (actEl) {
+    actEl.innerHTML = uid !== CU.uid ? `<button class="btn btn-secondary btn-sm" onclick="openComplaintSheet('${uid}','${esc(u.username)}','${esc(u.role||'user')}')">⚠️ Пожаловаться</button>` : '';
+  }
+
+  prevPage = document.querySelector('.page.on')?.id || 'pgLeaderboard';
+  goto('pgProfile');
+};
+
+window.profileAction = async(action, uid, username, currentVal) => {
+  const field = action==='block' ? 'blocked' : 'frozen';
+  const newVal = !currentVal;
+  try {
+    await requireFreshMoneyRole();
+    await updateDoc(doc(db,'wallets',uid),{[field]:newVal});
+    toast(`${username}: ${newVal?(field==='blocked'?'заблокирован':'заморожен'):(field==='blocked'?'разблокирован':'разморожен')}`, newVal?'w':'s');
+    showProfile(uid);
+  } catch(e) { toast(cfError(e),'e'); }
+};
+
+// ─── ADMIN: view complaints ───
+async function loadComplaints() {
+  const snap = await getDocs(query(collection(db,'complaints'), limit(50)));
+  let rows=[]; snap.forEach(d=>rows.push({...d.data(),_id:d.id}));
+  rows.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+  const el = document.getElementById('admComplaintsList');
+  if(!el) return;
+  if (!rows.length){el.innerHTML='<div class="empty-state"><span class="emo">✉️</span>Жалоб нет</div>';return}
+  el.innerHTML='<div>'+rows.map(r=>`
+    <div class="report-item">
+      <div style="flex:1;min-width:0">
+        <div style="font-weight:700;font-size:13.5px">На: ${esc(r.targetUid.slice(0,8))}... · ${esc(r.reason)}</div>
+        <div style="font-size:11.5px;color:var(--c-text2);margin-top:2px">От ${esc(r.fromUsername)} · ${fmtDate(r.createdAt)}</div>
+        ${r.details?`<div style="font-size:12px;color:var(--c-text2);margin-top:4px">${esc(r.details)}</div>`:''}
+      </div>
+      <div style="display:flex;gap:6px;flex-shrink:0">
+        <button class="btn btn-danger btn-sm" onclick="resolveComplaint('${r._id}','block','${r.targetUid}')">🔒</button>
+        <button class="btn btn-ghost btn-sm" onclick="resolveComplaint('${r._id}','dismiss','')">✓</button>
+      </div>
+    </div>`).join('')+'</div>';
+}
+
+window.resolveComplaint = async(id, action, targetUid) => {
+  try {
+    if (action==='block' && targetUid) {
+      await requireFreshMoneyRole();
+      await updateDoc(doc(db,'wallets',targetUid),{blocked:true});
+      toast('Пользователь заблокирован','w');
+    }
+    await updateDoc(doc(db,'complaints',id),{status:action==='block'?'resolved_blocked':'dismissed'});
+    toast('Жалоба обработана','s');
+    loadComplaints();
+  } catch(e){toast(cfError(e),'e');}
+};
+
+// ─── TELEGRAM LINKING ───
+window.linkTelegram = async function() {
+  const botUsername = 'BlackVaultBot'; // замените на имя вашего бота
+  const code = 'TG'+Date.now().toString(36).toUpperCase()+Math.random().toString(36).slice(2,5).toUpperCase();
+  await updateDoc(doc(db,'wallets',CU.uid),{tgLinkCode:code});
+  const url = `https://t.me/${botUsername}?start=${code}`;
+  window.open(url,'_blank');
+  toast('Открываем Telegram... После нажмите Start в боте','i',5000);
+};
+
+// ─── OVERRIDE renderSidebar to also show kassa btn ───
+const _baseSidebar = renderSidebar;
+renderSidebar = function() {
+  _baseSidebar();
+  renderSidebarKassa();
+  checkOwnerAlert(UD||{});
+};
+
+// ─── OVERRIDE goto to handle new pages ───
+const _baseGoto = goto;
+goto = function(id) {
+  if (id==='pgKassa') {
+    if (!UD?.kassaAccess && !UD?.isOwner) {
+      toast('Сначала купите доступ в Магазине','w'); _baseGoto('pgShop'); return;
+    }
+    loadKassaPage();
+  }
+  if (id==='pgQrPay') { startQrScanner(); }
+  _baseGoto(id);
+};
+// Also patch window.nav which is used by data-goto elements
+window.nav = goto;
+
+// Show update banner
+setTimeout(maybeShowUpdateBanner, 1500);
+
+
 
 // ─── Global safety net: never leave the user stuck on the loading screen ───
 window.addEventListener('error', e => {
@@ -2666,5 +3244,28 @@ setTimeout(() => {
 
 
 </script>
+
+  <!-- COMPLAINT SHEET -->
+  <div class="overlay" id="sheetComplaint">
+    <div class="sheet">
+      <div class="sheet-head">
+        <span class="sheet-title">⚠️ Жалоба на <span id="complaintTargetName"></span></span>
+        <button class="sheet-close" onclick="closeSheet('sheetComplaint')">✕</button>
+      </div>
+      <input type="hidden" id="complaintTarget"/>
+      <div class="form-group">
+        <label class="form-label">Причина</label>
+        <div id="complaintReasonsList"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Подробности (необязательно)</label>
+        <textarea class="form-input" id="complaintDetails" rows="3" placeholder="Опишите ситуацию..."></textarea>
+      </div>
+      <button class="btn btn-primary" id="btnSendComplaint">Отправить жалобу</button>
+    </div>
+  </div>
+
+  <!-- TG LINK BUTTON inside settings (injected by JS) -->
+
 </body>
 </html>
