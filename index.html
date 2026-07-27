@@ -332,7 +332,7 @@ a{color:var(--btn2);text-decoration:none}
   <div style="display:flex;align-items:flex-start;gap:10px">
     <div style="font-size:22px;flex-shrink:0">🆕</div>
     <div style="flex:1">
-      <div style="font-size:13.5px;font-weight:800;margin-bottom:5px">BlackVault v3.0</div>
+      <div style="font-size:13.5px;font-weight:800;margin-bottom:5px">BlackVault v4.0</div>
       <div style="font-size:12px;color:rgba(255,255,255,.6);line-height:1.6">• QR-оплата через камеру телефона<br>• Раздел «Моя касса» с доходами<br>• Жалобы на пользователей/админов<br>• Кнопки в профилях: блок, заморозка<br>• Telegram-бот для уведомлений<br>• Улучшенная безопасность</div>
     </div>
     <button id="btnCloseBanner" style="background:transparent;border:none;color:rgba(255,255,255,.4);font-size:18px;cursor:pointer;padding:2px;line-height:1">✕</button>
@@ -355,29 +355,7 @@ a{color:var(--btn2);text-decoration:none}
 <div id="toastRoot"></div>
 
 <!-- UPDATE LOG -->
-<div id="updateLogOverlay">
-  <div class="update-log-card">
-    <div class="update-log-icon">🚀</div>
-    <div class="update-log-title">BlackVault обновлён!</div>
-    <div class="update-log-sub">Версия 6.0 — что нового:</div>
-    <div class="update-log-list" id="updateLogList"></div>
-    <button class="btn btn-primary" id="btnCloseUpdateLog">Понятно, спасибо!</button>
-  </div>
-</div>
 
-<div id="authScreen" style="display:none">
-  <div id="pgLogin" class="auth-screen">
-    <div class="auth-card">
-      <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
-      <div class="auth-title">Добро пожаловать</div><div class="auth-sub">Войдите в свой кошелёк</div>
-      <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
-      <div class="form-group"><label class="form-label">Пароль</label><input id="lPass" class="form-input" type="password" placeholder="••••••••"/></div>
-      <button class="btn btn-primary" id="btnLogin">Войти</button>
-      <div class="divider">или</div>
-      <button class="btn btn-google" id="btnGoo1"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16"/> Google</button>
-      <div class="auth-foot">Нет аккаунта? <a id="toReg">Регистрация</a></div>
-    </div>
-  </div>
   <div id="pgReg" class="auth-screen" style="display:none">
     <div class="auth-card">
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
@@ -486,6 +464,8 @@ a{color:var(--btn2);text-decoration:none}
         </div>
         <div class="form-group"><label class="form-label">Комментарий</label><input class="form-input" id="trComment" placeholder="Необязательно..."/></div>
         <div style="background:var(--c-surface2);border-radius:var(--rs);padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px">⏳ Обработка ~5 секунд. Комиссия 0%</div>
+        <button class="wh-action-btn" onclick="goto('pgQrPay')" style="background:rgba(34,210,127,.1);border-color:rgba(34,210,127,.2);color:#22D27F">📱 QR оплата</button>
+        <button class="wh-action-btn" onclick="toggleNotifPanel()" style="position:relative">🔔 <span id="notifDot" style="position:absolute;top:8px;right:8px;width:7px;height:7px;background:var(--c-red);border-radius:50%;border:2px solid var(--bg);display:none"></span></button>
         <button class="btn btn-primary" id="btnTransfer">Отправить</button>
         <div class="pending-box" id="trPending"><div style="font-size:13px;color:#D4C5FF;font-weight:700">⏳ Выполняем перевод...</div><div class="progress-bar"><div class="progress-fill" id="trBar" style="width:0%"></div></div></div>
       </div>
@@ -886,8 +866,12 @@ a{color:var(--btn2);text-decoration:none}
 <div class="overlay" id="sheetNewReport"><div class="sheet"><div class="sheet-handle"></div>
   <div class="sheet-head"><div class="sheet-title">🎧 Новое обращение</div><button class="sheet-close" onclick="closeSheet('sheetNewReport')">✕</button></div>
   <div class="sheet-body">
-    <div class="form-group"><label class="form-label">Тип</label><select class="form-input" id="repType"><option value="question">❓ Вопрос</option><option value="report">🚨 Репорт</option><option value="request">📋 Просьба</option><option value="unban">🔓 Разбан / разморозка</option></select></div>
-    <div class="form-group"><label class="form-label">Тема</label><input class="form-input" id="repSubj" placeholder="Кратко опишите"/></div>
+    <div class="form-group"><label class="form-label">Тип</label><select class="form-input" id="repType"><option value="question">❓ Вопрос</option><option value="report">🚨 Репорт</option><option value="request">📋 Просьба</option><option value="unban">🔓 Разбан / разморозка</option><option value="complaint_admin">⚠️ Жалоба на администратора</option><option value="complaint_user">⚠️ Жалоба на пользователя</option></select></div>
+    <div class="form-group" id="repTargetGroup" style="display:none">
+        <label class="form-label">На кого жалуетесь (ник или BV-код)</label>
+        <input class="form-input" id="repTargetUser" placeholder="@username или BV-XXXXXX"/>
+      </div>
+      <div class="form-group"><label class="form-label">Тема</label><input class="form-input" id="repSubj" placeholder="Кратко опишите"/></div>
     <div class="form-group"><label class="form-label">Подробности</label><textarea class="form-input" id="repBody" placeholder="Подробное описание..."></textarea></div>
     <button class="btn btn-primary" id="btnSendReport">Отправить</button>
   </div></div>
@@ -1359,29 +1343,7 @@ document.getElementById('btnUname').addEventListener('click', async () => {
   await updateDoc(doc(db, 'wallets', CU.uid), { username: n });
 });
 
-// ═══ UPDATE LOG ═══
-const CURRENT_VERSION = '7.0-secure';
-const UPDATE_LOG = [
-  'Архитектура полностью переработана: вся логика денег, ролей и банов теперь выполняется на защищённом сервере (Cloud Functions) — взлом через консоль браузера больше невозможен',
-  'Firestore Security Rules защищают базу данных от прямой записи в баланс, роли и статус блокировки',
-  'Добавлены акции (Apple, Tesla, Google и др.) по реальным ценам',
-  'Новый раздел «Конкурсы» — задания и инвестиционные конкурсы от владельца',
-  'Изъятие денег у пользователей (включая владельца) работает корректно',
-  'Несколько уникальных тегов одновременно, новые роли Медиа и Спонсор',
-  'Функция скрытия должности администратора/владельца',
-  'Исправлен баг с аватаркой под баннером профиля',
-  'Полностью адаптивный интерфейс под телефоны'
-];
-function maybeShowUpdateLog() {
-  const seen = localStorage.getItem('bv_update_seen');
-  if (seen === CURRENT_VERSION) return;
-  document.getElementById('updateLogList').innerHTML = UPDATE_LOG.map((t, i) => `<div class="update-log-item"><span class="num">${i + 1}</span><span>${esc(t)}</span></div>`).join('');
-  document.getElementById('updateLogOverlay').classList.add('show');
-}
-document.getElementById('btnCloseUpdateLog').addEventListener('click', () => {
-  localStorage.setItem('bv_update_seen', CURRENT_VERSION);
-  document.getElementById('updateLogOverlay').classList.remove('show');
-});
+
 
 onAuthStateChanged(auth, async user => {
   document.getElementById('loader').style.display = 'none';
@@ -1417,11 +1379,10 @@ onAuthStateChanged(auth, async user => {
     renderSidebar(); loadHomeAssets(); applyUiTheme();
   });
 
-  renderSidebar(); loadHomeAssets(); loadRecentTx(); applyTheme(); applyUiTheme(); renderColorSwatches();
+  renderSidebar(); loadHomeAssets(); loadRecentTx(); setTimeout(()=>{ if(typeof loadNotifications==='function') loadNotifications(); },1500); applyTheme(); applyUiTheme(); renderColorSwatches();
   if (localStorage.getItem('bv_pin')) showPinWall('verify');
   checkDepositNotifications();
-  maybeShowUpdateLog();
-});
+  });
 
 document.addEventListener('visibilitychange', () => { });
 
@@ -2319,9 +2280,19 @@ document.getElementById('btnSendReport').addEventListener('click', async () => {
   const type = document.getElementById('repType').value;
   const subj = document.getElementById('repSubj').value.trim().slice(0, 100);
   const body = document.getElementById('repBody').value.trim().slice(0, 1000);
+  const targetUser = document.getElementById('repTargetUser')?.value.trim() || '';
   if (!subj) return toast('Введите тему', 'w');
-  await addDoc(collection(db, 'reports'), { uid: CU.uid, username: UD.username, type, subject: subj, status: 'open', messages: [{ uid: CU.uid, username: UD.username, text: body, ts: Date.now() }], createdAt: serverTimestamp(), updatedAt: serverTimestamp() });
-  closeSheet('sheetNewReport'); document.getElementById('repSubj').value = ''; document.getElementById('repBody').value = '';
+  if ((type === 'complaint_admin' || type === 'complaint_user') && !targetUser) return toast('Укажите на кого жалуетесь (ник или BV-код)', 'w');
+  await addDoc(collection(db, 'reports'), {
+    uid: CU.uid, username: UD.username, type, subject: subj, status: 'open',
+    targetUser: targetUser || null,
+    messages: [{ uid: CU.uid, username: UD.username, text: body, ts: Date.now() }],
+    createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+  });
+  closeSheet('sheetNewReport');
+  document.getElementById('repSubj').value = '';
+  document.getElementById('repBody').value = '';
+  const tu = document.getElementById('repTargetUser'); if(tu) tu.value = '';
   toast('Обращение отправлено', 's'); loadReports();
 });
 async function loadReports() {
@@ -2723,12 +2694,26 @@ if (window.electronAPI) {
 
 applyTheme();
 
+// Show target user field for complaints
+document.getElementById('repType')?.addEventListener('change', function() {
+  const isComplaint = this.value === 'complaint_admin' || this.value === 'complaint_user';
+  const group = document.getElementById('repTargetGroup');
+  if (group) group.style.display = isComplaint ? 'block' : 'none';
+  if (this.value === 'complaint_admin') {
+    document.getElementById('repSubj').placeholder = 'Кратко: что сделал администратор?';
+  } else if (this.value === 'complaint_user') {
+    document.getElementById('repSubj').placeholder = 'Кратко: что сделал пользователь?';
+  } else {
+    document.getElementById('repSubj').placeholder = 'Кратко опишите';
+  }
+});
+
 // ════════════════════════════════════════════════════════════
 //  BLACKVAULT v3.0 — SECURITY + QR PAY + KASSA + COMPLAINTS
 // ════════════════════════════════════════════════════════════
 
 // ─── UPDATE BANNER ───
-const BV_VERSION = '3.0';
+const BV_VERSION = '4.0';
 function maybeShowUpdateBanner() {
   if (localStorage.getItem('bv_banner_seen') === BV_VERSION) return;
   const banner = document.getElementById('updateBanner');
@@ -3250,5 +3235,28 @@ setTimeout(() => {
 
   <!-- TG LINK BUTTON inside settings (injected by JS) -->
 
+
+  <div class="overlay" id="sheetKassaWithdraw">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <div class="sheet-title">💸 Вывести деньги с кассы</div>
+        <button class="sheet-close" onclick="closeSheet('sheetKassaWithdraw')">✕</button>
+      </div>
+      <div style="font-size:13px;color:var(--c-text2);margin-bottom:16px;line-height:1.6">Деньги с продаж уже на вашем кошельке. Введите сумму для записи операции вывода.</div>
+      <div class="form-group"><label class="form-label">Сумма (UAH)</label><input class="form-input" id="kassaWithdrawAmt" type="number" placeholder="0.00"/></div>
+      <button class="btn btn-primary" onclick="withdrawKassa()">Вывести</button>
+    </div>
+  </div>
+  <div class="overlay" id="modalContestEntries">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head">
+        <div class="sheet-title" id="contestEntriesTitle">👥 Участники конкурса</div>
+        <button class="sheet-close" onclick="closeSheet('modalContestEntries')">✕</button>
+      </div>
+      <div id="contestEntriesList" style="max-height:65vh;overflow-y:auto"><div class="empty-state"><span class="emo">👥</span>Загрузка...</div></div>
+    </div>
+  </div>
 </body>
 </html>
