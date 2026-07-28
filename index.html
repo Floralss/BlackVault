@@ -3192,6 +3192,15 @@ setTimeout(maybeShowUpdateBanner, 1500);
 
 
 // ─── Global safety net: never leave the user stuck on the loading screen ───
+window.addEventListener('unhandledrejection', e => {
+  console.error('Unhandled promise rejection:', e.reason);
+  const loader = document.getElementById('loader');
+  if (loader && loader.style.display !== 'none') {
+    loader.style.display = 'none';
+    const msg = e.reason?.message || String(e.reason) || 'Неизвестная ошибка';
+    document.body.insertAdjacentHTML('beforeend', '<div style="position:fixed;inset:0;background:#07070F;z-index:99999;padding:40px;font-family:Inter,sans-serif;color:#fff;overflow:auto"><h2 style="color:#FF4D6A;font-size:18px;margin-bottom:12px">⚠️ Ошибка загрузки</h2><pre style="color:#8080AA;font-size:12px;white-space:pre-wrap;line-height:1.7;background:rgba(255,255,255,.05);padding:14px;border-radius:12px">' + msg + '</pre><button onclick="location.reload()" style="margin-top:18px;padding:12px 24px;background:#7C5CFC;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700">Перезагрузить</button></div>');
+  }
+});
 window.addEventListener('error', e => {
   console.error('Global error:', e.error || e.message);
   const loader = document.getElementById('loader');
@@ -3206,7 +3215,7 @@ setTimeout(() => {
     loader.style.display = 'none';
     document.body.insertAdjacentHTML('beforeend', `<div style="position:fixed;inset:0;background:#0D0D13;z-index:99999;padding:40px;font-family:Inter,sans-serif;color:#fff;overflow:auto"><h2 style="color:#FFB23E;font-size:20px;margin-bottom:12px">⏳ Загрузка занимает дольше обычного</h2><p style="color:#9C9CC0;font-size:14px;line-height:1.6;margin-bottom:16px">Проверьте интернет-соединение или попробуйте перезагрузить страницу. Если проблема повторяется — возможно, временно недоступен Firebase.</p><button onclick="location.reload()" style="padding:12px 24px;background:#7C5CFC;color:#fff;border:none;border-radius:12px;cursor:pointer;font-size:14px;font-weight:700">Перезагрузить</button></div>`);
   }
-}, 12000);
+}, 7000);
 
 
 
