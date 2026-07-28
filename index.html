@@ -354,27 +354,48 @@ a{color:var(--btn2);text-decoration:none}
 
 <div id="toastRoot"></div>
 
-<!-- UPDATE LOG -->
-
+<!-- AUTH -->
+<div id="authScreen">
+  <div id="pgLogin" class="auth-screen" style="display:none">
+    <div class="auth-box">
+      <div class="auth-card">
+        <div class="auth-brand"><div class="auth-brand-ico">🔐</div><div class="auth-brand-name">BlackVault</div></div>
+        <div class="auth-title">Вход</div>
+        <div class="auth-sub">Войдите в свой аккаунт</div>
+        <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
+        <div class="form-group"><label class="form-label">Пароль</label><input id="lPass" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+        <button class="btn btn-primary" id="btnLogin">Войти</button>
+        <div class="divider">или</div>
+        <button class="btn btn-secondary" id="btnGoo1" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt=""/> Google</button>
+        <div class="auth-foot">Нет аккаунта? <a id="toReg">Создать</a></div>
+      </div>
+    </div>
+  </div>
   <div id="pgReg" class="auth-screen" style="display:none">
-    <div class="auth-card">
-      <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
-      <div class="auth-title">Создать аккаунт</div><div class="auth-sub">Присоединяйтесь к BlackVault</div>
-      <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
-      <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов"/></div>
-      <div class="form-group"><label class="form-label">Повтор пароля</label><input id="rPass2" class="form-input" type="password" placeholder="••••••••"/></div>
-      <button class="btn btn-primary" id="btnReg">Создать аккаунт</button>
-      <div class="divider">или</div>
-      <button class="btn btn-google" id="btnGoo2"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16"/> Google</button>
-      <div class="auth-foot">Уже есть аккаунт? <a id="toLg">Войти</a></div>
+    <div class="auth-box">
+      <div class="auth-card">
+        <div class="auth-brand"><div class="auth-brand-ico">🔐</div><div class="auth-brand-name">BlackVault</div></div>
+        <div class="auth-title">Создать аккаунт</div>
+        <div class="auth-sub">Присоединяйтесь к BlackVault</div>
+        <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
+        <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов" autocomplete="new-password"/></div>
+        <div class="form-group"><label class="form-label">Повтор пароля</label><input id="rPass2" class="form-input" type="password" placeholder="••••••••" autocomplete="new-password"/></div>
+        <button class="btn btn-primary" id="btnReg">Создать аккаунт</button>
+        <div class="divider">или</div>
+        <button class="btn btn-secondary" id="btnGoo2" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt=""/> Google</button>
+        <div class="auth-foot">Уже есть аккаунт? <a id="toLg">Войти</a></div>
+      </div>
     </div>
   </div>
   <div id="pgUname" class="auth-screen" style="display:none">
-    <div class="auth-card">
-      <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
-      <div class="auth-title">Ваш никнейм</div><div class="auth-sub">Выберите уникальное имя</div>
-      <div class="form-group"><label class="form-label">Никнейм</label><input id="unameI" class="form-input" maxlength="24" placeholder="CryptoKing"/></div>
-      <button class="btn btn-primary" id="btnUname">Продолжить →</button>
+    <div class="auth-box">
+      <div class="auth-card">
+        <div class="auth-brand"><div class="auth-brand-ico">🔐</div><div class="auth-brand-name">BlackVault</div></div>
+        <div class="auth-title">Ваш никнейм</div>
+        <div class="auth-sub">Выберите уникальное имя</div>
+        <div class="form-group"><label class="form-label">Никнейм</label><input id="unameI" class="form-input" maxlength="24" placeholder="CryptoKing"/></div>
+        <button class="btn btn-primary" id="btnUname">Продолжить →</button>
+      </div>
     </div>
   </div>
 </div>
@@ -1308,36 +1329,51 @@ window.goBack = function () { goto(prevPage || 'pgWallet'); };
 window.nav = goto;
 document.querySelectorAll('[data-goto]').forEach(el => el.addEventListener('click', () => goto(el.getAttribute('data-goto'))));
 
-function closeSB() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbOverlay').classList.remove('open'); }
-document.getElementById('mobMenuBtn').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sbOverlay').classList.toggle('open'); });
-document.getElementById('sbOverlay').addEventListener('click', closeSB);
-document.getElementById('btnLogout').addEventListener('click', () => signOut(auth).then(() => toast('Вышли из аккаунта', 'i')));
+function closeSB() {
+  document.getElementById('sidebar')?.classList.remove('open');
+  document.getElementById('sbOverlay')?.classList.remove('open');
+}
+document.getElementById('mobMenuBtn')?.addEventListener('click', () => {
+  document.getElementById('sidebar')?.classList.toggle('open');
+  document.getElementById('sbOverlay')?.classList.toggle('open');
+});
+document.getElementById('sbOverlay')?.addEventListener('click', closeSB);
+document.getElementById('btnLogout')?.addEventListener('click', () => signOut(auth).then(() => toast('Вышли из аккаунта', 'i')));
 
 // ═══ AUTH ═══
-function showAuth(id) { ['pgLogin', 'pgReg', 'pgUname'].forEach(p => document.getElementById(p).style.display = p === id ? 'flex' : 'none'); document.getElementById('authScreen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; }
-document.getElementById('toReg').addEventListener('click', () => showAuth('pgReg'));
-document.getElementById('toLg').addEventListener('click', () => showAuth('pgLogin'));
+function showAuth(id) {
+  ['pgLogin', 'pgReg', 'pgUname'].forEach(p => {
+    const el = document.getElementById(p);
+    if (el) el.style.display = p === id ? 'flex' : 'none';
+  });
+  const auth = document.getElementById('authScreen');
+  if (auth) auth.style.display = 'flex';
+  const app = document.getElementById('app');
+  if (app) app.style.display = 'none';
+}
+document.getElementById('toReg')?.addEventListener('click', () => showAuth('pgReg'));
+document.getElementById('toLg')?.addEventListener('click', () => showAuth('pgLogin'));
 
-document.getElementById('btnLogin').addEventListener('click', async () => {
+document.getElementById('btnLogin')?.addEventListener('click', async () => {
   if (Date.now() < loginAttempts.until) return toast(`Подождите ${Math.ceil((loginAttempts.until - Date.now()) / 1000)}с`, 'e');
-  const e = document.getElementById('lEmail').value.trim(), p = document.getElementById('lPass').value;
+  const e = document.getElementById('lEmail')?.value.trim(), p = document.getElementById('lPass')?.value;
   if (!e || !p) return toast('Заполните поля', 'w');
   try { await signInWithEmailAndPassword(auth, e, p); loginAttempts.n = 0; }
   catch { loginAttempts.n++; if (loginAttempts.n >= 5) { loginAttempts.until = Date.now() + 60000; loginAttempts.n = 0; } toast('Неверный email или пароль', 'e'); }
 });
-document.getElementById('btnReg').addEventListener('click', async () => {
-  const e = document.getElementById('rEmail').value.trim(), p = document.getElementById('rPass').value, p2 = document.getElementById('rPass2').value;
+document.getElementById('btnReg')?.addEventListener('click', async () => {
+  const e = document.getElementById('rEmail')?.value.trim(), p = document.getElementById('rPass')?.value, p2 = document.getElementById('rPass2')?.value;
   if (!e || !p) return toast('Заполните поля', 'w');
   if (p !== p2) return toast('Пароли не совпадают', 'e');
   if (p.length < 6) return toast('Мин. 6 символов', 'w');
   try { await createUserWithEmailAndPassword(auth, e, p); } catch (err) { toast(err.code === 'auth/email-already-in-use' ? 'Email занят' : 'Ошибка', 'e'); }
 });
 async function goo() { try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch { toast('Ошибка Google', 'e'); } }
-document.getElementById('btnGoo1').addEventListener('click', goo);
-document.getElementById('btnGoo2').addEventListener('click', goo);
-document.getElementById('btnUname').addEventListener('click', async () => {
-  const n = document.getElementById('unameI').value.trim();
-  if (n.length < 2) return toast('Мин. 2 символа', 'w');
+document.getElementById('btnGoo1')?.addEventListener('click', goo);
+document.getElementById('btnGoo2')?.addEventListener('click', goo);
+document.getElementById('btnUname')?.addEventListener('click', async () => {
+  const n = document.getElementById('unameI')?.value.trim();
+  if (!n || n.length < 2) return toast('Мин. 2 символа', 'w');
   if (n.length > 24) return toast('Макс. 24', 'w');
   if (!/^[\w\sа-яА-ЯёЁ\-]+$/.test(n)) return toast('Недопустимые символы', 'w');
   await updateDoc(doc(db, 'wallets', CU.uid), { username: n });
