@@ -104,7 +104,15 @@ select.form-input{cursor:pointer;appearance:none;background-image:url("data:imag
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--c-border)}
 
 /* LAYOUT */
-#app{height:100vh;display:flex;background:radial-gradient(ellipse at 8% 0%,rgba(124,92,252,.09),transparent 45%),var(--bg)}
+#app{
+  height:100vh;display:flex;
+  background:radial-gradient(ellipse at 8% 0%,rgba(124,92,252,.09),transparent 45%),var(--bg);
+  animation:appIn .4s cubic-bezier(.22,1,.36,1) both;
+}
+@keyframes appIn{
+  from{opacity:0}
+  to{opacity:1}
+}
 
 /* SIDEBAR — hard premium */
 #sidebar{
@@ -186,11 +194,32 @@ select.form-input{cursor:pointer;appearance:none;background-image:url("data:imag
 #sbOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:499;backdrop-filter:blur(4px)}
 #sbOverlay.open{display:block}
 
-/* PAGES */
-#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
-.page{display:none;flex:1;flex-direction:column;overflow:hidden}
-.page.on{display:flex}
-.ph{padding:14px 18px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;background:rgba(7,7,15,.75);backdrop-filter:blur(20px)}
+/* PAGES + transitions */
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative}
+.page{
+  display:none;flex:1;flex-direction:column;overflow:hidden;
+  opacity:0;transform:translateY(12px);
+}
+.page.on{
+  display:flex;
+  animation:pageIn .32s cubic-bezier(.22,1,.36,1) forwards;
+}
+.page.page-out{
+  display:flex;animation:pageOut .16s ease forwards;pointer-events:none;
+}
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(14px) scale(.985)}
+  to{opacity:1;transform:none}
+}
+@keyframes pageOut{
+  from{opacity:1;transform:none}
+  to{opacity:0;transform:translateY(-6px) scale(.99)}
+}
+.ph{
+  padding:14px 18px;border-bottom:1px solid var(--c-border);
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  flex-shrink:0;background:rgba(7,7,15,.75);backdrop-filter:blur(20px);
+}
 .ph-top{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px}
 .ph-title{font-size:20px;font-weight:800;letter-spacing:-.5px}
 .ph-sub{font-size:12.5px;color:var(--c-text2);margin-top:2px}
@@ -198,6 +227,39 @@ select.form-input{cursor:pointer;appearance:none;background-image:url("data:imag
 /* PAGE BODY SCROLL */
 .page-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 18px 28px;-webkit-overflow-scrolling:touch}
 @media(max-width:900px){.page-body{padding:12px 14px 24px}}
+
+/* Stagger on page enter */
+.page.on .wallet-hero,
+.page.on .tg-promo,
+.page.on .sec,
+.page.on .auth-card{
+  animation:fadeUp .4s cubic-bezier(.22,1,.36,1) both;
+}
+.page.on .tg-promo{animation-delay:.05s}
+.page.on .sec:nth-of-type(1){animation-delay:.07s}
+.page.on .sec:nth-of-type(2){animation-delay:.12s}
+.page.on .sec:nth-of-type(3){animation-delay:.16s}
+@keyframes fadeUp{
+  from{opacity:0;transform:translateY(14px)}
+  to{opacity:1;transform:none}
+}
+
+/* List hover slide */
+.asset-row,.tx-row,.report-item,.stock-row,.lb-row{
+  transition:background .15s,padding-left .2s cubic-bezier(.22,1,.36,1);
+}
+.asset-row:hover,.tx-row:hover,.report-item:hover,.stock-row:hover,.lb-row:hover{
+  padding-left:6px;
+}
+
+/* Auth / loader */
+.auth-card{animation:fadeUp .45s cubic-bezier(.22,1,.36,1) both}
+#loader{transition:opacity .35s ease,visibility .35s}
+#loader.hide{opacity:0;visibility:hidden;pointer-events:none}
+
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
 
 /* WALLET — Telegram style */
 .wallet-hero{
@@ -1500,36 +1562,71 @@ window.toast = function (msg, t, dur) {
 };
 
 window.openSheet = function (id) {
-  document.getElementById(id).classList.add('on');
+  const el = document.getElementById(id);
+  if (!el) return;
+  el.classList.add('on');
   if (id === 'sheetCreateTag') { renderColorPicker('ctColors', TAG_COLORS, c => { selectedCtColor = c; updateCtPreview(); }); renderPayRow('ctPayRow', 150, c => ctPayCur = c); updateCtPreview(); }
   if (id === 'sheetCustomizeTag') setupCustomizeTagSheet();
   if (id === 'sheetCustomizeUI') setupUiSheet();
   if (id === 'sheetAvatarFrame') setupFrameSheet();
   if (id === 'sheetVip') renderPayRow('vipPayRow', 150, c => vipPayCur = c);
 };
-window.closeSheet = function (id) { document.getElementById(id).classList.remove('on'); };
+window.closeSheet = function (id) {
+  const el = document.getElementById(id);
+  if (el) el.classList.remove('on');
+};
 document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on'); }));
 
 // ═══ NAV ═══
+let _navLock = false;
 function goto(id) {
-  if (!id) return;
+  if (!id || _navLock) return;
+  const pg = document.getElementById(id);
+  if (!pg) return;
   const cur = document.querySelector('.page.on');
-  if (cur && cur.id !== id) prevPage = cur.id;
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
-  const pg = document.getElementById(id); if (pg) pg.classList.add('on');
-  document.querySelectorAll('[data-goto]').forEach(el => el.classList.toggle('on', el.getAttribute('data-goto') === id));
-  closeSB();
-  if (id === 'pgLeaderboard') loadLB();
-  if (id === 'pgHistory') loadHistory();
-  if (id === 'pgChecks') loadMyChecks();
-  if (id === 'pgSupport') loadReports();
-  if (id === 'pgAdmin') loadAdminData();
-  if (id === 'pgDeposit') loadMyDeposits();
-  if (id === 'pgWallet') { loadRecentTx(); loadHomeAssets(); }
-  if (id === 'pgAssets') loadAssets();
-  if (id === 'pgShop') loadShopState();
-  if (id === 'pgStocks') loadStocks();
-  if (id === 'pgContests') loadContests();
+  if (cur && cur.id === id) return;
+  if (cur) prevPage = cur.id;
+
+  const activate = () => {
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('on', 'page-out');
+    });
+    // force reflow so animation restarts
+    void pg.offsetWidth;
+    pg.classList.add('on');
+    document.querySelectorAll('[data-goto]').forEach(el =>
+      el.classList.toggle('on', el.getAttribute('data-goto') === id)
+    );
+    closeSB();
+    // scroll page body to top
+    const body = pg.querySelector('.page-body');
+    if (body) body.scrollTop = 0;
+
+    if (id === 'pgLeaderboard') loadLB();
+    if (id === 'pgHistory') loadHistory();
+    if (id === 'pgChecks') loadMyChecks();
+    if (id === 'pgSupport') loadReports();
+    if (id === 'pgAdmin') loadAdminData();
+    if (id === 'pgDeposit') loadMyDeposits();
+    if (id === 'pgWallet') { loadRecentTx(); loadHomeAssets(); }
+    if (id === 'pgAssets') loadAssets();
+    if (id === 'pgShop') loadShopState();
+    if (id === 'pgStocks') loadStocks();
+    if (id === 'pgContests') loadContests();
+  };
+
+  if (cur && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    _navLock = true;
+    cur.classList.remove('on');
+    cur.classList.add('page-out');
+    setTimeout(() => {
+      cur.classList.remove('page-out');
+      activate();
+      _navLock = false;
+    }, 150);
+  } else {
+    activate();
+  }
 }
 window.goBack = function () { goto(prevPage || 'pgWallet'); };
 window.nav = goto;
@@ -1588,7 +1685,8 @@ document.getElementById('btnUname')?.addEventListener('click', async () => {
 
 
 onAuthStateChanged(auth, async user => {
-  document.getElementById('loader').style.display = 'none';
+  const loader = document.getElementById('loader');
+  if (loader) { loader.classList.add('hide'); setTimeout(() => { loader.style.display = 'none'; }, 350); }
   if (UNSUB) { UNSUB(); UNSUB = null; }
   if (!user) { CU = null; UD = null; document.getElementById('app').style.display = 'none'; showAuth('pgLogin'); return; }
   CU = user;
