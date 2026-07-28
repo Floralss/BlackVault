@@ -124,27 +124,91 @@ select.form-input{cursor:pointer}
 #main{flex:1;overflow:hidden;display:flex;flex-direction:column}
 .page{display:none;flex:1;flex-direction:column;overflow:hidden}
 .page.on{display:flex}
-.ph{padding:16px 22px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;background:rgba(10,10,22,.6);backdrop-filter:blur(20px)}
+.ph{padding:14px 18px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;background:rgba(7,7,15,.75);backdrop-filter:blur(20px)}
 .ph-top{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px}
-.ph-title{font-size:19px;font-weight:900;letter-spacing:-.4px}
+.ph-title{font-size:20px;font-weight:800;letter-spacing:-.5px}
 .ph-sub{font-size:12.5px;color:var(--c-text2);margin-top:2px}
 
-/* WALLET HERO */
-.wallet-hero{background:linear-gradient(135deg,rgba(124,92,252,.12),rgba(90,70,200,.05));border:1px solid rgba(124,92,252,.18);border-radius:var(--r);padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
-.wallet-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(124,92,252,.18),transparent 70%);pointer-events:none}
-.wh-label{font-size:11px;font-weight:800;color:var(--c-text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
-#wBalInt{font-size:40px;font-weight:900;letter-spacing:-1.5px;background:linear-gradient(135deg,#fff 40%,var(--btn2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-#wBalDec{font-size:26px;font-weight:900;background:linear-gradient(135deg,#fff 40%,var(--btn2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.wh-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
-.wh-action-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;background:rgba(255,255,255,.07);border:1px solid var(--c-border2);border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;transition:.18s;color:var(--c-text);font-family:var(--f)}
-.wh-action-btn:hover{background:rgba(124,92,252,.15);border-color:rgba(124,92,252,.3);color:var(--btn2)}
+/* PAGE BODY SCROLL */
+.page-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 18px 28px;-webkit-overflow-scrolling:touch}
+@media(max-width:900px){.page-body{padding:12px 14px 24px}}
+
+/* WALLET — Telegram style */
+.wallet-hero{
+  background:transparent;border:none;border-radius:0;padding:8px 0 4px;
+  margin-bottom:0;position:relative;overflow:visible;text-align:center;
+}
+.wallet-hero::before{display:none}
+.wh-label{font-size:13px;font-weight:600;color:var(--c-text2);text-transform:none;letter-spacing:0;margin-bottom:10px}
+.wh-amount{
+  display:flex;align-items:baseline;justify-content:center;gap:2px;
+  font-size:42px;font-weight:800;letter-spacing:-1.8px;line-height:1.1;
+  color:#fff;margin-bottom:6px;
+}
+#wBalInt{font-size:42px;font-weight:800;letter-spacing:-1.8px;background:none;-webkit-background-clip:unset;-webkit-text-fill-color:#fff;color:#fff}
+#wBalDec{font-size:28px;font-weight:700;opacity:.55;background:none;-webkit-background-clip:unset;-webkit-text-fill-color:#fff;color:#fff}
+.wh-sub{font-size:13px;color:var(--c-text2);margin-bottom:4px;font-weight:500}
+.wh-code{
+  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--c-text2);
+  background:rgba(255,255,255,.05);border:1px solid var(--c-border);border-radius:20px;
+  padding:5px 12px;margin:8px auto 18px;cursor:pointer;font-family:var(--f);transition:.15s;
+}
+.wh-code:hover{background:rgba(255,255,255,.08);color:var(--c-text)}
+
+/* Telegram-style action grid */
+.wh-actions{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
+  margin:0 auto 18px;max-width:360px;
+}
+.wh-btn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
+  background:rgba(255,255,255,.07);border:none;border-radius:16px;
+  padding:14px 6px 12px;cursor:pointer;transition:all .18s;font-family:var(--f);
+  color:var(--c-text);min-height:78px;font-size:12px;font-weight:600;
+}
+.wh-btn:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
+.wh-btn:active{transform:scale(.96)}
+.wh-btn.primary{background:rgba(124,92,252,.2)}
+.wh-btn.primary:hover{background:rgba(124,92,252,.3)}
+.wh-btn.dis{opacity:.45;pointer-events:none}
+.wh-btn-icon{
+  width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:20px;background:rgba(255,255,255,.08);
+}
+.wh-btn.primary .wh-btn-icon{background:rgba(124,92,252,.3)}
+
+/* Promo banner (Telegram style) */
+.tg-promo{
+  display:flex;align-items:center;gap:12px;
+  background:linear-gradient(135deg,#6B4EFF 0%,#9B7FFF 55%,#C084FC 100%);
+  border-radius:16px;padding:14px 16px;margin-bottom:16px;cursor:pointer;
+  box-shadow:0 8px 24px rgba(107,78,255,.28);transition:.18s;
+}
+.tg-promo:hover{filter:brightness(1.06);transform:translateY(-1px)}
+.tg-promo-text{flex:1;min-width:0}
+.tg-promo-title{font-size:14px;font-weight:700;color:#fff;line-height:1.3}
+.tg-promo-sub{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
+.tg-promo-ico{font-size:28px;flex-shrink:0;line-height:1}
+
+.tg-tabs{
+  display:inline-flex;background:rgba(255,255,255,.06);border-radius:12px;padding:3px;margin:0 auto 14px;gap:2px;
+}
+.tg-tab{
+  padding:7px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;
+  color:var(--c-text2);transition:.15s;border:none;background:transparent;font-family:var(--f);
+}
+.tg-tab.on{background:rgba(255,255,255,.12);color:#fff}
+
 .blocked-banner{background:rgba(255,77,106,.1);border:1px solid rgba(255,77,106,.22);border-radius:var(--rs);padding:11px 14px;font-size:13px;color:#FF8FA3;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:12px}
 
 /* CARDS / SECTIONS */
 .card-p{padding:18px}
-.sec{background:rgba(255,255,255,.04);border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;margin-bottom:13px}
-.sec-head{padding:13px 17px 11px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:10px}
-.sec-title{font-size:13.5px;font-weight:800;letter-spacing:-.2px}
+.sec{background:rgba(255,255,255,.04);border:1px solid var(--c-border);border-radius:18px;overflow:hidden;margin-bottom:12px}
+.sec-head{padding:12px 16px 10px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sec-title{font-size:14px;font-weight:700;letter-spacing:-.2px}
+.sec-link{font-size:13px;font-weight:600;color:var(--btn2);cursor:pointer}
+.sec-link:hover{opacity:.85}
+.asset-list{padding:0 14px}
 
 /* ASSETS */
 .asset-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--c-border);cursor:pointer;transition:.15s}
@@ -448,23 +512,70 @@ a{color:var(--btn2);text-decoration:none}
   <div id="main">
 
     <div class="page on" id="pgWallet">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title" id="homeGreet">Кошелёк</div><div class="ph-sub" id="homeDate"></div></div><div id="homeBadge"></div></div></div>
-      <div id="homeBlockedBanner" style="display:none;background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);border-radius:var(--rs);padding:13px 17px;margin-bottom:17px;font-size:13px;color:#FF8FA3;font-weight:600">🔒 Кошелёк заблокирован. <span style="text-decoration:underline;cursor:pointer" data-goto="pgSupport">Поддержка</span></div>
-      <div class="wallet-hero">
-        <div class="wh-label">Общий баланс</div>
-        <div class="wh-amount"><span>$</span><span id="wBalInt">0</span><span id="wBalDec" style="opacity:.6">.00</span></div>
-        <div class="wh-sub" id="wSub">Кошелёк BlackVault</div>
-        <div class="wh-code" id="wCode" onclick="copyCode()">🔑 <span id="wCodeTxt">BV-??????</span> <span style="opacity:.5">⎘</span></div>
-        <div class="wh-actions">
-          <div class="wh-btn" data-goto="pgDeposit"><span class="wh-btn-icon">📥</span>Пополнить</div>
-          <div class="wh-btn primary" data-goto="pgTransfer"><span class="wh-btn-icon">↗️</span>Перевод</div>
-          <div class="wh-btn dis" onclick="toast('Вывод временно недоступен','w')"><span class="wh-btn-icon">📤</span>Вывести</div>
-          <div class="wh-btn" data-goto="pgExchange"><span class="wh-btn-icon">💱</span>Обмен</div>
-          <div class="wh-btn" data-goto="pgChecks"><span class="wh-btn-icon">🧾</span>Чек</div>
+      <div class="ph">
+        <div class="ph-top">
+          <div style="display:flex;align-items:center;gap:10px">
+            <div>
+              <div class="ph-title" id="homeGreet">Кошелёк</div>
+              <div class="ph-sub" id="homeDate" style="font-size:12px;color:var(--c-text2);margin-top:1px"></div>
+            </div>
+            <span id="homeBadge"></span>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px">
+            <button class="btn btn-ghost btn-sm" onclick="goto('pgQrPay')" title="QR-оплата" style="width:36px;height:36px;padding:0;border-radius:10px">📱</button>
+            <button class="btn btn-ghost btn-sm" onclick="toggleNotifPanel()" title="Уведомления" style="width:36px;height:36px;padding:0;border-radius:10px;position:relative">🔔<span id="notifDot" style="position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--c-red);border-radius:50%;border:2px solid var(--bg);display:none"></span></button>
+          </div>
         </div>
       </div>
-      <div class="sec"><div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все</span></div><div class="asset-list" id="homeAssets"></div></div>
-      <div class="sec"><div class="sec-head"><span class="sec-title">Последние операции</span><span class="sec-link" data-goto="pgHistory">Все</span></div><div id="homeTx"><div class="empty-state"><span class="emo">📭</span>Операций пока нет</div></div></div>
+      <div class="page-body">
+        <div id="homeBlockedBanner" style="display:none;background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:#FF8FA3;font-weight:600">🔒 Кошелёк заблокирован. <span style="text-decoration:underline;cursor:pointer" data-goto="pgSupport">Поддержка</span></div>
+
+        <div class="wallet-hero">
+          <div class="tg-tabs">
+            <button class="tg-tab on" type="button">Wallet</button>
+            <button class="tg-tab" type="button" data-goto="pgStocks">Акции</button>
+          </div>
+          <div class="wh-label">Общий баланс</div>
+          <div class="wh-amount"><span style="font-size:28px;opacity:.7;margin-right:2px">$</span><span id="wBalInt">0</span><span id="wBalDec">.00</span></div>
+          <div class="wh-sub" id="wSub">BlackVault</div>
+          <div class="wh-code" id="wCode" onclick="copyCode()">🔑 <span id="wCodeTxt">BV-??????</span> <span style="opacity:.5">⎘</span></div>
+
+          <div class="wh-actions">
+            <div class="wh-btn primary" data-goto="pgTransfer"><span class="wh-btn-icon">↗</span>Перевести</div>
+            <div class="wh-btn" data-goto="pgDeposit"><span class="wh-btn-icon">＋</span>Пополнить</div>
+            <div class="wh-btn" onclick="toast('Вывод временно недоступен','w')"><span class="wh-btn-icon">↑</span>Вывести</div>
+            <div class="wh-btn" data-goto="pgExchange"><span class="wh-btn-icon">⇄</span>Обменять</div>
+          </div>
+        </div>
+
+        <div class="tg-promo" data-goto="pgContests">
+          <div class="tg-promo-text">
+            <div class="tg-promo-title">Участвуйте в конкурсах</div>
+            <div class="tg-promo-sub">Призы и бонусы внутри BlackVault</div>
+          </div>
+          <div class="tg-promo-ico">🎉</div>
+        </div>
+
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все ›</span></div>
+          <div class="asset-list" id="homeAssets"></div>
+        </div>
+        <div class="sec">
+          <div class="sec-head"><span class="sec-title">Последние операции</span><span class="sec-link" data-goto="pgHistory">Все ›</span></div>
+          <div id="homeTx" style="padding:0 14px"><div class="empty-state"><span class="emo">📭</span>Операций пока нет</div></div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
+          <div class="wh-btn" data-goto="pgChecks" style="min-height:64px;flex-direction:row;gap:10px;padding:12px 14px;justify-content:flex-start">
+            <span class="wh-btn-icon" style="width:36px;height:36px;font-size:18px">🧾</span>
+            <span style="text-align:left;font-size:13px">Чеки</span>
+          </div>
+          <div class="wh-btn" data-goto="pgQrPay" style="min-height:64px;flex-direction:row;gap:10px;padding:12px 14px;justify-content:flex-start">
+            <span class="wh-btn-icon" style="width:36px;height:36px;font-size:18px">📱</span>
+            <span style="text-align:left;font-size:13px">QR-оплата</span>
+          </div>
+        </div>
+      </div>
     </div>
 
     <div class="page" id="pgAssets">
@@ -484,9 +595,7 @@ a{color:var(--btn2);text-decoration:none}
           <div class="form-hint" id="trBalHint">Доступно: —</div>
         </div>
         <div class="form-group"><label class="form-label">Комментарий</label><input class="form-input" id="trComment" placeholder="Необязательно..."/></div>
-        <div style="background:var(--c-surface2);border-radius:var(--rs);padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px">⏳ Обработка ~5 секунд. Комиссия 0%</div>
-        <button class="wh-action-btn" onclick="goto('pgQrPay')" style="background:rgba(34,210,127,.1);border-color:rgba(34,210,127,.2);color:#22D27F">📱 QR оплата</button>
-        <button class="wh-action-btn" onclick="toggleNotifPanel()" style="position:relative">🔔 <span id="notifDot" style="position:absolute;top:8px;right:8px;width:7px;height:7px;background:var(--c-red);border-radius:50%;border:2px solid var(--bg);display:none"></span></button>
+        <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:16px;border:1px solid var(--c-border)">⏳ Обработка ~5 секунд · Комиссия 0%</div>
         <button class="btn btn-primary" id="btnTransfer">Отправить</button>
         <div class="pending-box" id="trPending"><div style="font-size:13px;color:#D4C5FF;font-weight:700">⏳ Выполняем перевод...</div><div class="progress-bar"><div class="progress-fill" id="trBar" style="width:0%"></div></div></div>
       </div>
@@ -867,11 +976,11 @@ a{color:var(--btn2);text-decoration:none}
 
 <div id="mobNav">
   <div class="mob-items">
-    <div class="mob-item on" data-goto="pgWallet"><div class="ic">💳</div>Кошелёк</div>
-    <div class="mob-item" data-goto="pgTransfer"><div class="ic">↗️</div>Перевод</div>
-    <div class="mob-item" data-goto="pgShop"><div class="ic">🛍</div>Магазин</div>
-    <div class="mob-item" data-goto="pgLeaderboard"><div class="ic">🏆</div>Forbes</div>
-    <div class="mob-item" data-goto="pgSettings"><div class="ic">⚙️</div>Настройки</div>
+    <div class="mob-item on" data-goto="pgWallet"><div class="ic">💳</div>Wallet</div>
+    <div class="mob-item" data-goto="pgExchange"><div class="ic">📈</div>Обмен</div>
+    <div class="mob-item" data-goto="pgDeposit"><div class="ic">💰</div>Пополнить</div>
+    <div class="mob-item" data-goto="pgContests"><div class="ic">🎁</div>Бонусы</div>
+    <div class="mob-item" data-goto="pgSettings"><div class="ic">⚙️</div>Ещё</div>
   </div>
 </div>
 
