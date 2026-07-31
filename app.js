@@ -3189,3 +3189,18 @@ setInterval(()=>{
   }catch(e){}
 }, 2000);
 console.log('[BV] auth+ach v16');
+
+// FINAL v17 safety
+window.openSheet = function(id){
+  try{
+    const el = document.getElementById(id);
+    if(!el){ console.warn('sheet missing', id); if(window.toast) toast('Раздел недоступен','w'); return; }
+    el.classList.add('on');
+    if(id==='sheetAccounts' && typeof renderAccountsList==='function') renderAccountsList();
+    if(id==='sheetCreateTag' && typeof renderColorPicker==='function'){
+      try{ renderColorPicker('ctColors', TAG_COLORS, c=>{ selectedCtColor=c; updateCtPreview(); }); }catch(e){}
+    }
+  }catch(e){ console.error(e); }
+};
+window.closeSheet = function(id){ try{ document.getElementById(id)?.classList.remove('on'); }catch(e){} };
+console.log('[BV] final v17');
