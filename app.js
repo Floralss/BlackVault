@@ -2653,3 +2653,141 @@ document.getElementById('mobMenuBtn')?.addEventListener('click', function(e){
 });
 document.getElementById('sbOverlay')?.addEventListener('click', closeSB);
 
+
+
+// ===== SETTINGS FIX v10 — all handlers on window + delegation =====
+window.togglePrivacy = function(){
+  const on = localStorage.getItem('bv_privacy') === '1';
+  localStorage.setItem('bv_privacy', on ? '0' : '1');
+  document.getElementById('privacyToggle')?.classList.toggle('on', !on);
+  if(!on){
+    const bi=document.getElementById('wBalInt'); if(bi){ bi.dataset.real=bi.textContent; bi.textContent='••••'; }
+    const bd=document.getElementById('wBalDec'); if(bd){ bd.dataset.real=bd.textContent; bd.textContent=''; }
+  } else {
+    location.reload();
+  }
+  if(typeof toast==='function') toast(!on ? 'Балансы скрыты' : 'Балансы видны', 'i');
+};
+
+window.claimDailyBonus = async function(){
+  if(typeof CU==='undefined'||!CU||typeof UD==='undefined'||!UD) return toast('Войдите','e');
+  const key = 'bv_daily_'+CU.uid;
+  const last = parseInt(localStorage.getItem(key)||'0',10);
+  const now = Date.now();
+  if(now - last < 86400000){
+    const left = Math.ceil((86400000-(now-last))/3600000);
+    return toast('Уже получено. Через ~'+left+' ч.','w');
+  }
+  try{
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(5)});
+    localStorage.setItem(key, String(now));
+    await addDoc(collection(db,'transactions'),{
+      fromUid:'system',fromUsername:'BlackVault',fromCode:'BONUS',
+      toUid:CU.uid,toUsername:UD.username||'',toCode:UD.code||'',
+      currency:'UAH',amount:5,type:'daily_bonus',createdAt:serverTimestamp()
+    });
+    toast('🎁 +5 ₴ начислено!','s');
+  }catch(e){ toast(e.message||'Ошибка','e'); }
+};
+
+window.copyReferral = function(){
+  if(typeof UD==='undefined'||!UD) return toast('Войдите','e');
+  const link = location.origin + location.pathname + '?ref=' + encodeURIComponent(UD.code||'');
+  navigator.clipboard.writeText(link).then(()=>toast('Ссылка скопирована','s')).catch(()=>toast(link,'i',5000));
+};
+
+window.renderAccountsList = function(){
+  const el = document.getElementById('accountsList');
+  if(!el) return;
+  let list=[];
+  try{ list = JSON.parse(localStorage.getItem('bv_accounts')||'[]'); }catch(e){}
+  if(!list.length){
+    el.innerHTML = '<div class="empty-state" style="padding:20px"><span class="emo">👤</span>Нет сохранённых аккаунтов</div>';
+    return;
+  }
+  el.innerHTML = list.map((a,i)=>`
+    <div class="settings-row" style="border:1px solid var(--c-border);border-radius:12px;padding:10px 12px;margin-bottom:8px">
+      <div class="settings-row-l">
+        <div class="settings-row-title">${a.username||a.email||'Аккаунт'}</div>
+        <div class="settings-row-sub">${a.code||a.email||''}</div>
+      </div>
+      <button class="btn btn-secondary btn-xs" type="button" onclick="switchAccountHint()">Сменить</button>
+    </div>`).join('');
+};
+
+window.switchAccountHint = function(){
+  toast('Нажмите «Добавить аккаунт» и войдите под другим email','i',4000);
+};
+
+window.saveAccountToList = function(){
+  if(typeof CU==='undefined'||!CU||typeof UD==='undefined'||!UD) return;
+  let list=[];
+  try{ list = JSON.parse(localStorage.getItem('bv_accounts')||'[]'); }catch(e){}
+  const entry = {uid:CU.uid, email:CU.email, username:UD.username, code:UD.code};
+  list = list.filter(a=>a.uid!==CU.uid);
+  list.unshift(entry);
+  localStorage.setItem('bv_accounts', JSON.stringify(list.slice(0,8)));
+};
+
+// Event delegation — works even if inline onclick fails
+document.addEventListener('click', function(ev){
+  const row = ev.target.closest('[onclick]');
+  // don't block - native onclick still runs
+  // Ensure theme buttons
+  const t = ev.target.closest('[data-goto]');
+  if(t && t.getAttribute('data-goto') && typeof goto==='function'){
+    // already handled
+  }
+}, true);
+
+// Re-ensure globals after all definitions
+window.openSheet = window.openSheet || function(id){
+  const el = document.getElementById(id);
+  if(!el){ console.warn('missing', id); if(typeof toast==='function') toast('Раздел недоступен: '+id,'w'); return; }
+  el.classList.add('on');
+  if(id==='sheetAccounts') try{ renderAccountsList(); }catch(e){}
+};
+window.closeSheet = window.closeSheet || function(id){ document.getElementById(id)?.classList.remove('on'); };
+
+// Bind logout
+document.getElementById('btnLogout')?.addEventListener('click', async ()=>{
+  try{ await signOut(auth); toast('Вышли','i'); }catch(e){ toast(e.message,'e'); }
+});
+document.getElementById('btnAddAccount')?.addEventListener('click', async ()=>{
+  try{
+    saveAccountToList();
+    await signOut(auth);
+    closeSheet('sheetAccounts');
+    toast('Войдите в другой аккаунт','i');
+  }catch(e){ toast(e.message,'e'); }
+});
+
+// Render UI presets when settings opens - patch goto
+(function(){
+  const _goto = window.goto;
+  if(typeof _goto === 'function'){
+    window.goto = function(id){
+      _goto(id);
+      if(id==='pgSettings'){
+        try{ if(typeof renderUiPresets==='function') renderUiPresets(); }catch(e){}
+        const pt = document.getElementById('privacyToggle');
+        if(pt) pt.classList.toggle('on', localStorage.getItem('bv_privacy')==='1');
+      }
+    };
+    window.nav = window.goto;
+  }
+})();
+
+// Initial presets if grid exists
+setTimeout(function(){
+  try{ if(typeof renderUiPresets==='function') renderUiPresets(); }catch(e){}
+  try{
+    const fx = localStorage.getItem('bv_bg_fx');
+    if(fx && typeof setBgFx==='function') setBgFx(fx);
+    const preset = localStorage.getItem('bv_ui_preset');
+    if(preset && typeof applyUiPreset==='function') applyUiPreset(preset);
+  }catch(e){}
+}, 500);
+
+console.log('[BV] settings handlers ready', typeof openSheet, typeof setBgFx, typeof applyUiPreset);
+
