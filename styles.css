@@ -1218,3 +1218,44 @@ button.wa.off{
 }
 /* hide old classes if residual */
 .wh-btn{display:none !important}
+
+/* MOBILE TAP FIX v22 */
+@media (max-width: 900px) {
+  #sbOverlay:not(.open) {
+    display: none !important;
+    pointer-events: none !important;
+  }
+  #authScreen[style*="display: none"],
+  #authScreen[style*="display:none"] {
+    display: none !important;
+    pointer-events: none !important;
+  }
+  #loader[style*="display: none"],
+  #loader[style*="display:none"] {
+    pointer-events: none !important;
+  }
+  .overlay:not(.on) {
+    display: none !important;
+    pointer-events: none !important;
+    opacity: 0 !important;
+  }
+  #main, .page.on, .wh-actions, .wa, .wh-btn, .btn, .sb-tile, .sb-list-item,
+  [data-goto], [data-sheet], #mobNav, #mobNav button, #mobMenuBtn {
+    pointer-events: auto !important;
+  }
+  .wa, button.wa, .btn, .sb-tile, .sb-list-item, #mobNav button {
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: rgba(124,92,252,0.25) !important;
+    cursor: pointer !important;
+  }
+  /* sidebar off-screen must not capture */
+  #sidebar:not(.open) {
+    pointer-events: none !important;
+  }
+  #sidebar.open {
+    pointer-events: auto !important;
+  }
+  #fxSnow, body::before, .wallet-hero::after {
+    pointer-events: none !important;
+  }
+}
