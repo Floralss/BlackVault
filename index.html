@@ -457,6 +457,9 @@
       <div class="ph"><div class="ph-top"><div><div class="ph-title">👑 Панель</div><div class="ph-sub" id="adminRoleSub">Управление</div></div><div id="adminTopBadge"></div></div></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:19px" id="adminTabs">
         <button class="btn btn-primary btn-sm" onclick="admTab('wallets')">Кошельки</button>
+        <button class="btn btn-secondary btn-sm" type="button" onclick="admTab('achievements')">🏆 Достижения</button>
+        <button class="btn btn-secondary btn-sm" type="button" onclick="admTab('broadcast')">📢 Рассылка</button>
+        <button class="btn btn-secondary btn-sm" type="button" onclick="admTab('freeze')">❄️ Заморозка</button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('deposits')">Пополнения<span id="admDepCount" style="margin-left:5px"></span></button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('tx')">Транзакции</button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('reports')">Тикеты</button>
@@ -468,7 +471,47 @@
         <button class="btn btn-secondary btn-sm" id="admContestTabBtn" style="display:none" onclick="admTab('contest')">Конкурсы</button>
         <button class="btn btn-secondary btn-sm" id="admComplaintsTabBtn" style="display:flex" onclick="admTab('complaints');loadComplaints()">⚠️ Жалобы</button>
       </div>
-      <div id="admWallets"><div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Роль</th><th>Действия</th></tr></thead><tbody id="admWalletsTb"><tr><td colspan="6" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
+      
+      <div id="admAchievements" style="display:none;padding:0 16px 20px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">СОЗДАТЬ ДОСТИЖЕНИЕ</div>
+          <input class="form-input" id="achNewId" placeholder="ID (first_transfer)" style="margin-bottom:8px"/>
+          <input class="form-input" id="achNewTitle" placeholder="Название" style="margin-bottom:8px"/>
+          <input class="form-input" id="achNewIcon" placeholder="Иконка 🏆" style="margin-bottom:8px"/>
+          <input class="form-input" id="achNewDesc" placeholder="Описание" style="margin-bottom:8px"/>
+          <button class="btn btn-primary" type="button" onclick="adminCreateAchievement()">Создать</button>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">ВЫДАТЬ ДОСТИЖЕНИЕ</div>
+          <input class="form-input" id="achGiveUser" placeholder="BV-XXXXXX или ник" style="margin-bottom:8px"/>
+          <input class="form-input" id="achGiveId" placeholder="ID достижения" style="margin-bottom:8px"/>
+          <button class="btn btn-primary" type="button" onclick="adminGiveAchievement()">Выдать</button>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">СПИСОК</div>
+          <div id="achAdminList"></div>
+        </div>
+      </div>
+      <div id="admBroadcast" style="display:none;padding:0 16px 20px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">РАССЫЛКА</div>
+          <input class="form-input" id="bcTitle" placeholder="Заголовок" style="margin-bottom:8px"/>
+          <textarea class="form-input" id="bcBody" rows="3" placeholder="Текст" style="margin-bottom:8px"></textarea>
+          <button class="btn btn-primary" type="button" onclick="adminBroadcast()">Отправить</button>
+        </div>
+      </div>
+      <div id="admFreeze" style="display:none;padding:0 16px 20px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">ЗАМОРОЗКА</div>
+          <input class="form-input" id="fzUser" placeholder="BV-XXXXXX или ник" style="margin-bottom:8px"/>
+          <input class="form-input" id="fzReason" placeholder="Причина" style="margin-bottom:8px"/>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" type="button" style="background:#FF4D6A" onclick="adminFreeze(true)">Заморозить</button>
+            <button class="btn btn-secondary" type="button" onclick="adminFreeze(false)">Разморозить</button>
+          </div>
+        </div>
+      </div>
+<div id="admWallets"><div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Роль</th><th>Действия</th></tr></thead><tbody id="admWalletsTb"><tr><td colspan="6" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
       <div id="admDeposits" style="display:none"><div class="sec" id="admDepositsList"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div></div>
       <div id="admTx" style="display:none"><div class="table-wrap"><table class="data-table"><thead><tr><th>От</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr></thead><tbody id="admTxTb"><tr><td colspan="5" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
       <div id="admReports" style="display:none"><div class="sec" id="admReportsList"><div class="empty-state"><span class="emo">🎧</span>Нет</div></div></div>
@@ -888,6 +931,7 @@
     </div>
   </div>
 </div>
+
 
 
 <script type="module" src="app.js"></script>
