@@ -833,21 +833,23 @@ function renderPayRow(elId, uahPrice, onSelect) {
   onSelect(PAY_CURRENCIES[0]);
 }
 function loadShopState() {
-  const el = document.getElementById('myTagsInfo');
-  const tags = UD.customTags || (UD.customTag ? [UD.customTag] : []);
-  el.innerHTML = tags.length ? roleBadge({ customTags: tags }) : '<span style="color:var(--c-text3);font-size:13px">У вас пока нет своих тегов</span>';
-
-  // Kassa access status
-  const kassaBtn = document.getElementById('btnBuyKassa');
-  const kassaStatus = document.getElementById('kassaAccessStatus');
-  if (UD.kassaAccess || UD.isOwner) {
-    if (kassaStatus) kassaStatus.innerHTML = '<span style="color:#00C07A;font-size:13px;font-weight:700">✅ Доступ активирован! <a href="kassa.html" target="_blank" style="color:#00C07A;text-decoration:underline">Открыть кассу →</a></span>';
-    if (kassaBtn) { kassaBtn.textContent = 'Открыть кассу'; kassaBtn.onclick = () => window.open('kassa.html', '_blank'); }
-  } else {
-    if (kassaStatus) kassaStatus.innerHTML = '<span style="color:var(--c-text3);font-size:12px">Разовая покупка — доступ навсегда</span>';
-    if (kassaBtn) kassaBtn.onclick = buyKassaAccess;
-  }
+  try {
+    const el = document.getElementById('myTagsInfo');
+    if (!UD) { if(el) el.innerHTML=''; return; }
+    const tags = UD.customTags || (UD.customTag ? [UD.customTag] : []);
+    if (el) el.innerHTML = tags.length ? roleBadge({ customTags: tags }) : '<span style="color:var(--c-text3);font-size:13px">У вас пока нет своих тегов</span>';
+    const kassaBtn = document.getElementById('btnBuyKassa');
+    const kassaStatus = document.getElementById('kassaAccessStatus');
+    if (UD.kassaAccess || UD.isOwner) {
+      if (kassaStatus) kassaStatus.innerHTML = '<span style="color:#00C07A;font-size:13px;font-weight:700">✅ Доступ активирован! <a href="kassa.html" target="_blank" style="color:#00C07A;text-decoration:underline">Открыть кассу →</a></span>';
+      if (kassaBtn) { kassaBtn.textContent = 'Открыть кассу'; kassaBtn.onclick = () => window.open('kassa.html', '_blank'); }
+    } else {
+      if (kassaStatus) kassaStatus.innerHTML = '<span style="color:var(--c-text3);font-size:12px">Разовая покупка — доступ навсегда</span>';
+      if (kassaBtn) kassaBtn.onclick = buyKassaAccess;
+    }
+  } catch (e) { console.error('loadShopState', e); }
 }
+window.loadShopState = loadShopState;
 
 async function buyKassaAccess() {
   if (!UD || UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
@@ -3023,3 +3025,104 @@ window.findWalletByCodeOrName = async function(q){
   }catch(e){ console.error(e); }
   return null;
 };
+
+// ===== HARD FIX v13 =====
+window.toast = window.toast || function(msg,t){ try{ console.log(t,msg);}catch(e){} alert(msg); };
+
+window.claimDailyBonus = async function(){
+  try{
+    if(typeof CU==='undefined'||!CU){ alert('Войдите в аккаунт'); return; }
+    const key='bv_daily_'+CU.uid;
+    const last=parseInt(localStorage.getItem(key)||'0',10);
+    if(Date.now()-last<86400000){ (window.toast||alert)('Уже получено сегодня','w'); return; }
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(5)});
+    localStorage.setItem(key,String(Date.now()));
+    (window.toast||alert)('🎁 +5 ₴ начислено!','s');
+  }catch(e){ console.error(e); alert('Бонус: '+e.message); }
+};
+window.copyReferral = function(){
+  try{
+    if(typeof UD==='undefined'||!UD){ alert('Войдите'); return; }
+    const link=location.href.split('?')[0]+'?ref='+encodeURIComponent(UD.code||UD.username||'');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(link).then(()=>(window.toast||alert)('Ссылка скопирована!')).catch(()=>prompt('Скопируйте:',link));
+    } else prompt('Скопируйте:',link);
+  }catch(e){ alert(e.message); }
+};
+window.togglePin = function(){
+  try{
+    const row=document.getElementById('pinSetRow');
+    const tog=document.getElementById('pinToggle');
+    if(localStorage.getItem('bv_pin')){
+      localStorage.removeItem('bv_pin');
+      tog&&tog.classList.remove('on');
+      if(row) row.style.display='none';
+      (window.toast||alert)('PIN отключён');
+    } else {
+      if(row) row.style.display='block';
+      tog&&tog.classList.add('on');
+      (window.toast||alert)('Введите PIN ниже и нажмите Сохранить');
+    }
+  }catch(e){ alert(e.message); }
+};
+window.togglePrivacy = function(){
+  try{
+    const on=localStorage.getItem('bv_privacy')==='1';
+    localStorage.setItem('bv_privacy', on?'0':'1');
+    document.getElementById('privacyToggle')?.classList.toggle('on', !on);
+    (window.toast||alert)(!on?'Балансы скрыты':'Балансы видны');
+    if(on) setTimeout(()=>location.reload(),300);
+  }catch(e){ alert(e.message); }
+};
+window.doLogout = async function(){
+  try{ await signOut(auth); (window.toast||alert)('Вышли'); }
+  catch(e){ alert(e.message); }
+};
+
+window.admTab = function(t){
+  const ids=['admWallets','admDeposits','admTx','admReports','admTgreq','admGive','admTake','admStaff','admGrantTag','admContest','admComplaints','admAchievements','admBroadcast','admFreeze'];
+  ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  const map={wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze'};
+  const show=document.getElementById(map[t]);
+  if(show) show.style.display='block';
+  else console.warn('admin panel missing', t, map[t]);
+  document.querySelectorAll('#adminTabs .btn').forEach(b=>b.classList.remove('btn-primary'));
+  if(t==='achievements' && typeof adminLoadAchievements==='function') adminLoadAchievements();
+};
+
+window.loadShopState = function(){
+  try{
+    const el=document.getElementById('myTagsInfo');
+    if(!UD){ if(el) el.innerHTML=''; return; }
+    const tags=UD.customTags||(UD.customTag?[UD.customTag]:[]);
+    if(el) el.innerHTML = tags.length && typeof roleBadge==='function' ? roleBadge({customTags:tags}) : '<span style="color:#888">Нет своих тегов</span>';
+    const kassaBtn=document.getElementById('btnBuyKassa');
+    if(kassaBtn && UD.kassaAccess) kassaBtn.textContent='Касса активна ✓';
+  }catch(e){ console.error('shop',e); }
+};
+
+// Mobile force visible
+(function(){
+  function forceMobile(){
+    if(window.innerWidth>900) return;
+    const app=document.getElementById('app');
+    if(app && app.style.display!=='none'){
+      app.style.cssText += ';opacity:1!important;visibility:visible!important;background:#0a0a14;color:#fff;display:flex;flex-direction:column;min-height:100dvh';
+    }
+    const main=document.getElementById('main');
+    if(main){
+      main.style.cssText += ';opacity:1!important;visibility:visible!important;background:#0a0a14;color:#fff;flex:1;min-height:50vh;display:flex;flex-direction:column';
+    }
+    document.querySelectorAll('.page').forEach(function(p){
+      if(p.classList.contains('on')){
+        p.style.cssText += ';display:flex!important;opacity:1!important;visibility:visible!important;background:#0a0a14;color:#f0f0ff;flex:1;overflow-y:auto;min-height:40vh';
+      } else {
+        p.style.display='none';
+      }
+    });
+  }
+  setInterval(forceMobile, 1000);
+  window.addEventListener('resize', forceMobile);
+  setTimeout(forceMobile, 500);
+})();
+console.log('[BV] hard fix v13');
