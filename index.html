@@ -23,6 +23,7 @@
   --glow:rgba(124,92,252,.4);
   --grad:linear-gradient(135deg,#A78BFA 0%,#7C5CFC 45%,#5B4FE9 100%);
 }
+html{color-scheme:dark}
 html,body{height:100%;overflow:hidden;font-family:var(--f);background:var(--bg);color:var(--c-text);-webkit-font-smoothing:antialiased;}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(124,92,252,.3);border-radius:4px}
 
@@ -55,23 +56,54 @@ html,body{height:100%;overflow:hidden;font-family:var(--f);background:var(--bg);
 .auth-foot{text-align:center;margin-top:14px;font-size:13px;color:var(--c-text2)}
 .auth-foot a{color:var(--btn2);font-weight:700;cursor:pointer}
 
-/* FORMS */
+/* FORMS — dark everywhere (no white dropdowns) */
 .form-group{margin-bottom:14px}
 .form-label{font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:7px}
-.form-input{
-  width:100%;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  border-radius:14px;padding:13px 15px;color:var(--c-text);font-size:14.5px;
-  font-family:var(--f);outline:none;transition:all .18s;
+.form-input,input,textarea,select{
+  width:100%;background:#161626!important;border:1px solid rgba(255,255,255,.1)!important;
+  border-radius:14px;padding:13px 15px;color:#F2F2FF!important;font-size:14.5px;
+  font-family:var(--f);outline:none;transition:all .18s;color-scheme:dark;
+  -webkit-appearance:none;appearance:none;
 }
-.form-input:focus{
-  border-color:rgba(124,92,252,.55);background:rgba(124,92,252,.08);
+.form-input:focus,input:focus,textarea:focus,select:focus{
+  border-color:rgba(124,92,252,.55)!important;background:#1C1C30!important;
   box-shadow:0 0 0 3px rgba(124,92,252,.15);
 }
-.form-input::placeholder{color:var(--c-text3)}
-textarea.form-input{resize:vertical;min-height:80px}
-select.form-input{cursor:pointer;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%238080AA' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 14px center;padding-right:36px}
+.form-input::placeholder,input::placeholder,textarea::placeholder{color:#525270!important}
+textarea.form-input,textarea{resize:vertical;min-height:80px}
+select,select.form-input{
+  cursor:pointer;
+  background-color:#161626!important;color:#F2F2FF!important;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23A78BFA' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
+}
+select option,select.form-input option{
+  background:#12121E!important;color:#F2F2FF!important;padding:10px;
+}
 .input-row{display:flex;gap:8px}
-.input-row .form-input{flex:1}
+.input-row .form-input,.input-row select,.input-row input{flex:1}
+
+/* Method picker cards (instead of ugly native select) */
+.method-grid{display:flex;flex-direction:column;gap:8px}
+.method-opt{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);
+  border-radius:14px;cursor:pointer;transition:.18s;color:var(--c-text);font-weight:600;font-size:14px;
+}
+.method-opt:hover{border-color:rgba(124,92,252,.35);background:rgba(124,92,252,.08)}
+.method-opt.on{border-color:var(--btn1);background:rgba(124,92,252,.14);box-shadow:0 0 0 3px rgba(124,92,252,.12)}
+.method-opt .ico{font-size:20px;width:36px;text-align:center}
+
+/* Check cards */
+.check-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;padding:14px 16px;margin-bottom:10px;
+  transition:border-color .18s,transform .15s;
+}
+.check-card:hover{border-color:rgba(124,92,252,.3)}
+.check-amount{font-size:20px;font-weight:900;letter-spacing:-.4px;color:#fff}
+.seg-tabs{display:flex;gap:6px;background:rgba(255,255,255,.04);padding:4px;border-radius:12px;margin-bottom:14px}
+.seg-tabs .btn{flex:1;border-radius:10px}
 
 /* BUTTONS — hard premium */
 .btn{
@@ -723,6 +755,7 @@ a{color:var(--btn2);text-decoration:none}
       <div class="sb-list-item" data-goto="pgDeposit"><span class="ic">＋</span>Пополнить<span class="sb-badge" id="depDot" style="display:none">!</span></div>
       <div class="sb-list-item" data-goto="pgChecks"><span class="ic">🧾</span>Чеки</div>
       <div class="sb-list-item" data-goto="pgContests"><span class="ic">🎉</span>Конкурсы</div>
+      <div class="sb-list-item" data-goto="pgP2P"><span class="ic">🤝</span>P2P Маркет</div>
 
       <div class="sb-sep">Сообщество</div>
       <div class="sb-list-item" data-goto="pgHistory"><span class="ic">📋</span>История</div>
@@ -819,8 +852,8 @@ a{color:var(--btn2);text-decoration:none}
     </div>
 
     <div class="page" id="pgTransfer">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">↗️ Перевод</div><div class="ph-sub">Отправить средства</div></div></div></div>
-      <div class="sec card-p" style="max-width:480px">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">↗ Перевод</div><div class="ph-sub">Отправить средства</div></div></div></div>
+      <div class="page-body"><div class="sec card-p" style="max-width:480px;margin:0 auto">
         <div class="form-group"><label class="form-label">Получатель</label><input class="form-input" id="trTo" placeholder="BV-XXXXXX или @nickname"/></div>
         <div class="form-group"><label class="form-label">Валюта и сумма</label>
           <div class="input-row">
@@ -833,12 +866,12 @@ a{color:var(--btn2);text-decoration:none}
         <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:16px;border:1px solid var(--c-border)">⏳ Обработка ~5 секунд · Комиссия 0%</div>
         <button class="btn btn-primary" id="btnTransfer">Отправить</button>
         <div class="pending-box" id="trPending"><div style="font-size:13px;color:#D4C5FF;font-weight:700">⏳ Выполняем перевод...</div><div class="progress-bar"><div class="progress-fill" id="trBar" style="width:0%"></div></div></div>
-      </div>
+      </div></div>
     </div>
 
     <div class="page" id="pgExchange">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">💱 Обмен</div><div class="ph-sub">По рыночному курсу</div></div></div></div>
-      <div style="max-width:480px">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">⇄ Обмен</div><div class="ph-sub">По рыночному курсу</div></div></div></div>
+      <div class="page-body"><div style="max-width:480px;margin:0 auto">
         <div class="ex-wrap">
           <div class="ex-side"><div class="ex-label">Отдаёте</div>
             <div class="input-row"><select class="form-input" id="exFrom"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select><input class="form-input" id="exAmt" type="number" placeholder="0.00"/></div>
@@ -852,33 +885,44 @@ a{color:var(--btn2);text-decoration:none}
         <div style="background:var(--c-surface);border-radius:var(--rs);padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px;border:1px solid var(--c-border)">⏳ Время обмена: ~1 минута</div>
         <button class="btn btn-primary" id="btnExchange">Обменять</button>
         <div class="pending-box" id="exPending"><div style="font-size:13px;color:#D4C5FF;font-weight:700">💱 Выполняем обмен...</div><div class="progress-bar"><div class="progress-fill" id="exBar" style="width:0%"></div></div></div>
-      </div>
+      </div></div>
     </div>
 
     <!-- STOCKS -->
     <div class="page" id="pgStocks">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">📈 Акции</div><div class="ph-sub">Покупайте акции по реальным ценам</div></div></div></div>
-      <div class="sec"><div id="stocksList" class="asset-list"></div></div>
-      <div class="sec"><div class="sec-head"><span class="sec-title">Мои акции</span></div><div id="myStocksList"><div class="empty-state"><span class="emo">📈</span>У вас пока нет акций</div></div></div>
+      <div class="page-body">
+        <div class="sec"><div id="stocksList" class="asset-list"></div></div>
+        <div class="sec"><div class="sec-head"><span class="sec-title">Мои акции</span></div><div id="myStocksList"><div class="empty-state"><span class="emo">📈</span>У вас пока нет акций</div></div></div>
+      </div>
     </div>
 
     <div class="page" id="pgDeposit">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">📥 Пополнение</div><div class="ph-sub">Заявка обрабатывается администратором</div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">＋ Пополнение</div><div class="ph-sub">Заявка обрабатывается администратором</div></div>
       <button class="btn btn-primary btn-sm" id="btnNewDeposit">+ Новая заявка</button></div></div>
-      <div class="sec" id="depRequestsWrap"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div>
+      <div class="page-body"><div class="sec" id="depRequestsWrap"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div></div>
     </div>
 
     <div class="page" id="pgChecks">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🧾 Чеки</div><div class="ph-sub">Создавайте и принимайте платежи</div></div>
       <button class="btn btn-primary btn-sm" id="btnOpenCheck">+ Создать</button></div></div>
-      <div style="display:flex;gap:8px;margin-bottom:17px">
-        <button class="btn btn-primary btn-sm" id="chkTabMy" onclick="chkTab('my')">Мои чеки</button>
-        <button class="btn btn-secondary btn-sm" id="chkTabPay" onclick="chkTab('pay')">Оплатить</button>
-      </div>
-      <div id="myChecksWrap"><div id="myChecksList"><div class="empty-state"><span class="emo">🧾</span>Чеков нет</div></div></div>
-      <div id="payCheckWrap" style="display:none">
-        <div class="sec card-p" style="max-width:480px">
-          <div class="form-group"><label class="form-label">ID чека</label><div style="display:flex;gap:8px"><input class="form-input" id="payChkId" placeholder="Введите ID"/><button class="btn btn-primary btn-sm" id="btnPayChk" style="white-space:nowrap">Оплатить</button></div></div>
+      <div class="page-body">
+        <div class="seg-tabs">
+          <button class="btn btn-primary btn-sm" id="chkTabMy" onclick="chkTab('my')">Мои чеки</button>
+          <button class="btn btn-secondary btn-sm" id="chkTabPay" onclick="chkTab('pay')">Оплатить</button>
+        </div>
+        <div id="myChecksWrap">
+          <div id="myChecksList"><div class="empty-state"><span class="emo">🧾</span>Чеков нет</div></div>
+        </div>
+        <div id="payCheckWrap" style="display:none">
+          <div class="sec card-p">
+            <div class="form-group"><label class="form-label">ID чека</label>
+              <div style="display:flex;gap:8px;flex-wrap:wrap">
+                <input class="form-input" id="payChkId" placeholder="Введите ID" style="flex:1;min-width:140px"/>
+                <button class="btn btn-primary btn-sm" id="btnPayChk">Оплатить</button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -886,22 +930,55 @@ a{color:var(--btn2);text-decoration:none}
     <!-- CONTESTS -->
     <div class="page" id="pgContests">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🎉 Конкурсы</div><div class="ph-sub">Участвуйте и выигрывайте призы</div></div></div></div>
-      <div id="contestsList"><div class="empty-state"><span class="emo">🎉</span>Активных конкурсов нет</div></div>
+      <div class="page-body"><div id="contestsList"><div class="empty-state"><span class="emo">🎉</span>Активных конкурсов нет</div></div></div>
+    </div>
+
+    <!-- P2P MARKETPLACE -->
+    <div class="page" id="pgP2P">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">🤝 P2P Маркет</div><div class="ph-sub">Покупка и продажа с гарантом</div></div>
+        <button class="btn btn-primary btn-sm" onclick="openSheet('sheetP2PCreate')">+ Объявление</button>
+      </div></div>
+      <div class="page-body">
+        <div class="seg-tabs">
+          <button class="btn btn-primary btn-sm" id="p2pTabMarket" onclick="p2pTab('market')">Маркет</button>
+          <button class="btn btn-secondary btn-sm" id="p2pTabMy" onclick="p2pTab('my')">Мои сделки</button>
+          <button class="btn btn-secondary btn-sm" id="p2pTabOrders" onclick="p2pTab('orders')">Покупки</button>
+        </div>
+        <div id="p2pMarketWrap">
+          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="p2pCatFilters">
+            <button class="btn btn-secondary btn-xs p2p-cat on" data-cat="all" onclick="p2pFilterCat(this)">Все</button>
+            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="currency" onclick="p2pFilterCat(this)">💱 Валюта</button>
+            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="game" onclick="p2pFilterCat(this)">🎮 Игры</button>
+            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="item" onclick="p2pFilterCat(this)">🎁 Предметы</button>
+            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="other" onclick="p2pFilterCat(this)">📦 Другое</button>
+          </div>
+          <div id="p2pListings"><div class="empty-state"><span class="emo">🤝</span>Загрузка...</div></div>
+        </div>
+        <div id="p2pMyWrap" style="display:none"><div id="p2pMyListings"><div class="empty-state"><span class="emo">📋</span>Нет объявлений</div></div></div>
+        <div id="p2pOrdersWrap" style="display:none"><div id="p2pOrdersList"><div class="empty-state"><span class="emo">🛒</span>Нет покупок</div></div></div>
+        <div class="sec card-p" style="margin-top:14px;font-size:12.5px;color:var(--c-text2);line-height:1.55">
+          <b style="color:var(--c-text)">Как работает гарант</b><br>
+          1) Покупатель оплачивает с баланса — деньги холдятся<br>
+          2) Продавец передаёт товар и отмечает «Отправлено»<br>
+          3) Покупатель подтверждает получение → продавцу зачисляется оплата<br>
+          4) При обмане — жалоба в поддержку, средства можно вернуть, скамера блокируют
+        </div>
+      </div>
     </div>
 
     <div class="page" id="pgHistory">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">📋 История</div><div class="ph-sub">Все операции</div></div></div></div>
-      <div class="sec" id="histWrap"><div class="empty-state"><span class="emo">📭</span>Нет операций</div></div>
+      <div class="page-body"><div class="sec" id="histWrap"><div class="empty-state"><span class="emo">📭</span>Нет операций</div></div></div>
     </div>
 
     <div class="page" id="pgLeaderboard">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🏆 Forbes</div><div class="ph-sub">Рейтинг богатейших</div></div></div></div>
-      <div class="sec" id="lbWrap"><div class="empty-state"><span class="emo">⏳</span>Загрузка...</div></div>
+      <div class="page-body"><div class="sec" id="lbWrap"><div class="empty-state"><span class="emo">⏳</span>Загрузка...</div></div></div>
     </div>
 
     <div class="page" id="pgShop">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🛍 Магазин</div><div class="ph-sub">Кастомизация, привилегии и интерфейсы</div></div></div></div>
-
+      <div class="page-body">
       <div class="shop-item">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
           <div style="font-size:16px;font-weight:800">⭐ Уникальный тег</div>
@@ -959,6 +1036,7 @@ a{color:var(--btn2);text-decoration:none}
         <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Откройте собственную кассу — добавляйте товары, принимайте оплату наличными и по QR. Доходы приходят прямо на кошелёк (за вычетом 7% комиссии сервиса).</div>
         <div id="kassaAccessStatus" style="margin-bottom:10px"></div>
         <button class="btn btn-primary btn-sm" id="btnBuyKassa" onclick="buyKassaAccess()">Открыть доступ к кассе</button>
+      </div>
       </div>
     </div>
 
@@ -1059,16 +1137,16 @@ a{color:var(--btn2);text-decoration:none}
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🏪 Моя касса</div><div class="ph-sub">Управление, доходы, товары</div></div>
         <a href="kassa.html" target="_blank" class="btn btn-primary btn-sm">Открыть кассу →</a>
       </div></div>
-
+      <div class="page-body">
       <!-- Stats -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 16px 16px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:12px">
         <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">Сегодня</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatToday">0 ₴</div></div>
         <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">За 7 дней</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatWeek">0 ₴</div></div>
         <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">Всего</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatTotal">0 ₴</div></div>
       </div>
 
       <!-- Products management -->
-      <div class="sec" style="margin:0 16px 16px">
+      <div class="sec">
         <div class="sec-head" style="display:flex;justify-content:space-between;align-items:center">
           <span class="sec-title">📦 Товары кассы</span>
           <button class="btn btn-primary btn-sm" onclick="openSheet('sheetAddKassaProduct')">+ Добавить</button>
@@ -1077,9 +1155,10 @@ a{color:var(--btn2);text-decoration:none}
       </div>
 
       <!-- Sales history -->
-      <div class="sec" style="margin:0 16px 16px">
+      <div class="sec">
         <div class="sec-head"><span class="sec-title">💰 История продаж</span></div>
         <div id="kassaSalesList"><div class="empty-state"><span class="emo">💰</span>Продаж ещё нет</div></div>
+      </div>
       </div>
     </div>
 
@@ -1216,7 +1295,7 @@ a{color:var(--btn2);text-decoration:none}
     <div class="mob-item on" data-goto="pgWallet"><div class="ic">💳</div>Wallet</div>
     <div class="mob-item" data-goto="pgExchange"><div class="ic">📈</div>Обмен</div>
     <div class="mob-item" data-goto="pgDeposit"><div class="ic">💰</div>Пополнить</div>
-    <div class="mob-item" data-goto="pgContests"><div class="ic">🎁</div>Бонусы</div>
+    <div class="mob-item" data-goto="pgP2P"><div class="ic">🤝</div>P2P</div>
     <div class="mob-item" data-goto="pgSettings"><div class="ic">⚙️</div>Ещё</div>
   </div>
 </div>
@@ -1259,10 +1338,19 @@ a{color:var(--btn2);text-decoration:none}
 <div class="overlay" id="sheetNewDeposit"><div class="sheet"><div class="sheet-handle"></div>
   <div class="sheet-head"><div class="sheet-title">📥 Заявка на пополнение</div><button class="sheet-close" onclick="closeSheet('sheetNewDeposit')">✕</button></div>
   <div class="sheet-body">
-    <div class="form-group"><label class="form-label">Способ</label><select class="form-input" id="ndMethod"><option value="crypto">🔐 Крипто (BTC/ETH/TON)</option><option value="steam">🎮 Steam Gift</option><option value="fiat">💳 Фиат (UAH/RUB/USD)</option></select></div>
-    <div class="form-group"><label class="form-label">Валюта зачисления</label><select class="form-input" id="ndCur"><option value="USD">USD</option><option value="UAH">UAH</option><option value="RUB">RUB</option><option value="TON">TON</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select></div>
-    <div class="form-group"><label class="form-label">Сумма</label><input class="form-input" id="ndAmt" type="number" placeholder="0.00"/></div>
-    <div style="background:var(--c-surface2);border-radius:var(--rs);padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px">ℹ️ После отправки администратор свяжется в чате и пришлёт реквизиты</div>
+    <div class="form-group"><label class="form-label">Способ</label>
+      <input type="hidden" id="ndMethod" value="crypto"/>
+      <div class="method-grid" id="ndMethodGrid">
+        <div class="method-opt on" data-v="crypto" onclick="selNdMethod(this)"><span class="ico">🔐</span><span>Крипто (BTC/ETH/TON)</span></div>
+        <div class="method-opt" data-v="steam" onclick="selNdMethod(this)"><span class="ico">🎮</span><span>Steam Gift</span></div>
+        <div class="method-opt" data-v="fiat" onclick="selNdMethod(this)"><span class="ico">💳</span><span>Фиат (UAH/RUB/USD)</span></div>
+      </div>
+    </div>
+    <div class="form-group"><label class="form-label">Валюта зачисления</label>
+      <select class="form-input" id="ndCur"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select>
+    </div>
+    <div class="form-group"><label class="form-label">Сумма</label><input class="form-input" id="ndAmt" type="number" placeholder="0.00" inputmode="decimal"/></div>
+    <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px;border:1px solid var(--c-border)">ℹ️ После отправки администратор свяжется в чате и пришлёт реквизиты</div>
     <button class="btn btn-primary" id="btnSubmitDeposit">Отправить заявку</button>
   </div></div>
 </div>
@@ -1712,6 +1800,7 @@ function goto(id) {
     if (id === 'pgShop') loadShopState();
     if (id === 'pgStocks') loadStocks();
     if (id === 'pgContests') loadContests();
+    if (id === 'pgP2P') { p2pTab('market'); loadP2PListings(); }
   };
 
   if (cur && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -2226,7 +2315,21 @@ async function loadMyChecks() {
   if (snap.empty) { el.innerHTML = '<div class="empty-state"><span class="emo">🧾</span>Нет чеков</div>'; return; }
   let rows = []; snap.forEach(d => rows.push(d.data()));
   rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-  el.innerHTML = rows.map(c => `<div class="check-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><div class="check-amount">${fmtBal(c.amount, c.currency)}</div>${c.description ? `<div style="font-size:13px;color:var(--c-text2);margin-top:6px">${esc(c.description)}</div>` : ''}<div style="font-family:monospace;font-size:11px;color:var(--c-text3);margin-top:7px">ID: ${c.id}</div><div style="font-size:11px;color:var(--c-text3);margin-top:3px">${fmtDate(c.createdAt)}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px"><span class="badge ${c.status === 'active' ? 'badge-green' : 'badge-purple'}">${c.status === 'active' ? 'Активен' : 'Оплачен'}</span><button class="btn btn-secondary btn-sm" onclick="navigator.clipboard.writeText('${c.id}').then(()=>toast('Скопировано','s'))">📋</button></div></div></div>`).join('');
+  el.innerHTML = rows.map(c => `
+    <div class="check-card">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+        <div style="flex:1;min-width:0">
+          <div class="check-amount">${fmtBal(c.amount, c.currency)}</div>
+          ${c.description ? `<div style="font-size:13px;color:var(--c-text2);margin-top:6px;word-break:break-word">${esc(c.description)}</div>` : ''}
+          <div style="font-family:ui-monospace,monospace;font-size:11px;color:var(--c-text3);margin-top:8px;word-break:break-all">ID: ${esc(c.id)}</div>
+          <div style="font-size:11px;color:var(--c-text3);margin-top:3px">${fmtDate(c.createdAt)}</div>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
+          <span class="badge ${c.status === 'active' ? 'badge-green' : 'badge-purple'}">${c.status === 'active' ? 'Активен' : 'Оплачен'}</span>
+          <button class="btn btn-secondary btn-sm" type="button" onclick="navigator.clipboard.writeText('${String(c.id).replace(/'/g,'')}').then(()=>toast('Скопировано','s'))">📋</button>
+        </div>
+      </div>
+    </div>`).join('');
 }
 
 // ═══ LEADERBOARD ═══
@@ -3631,6 +3734,256 @@ setTimeout(maybeShowUpdateBanner, 1500);
 
 
 
+// ─── Deposit method picker ───
+window.selNdMethod = function (el) {
+  document.querySelectorAll('#ndMethodGrid .method-opt').forEach(x => x.classList.remove('on'));
+  el.classList.add('on');
+  document.getElementById('ndMethod').value = el.getAttribute('data-v');
+};
+
+// ═══ P2P MARKETPLACE ═══
+let _p2pCat = 'all', _curP2POrder = null;
+const P2P_FEE = 0.05;
+
+window.p2pTab = function (t) {
+  document.getElementById('p2pMarketWrap').style.display = t === 'market' ? 'block' : 'none';
+  document.getElementById('p2pMyWrap').style.display = t === 'my' ? 'block' : 'none';
+  document.getElementById('p2pOrdersWrap').style.display = t === 'orders' ? 'block' : 'none';
+  ['market', 'my', 'orders'].forEach(k => {
+    const b = document.getElementById('p2pTab' + k.charAt(0).toUpperCase() + k.slice(1));
+    if (b) b.className = 'btn btn-' + (t === k ? 'primary' : 'secondary') + ' btn-sm';
+  });
+  if (t === 'market') loadP2PListings();
+  if (t === 'my') loadP2PMy();
+  if (t === 'orders') loadP2POrders();
+};
+window.p2pFilterCat = function (el) {
+  document.querySelectorAll('.p2p-cat').forEach(x => x.classList.remove('on'));
+  el.classList.add('on');
+  _p2pCat = el.getAttribute('data-cat');
+  loadP2PListings();
+};
+
+async function loadP2PListings() {
+  const el = document.getElementById('p2pListings');
+  if (!el) return;
+  try {
+    const snap = await getDocs(query(collection(db, 'p2pListings'), limit(50)));
+    let rows = [];
+    snap.forEach(d => rows.push({ ...d.data(), _id: d.id }));
+    rows = rows.filter(r => r.status === 'active' && r.sellerUid !== CU?.uid);
+    if (_p2pCat !== 'all') rows = rows.filter(r => r.category === _p2pCat);
+    rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+    if (!rows.length) { el.innerHTML = '<div class="empty-state"><span class="emo">🤝</span>Объявлений нет</div>'; return; }
+    const catIco = { currency: '💱', game: '🎮', item: '🎁', other: '📦' };
+    el.innerHTML = rows.map(r => `
+      <div class="check-card">
+        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
+          <div style="flex:1;min-width:0">
+            <div style="font-size:11px;color:var(--c-text3);margin-bottom:4px">${catIco[r.category] || '📦'} ${esc(r.category || '')} · @${esc(r.sellerName || '')}</div>
+            <div style="font-weight:800;font-size:15px;margin-bottom:4px">${esc(r.title)}</div>
+            <div style="font-size:12.5px;color:var(--c-text2);line-height:1.4">${esc((r.description || '').slice(0, 120))}</div>
+          </div>
+          <div style="text-align:right;flex-shrink:0">
+            <div class="check-amount" style="font-size:16px">${fmtBal(r.price, r.currency)}</div>
+            <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="buyP2P('${r._id}')">Купить</button>
+          </div>
+        </div>
+      </div>`).join('');
+  } catch (e) { el.innerHTML = '<div class="empty-state"><span class="emo">⚠️</span>Ошибка загрузки</div>'; console.error(e); }
+}
+
+async function loadP2PMy() {
+  const el = document.getElementById('p2pMyListings');
+  if (!el || !CU) return;
+  const snap = await getDocs(query(collection(db, 'p2pListings'), where('sellerUid', '==', CU.uid), limit(30)));
+  let rows = []; snap.forEach(d => rows.push({ ...d.data(), _id: d.id }));
+  rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  if (!rows.length) { el.innerHTML = '<div class="empty-state"><span class="emo">📋</span>Нет объявлений</div>'; return; }
+  el.innerHTML = rows.map(r => `
+    <div class="check-card">
+      <div style="display:flex;justify-content:space-between;gap:10px">
+        <div><div style="font-weight:800">${esc(r.title)}</div>
+        <div style="font-size:12px;color:var(--c-text2);margin-top:4px">${fmtBal(r.price, r.currency)} · ${esc(r.status)}</div></div>
+        <div style="display:flex;flex-direction:column;gap:6px">
+          <span class="badge ${r.status === 'active' ? 'badge-green' : 'badge-purple'}">${r.status === 'active' ? 'Активен' : esc(r.status)}</span>
+          ${r.status === 'active' ? `<button class="btn btn-danger btn-xs" onclick="closeP2PListing('${r._id}')">Снять</button>` : ''}
+        </div>
+      </div>
+    </div>`).join('');
+}
+
+async function loadP2POrders() {
+  const el = document.getElementById('p2pOrdersList');
+  if (!el || !CU) return;
+  const snap = await getDocs(query(collection(db, 'p2pOrders'), where('buyerUid', '==', CU.uid), limit(30)));
+  let rows = []; snap.forEach(d => rows.push({ ...d.data(), _id: d.id }));
+  // also seller side
+  try {
+    const s2 = await getDocs(query(collection(db, 'p2pOrders'), where('sellerUid', '==', CU.uid), limit(30)));
+    s2.forEach(d => { if (!rows.find(x => x._id === d.id)) rows.push({ ...d.data(), _id: d.id }); });
+  } catch (_) {}
+  rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
+  if (!rows.length) { el.innerHTML = '<div class="empty-state"><span class="emo">🛒</span>Нет сделок</div>'; return; }
+  el.innerHTML = rows.map(r => `
+    <div class="check-card" onclick="openP2POrder('${r._id}')" style="cursor:pointer">
+      <div style="display:flex;justify-content:space-between;gap:10px">
+        <div><div style="font-weight:800">${esc(r.title)}</div>
+        <div style="font-size:12px;color:var(--c-text2);margin-top:4px">${fmtBal(r.price, r.currency)} · ${fmtDate(r.createdAt)}</div></div>
+        <span class="badge badge-purple">${esc(r.status)}</span>
+      </div>
+    </div>`).join('');
+}
+
+document.getElementById('btnCreateP2P')?.addEventListener('click', async () => {
+  if (!CU || !UD) return toast('Войдите в аккаунт', 'e');
+  if (UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
+  const title = document.getElementById('p2pTitle')?.value.trim();
+  const description = document.getElementById('p2pDesc')?.value.trim();
+  const category = document.getElementById('p2pCat')?.value;
+  const price = parseFloat(document.getElementById('p2pPrice')?.value);
+  const currency = document.getElementById('p2pCur')?.value;
+  if (!title || title.length < 3) return toast('Название слишком короткое', 'w');
+  if (!price || price <= 0) return toast('Укажите цену', 'w');
+  try {
+    await addDoc(collection(db, 'p2pListings'), {
+      sellerUid: CU.uid, sellerName: UD.username, sellerCode: UD.code,
+      title: title.slice(0, 80), description: (description || '').slice(0, 500),
+      category, price, currency, status: 'active', createdAt: serverTimestamp()
+    });
+    toast('Объявление опубликовано', 's');
+    closeSheet('sheetP2PCreate');
+    document.getElementById('p2pTitle').value = '';
+    document.getElementById('p2pDesc').value = '';
+    document.getElementById('p2pPrice').value = '';
+    p2pTab('my');
+  } catch (e) { toast(cfError ? cfError(e) : e.message, 'e'); }
+});
+
+window.closeP2PListing = async function (id) {
+  try {
+    await updateDoc(doc(db, 'p2pListings', id), { status: 'closed' });
+    toast('Снято с публикации', 'i');
+    loadP2PMy();
+  } catch (e) { toast(e.message, 'e'); }
+};
+
+window.buyP2P = async function (listingId) {
+  if (!CU || !UD) return toast('Войдите', 'e');
+  if (UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
+  try {
+    const snap = await getDoc(doc(db, 'p2pListings', listingId));
+    if (!snap.exists()) return toast('Объявление не найдено', 'e');
+    const L = snap.data();
+    if (L.status !== 'active') return toast('Уже недоступно', 'w');
+    if (L.sellerUid === CU.uid) return toast('Это ваше объявление', 'w');
+    const bal = (UD.balances && UD.balances[L.currency]) || 0;
+    if (bal < L.price) return toast(`Недостаточно ${L.currency}`, 'e');
+    if (!confirm(`Оплатить ${fmtBal(L.price, L.currency)}? Деньги будут удержаны до подтверждения получения.`)) return;
+
+    const batch = writeBatch(db);
+    batch.update(doc(db, 'wallets', CU.uid), { [`balances.${L.currency}`]: increment(-L.price) });
+    batch.update(doc(db, 'p2pListings', listingId), { status: 'sold' });
+    const orderRef = doc(collection(db, 'p2pOrders'));
+    batch.set(orderRef, {
+      listingId, title: L.title, description: L.description,
+      price: L.price, currency: L.currency, category: L.category,
+      sellerUid: L.sellerUid, sellerName: L.sellerName,
+      buyerUid: CU.uid, buyerName: UD.username,
+      status: 'paid_held', // paid by buyer, held until confirm
+      createdAt: serverTimestamp()
+    });
+    batch.set(doc(collection(db, 'transactions')), {
+      fromUid: CU.uid, fromUsername: UD.username, fromCode: UD.code,
+      toUid: 'p2p_escrow', toUsername: 'P2P Гарант', toCode: 'P2P',
+      currency: L.currency, amount: L.price, type: 'p2p_hold',
+      orderId: orderRef.id, createdAt: serverTimestamp()
+    });
+    await batch.commit();
+    toast('Оплачено! Ожидайте товар от продавца', 's', 5000);
+    openP2POrder(orderRef.id);
+    loadP2PListings();
+  } catch (e) { toast(e.message || 'Ошибка', 'e'); }
+};
+
+window.openP2POrder = async function (id) {
+  const snap = await getDoc(doc(db, 'p2pOrders', id));
+  if (!snap.exists()) return toast('Сделка не найдена', 'e');
+  const o = { ...snap.data(), _id: id };
+  _curP2POrder = o;
+  document.getElementById('p2pOrderTitle').textContent = o.title || 'Сделка';
+  const isBuyer = o.buyerUid === CU?.uid;
+  const isSeller = o.sellerUid === CU?.uid;
+  let actions = '';
+  if (o.status === 'paid_held' && isSeller) {
+    actions = `<button class="btn btn-primary" onclick="p2pMarkShipped('${id}')">📦 Товар передан</button>`;
+  } else if (o.status === 'shipped' && isBuyer) {
+    actions = `<button class="btn btn-primary" onclick="p2pConfirmReceive('${id}')">✅ Подтвердить получение</button>
+      <button class="btn btn-danger" style="margin-top:8px" onclick="p2pDispute('${id}')">⚠️ Спор / обман</button>`;
+  } else if (o.status === 'paid_held' && isBuyer) {
+    actions = `<div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Ожидаем передачу товара продавцом...</div>
+      <button class="btn btn-danger" onclick="p2pDispute('${id}')">⚠️ Спор / обман</button>`;
+  } else if (o.status === 'completed') {
+    actions = '<div style="color:var(--c-green);font-weight:700">✅ Сделка завершена</div>';
+  } else if (o.status === 'disputed') {
+    actions = '<div style="color:var(--c-gold);font-weight:700">⚠️ Спор открыт — разберёт поддержка</div>';
+  }
+  document.getElementById('p2pOrderBody').innerHTML = `
+    <div style="font-size:13px;color:var(--c-text2);margin-bottom:8px">Статус: <b style="color:var(--c-text)">${esc(o.status)}</b></div>
+    <div style="font-size:20px;font-weight:900;margin-bottom:8px">${fmtBal(o.price, o.currency)}</div>
+    <div style="font-size:13px;color:var(--c-text2);margin-bottom:6px">Продавец: ${esc(o.sellerName)} · Покупатель: ${esc(o.buyerName)}</div>
+    <div style="font-size:13px;line-height:1.5;margin-bottom:14px;padding:12px;background:rgba(255,255,255,.04);border-radius:12px">${esc(o.description || '—')}</div>
+    ${actions}`;
+  openSheet('sheetP2POrder');
+};
+
+window.p2pMarkShipped = async function (id) {
+  try {
+    await updateDoc(doc(db, 'p2pOrders', id), { status: 'shipped', shippedAt: serverTimestamp() });
+    toast('Отмечено: товар передан', 's');
+    openP2POrder(id);
+  } catch (e) { toast(e.message, 'e'); }
+};
+
+window.p2pConfirmReceive = async function (id) {
+  try {
+    const snap = await getDoc(doc(db, 'p2pOrders', id));
+    if (!snap.exists()) return;
+    const o = snap.data();
+    if (o.status !== 'shipped' && o.status !== 'paid_held') return toast('Нельзя подтвердить', 'w');
+    const fee = o.price * P2P_FEE;
+    const sellerGets = o.price - fee;
+    const batch = writeBatch(db);
+    batch.update(doc(db, 'wallets', o.sellerUid), { [`balances.${o.currency}`]: increment(sellerGets) });
+    batch.update(doc(db, 'p2pOrders', id), { status: 'completed', completedAt: serverTimestamp() });
+    batch.set(doc(collection(db, 'transactions')), {
+      fromUid: 'p2p_escrow', fromUsername: 'P2P Гарант', fromCode: 'P2P',
+      toUid: o.sellerUid, toUsername: o.sellerName, toCode: '',
+      currency: o.currency, amount: sellerGets, type: 'p2p_release',
+      orderId: id, fee, createdAt: serverTimestamp()
+    });
+    await batch.commit();
+    toast('Сделка завершена! Продавцу зачислено', 's', 5000);
+    openP2POrder(id);
+    loadP2POrders();
+  } catch (e) { toast(e.message, 'e'); }
+};
+
+window.p2pDispute = async function (id) {
+  try {
+    await updateDoc(doc(db, 'p2pOrders', id), { status: 'disputed', disputedAt: serverTimestamp(), disputedBy: CU.uid });
+    await addDoc(collection(db, 'reports'), {
+      fromUid: CU.uid, fromUsername: UD.username, fromCode: UD.code,
+      subject: 'P2P спор / возможный обман',
+      body: `Сделка ${id}. Прошу проверить и вернуть средства при подтверждении обмана.`,
+      type: 'p2p_dispute', orderId: id, status: 'open', createdAt: serverTimestamp()
+    });
+    toast('Спор открыт. Напишите детали в Поддержке', 'w', 6000);
+    openP2POrder(id);
+    goto('pgSupport');
+  } catch (e) { toast(e.message, 'e'); }
+};
+
 // ─── Global safety net: never leave the user stuck on the loading screen ───
 window.addEventListener('unhandledrejection', e => {
   console.error('Unhandled promise rejection:', e.reason);
@@ -3663,6 +4016,41 @@ setTimeout(() => {
 </script>
 
   <!-- COMPLAINT SHEET -->
+  <div class="overlay" id="sheetP2PCreate">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><div class="sheet-title">🤝 Новое объявление</div><button class="sheet-close" onclick="closeSheet('sheetP2PCreate')">✕</button></div>
+      <div class="sheet-body">
+        <div class="form-group"><label class="form-label">Категория</label>
+          <select class="form-input" id="p2pCat">
+            <option value="currency">💱 Валюта (крипто / фиат)</option>
+            <option value="game">🎮 Игровая валюта / аккаунт</option>
+            <option value="item">🎁 Предметы / скины</option>
+            <option value="other">📦 Другое</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="p2pTitle" maxlength="80" placeholder="Например: 1000 UC PUBG"/></div>
+        <div class="form-group"><label class="form-label">Описание</label><textarea class="form-input" id="p2pDesc" rows="3" placeholder="Что получит покупатель, как передаёте..."></textarea></div>
+        <div class="form-group"><label class="form-label">Цена</label>
+          <div class="input-row">
+            <input class="form-input" id="p2pPrice" type="number" placeholder="0.00" inputmode="decimal"/>
+            <select class="form-input" id="p2pCur"><option value="UAH">UAH</option><option value="USD">USD</option><option value="RUB">RUB</option><option value="TON">TON</option></select>
+          </div>
+        </div>
+        <div style="font-size:12px;color:var(--c-text2);margin-bottom:12px;line-height:1.5">Комиссия сервиса 5% удерживается с продавца при успешной сделке.</div>
+        <button class="btn btn-primary" id="btnCreateP2P">Опубликовать</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="sheetP2POrder">
+    <div class="sheet">
+      <div class="sheet-handle"></div>
+      <div class="sheet-head"><div class="sheet-title" id="p2pOrderTitle">Сделка</div><button class="sheet-close" onclick="closeSheet('sheetP2POrder')">✕</button></div>
+      <div class="sheet-body" id="p2pOrderBody"></div>
+    </div>
+  </div>
+
   <div class="overlay" id="sheetComplaint">
     <div class="sheet">
       <div class="sheet-head">
