@@ -809,6 +809,58 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 .form-input option{background:#1a1a2e;color:#fff}
 .wh-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-size:12px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap}
 
+/* MOBILE NUCLEAR v13 */
+@media (max-width:900px){
+  html,body{
+    background:#0a0a14!important;color:#f0f0ff!important;
+    height:100%!important;min-height:100dvh!important;overflow:hidden!important;
+  }
+  #app{
+    background:#0a0a14!important;color:#f0f0ff!important;
+    opacity:1!important;visibility:visible!important;
+    min-height:100dvh!important;height:100dvh!important;
+    display:flex!important;flex-direction:column!important;
+    padding-bottom:60px!important;position:relative!important;z-index:1!important;
+  }
+  #app[style*="display: none"],#app[style*="display:none"]{display:none!important}
+  #main{
+    background:#0a0a14!important;color:#f0f0ff!important;
+    opacity:1!important;visibility:visible!important;
+    flex:1!important;min-height:0!important;width:100%!important;
+    display:flex!important;flex-direction:column!important;
+    overflow:hidden!important;position:relative!important;z-index:2!important;
+  }
+  .page{display:none!important;background:#0a0a14!important;color:#f0f0ff!important}
+  .page.on{
+    display:flex!important;flex-direction:column!important;
+    opacity:1!important;visibility:visible!important;
+    background:#0a0a14!important;color:#f0f0ff!important;
+    overflow-y:auto!important;flex:1!important;min-height:40vh!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  .ph-title,.sec-title,.set-name,.wh-amount,#wBalInt,.asset-name,.tx-who,b,h1,h2,h3{color:#fff!important}
+  .ph-sub,.set-code,.settings-row-sub,small,.sec-link{color:#a0a0c0!important}
+  .sec,.wallet-hero,.shop-item,.set-card{
+    background:rgba(30,30,50,.9)!important;border:1px solid rgba(255,255,255,.12)!important;
+    color:#fff!important;
+  }
+  #sidebar{
+    position:fixed!important;left:0;top:0;bottom:0;width:min(300px,88vw)!important;
+    transform:translateX(-105%)!important;z-index:800!important;
+    background:#0c0c18!important;color:#fff!important;
+  }
+  #sidebar.open{transform:translateX(0)!important}
+  #mobNav{
+    display:flex!important;position:fixed!important;left:0;right:0;bottom:0;
+    z-index:700!important;background:#0c0c18!important;color:#fff!important;
+    border-top:1px solid rgba(255,255,255,.1)!important;
+    padding-bottom:env(safe-area-inset-bottom)!important;
+  }
+  #mobMenuBtn{display:flex!important;z-index:710!important}
+  #loader{background:#0a0a14!important;color:#fff!important}
+  #updateBanner{z-index:600!important}
+}
+
 </style>
 </head>
 <body>
@@ -1433,7 +1485,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
           <div class="set-label">Безопасность</div>
           <div class="set-row">
             <div class="set-row-txt"><b>PIN-код при входе</b><small>Блокировка при запуске</small></div>
-            <div class="toggle" id="pinToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+            <div class="toggle" id="pinToggle" onclick="window.togglePin&&window.togglePin()" role="button" tabindex="0"><div class="toggle-k"></div></div>
           </div>
           <div class="set-row" id="pinSetRow" style="display:none">
             <div class="set-row-txt" style="width:100%">
@@ -1446,7 +1498,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
           </div>
           <div class="set-row">
             <div class="set-row-txt"><b>Скрыть балансы</b><small>Режим приватности (••••)</small></div>
-            <div class="toggle" id="privacyToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+            <div class="toggle" id="privacyToggle" onclick="window.togglePrivacy&&window.togglePrivacy()" role="button" tabindex="0"><div class="toggle-k"></div></div>
           </div>
         </div>
 
@@ -1470,12 +1522,12 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 
         <div class="set-card">
           <div class="set-label">Дополнительно</div>
-          <button type="button" class="set-link" id="btnDailyBonus">
+          <button type="button" class="set-link" id="btnDailyBonus" onclick="window.claimDailyBonus&&window.claimDailyBonus()">
             <span class="set-link-ico">🎁</span>
             <span class="set-link-txt"><b>Ежедневный бонус</b><small id="dailyBonusHint">+5 ₴ раз в сутки</small></span>
             <span class="set-link-arr">›</span>
           </button>
-          <button type="button" class="set-link" id="btnCopyRef">
+          <button type="button" class="set-link" id="btnCopyRef" onclick="window.copyReferral&&window.copyReferral()">
             <span class="set-link-ico">🔗</span>
             <span class="set-link-txt"><b>Реферальная ссылка</b><small>Пригласи друга</small></span>
             <span class="set-link-arr">📋</span>
@@ -1485,7 +1537,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 
         <div class="set-card">
           <div class="set-label">Аккаунт</div>
-          <button type="button" class="set-link danger" id="btnSettingsLogout">
+          <button type="button" class="set-link danger" id="btnSettingsLogout" onclick="window.doLogout&&window.doLogout()">
             <span class="set-link-ico">🚪</span>
             <span class="set-link-txt"><b>Выйти из аккаунта</b><small>Завершить сессию</small></span>
             <span class="set-link-arr">›</span>
@@ -1734,6 +1786,8 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
     </div>
   </div>
 </div>
+
+
 
 
 
@@ -2573,21 +2627,23 @@ function renderPayRow(elId, uahPrice, onSelect) {
   onSelect(PAY_CURRENCIES[0]);
 }
 function loadShopState() {
-  const el = document.getElementById('myTagsInfo');
-  const tags = UD.customTags || (UD.customTag ? [UD.customTag] : []);
-  el.innerHTML = tags.length ? roleBadge({ customTags: tags }) : '<span style="color:var(--c-text3);font-size:13px">У вас пока нет своих тегов</span>';
-
-  // Kassa access status
-  const kassaBtn = document.getElementById('btnBuyKassa');
-  const kassaStatus = document.getElementById('kassaAccessStatus');
-  if (UD.kassaAccess || UD.isOwner) {
-    if (kassaStatus) kassaStatus.innerHTML = '<span style="color:#00C07A;font-size:13px;font-weight:700">✅ Доступ активирован! <a href="kassa.html" target="_blank" style="color:#00C07A;text-decoration:underline">Открыть кассу →</a></span>';
-    if (kassaBtn) { kassaBtn.textContent = 'Открыть кассу'; kassaBtn.onclick = () => window.open('kassa.html', '_blank'); }
-  } else {
-    if (kassaStatus) kassaStatus.innerHTML = '<span style="color:var(--c-text3);font-size:12px">Разовая покупка — доступ навсегда</span>';
-    if (kassaBtn) kassaBtn.onclick = buyKassaAccess;
-  }
+  try {
+    const el = document.getElementById('myTagsInfo');
+    if (!UD) { if(el) el.innerHTML=''; return; }
+    const tags = UD.customTags || (UD.customTag ? [UD.customTag] : []);
+    if (el) el.innerHTML = tags.length ? roleBadge({ customTags: tags }) : '<span style="color:var(--c-text3);font-size:13px">У вас пока нет своих тегов</span>';
+    const kassaBtn = document.getElementById('btnBuyKassa');
+    const kassaStatus = document.getElementById('kassaAccessStatus');
+    if (UD.kassaAccess || UD.isOwner) {
+      if (kassaStatus) kassaStatus.innerHTML = '<span style="color:#00C07A;font-size:13px;font-weight:700">✅ Доступ активирован! <a href="kassa.html" target="_blank" style="color:#00C07A;text-decoration:underline">Открыть кассу →</a></span>';
+      if (kassaBtn) { kassaBtn.textContent = 'Открыть кассу'; kassaBtn.onclick = () => window.open('kassa.html', '_blank'); }
+    } else {
+      if (kassaStatus) kassaStatus.innerHTML = '<span style="color:var(--c-text3);font-size:12px">Разовая покупка — доступ навсегда</span>';
+      if (kassaBtn) kassaBtn.onclick = buyKassaAccess;
+    }
+  } catch (e) { console.error('loadShopState', e); }
 }
+window.loadShopState = loadShopState;
 
 async function buyKassaAccess() {
   if (!UD || UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
@@ -4763,6 +4819,107 @@ window.findWalletByCodeOrName = async function(q){
   }catch(e){ console.error(e); }
   return null;
 };
+
+// ===== HARD FIX v13 =====
+window.toast = window.toast || function(msg,t){ try{ console.log(t,msg);}catch(e){} alert(msg); };
+
+window.claimDailyBonus = async function(){
+  try{
+    if(typeof CU==='undefined'||!CU){ alert('Войдите в аккаунт'); return; }
+    const key='bv_daily_'+CU.uid;
+    const last=parseInt(localStorage.getItem(key)||'0',10);
+    if(Date.now()-last<86400000){ (window.toast||alert)('Уже получено сегодня','w'); return; }
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(5)});
+    localStorage.setItem(key,String(Date.now()));
+    (window.toast||alert)('🎁 +5 ₴ начислено!','s');
+  }catch(e){ console.error(e); alert('Бонус: '+e.message); }
+};
+window.copyReferral = function(){
+  try{
+    if(typeof UD==='undefined'||!UD){ alert('Войдите'); return; }
+    const link=location.href.split('?')[0]+'?ref='+encodeURIComponent(UD.code||UD.username||'');
+    if(navigator.clipboard&&navigator.clipboard.writeText){
+      navigator.clipboard.writeText(link).then(()=>(window.toast||alert)('Ссылка скопирована!')).catch(()=>prompt('Скопируйте:',link));
+    } else prompt('Скопируйте:',link);
+  }catch(e){ alert(e.message); }
+};
+window.togglePin = function(){
+  try{
+    const row=document.getElementById('pinSetRow');
+    const tog=document.getElementById('pinToggle');
+    if(localStorage.getItem('bv_pin')){
+      localStorage.removeItem('bv_pin');
+      tog&&tog.classList.remove('on');
+      if(row) row.style.display='none';
+      (window.toast||alert)('PIN отключён');
+    } else {
+      if(row) row.style.display='block';
+      tog&&tog.classList.add('on');
+      (window.toast||alert)('Введите PIN ниже и нажмите Сохранить');
+    }
+  }catch(e){ alert(e.message); }
+};
+window.togglePrivacy = function(){
+  try{
+    const on=localStorage.getItem('bv_privacy')==='1';
+    localStorage.setItem('bv_privacy', on?'0':'1');
+    document.getElementById('privacyToggle')?.classList.toggle('on', !on);
+    (window.toast||alert)(!on?'Балансы скрыты':'Балансы видны');
+    if(on) setTimeout(()=>location.reload(),300);
+  }catch(e){ alert(e.message); }
+};
+window.doLogout = async function(){
+  try{ await signOut(auth); (window.toast||alert)('Вышли'); }
+  catch(e){ alert(e.message); }
+};
+
+window.admTab = function(t){
+  const ids=['admWallets','admDeposits','admTx','admReports','admTgreq','admGive','admTake','admStaff','admGrantTag','admContest','admComplaints','admAchievements','admBroadcast','admFreeze'];
+  ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
+  const map={wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze'};
+  const show=document.getElementById(map[t]);
+  if(show) show.style.display='block';
+  else console.warn('admin panel missing', t, map[t]);
+  document.querySelectorAll('#adminTabs .btn').forEach(b=>b.classList.remove('btn-primary'));
+  if(t==='achievements' && typeof adminLoadAchievements==='function') adminLoadAchievements();
+};
+
+window.loadShopState = function(){
+  try{
+    const el=document.getElementById('myTagsInfo');
+    if(!UD){ if(el) el.innerHTML=''; return; }
+    const tags=UD.customTags||(UD.customTag?[UD.customTag]:[]);
+    if(el) el.innerHTML = tags.length && typeof roleBadge==='function' ? roleBadge({customTags:tags}) : '<span style="color:#888">Нет своих тегов</span>';
+    const kassaBtn=document.getElementById('btnBuyKassa');
+    if(kassaBtn && UD.kassaAccess) kassaBtn.textContent='Касса активна ✓';
+  }catch(e){ console.error('shop',e); }
+};
+
+// Mobile force visible
+(function(){
+  function forceMobile(){
+    if(window.innerWidth>900) return;
+    const app=document.getElementById('app');
+    if(app && app.style.display!=='none'){
+      app.style.cssText += ';opacity:1!important;visibility:visible!important;background:#0a0a14;color:#fff;display:flex;flex-direction:column;min-height:100dvh';
+    }
+    const main=document.getElementById('main');
+    if(main){
+      main.style.cssText += ';opacity:1!important;visibility:visible!important;background:#0a0a14;color:#fff;flex:1;min-height:50vh;display:flex;flex-direction:column';
+    }
+    document.querySelectorAll('.page').forEach(function(p){
+      if(p.classList.contains('on')){
+        p.style.cssText += ';display:flex!important;opacity:1!important;visibility:visible!important;background:#0a0a14;color:#f0f0ff;flex:1;overflow-y:auto;min-height:40vh';
+      } else {
+        p.style.display='none';
+      }
+    });
+  }
+  setInterval(forceMobile, 1000);
+  window.addEventListener('resize', forceMobile);
+  setTimeout(forceMobile, 500);
+})();
+console.log('[BV] hard fix v13');
 
 </script>
 </body>
