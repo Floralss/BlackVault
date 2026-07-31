@@ -455,8 +455,21 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 
 <div id="toastRoot"></div>
 
-<!-- UPDATE LOG -->
-
+<!-- AUTH -->
+<div id="authScreen" style="display:none">
+  <div id="pgLogin" class="auth-screen" style="display:flex">
+    <div class="auth-card">
+      <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
+      <div class="auth-title">Вход</div>
+      <div class="auth-sub">Добро пожаловать обратно</div>
+      <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
+      <div class="form-group"><label class="form-label">Пароль</label><input id="lPass" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
+      <button class="btn btn-primary" id="btnLogin" type="button">Войти</button>
+      <div class="divider">или</div>
+      <button class="btn btn-google" id="btnGoo1" type="button"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt=""/> Google</button>
+      <div class="auth-foot">Нет аккаунта? <a id="toReg" href="javascript:void(0)">Регистрация</a></div>
+    </div>
+  </div>
   <div id="pgReg" class="auth-screen" style="display:none">
     <div class="auth-card">
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
@@ -475,7 +488,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
       <div class="auth-title">Ваш никнейм</div><div class="auth-sub">Выберите уникальное имя</div>
       <div class="form-group"><label class="form-label">Никнейм</label><input id="unameI" class="form-input" maxlength="24" placeholder="CryptoKing"/></div>
-      <button class="btn btn-primary" id="btnUname">Продолжить →</button>
+      <button class="btn btn-primary" id="btnUname" type="button">Продолжить →</button>
     </div>
   </div>
 </div>
@@ -989,6 +1002,17 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
         <div style="padding:12px 16px 8px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Достижения</div>
         <div class="ach-grid" id="setAchievements" style="padding:0 14px 14px"></div>
       </div>
+
+      <div class="settings-section">
+        <div class="settings-row clickable" id="btnLogoutSettings" onclick="doLogout()">
+          <div class="settings-row-l"><div class="settings-row-title">Выйти из аккаунта</div><div class="settings-row-sub">Завершить сессию</div></div>
+          <div class="settings-row-v">🚪</div>
+        </div>
+        <div class="settings-row clickable" onclick="openSheet('sheetAccounts')">
+          <div class="settings-row-l"><div class="settings-row-title">Аккаунты</div><div class="settings-row-sub">Переключение между профилями</div></div>
+          <div class="settings-row-v">›</div>
+        </div>
+      </div>
 <div class="settings-section">
         <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" style="color:#FF8FA3">Удалить аккаунт</div><div class="settings-row-sub">Необратимое действие</div></div><button class="btn btn-danger btn-sm" id="btnDeleteSelf">Удалить</button></div>
       </div>
@@ -1472,23 +1496,34 @@ window.nav = goto;
 document.querySelectorAll('[data-goto]').forEach(el => el.addEventListener('click', () => goto(el.getAttribute('data-goto'))));
 
 function closeSB() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbOverlay').classList.remove('open'); }
-document.getElementById('mobMenuBtn').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sbOverlay').classList.toggle('open'); });
-document.getElementById('sbOverlay').addEventListener('click', closeSB);
-document.getElementById('btnLogout').addEventListener('click', () => signOut(auth).then(() => toast('Вышли из аккаунта', 'i')));
+document.getElementById('mobMenuBtn')?.addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sbOverlay').classList.toggle('open'); });
+document.getElementById('sbOverlay')?.addEventListener('click', closeSB);
+document.getElementById('btnLogout')?.addEventListener('click', () => signOut(auth).then(() => toast('Вышли из аккаунта', 'i')));
 
 // ═══ AUTH ═══
-function showAuth(id) { ['pgLogin', 'pgReg', 'pgUname'].forEach(p => document.getElementById(p).style.display = p === id ? 'flex' : 'none'); document.getElementById('authScreen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; }
-document.getElementById('toReg').addEventListener('click', () => showAuth('pgReg'));
-document.getElementById('toLg').addEventListener('click', () => showAuth('pgLogin'));
+function showAuth(id) {
+  ['pgLogin', 'pgReg', 'pgUname'].forEach(p => {
+    const el = document.getElementById(p);
+    if (el) el.style.display = p === id ? 'flex' : 'none';
+  });
+  const as = document.getElementById('authScreen');
+  if (as) as.style.display = 'flex';
+  const app = document.getElementById('app');
+  if (app) app.style.display = 'none';
+  const loader = document.getElementById('loader');
+  if (loader) loader.style.display = 'none';
+}
+document.getElementById('toReg')?.addEventListener('click', () => showAuth('pgReg'));
+document.getElementById('toLg')?.addEventListener('click', () => showAuth('pgLogin'));
 
-document.getElementById('btnLogin').addEventListener('click', async () => {
+document.getElementById('btnLogin')?.addEventListener('click', async () => {
   if (Date.now() < loginAttempts.until) return toast(`Подождите ${Math.ceil((loginAttempts.until - Date.now()) / 1000)}с`, 'e');
   const e = document.getElementById('lEmail').value.trim(), p = document.getElementById('lPass').value;
   if (!e || !p) return toast('Заполните поля', 'w');
   try { await signInWithEmailAndPassword(auth, e, p); loginAttempts.n = 0; }
   catch { loginAttempts.n++; if (loginAttempts.n >= 5) { loginAttempts.until = Date.now() + 60000; loginAttempts.n = 0; } toast('Неверный email или пароль', 'e'); }
 });
-document.getElementById('btnReg').addEventListener('click', async () => {
+document.getElementById('btnReg')?.addEventListener('click', async () => {
   const e = document.getElementById('rEmail').value.trim(), p = document.getElementById('rPass').value, p2 = document.getElementById('rPass2').value;
   if (!e || !p) return toast('Заполните поля', 'w');
   if (p !== p2) return toast('Пароли не совпадают', 'e');
@@ -1496,9 +1531,9 @@ document.getElementById('btnReg').addEventListener('click', async () => {
   try { await createUserWithEmailAndPassword(auth, e, p); } catch (err) { toast(err.code === 'auth/email-already-in-use' ? 'Email занят' : 'Ошибка', 'e'); }
 });
 async function goo() { try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch { toast('Ошибка Google', 'e'); } }
-document.getElementById('btnGoo1').addEventListener('click', goo);
-document.getElementById('btnGoo2').addEventListener('click', goo);
-document.getElementById('btnUname').addEventListener('click', async () => {
+document.getElementById('btnGoo1')?.addEventListener('click', goo);
+document.getElementById('btnGoo2')?.addEventListener('click', goo);
+document.getElementById('btnUname')?.addEventListener('click', async () => {
   const n = document.getElementById('unameI').value.trim();
   if (n.length < 2) return toast('Мин. 2 символа', 'w');
   if (n.length > 24) return toast('Макс. 24', 'w');
@@ -1574,7 +1609,7 @@ window.togglePin = function () {
   if (localStorage.getItem('bv_pin')) { localStorage.removeItem('bv_pin'); document.getElementById('pinToggle').classList.remove('on'); document.getElementById('pinSetRow').style.display = 'none'; toast('PIN отключён', 'i'); }
   else document.getElementById('pinSetRow').style.display = 'block';
 };
-document.getElementById('btnSetPin').addEventListener('click', () => {
+document.getElementById('btnSetPin')?.addEventListener('click', () => {
   const p = document.getElementById('newPinIn').value;
   if (!/^\d{4}$/.test(p)) return toast('4 цифры', 'w');
   sha(p + CU.uid).then(h => { localStorage.setItem('bv_pin', h); document.getElementById('pinToggle').classList.add('on'); document.getElementById('pinSetRow').style.display = 'none'; toast('PIN установлен', 's'); });
@@ -3698,6 +3733,74 @@ setTimeout(function(){
     window.nav=window.goto;
   }
 }, 0);
+
+
+window.doLogout = async function(){
+  try{
+    saveAccountToList();
+    await signOut(auth);
+    toast('Вы вышли','i');
+  }catch(e){ toast(e.message||'Ошибка','e'); }
+};
+function saveAccountToList(){
+  try{
+    if(!CU||!UD) return;
+    const list = JSON.parse(localStorage.getItem('bv_accounts')||'[]');
+    const entry = {uid:CU.uid, email:CU.email||'', username:UD.username||'', code:UD.code||'', avatarUrl:UD.avatarUrl||'', ts:Date.now()};
+    const next = list.filter(a=>a.uid!==entry.uid);
+    next.unshift(entry);
+    localStorage.setItem('bv_accounts', JSON.stringify(next.slice(0,8)));
+  }catch(e){}
+}
+function renderAccountsList(){
+  const el=document.getElementById('accountsList'); if(!el) return;
+  const list=JSON.parse(localStorage.getItem('bv_accounts')||'[]');
+  if(!list.length){ el.innerHTML='<div class="empty-state" style="padding:20px"><span class="emo">👤</span>Пока один аккаунт</div>'; return; }
+  el.innerHTML=list.map(a=>`<div class="check-card" style="display:flex;align-items:center;gap:12px">
+    <div style="width:40px;height:40px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-weight:900;overflow:hidden;flex-shrink:0">
+      ${a.avatarUrl?`<img src="${esc(a.avatarUrl)}" style="width:100%;height:100%;object-fit:cover"/>`:(a.username||'?').charAt(0).toUpperCase()}
+    </div>
+    <div style="flex:1;min-width:0">
+      <div style="font-weight:800">${esc(a.username||'—')}</div>
+      <div style="font-size:11px;color:var(--c-text3)">${esc(a.code||'')} · ${esc(a.email||'')}</div>
+    </div>
+    ${a.uid===CU?.uid?'<span class="badge badge-green">Сейчас</span>':`<button class="btn btn-secondary btn-sm" onclick="switchAccountHint()">Сменить</button>`}
+  </div>`).join('');
+}
+window.switchAccountHint=function(){
+  toast('Нажмите «Добавить аккаунт» и войдите под другим email','i',4000);
+};
+document.getElementById('btnAddAccount')?.addEventListener('click', async()=>{
+  saveAccountToList();
+  await signOut(auth);
+  closeSheet('sheetAccounts');
+  toast('Войдите в другой аккаунт','i');
+});
+// refresh accounts when opening sheet - patch openSheet
+(function(){
+  const _os = window.openSheet;
+  if(typeof openSheet==='function'){
+    window.openSheet=function(id){
+      _os(id);
+      if(id==='sheetAccounts') renderAccountsList();
+    };
+  }
+})();
+// save account on successful login
+(function(){
+  const orig = window.renderSidebar;
+  // after auth, save periodically
+  setInterval(()=>{ try{ if(CU&&UD) saveAccountToList(); }catch(e){} }, 15000);
+})();
+
+// Safety: hide loader always after 4s
+setTimeout(()=>{
+  const loader=document.getElementById('loader');
+  if(loader && loader.style.display!=='none'){
+    loader.style.display='none';
+    if(!CU){ try{ showAuth('pgLogin'); }catch(e){} }
+  }
+}, 4000);
 
 </script>
 
