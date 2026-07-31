@@ -257,6 +257,7 @@ document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e
 
 // ═══ NAV ═══
 function goto(id) {
+  // exported below
   if (!id) return;
   const cur = document.querySelector('.page.on');
   if (cur && cur.id !== id) prevPage = cur.id;
@@ -3305,4 +3306,69 @@ console.log('[BV] final v17');
   const _ci = document.createElement;
   // don't override createElement - too invasive
   console.log('[BV] buttons v20');
+})();
+
+// MOBILE TAP FIX v22 — event delegation for all navigation
+(function(){
+  function handleNav(e){
+    try{
+      const t = e.target && e.target.closest ? e.target.closest('[data-goto], .wa[data-goto], .sb-tile[data-goto], .sb-list-item[data-goto], #mobNav [data-goto]') : null;
+      if(t){
+        const id = t.getAttribute('data-goto');
+        if(id){
+          e.preventDefault();
+          e.stopPropagation();
+          // close mobile sidebar
+          document.getElementById('sidebar')?.classList.remove('open');
+          document.getElementById('sbOverlay')?.classList.remove('open');
+          if(typeof window.goto === 'function') window.goto(id);
+          else if(typeof goto === 'function') goto(id);
+          return true;
+        }
+      }
+      const sheet = e.target && e.target.closest ? e.target.closest('[data-sheet]') : null;
+      if(sheet){
+        e.preventDefault();
+        const sid = sheet.getAttribute('data-sheet');
+        if(sid && typeof window.openSheet === 'function') window.openSheet(sid);
+        return true;
+      }
+    }catch(err){ console.error('nav', err); }
+    return false;
+  }
+  document.addEventListener('click', handleNav, true);
+  document.addEventListener('touchend', function(e){
+    // only for nav targets to avoid double-firing with click
+    const t = e.target && e.target.closest ? e.target.closest('[data-goto], [data-sheet]') : null;
+    if(t) handleNav(e);
+  }, {passive:false, capture:true});
+
+  // Clear stuck overlays that block taps
+  function clearBlockers(){
+    try{
+      const app = document.getElementById('app');
+      if(app && app.style.display !== 'none'){
+        const auth = document.getElementById('authScreen');
+        if(auth){ auth.style.display = 'none'; auth.style.pointerEvents = 'none'; }
+        const loader = document.getElementById('loader');
+        if(loader){ loader.style.display = 'none'; loader.style.pointerEvents = 'none'; }
+        document.querySelectorAll('.overlay:not(.on)').forEach(o=>{
+          o.style.pointerEvents = 'none';
+        });
+        const sb = document.getElementById('sbOverlay');
+        if(sb && !sb.classList.contains('open')){
+          sb.style.display = 'none';
+          sb.style.pointerEvents = 'none';
+        }
+      }
+    }catch(e){}
+  }
+  clearBlockers();
+  setInterval(clearBlockers, 2000);
+
+  // Ensure window.goto exists
+  if(typeof window.goto !== 'function' && typeof goto === 'function'){
+    window.goto = goto;
+  }
+  console.log('[BV] mobile tap v22');
 })();
