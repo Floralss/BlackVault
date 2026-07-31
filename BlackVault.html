@@ -956,6 +956,55 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 .wh-btn:hover{background:rgba(124,92,252,.28)}
 .wh-btn-icon{font-size:14px}
 
+/* AUTH + ACH + UI FIX v16 */
+#authScreen{display:none;position:fixed;inset:0;z-index:9000;background:radial-gradient(ellipse at 30% 20%,rgba(124,92,252,.2),transparent 50%),#07070F;align-items:center;justify-content:center;padding:20px;overflow-y:auto}
+#authScreen[style*="flex"],#authScreen.show{display:flex!important}
+.auth-card{
+  width:100%;max-width:400px;background:rgba(18,18,36,.95);
+  border:1px solid rgba(255,255,255,.1);border-radius:24px;padding:28px 24px;
+  box-shadow:0 24px 80px rgba(0,0,0,.5);
+}
+.auth-logo{display:flex;align-items:center;gap:10px;margin-bottom:18px;justify-content:center}
+.auth-logo-ico{width:48px;height:48px;border-radius:14px;background:linear-gradient(135deg,#9B7FFF,#5B4FE9);display:flex;align-items:center;justify-content:center;font-size:22px}
+.auth-logo-name{font-size:20px;font-weight:900;color:#fff}
+.auth-title{font-size:22px;font-weight:900;color:#fff;text-align:center;margin-bottom:4px}
+.auth-sub{font-size:13px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:20px}
+.auth-foot{text-align:center;margin-top:16px;font-size:13px;color:rgba(255,255,255,.5)}
+.auth-foot a{color:#A78BFA;font-weight:700;cursor:pointer;text-decoration:none}
+.pass-wrap{position:relative}
+.pass-wrap .form-input{padding-right:44px}
+.pass-eye{position:absolute;right:8px;top:50%;transform:translateY(-50%);background:transparent;border:none;cursor:pointer;font-size:16px;opacity:.7;padding:6px}
+.divider{display:flex;align-items:center;gap:12px;margin:14px 0;color:rgba(255,255,255,.35);font-size:12px}
+.divider::before,.divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,.1)}
+.btn-google{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;padding:12px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-weight:700;cursor:pointer}
+.btn-primary{width:100%;padding:13px;border-radius:12px;background:linear-gradient(135deg,#9B7FFF,#6D5BFF);border:none;color:#fff;font-size:15px;font-weight:800;cursor:pointer}
+.form-group{margin-bottom:12px}
+.form-label{display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,.55);margin-bottom:6px}
+.form-input{width:100%;padding:12px 14px;border-radius:12px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);color:#fff;font-size:14px;font-weight:600}
+.form-input:focus{outline:none;border-color:rgba(124,92,252,.6)}
+
+.ach-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;padding:8px 4px 12px}
+.ach-card{
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;padding:12px 10px;text-align:center;
+}
+.ach-card.on{border-color:rgba(124,92,252,.5);background:rgba(124,92,252,.12)}
+.ach-card:not(.on){opacity:.45;filter:grayscale(.7)}
+.ach-ico{font-size:28px;margin-bottom:4px}
+.ach-name{font-size:12px;font-weight:800;color:#fff}
+.ach-desc{font-size:10px;color:rgba(255,255,255,.45);margin-top:2px;line-height:1.3}
+
+@media(max-width:900px){
+  html,body,#app,#main{background:#07070F!important;color:#F0F0FF!important}
+  #app{min-height:100dvh!important}
+  .page.on{display:flex!important;opacity:1!important;visibility:visible!important;color:#F0F0FF!important;background:#07070F!important}
+  .ph-title,.sec-title,.set-name,.wh-amount{color:#fff!important}
+  #mobNav{display:flex!important}
+  #mobMenuBtn{display:flex!important}
+  #sidebar{transform:translateX(-105%)!important}
+  #sidebar.open{transform:translateX(0)!important}
+}
+
 </style>
 </head>
 <body>
@@ -994,9 +1043,16 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
       <div class="auth-title">Вход</div>
       <div class="auth-sub">Добро пожаловать обратно</div>
-      <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
-      <div class="form-group"><label class="form-label">Пароль</label><input id="lPass" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
-      <button class="btn btn-primary" id="btnLogin" type="button">Войти</button>
+      <form id="formLogin" autocomplete="on" onsubmit="return false;">
+        <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="username" required/></div>
+        <div class="form-group"><label class="form-label">Пароль</label>
+          <div class="pass-wrap">
+            <input id="lPass" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password" required/>
+            <button type="button" class="pass-eye" data-for="lPass" aria-label="Показать">👁</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btnLogin" type="submit">Войти</button>
+      </form>
       <div class="divider">или</div>
       <button class="btn btn-google" id="btnGoo1" type="button"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt=""/> Google</button>
       <div class="auth-foot">Нет аккаунта? <a id="toReg" href="javascript:void(0)">Регистрация</a></div>
@@ -1006,10 +1062,22 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
     <div class="auth-card">
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
       <div class="auth-title">Создать аккаунт</div><div class="auth-sub">Присоединяйтесь к BlackVault</div>
-      <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
-      <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов"/></div>
-      <div class="form-group"><label class="form-label">Повтор пароля</label><input id="rPass2" class="form-input" type="password" placeholder="••••••••"/></div>
-      <button class="btn btn-primary" id="btnReg">Создать аккаунт</button>
+      <form id="formReg" autocomplete="on" onsubmit="return false;">
+        <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="username" required/></div>
+        <div class="form-group"><label class="form-label">Пароль</label>
+          <div class="pass-wrap">
+            <input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов" autocomplete="new-password" required minlength="6"/>
+            <button type="button" class="pass-eye" data-for="rPass" aria-label="Показать">👁</button>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Повтор пароля</label>
+          <div class="pass-wrap">
+            <input id="rPass2" class="form-input" type="password" placeholder="••••••••" autocomplete="new-password" required/>
+            <button type="button" class="pass-eye" data-for="rPass2" aria-label="Показать">👁</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btnReg" type="submit">Создать аккаунт</button>
+      </form>
       <div class="divider">или</div>
       <button class="btn btn-google" id="btnGoo2"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16"/> Google</button>
       <div class="auth-foot">Уже есть аккаунт? <a id="toLg">Войти</a></div>
@@ -1647,7 +1715,8 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
             <span class="set-link-txt"><b>Реферальная ссылка</b><small>Пригласи друга</small></span>
             <span class="set-link-arr">📋</span>
           </button>
-          <div id="setAchievements"></div>
+          <div class="set-label" style="margin-top:4px">Достижения</div>
+          <div id="setAchievements" class="ach-grid"></div>
         </div>
 
         <div class="set-card">
@@ -1901,6 +1970,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
     </div>
   </div>
 </div>
+
 
 
 
@@ -5071,6 +5141,35 @@ console.log('[BV] hard fix v13');
   else bind();
   setTimeout(bind, 800);
 })();
+
+// AUTH + ACH v16
+document.querySelectorAll('.pass-eye').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.getAttribute('data-for');
+    const inp=document.getElementById(id);
+    if(!inp) return;
+    inp.type = inp.type==='password' ? 'text' : 'password';
+  });
+});
+document.getElementById('formLogin')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('btnLogin')?.click();
+});
+document.getElementById('formReg')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('btnReg')?.click();
+});
+// Force achievements when settings visible
+setInterval(()=>{
+  try{
+    const pg=document.getElementById('pgSettings');
+    const el=document.getElementById('setAchievements');
+    if(pg&&pg.classList.contains('on')&&el&&!el.children.length&&typeof renderAchievements==='function'){
+      renderAchievements('setAchievements', typeof UD!=='undefined'?UD:null);
+    }
+  }catch(e){}
+}, 2000);
+console.log('[BV] auth+ach v16');
 
 </script>
 </body>
