@@ -851,3 +851,48 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
   #loader{background:#0a0a14!important;color:#fff!important}
   #updateBanner{z-index:600!important}
 }
+
+/* WALLET POLISH v14 */
+.wallet-hero{
+  background:linear-gradient(145deg,rgba(124,92,252,.18),rgba(20,16,40,.9));
+  border:1px solid rgba(124,92,252,.25);
+  border-radius:20px;padding:20px 18px;margin:0 14px 14px;
+}
+.wh-label{font-size:11px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.55);margin-bottom:6px}
+.wh-amount{font-size:36px;font-weight:900;color:#fff;line-height:1.1;letter-spacing:-.02em}
+.wh-amount span{color:rgba(255,255,255,.9)}
+.wh-sub{font-size:13px;color:rgba(255,255,255,.65);margin-top:6px}
+.wh-code{font-size:12px;font-family:ui-monospace,monospace;color:rgba(255,255,255,.55);margin-top:4px;cursor:pointer}
+.wh-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.wh-btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:6px;
+  padding:10px 14px;border-radius:12px;min-height:40px;
+  background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.12);
+  font-size:12.5px;font-weight:700;color:#fff;cursor:pointer;
+  transition:background .15s,transform .1s;
+}
+.wh-btn:hover{background:rgba(124,92,252,.25);border-color:rgba(124,92,252,.4)}
+.wh-btn:active{transform:scale(.97)}
+.wh-btn .wh-btn-icon,.wh-btn .wh-btn-ico{font-size:15px;line-height:1}
+.sec{margin:0 14px 14px;border-radius:16px;overflow:hidden;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08)}
+.sec-head{display:flex;align-items:center;justify-content:space-between;padding:12px 14px 8px}
+.sec-title{font-size:14px;font-weight:800;color:#fff}
+.sec-link{font-size:12px;font-weight:700;color:var(--btn2);cursor:pointer}
+.asset-row,.tx-row{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+  border-top:1px solid rgba(255,255,255,.05);
+}
+.asset-ico,.tx-ico{
+  width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
+  font-size:16px;font-weight:800;flex-shrink:0;background:rgba(255,255,255,.06);
+}
+.asset-name,.tx-who{font-size:14px;font-weight:700;color:#fff}
+.asset-sym,.tx-date{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px}
+.asset-right,.tx-right{margin-left:auto;text-align:right}
+.asset-bal{font-size:14px;font-weight:800;color:#fff}
+.asset-usd{font-size:11px;color:rgba(255,255,255,.45)}
+.tx-amt{font-size:14px;font-weight:800}
+.tx-amt.neg{color:#FF6B7A}
+.tx-amt.pos{color:#22D27F}
+.ph-title{font-size:20px;font-weight:900;color:#fff}
+.ph-sub{font-size:13px;color:rgba(255,255,255,.5)}
