@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+\<!DOCTYPE html>
 <html lang="ru">
 <head>
 <meta charset="UTF-8"/>
@@ -112,11 +112,21 @@ select.form-input{cursor:pointer}
 #btnLogout:hover{background:rgba(255,77,106,.1)}
 .sb-tiles-sect{padding:8px}
 .tiles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
-.sb-tile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;background:rgba(255,255,255,.05);border:1px solid var(--c-border);border-radius:var(--rs);cursor:pointer;transition:.18s}
-.sb-tile:hover,.sb-tile.on{background:rgba(124,92,252,.1);border-color:rgba(124,92,252,.25)}
-.sb-tile .ic{font-size:22px}
-.sb-tile .lb{font-size:10px;font-weight:700;text-align:center;color:var(--c-text2);line-height:1.2}
+.sb-tile{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:5px;padding:10px 4px;min-height:64px;
+  background:rgba(255,255,255,.04);border:1px solid var(--c-border);
+  border-radius:12px;cursor:pointer;transition:.18s;position:relative;
+}
+.sb-tile:hover,.sb-tile.on{background:rgba(124,92,252,.12);border-color:rgba(124,92,252,.3)}
+.sb-tile .ic{font-size:20px;line-height:1;display:block}
+.sb-tile .lb{
+  font-size:10px;font-weight:700;text-align:center;color:var(--c-text2);
+  line-height:1.15;max-width:100%;overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap;padding:0 2px;
+}
 .sb-tile.on .lb{color:var(--btn2)}
+.sb-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}
 #mobMenuBtn{display:none;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid var(--c-border);align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0}
 #sbOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:499;backdrop-filter:blur(4px)}
 #sbOverlay.open{display:block}
@@ -438,35 +448,56 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 }
 
 
-/* ========== MOBILE FULL FIX v7 ========== */
+
+
+/* ========== MOBILE FIX v9 ========== */
 @media (max-width: 900px) {
   html, body {
     background: #07070F !important;
     color: #F0F0FF !important;
+    width: 100% !important;
     height: 100% !important;
     height: 100dvh !important;
     overflow: hidden !important;
+    margin: 0 !important;
+  }
+  body * {
+    -webkit-tap-highlight-color: transparent;
+  }
+  #loader {
+    background: #07070F !important;
+    color: #F0F0FF !important;
+    z-index: 99999 !important;
   }
   #app {
     display: flex !important;
-    flex-direction: row !important;
+    flex-direction: column !important;
     opacity: 1 !important;
     visibility: visible !important;
     background: #07070F !important;
     color: #F0F0FF !important;
+    width: 100% !important;
     height: 100% !important;
     height: 100dvh !important;
     min-height: 100dvh !important;
-    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+    padding: 0 !important;
+    padding-bottom: calc(58px + env(safe-area-inset-bottom, 0px)) !important;
     position: relative !important;
     z-index: 1 !important;
+    overflow: hidden !important;
+  }
+  /* When auth hides app via style=display:none, don't force show */
+  #app[style*="display: none"],
+  #app[style*="display:none"] {
+    display: none !important;
   }
   #main {
     display: flex !important;
     flex-direction: column !important;
-    flex: 1 !important;
+    flex: 1 1 auto !important;
     width: 100% !important;
     min-width: 0 !important;
+    min-height: 0 !important;
     opacity: 1 !important;
     visibility: visible !important;
     background: #07070F !important;
@@ -479,10 +510,12 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
     display: none !important;
     background: #07070F !important;
     color: #F0F0FF !important;
+    width: 100% !important;
   }
   .page.on {
     display: flex !important;
     flex-direction: column !important;
+    flex: 1 1 auto !important;
     opacity: 1 !important;
     visibility: visible !important;
     background: #07070F !important;
@@ -490,86 +523,134 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
     overflow-y: auto !important;
     overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
-    flex: 1 !important;
     min-height: 0 !important;
+    padding-bottom: 12px !important;
   }
-  .ph, .ph-title, .ph-sub, .sec-title, .settings-row-title, .wh-label {
+  /* Text always readable */
+  .ph-title, .sec-title, .settings-row-title, .wh-label, .wh-amount,
+  .asset-name, .tx-who, .sb-uname, .sb-brand-name, .form-label {
     color: #F0F0FF !important;
   }
-  .ph-sub, .settings-row-sub, .sec-link, .c-text2 {
-    color: #8080AA !important;
+  .ph-sub, .settings-row-sub, .sec-link, .sb-code, .c-text2, .asset-sub {
+    color: #9A9AB8 !important;
   }
-  #wBalInt, #wBalDec, .wh-amount {
+  #wBalInt, #wBalDec, .wh-amount, .wh-amount * {
     color: #FFFFFF !important;
     -webkit-text-fill-color: #FFFFFF !important;
+    background: none !important;
   }
-  /* Sidebar: drawer */
+  .sec, .wallet-hero, .shop-item, .settings-row {
+    background: rgba(255,255,255,.04) !important;
+    border-color: rgba(255,255,255,.08) !important;
+  }
+  /* Drawer sidebar - hidden until open */
   #sidebar {
     display: flex !important;
     position: fixed !important;
-    left: 0 !important; top: 0 !important; bottom: 0 !important;
-    width: min(280px, 85vw) !important;
-    z-index: 600 !important;
-    transform: translateX(-110%) !important;
-    transition: transform .25s ease !important;
-    background: #0A0A14 !important;
+    left: 0 !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    width: min(300px, 88vw) !important;
+    max-width: 320px !important;
+    z-index: 800 !important;
+    transform: translateX(-105%) !important;
+    transition: transform .28s cubic-bezier(.4,0,.2,1) !important;
+    background: #0B0B16 !important;
     color: #F0F0FF !important;
+    border-right: 1px solid rgba(255,255,255,.08) !important;
     box-shadow: none !important;
+    overflow: hidden !important;
   }
   #sidebar.open {
     transform: translateX(0) !important;
-    box-shadow: 16px 0 48px rgba(0,0,0,.65) !important;
+    box-shadow: 12px 0 40px rgba(0,0,0,.7) !important;
   }
   #sbOverlay {
     display: none !important;
     position: fixed !important;
     inset: 0 !important;
-    background: rgba(0,0,0,.55) !important;
-    z-index: 550 !important;
+    background: rgba(0,0,0,.6) !important;
+    z-index: 750 !important;
   }
-  #sbOverlay.open {
-    display: block !important;
-  }
-  #mobNav {
-    display: block !important;
-    position: fixed !important;
-    left: 0 !important; right: 0 !important; bottom: 0 !important;
-    z-index: 500 !important;
-    background: rgba(10,10,22,.97) !important;
-    border-top: 1px solid rgba(255,255,255,.08) !important;
-    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
-  }
+  #sbOverlay.open { display: block !important; }
   #mobMenuBtn {
     display: flex !important;
     position: fixed !important;
-    top: 10px !important; left: 10px !important;
-    z-index: 520 !important;
-    width: 40px !important; height: 40px !important;
-    align-items: center !important; justify-content: center !important;
-    background: rgba(20,20,40,.95) !important;
-    border: 1px solid rgba(255,255,255,.12) !important;
+    top: max(10px, env(safe-area-inset-top)) !important;
+    left: 10px !important;
+    z-index: 700 !important;
+    width: 42px !important;
+    height: 42px !important;
+    align-items: center !important;
+    justify-content: center !important;
+    background: rgba(18,18,36,.96) !important;
+    border: 1px solid rgba(255,255,255,.14) !important;
     border-radius: 12px !important;
     color: #fff !important;
     font-size: 18px !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,.4) !important;
   }
-  .ph { padding-left: 56px !important; }
-  /* Kill covering effects */
-  #fxSnow, body::before {
+  #mobNav {
+    display: flex !important;
+    position: fixed !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    z-index: 700 !important;
+    background: rgba(10,10,20,.98) !important;
+    border-top: 1px solid rgba(255,255,255,.1) !important;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom, 0px)) !important;
+    justify-content: space-around !important;
+    align-items: center !important;
+  }
+  .mob-item {
+    flex: 1 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 2px !important;
+    padding: 6px 2px !important;
+    color: #8A8AA8 !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    background: transparent !important;
+    border: none !important;
+  }
+  .mob-item.on { color: #A78BFA !important; }
+  .mob-item .ic { font-size: 18px !important; }
+  .ph {
+    padding: 14px 16px 10px 56px !important;
+  }
+  .wallet-hero { margin: 0 12px 12px !important; padding: 16px !important; }
+  .sec { margin: 0 12px 12px !important; }
+  .wh-actions { gap: 6px !important; }
+  .wh-btn { padding: 7px 10px !important; font-size: 11px !important; }
+  #fxSnow, body.fx-grid::before, body.fx-dots::before {
     pointer-events: none !important;
     z-index: 0 !important;
+    opacity: 0.35 !important;
   }
   #updateBanner {
-    left: 12px !important; right: 12px !important;
-    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    left: 10px !important;
+    right: 10px !important;
+    bottom: calc(70px + env(safe-area-inset-bottom, 0px)) !important;
     max-width: none !important;
-    z-index: 400 !important;
+    z-index: 650 !important;
   }
-  .overlay.on {
-    z-index: 3000 !important;
-  }
+  .overlay { z-index: 9000 !important; }
+  .sheet { max-height: 88vh !important; }
 }
 
-
+/* Desktop: hide mobile chrome */
+@media (min-width: 901px) {
+  #mobNav, #mobMenuBtn, #sbOverlay { display: none !important; }
+  #sidebar {
+    display: flex !important;
+    position: relative !important;
+    transform: none !important;
+    width: 240px !important;
+  }
+}
 
 /* === PAGE NAV FIX: only one page visible === */
 .page {
@@ -586,6 +667,34 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 .page.on {
   display: flex !important;
 }
+
+/* Wallet quick actions - neat row */
+.wh-actions{
+  display:flex;flex-wrap:wrap;gap:8px;margin-top:14px;align-items:center;
+}
+.wh-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:8px 12px;border-radius:10px;
+  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.08);
+  font-size:12px;font-weight:700;color:var(--c-text);cursor:pointer;
+  white-space:nowrap;transition:.15s;
+}
+.wh-btn:hover{background:rgba(124,92,252,.15);border-color:rgba(124,92,252,.3)}
+.wh-btn.primary{background:rgba(124,92,252,.2);border-color:rgba(124,92,252,.35);color:#fff}
+.wh-btn-icon,.wh-btn-ico{font-size:14px}
+.asset-row,.tx-row{
+  display:flex;align-items:center;gap:12px;padding:12px 14px;
+  border-bottom:1px solid var(--c-border);
+}
+.asset-row:last-child,.tx-row:last-child{border-bottom:none}
+.sb-list-item{
+  display:flex;align-items:center;gap:10px;
+  padding:10px 12px;border-radius:10px;cursor:pointer;
+  color:var(--c-text2);font-size:13px;font-weight:600;
+}
+.sb-list-item .ic{width:28px;height:28px;display:flex;align-items:center;justify-content:center;font-size:15px;border-radius:8px;background:rgba(255,255,255,.05);flex-shrink:0}
+.sb-list-item.on{background:rgba(124,92,252,.12);color:var(--btn2)}
+.sb-sep{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.06em;color:var(--c-text3);padding:12px 12px 6px}
 
 </style>
 </head>
@@ -1412,6 +1521,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
   <div class="sheet-head"><div class="sheet-title" id="contestDetailTitle">Конкурс</div><button class="sheet-close" onclick="closeSheet('sheetContestDetail')">✕</button></div>
   <div class="sheet-body" id="contestDetailBody"></div>
 </div></div>
+
 
 
 <script type="module">
@@ -4051,6 +4161,24 @@ window.goto = function(id) {
 };
 window.nav = window.goto;
 window.goBack = function() { goto(window.prevPage || 'pgWallet'); };
+
+
+
+// Mobile menu v9
+window.openSB = function(){
+  document.getElementById('sidebar')?.classList.add('open');
+  document.getElementById('sbOverlay')?.classList.add('open');
+};
+window.closeSB = function(){
+  document.getElementById('sidebar')?.classList.remove('open');
+  document.getElementById('sbOverlay')?.classList.remove('open');
+};
+document.getElementById('mobMenuBtn')?.addEventListener('click', function(e){
+  e.preventDefault(); e.stopPropagation();
+  const sb = document.getElementById('sidebar');
+  if (sb?.classList.contains('open')) closeSB(); else openSB();
+});
+document.getElementById('sbOverlay')?.addEventListener('click', closeSB);
 
 
 </script>
