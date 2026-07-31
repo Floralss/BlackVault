@@ -478,8 +478,8 @@ function txRow(tx) {
 }
 
 // ═══ TRANSFER (via Cloud Function) ═══
-document.getElementById('trCur').addEventListener('change', e => { if (!UD) return; const cur = e.target.value; document.getElementById('trBalHint').textContent = 'Доступно: ' + fmtBal(UD.balances?.[cur] || 0, cur); });
-document.getElementById('btnTransfer').addEventListener('click', async () => {
+document.getElementById('trCur')?.addEventListener('change', e => { if (!UD) return; const cur = e.target.value; document.getElementById('trBalHint').textContent = 'Доступно: ' + fmtBal(UD.balances?.[cur] || 0, cur); });
+document.getElementById('btnTransfer')?.addEventListener('click', async () => {
   if (!UD || UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
   const to = document.getElementById('trTo').value.trim();
   const cur = document.getElementById('trCur').value;
@@ -538,8 +538,8 @@ function calcEx() {
   document.getElementById('exRateInfo').textContent = `1 ${f} = ${fmtNum(1 / rate, f === 'BTC' ? 2 : f === 'ETH' ? 2 : 4)} ${t}`;
 }
 ['exFrom', 'exTo', 'exAmt'].forEach(id => document.getElementById(id).addEventListener('input', calcEx));
-document.getElementById('btnSwapEx').addEventListener('click', () => { const f = document.getElementById('exFrom'), t = document.getElementById('exTo'); [f.value, t.value] = [t.value, f.value]; calcEx(); });
-document.getElementById('btnExchange').addEventListener('click', async () => {
+document.getElementById('btnSwapEx')?.addEventListener('click', () => { const f = document.getElementById('exFrom'), t = document.getElementById('exTo'); [f.value, t.value] = [t.value, f.value]; calcEx(); });
+document.getElementById('btnExchange')?.addEventListener('click', async () => {
   if (!UD || UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
   const f = document.getElementById('exFrom').value, t = document.getElementById('exTo').value;
   const amt = parseFloat(document.getElementById('exAmt').value);
@@ -580,8 +580,8 @@ document.getElementById('btnExchange').addEventListener('click', async () => {
 window.copyCode = function () { navigator.clipboard.writeText(UD?.code || '').then(() => toast('Код скопирован', 's')); };
 
 // ═══ DEPOSITS ═══
-document.getElementById('btnNewDeposit').addEventListener('click', () => openSheet('sheetNewDeposit'));
-document.getElementById('btnSubmitDeposit').addEventListener('click', async () => {
+document.getElementById('btnNewDeposit')?.addEventListener('click', () => openSheet('sheetNewDeposit'));
+document.getElementById('btnSubmitDeposit')?.addEventListener('click', async () => {
   const method = document.getElementById('ndMethod').value;
   const cur = document.getElementById('ndCur').value;
   const amt = parseFloat(document.getElementById('ndAmt').value);
@@ -652,13 +652,13 @@ async function loadDepChatMsgs(id) {
   el.innerHTML = msgs.map(m => { if (m.sys) return `<div class="msg-bubble sys">${esc(m.text)}</div>`; return `<div class="msg-bubble ${m.uid === CU.uid ? 'mine' : 'theirs'}"><div>${esc(m.text)}</div><div class="msg-meta">${esc(m.username)} · ${m.ts ? new Date(m.ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) : ''}</div></div>`; }).join('');
   el.scrollTop = el.scrollHeight;
 }
-document.getElementById('btnSendDepChat').addEventListener('click', async () => {
+document.getElementById('btnSendDepChat')?.addEventListener('click', async () => {
   const text = document.getElementById('depChatIn').value.trim().slice(0, 500);
   if (!text || !curDepId) return;
   await updateDoc(doc(db, 'depositRequests', curDepId), { messages: arrayUnion({ uid: CU.uid, username: UD.username, text, ts: Date.now() }), updatedAt: serverTimestamp() });
   document.getElementById('depChatIn').value = ''; loadDepChatMsgs(curDepId);
 });
-document.getElementById('depChatIn').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('btnSendDepChat').click(); } });
+document.getElementById('depChatIn')?.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('btnSendDepChat').click(); } });
 
 async function completeDepositUI(id) {
   try {
@@ -707,8 +707,8 @@ async function checkDepositNotifications() {
 }
 
 // ═══ CHECKS (via Cloud Function) ═══
-document.getElementById('btnOpenCheck').addEventListener('click', () => openSheet('sheetCreateCheck'));
-document.getElementById('btnCreateChk').addEventListener('click', async () => {
+document.getElementById('btnOpenCheck')?.addEventListener('click', () => openSheet('sheetCreateCheck'));
+document.getElementById('btnCreateChk')?.addEventListener('click', async () => {
   if (!UD || UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
   const cur = document.getElementById('chkCur').value;
   const amt = parseFloat(document.getElementById('chkAmt').value);
@@ -729,7 +729,7 @@ document.getElementById('btnCreateChk').addEventListener('click', async () => {
     toast('Чек создан! ID: ' + checkId, 's', 7000); loadMyChecks();
   } catch (err) { toast(cfError(err), 'e'); }
 });
-document.getElementById('btnPayChk').addEventListener('click', async () => {
+document.getElementById('btnPayChk')?.addEventListener('click', async () => {
   if (!UD || UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
   const cid = document.getElementById('payChkId').value.trim().toUpperCase();
   if (!cid) return toast('Введите ID', 'w');
@@ -885,9 +885,9 @@ function updateCtPreview() {
   else { prev.className = 'role-tag'; prev.style.cssText = `background:${selectedCtColor}22;border-color:${selectedCtColor}55;color:${selectedCtColor};${fontStyle}`; }
   prev.textContent = name;
 }
-document.getElementById('ctName').addEventListener('input', updateCtPreview);
-document.getElementById('ctFont').addEventListener('change', updateCtPreview);
-document.getElementById('ctEffect').addEventListener('change', updateCtPreview);
+document.getElementById('ctName')?.addEventListener('input', updateCtPreview);
+document.getElementById('ctFont')?.addEventListener('change', updateCtPreview);
+document.getElementById('ctEffect')?.addEventListener('change', updateCtPreview);
 
 // ─── Shared shop charge helper: deducts balance in chosen currency, logs transaction ───
 const SHOP_PRICES_UAH = { customTag: 150, customizeTag: 200, uiTheme: 50, avatarFrame: 80, vip: 150 };
@@ -908,7 +908,7 @@ async function chargeShop(itemKey, payCurrency, txType) {
 }
 const FORBIDDEN_TAG_WORDS = ['admin', 'owner', 'helper', 'media', 'sponsor', 'админ', 'владелец', 'хелпер', 'модератор', 'moderator'];
 
-document.getElementById('btnBuyTag').addEventListener('click', async () => {
+document.getElementById('btnBuyTag')?.addEventListener('click', async () => {
   const name = document.getElementById('ctName').value.trim();
   const font = document.getElementById('ctFont').value;
   const effect = document.getElementById('ctEffect').value;
@@ -936,7 +936,7 @@ function setupCustomizeTagSheet() {
   renderColorPicker('custColors', TAG_COLORS, c => selectedCustColor = c);
   renderPayRow('custPayRow', 200, c => custPayCur = c);
 }
-document.getElementById('btnBuyCustomize').addEventListener('click', async () => {
+document.getElementById('btnBuyCustomize')?.addEventListener('click', async () => {
   const isStaff = isStaffUser(UD);
   if (!isStaff && !(UD.customTags || []).length) return toast('Сначала создайте тег', 'w');
   const effect = document.getElementById('custEffect').value;
@@ -976,14 +976,14 @@ function updateUiPreview() {
   if (uiMode === 'image' && uiImageData) { btn.style.backgroundImage = `url(${uiImageData})`; btn.style.backgroundSize = 'cover'; btn.style.backgroundPosition = 'center'; }
   else { btn.style.backgroundImage = ''; btn.style.background = `linear-gradient(150deg,${selectedUi2},${selectedUi1})`; }
 }
-document.getElementById('uiImgIn').addEventListener('change', e => {
+document.getElementById('uiImgIn')?.addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
   if (f.size > 500 * 1024) return toast('Максимум 500KB для картинки кнопок', 'w');
   const r = new FileReader();
   r.onload = ev => { uiImageData = ev.target.result; updateUiPreview(); toast('Картинка загружена, нажмите Применить', 'i'); };
   r.readAsDataURL(f);
 });
-document.getElementById('btnBuyUI').addEventListener('click', async () => {
+document.getElementById('btnBuyUI')?.addEventListener('click', async () => {
   try {
     await chargeShop('uiTheme', uiPayCur, 'shop_ui');
     const themeCode = 'BVTHEME-' + Array.from({ length: 8 }, () => (~~(Math.random() * 36)).toString(36).toUpperCase()).join('');
@@ -1000,7 +1000,7 @@ document.getElementById('btnBuyUI').addEventListener('click', async () => {
 });
 window.copyThemeCode = function () { navigator.clipboard.writeText(document.getElementById('myThemeCode').value).then(() => toast('Код скопирован', 's')); };
 
-document.getElementById('btnUseTheme').addEventListener('click', async () => {
+document.getElementById('btnUseTheme')?.addEventListener('click', async () => {
   const code = document.getElementById('useThemeCodeIn').value.trim().toUpperCase();
   if (!code) return toast('Введите код', 'w');
   try {
@@ -1024,14 +1024,14 @@ function setupFrameSheet() {
   updateFramePreview();
 }
 function updateFramePreview() { const p = document.getElementById('framePreview'); if (p) p.style.boxShadow = `0 0 0 3px ${selectedFrameColor},0 0 14px ${selectedFrameColor}88`; }
-document.getElementById('btnBuyFrame').addEventListener('click', async () => {
+document.getElementById('btnBuyFrame')?.addEventListener('click', async () => {
   try {
     await chargeShop('avatarFrame', framePayCur, 'shop_frame');
     await updateDoc(doc(db, 'wallets', CU.uid), { avatarFrame: selectedFrameColor });
     toast('Рамка применена! 🖼', 's'); closeSheet('sheetAvatarFrame');
   } catch (err) { toast(cfError(err), 'e'); }
 });
-document.getElementById('btnBuyVip').addEventListener('click', async () => {
+document.getElementById('btnBuyVip')?.addEventListener('click', async () => {
   try {
     await chargeShop('vip', vipPayCur, 'shop_vip');
     const vipUntil = Date.now() + 30 * 24 * 60 * 60 * 1000;
@@ -1147,9 +1147,9 @@ function updateStockCost() {
   const cost = cur === 'USD' ? usdCost : usdCost / RATES[cur];
   document.getElementById('stockCostHint').textContent = qty > 0 ? 'Стоимость: ' + fmtBal(cost, cur) : 'Введите количество';
 }
-document.getElementById('stockQty').addEventListener('input', updateStockCost);
-document.getElementById('stockPayCur').addEventListener('change', updateStockCost);
-document.getElementById('btnBuyStockConfirm').addEventListener('click', async () => {
+document.getElementById('stockQty')?.addEventListener('input', updateStockCost);
+document.getElementById('stockPayCur')?.addEventListener('change', updateStockCost);
+document.getElementById('btnBuyStockConfirm')?.addEventListener('click', async () => {
   const qty = parseFloat(document.getElementById('stockQty').value);
   const cur = document.getElementById('stockPayCur').value;
   const mode = document.getElementById('btnBuyStockConfirm')._mode || 'buy';
@@ -1233,7 +1233,7 @@ window.openContestDetail = async function (id) {
       <div class="form-group"><label class="form-label">Сумма вложения (${c.investCurrency})</label><input class="form-input" id="contestInvestIn" type="number" placeholder="0.00"/></div>
       <button class="btn btn-primary" id="btnEnterContest">Вложить и участвовать</button>`;
   }
-  document.getElementById('btnEnterContest').addEventListener('click', async () => {
+  document.getElementById('btnEnterContest')?.addEventListener('click', async () => {
     try {
       const user = await freshSelf();
       if (c.type === 'task') {
@@ -1267,8 +1267,8 @@ window.openContestDetail = async function (id) {
 };
 
 // ═══ SUPPORT ═══
-document.getElementById('btnNewReport').addEventListener('click', () => openSheet('sheetNewReport'));
-document.getElementById('btnSendReport').addEventListener('click', async () => {
+document.getElementById('btnNewReport')?.addEventListener('click', () => openSheet('sheetNewReport'));
+document.getElementById('btnSendReport')?.addEventListener('click', async () => {
   const type = document.getElementById('repType').value;
   const subj = document.getElementById('repSubj').value.trim().slice(0, 100);
   const body = document.getElementById('repBody').value.trim().slice(0, 1000);
@@ -1317,14 +1317,14 @@ async function loadChatMsgs(id) {
   document.getElementById('chatMsgs').innerHTML = msgs.map(m => `<div class="msg-bubble ${m.uid === CU.uid ? 'mine' : 'theirs'}"><div>${esc(m.text)}</div><div class="msg-meta">${esc(m.username)} · ${m.ts ? new Date(m.ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) : ''}</div></div>`).join('');
   document.getElementById('chatMsgs').scrollTop = 9999;
 }
-document.getElementById('btnSendChat').addEventListener('click', async () => {
+document.getElementById('btnSendChat')?.addEventListener('click', async () => {
   const text = document.getElementById('chatIn').value.trim().slice(0, 500);
   if (!text || !curTicketId) return;
   await updateDoc(doc(db, 'reports', curTicketId), { messages: arrayUnion({ uid: CU.uid, username: UD.username, text, ts: Date.now() }), updatedAt: serverTimestamp() });
   document.getElementById('chatIn').value = ''; loadChatMsgs(curTicketId);
 });
-document.getElementById('chatIn').addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('btnSendChat').click(); } });
-document.getElementById('btnCloseTicket').addEventListener('click', async () => {
+document.getElementById('chatIn')?.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); document.getElementById('btnSendChat').click(); } });
+document.getElementById('btnCloseTicket')?.addEventListener('click', async () => {
   if (!curTicketId) return;
   try {
     await requireFreshStaff();
@@ -1433,7 +1433,7 @@ window.openDeleteSheet = function (code, uname) {
   document.getElementById('btnConfirmDelete').setAttribute('data-target', code);
   openSheet('sheetDeleteConfirm');
 };
-document.getElementById('btnConfirmDelete').addEventListener('click', async function () {
+document.getElementById('btnConfirmDelete')?.addEventListener('click', async function () {
   const target = this.getAttribute('data-target');
   const reason = document.getElementById('delReason').value.trim();
   const adm = document.getElementById('delAdminNick').value.trim();
@@ -1460,7 +1460,7 @@ document.getElementById('btnConfirmDelete').addEventListener('click', async func
     loadAdminData();
   } catch (err) { toast(cfError(err), 'e'); }
 });
-document.getElementById('btnSetStaff').addEventListener('click', async () => {
+document.getElementById('btnSetStaff')?.addEventListener('click', async () => {
   const target = document.getElementById('stTarget').value.trim();
   const role = document.getElementById('stRole').value;
   if (!target) return toast('Введите пользователя', 'w');
@@ -1485,7 +1485,7 @@ window.setStaffUI = async function (code, role) {
     loadAdminData();
   } catch (err) { toast(cfError(err), 'e'); }
 };
-document.getElementById('btnAdmGive').addEventListener('click', async () => {
+document.getElementById('btnAdmGive')?.addEventListener('click', async () => {
   const target = document.getElementById('agTo').value.trim();
   const cur = document.getElementById('agCur').value;
   const amt = parseFloat(document.getElementById('agAmt').value);
@@ -1503,7 +1503,7 @@ document.getElementById('btnAdmGive').addEventListener('click', async () => {
     document.getElementById('agTo').value = ''; document.getElementById('agAmt').value = '';
   } catch (err) { toast(cfError(err), 'e'); }
 });
-document.getElementById('btnAdmTake').addEventListener('click', async () => {
+document.getElementById('btnAdmTake')?.addEventListener('click', async () => {
   const target = document.getElementById('atTo').value.trim();
   const cur = document.getElementById('atCur').value;
   const amt = parseFloat(document.getElementById('atAmt').value);
@@ -1547,7 +1547,7 @@ window.denyTgUI = async function (reqId) {
   catch (err) { toast(cfError(err), 'e'); }
 };
 
-document.getElementById('btnGrantTag').addEventListener('click', async () => {
+document.getElementById('btnGrantTag')?.addEventListener('click', async () => {
   const target = document.getElementById('gtTo').value.trim();
   const name = document.getElementById('gtName').value.trim();
   const font = document.getElementById('gtFont').value;
@@ -1567,11 +1567,11 @@ document.getElementById('btnGrantTag').addEventListener('click', async () => {
 });
 
 // Contest type toggle in admin form
-document.getElementById('cType').addEventListener('change', e => {
+document.getElementById('cType')?.addEventListener('change', e => {
   document.getElementById('cTaskGroup').style.display = e.target.value === 'task' ? 'block' : 'none';
   document.getElementById('cInvestGroup').style.display = e.target.value === 'invest' ? 'block' : 'none';
 });
-document.getElementById('btnCreateContest').addEventListener('click', async () => {
+document.getElementById('btnCreateContest')?.addEventListener('click', async () => {
   const type = document.getElementById('cType').value;
   const imageUrl = document.getElementById('cImg').value.trim();
   const name = document.getElementById('cName').value.trim();
@@ -1605,7 +1605,7 @@ window.closeContestUI = async function (id) {
 };
 
 // ═══ SETTINGS ═══
-document.getElementById('btnSaveProfile').addEventListener('click', async () => {
+document.getElementById('btnSaveProfile')?.addEventListener('click', async () => {
   const n = document.getElementById('editUname').value.trim();
   const bio = document.getElementById('editBio').value.trim().slice(0, 200);
   if (n && (n.length < 2 || n.length > 24)) return toast('Ник 2-24 символа', 'w');
@@ -1613,11 +1613,11 @@ document.getElementById('btnSaveProfile').addEventListener('click', async () => 
   await updateDoc(doc(db, 'wallets', CU.uid), upd);
   toast('Профиль сохранён', 's'); closeSheet('sheetEditProfile');
 });
-document.getElementById('bannerIn').addEventListener('change', e => {
+document.getElementById('bannerIn')?.addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return; if (f.size > 3 * 1024 * 1024) return toast('Макс 3MB', 'w');
   const r = new FileReader(); r.onload = async ev => { await updateDoc(doc(db, 'wallets', CU.uid), { bannerUrl: ev.target.result }); toast('Баннер обновлён', 's'); }; r.readAsDataURL(f); e.target.value = '';
 });
-document.getElementById('avIn').addEventListener('change', e => {
+document.getElementById('avIn')?.addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
   if (f.size > 2 * 1024 * 1024) return toast('Макс 2MB', 'w');
   const r = new FileReader();
@@ -1641,11 +1641,11 @@ function renderColorSwatches() {
   document.getElementById('colorSwatches').innerHTML = BGS.map(c => `<div class="swatch${saved === c.v ? ' sel' : ''}" style="background:${c.v};border-color:${saved === c.v ? '#fff' : 'transparent'}" onclick="selColor('${c.v}')" title="${c.n}"></div>`).join('');
 }
 window.selColor = function (v) { localStorage.setItem('bv_bgc', v); localStorage.removeItem('bv_bgi'); applyTheme(); renderColorSwatches(); };
-document.getElementById('bgIn').addEventListener('change', e => {
+document.getElementById('bgIn')?.addEventListener('change', e => {
   const f = e.target.files[0]; if (!f) return;
   const r = new FileReader(); r.onload = ev => { localStorage.setItem('bv_bgi', ev.target.result); localStorage.removeItem('bv_bgc'); applyTheme(); toast('Фон установлен', 's'); }; r.readAsDataURL(f); e.target.value = '';
 });
-document.getElementById('btnResetTheme').addEventListener('click', () => { localStorage.removeItem('bv_bgc'); localStorage.removeItem('bv_bgi'); applyTheme(); renderColorSwatches(); toast('Сброшено', 's'); });
+document.getElementById('btnResetTheme')?.addEventListener('click', () => { localStorage.removeItem('bv_bgc'); localStorage.removeItem('bv_bgi'); applyTheme(); renderColorSwatches(); toast('Сброшено', 's'); });
 function applyTheme() {
   const img = localStorage.getItem('bv_bgi'), col = localStorage.getItem('bv_bgc');
   if (img) document.body.style.background = `url(${img}) center/cover fixed`;
@@ -1653,7 +1653,7 @@ function applyTheme() {
   else { document.body.style.background = ''; document.body.style.backgroundColor = ''; }
 }
 
-document.getElementById('btnDeleteSelf').addEventListener('click', async () => {
+document.getElementById('btnDeleteSelf')?.addEventListener('click', async () => {
   if (!confirm('Удалить аккаунт навсегда?')) return;
   if (!confirm('Это действие необратимо. Продолжить?')) return;
   try { await deleteDoc(doc(db, 'wallets', CU.uid)); await signOut(auth); toast('Аккаунт удалён', 's'); }
@@ -2944,7 +2944,7 @@ document.addEventListener('click', function(e){
   const fx = e.target.closest('[data-fx]');
   if(fx && typeof setBgFx==='function'){ setBgFx(fx.getAttribute('data-fx')); return; }
 });
-document.getElementById('btnSetPin') && document.getElementById('btnSetPin').addEventListener('click', function(){
+document.getElementById('btnSetPin') && document.getElementById('btnSetPin')?.addEventListener('click', function(){
   const p = (document.getElementById('newPinIn')||{}).value||'';
   if(!/^\d{4}$/.test(p)) return toast('Введите 4 цифры','w');
   localStorage.setItem('bv_pin', p);
@@ -3126,3 +3126,36 @@ window.loadShopState = function(){
   setTimeout(forceMobile, 500);
 })();
 console.log('[BV] hard fix v13');
+
+// Settings force bind v14
+(function(){
+  function bind(){
+    const map = [
+      ['btnDailyBonus', () => window.claimDailyBonus && window.claimDailyBonus()],
+      ['btnCopyRef', () => window.copyReferral && window.copyReferral()],
+      ['btnSettingsLogout', () => window.doLogout && window.doLogout()],
+      ['pinToggle', () => window.togglePin && window.togglePin()],
+      ['privacyToggle', () => window.togglePrivacy && window.togglePrivacy()],
+      ['btnSetPin', () => {
+        const p = (document.getElementById('newPinIn')||{}).value||'';
+        if(!/^\d{4}$/.test(p)) return (window.toast||alert)('4 цифры');
+        localStorage.setItem('bv_pin', p);
+        document.getElementById('pinToggle')?.classList.add('on');
+        const row=document.getElementById('pinSetRow'); if(row) row.style.display='none';
+        (window.toast||alert)('PIN сохранён');
+      }],
+    ];
+    map.forEach(([id, fn]) => {
+      const el = document.getElementById(id);
+      if(!el) return;
+      el.onclick = function(e){ e.preventDefault(); e.stopPropagation(); fn(); };
+    });
+    document.querySelectorAll('[data-sheet]').forEach(btn => {
+      btn.onclick = function(e){ e.preventDefault(); window.openSheet && window.openSheet(btn.getAttribute('data-sheet')); };
+    });
+    console.log('[BV] settings bind v14');
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded', bind);
+  else bind();
+  setTimeout(bind, 800);
+})();
