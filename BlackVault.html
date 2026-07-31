@@ -792,7 +792,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 /* LAYOUT FIX v12 */
 .sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;min-width:0}
 .sb-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;overflow:hidden}
-.sb-uname,.sb-user-name{font-size:13px;font-weight:700;line-height:1.25;color:var(--c-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.sb-uname,.sb-user-name{font-size:13px;font-weight:700;line-height:1.25;color:var(--c-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
 .sb-code,.sb-user-code{font-size:11px;color:var(--c-text2);font-family:ui-monospace,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .sb-user>div:nth-child(2){flex:1;min-width:0;overflow:hidden}
 .swatches,#ctColors,#colorSwatches,#custTagColors,#frameColors{display:flex!important;flex-wrap:wrap!important;gap:8px!important;padding:4px 0 8px!important;max-width:100%!important}
@@ -1003,6 +1003,28 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
   #mobMenuBtn{display:flex!important}
   #sidebar{transform:translateX(-105%)!important}
   #sidebar.open{transform:translateX(0)!important}
+}
+
+/* FINAL POLISH v17 */
+.sb-user{min-width:0}
+.sb-user > div:nth-child(2){flex:1;min-width:0;overflow:hidden}
+.sb-uname,.sb-user-name{max-width:none!important;font-size:13px!important;font-weight:700!important;color:#fff!important}
+.sb-code,.sb-user-code{font-size:11px!important;color:rgba(255,255,255,.5)!important}
+#sidebar{width:250px!important}
+.sb-grid{display:grid!important;grid-template-columns:1fr 1fr!important;gap:6px!important}
+.sb-tile .lb{font-size:10px!important;white-space:nowrap!important}
+.page,.page.on{color:#F0F0FF}
+.wh-btn,.set-link,.btn{cursor:pointer!important}
+@media(max-width:900px){
+  html,body{background:#07070F!important;color:#fff!important}
+  #app:not([style*="display: none"]):not([style*="display:none"]){
+    display:flex!important;opacity:1!important;visibility:visible!important;
+    background:#07070F!important;color:#fff!important;min-height:100dvh!important;
+  }
+  #main{background:#07070F!important;color:#fff!important;opacity:1!important;flex:1!important;min-height:0!important}
+  .page.on{display:flex!important;opacity:1!important;visibility:visible!important;background:#07070F!important;color:#fff!important;overflow-y:auto!important}
+  #mobNav{display:flex!important;background:#0c0c18!important}
+  #mobMenuBtn{display:flex!important}
 }
 
 </style>
@@ -1970,6 +1992,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
     </div>
   </div>
 </div>
+
 
 
 
@@ -5170,6 +5193,21 @@ setInterval(()=>{
   }catch(e){}
 }, 2000);
 console.log('[BV] auth+ach v16');
+
+// FINAL v17 safety
+window.openSheet = function(id){
+  try{
+    const el = document.getElementById(id);
+    if(!el){ console.warn('sheet missing', id); if(window.toast) toast('Раздел недоступен','w'); return; }
+    el.classList.add('on');
+    if(id==='sheetAccounts' && typeof renderAccountsList==='function') renderAccountsList();
+    if(id==='sheetCreateTag' && typeof renderColorPicker==='function'){
+      try{ renderColorPicker('ctColors', TAG_COLORS, c=>{ selectedCtColor=c; updateCtPreview(); }); }catch(e){}
+    }
+  }catch(e){ console.error(e); }
+};
+window.closeSheet = function(id){ try{ document.getElementById(id)?.classList.remove('on'); }catch(e){} };
+console.log('[BV] final v17');
 
 </script>
 </body>
