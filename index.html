@@ -7,6 +7,174 @@
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='24' fill='%235B4FE9'/><text y='.85em' font-size='60' x='20'>🔐</text></svg>"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="styles.css"/>
+
+<style id="bv-critical">
+
+/* BALANCE CARD FIX v19 — compact, no empty void */
+.wallet-hero{
+  display:flex !important;
+  flex-direction:column !important;
+  align-items:flex-start !important;
+  width:auto !important;
+  max-width:100% !important;
+  margin:12px 16px !important;
+  padding:20px 20px 16px !important;
+  border-radius:20px !important;
+  background:linear-gradient(145deg, #2a1f5c 0%, #1a1535 45%, #12101c 100%) !important;
+  border:1px solid rgba(139, 92, 246, 0.35) !important;
+  box-shadow:0 8px 32px rgba(0,0,0,0.35) !important;
+  min-height:unset !important;
+  height:auto !important;
+  position:relative !important;
+  overflow:hidden !important;
+}
+.wallet-hero::after{
+  content:'' !important;
+  position:absolute !important;
+  right:-40px !important; top:-40px !important;
+  width:160px !important; height:160px !important;
+  background:radial-gradient(circle, rgba(167,139,250,0.25), transparent 70%) !important;
+  pointer-events:none !important;
+}
+.wh-label{
+  font-size:11px !important;
+  font-weight:700 !important;
+  letter-spacing:0.08em !important;
+  text-transform:uppercase !important;
+  color:rgba(255,255,255,0.45) !important;
+  margin:0 0 8px !important;
+}
+.wh-amount{
+  font-size:36px !important;
+  font-weight:900 !important;
+  color:#ffffff !important;
+  line-height:1.05 !important;
+  letter-spacing:-0.02em !important;
+  margin:0 !important;
+  display:flex !important;
+  align-items:baseline !important;
+  gap:0 !important;
+}
+.wh-amount > span:first-child{opacity:0.9; margin-right:2px}
+#wBalInt{color:#fff !important; -webkit-text-fill-color:#fff !important}
+#wBalDec{color:rgba(255,255,255,0.5) !important; font-size:22px !important; font-weight:800 !important}
+.wh-sub{
+  font-size:13px !important;
+  font-weight:600 !important;
+  color:rgba(255,255,255,0.75) !important;
+  margin:10px 0 0 !important;
+}
+.wh-code{
+  font-size:12px !important;
+  font-family:ui-monospace, SFMono-Regular, Menlo, monospace !important;
+  color:rgba(255,255,255,0.4) !important;
+  margin:4px 0 0 !important;
+  cursor:pointer !important;
+}
+.wh-actions{
+  display:flex !important;
+  flex-wrap:wrap !important;
+  gap:8px !important;
+  margin-top:16px !important;
+  width:100% !important;
+}
+.wh-btn{
+  display:inline-flex !important;
+  align-items:center !important;
+  justify-content:center !important;
+  gap:5px !important;
+  padding:9px 13px !important;
+  border-radius:12px !important;
+  background:rgba(255,255,255,0.08) !important;
+  border:1px solid rgba(255,255,255,0.1) !important;
+  color:#fff !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  cursor:pointer !important;
+  white-space:nowrap !important;
+}
+.wh-btn.primary{
+  background:rgba(124,92,252,0.45) !important;
+  border-color:rgba(167,139,250,0.5) !important;
+}
+.wh-btn.dis{opacity:0.5 !important}
+.wh-btn:hover{background:rgba(124,92,252,0.3) !important}
+
+@media(max-width:900px){
+  .wallet-hero{margin:10px 12px !important; padding:16px 14px !important}
+  .wh-amount{font-size:30px !important}
+  .wh-btn{padding:8px 10px !important; font-size:11px !important}
+}
+
+
+/* Critical mobile + balance */
+
+.wh-label{font-size:11px!important;font-weight:800!important;color:rgba(255,255,255,.5)!important;text-transform:uppercase!important;letter-spacing:.06em!important;margin:0 0 6px!important}
+.wh-amount{font-size:34px!important;font-weight:900!important;color:#fff!important;line-height:1.1!important;margin:0!important}
+.wh-amount #wBalInt{color:#fff!important}
+.wh-amount #wBalDec{color:rgba(255,255,255,.55)!important;font-size:24px!important}
+.wh-sub{font-size:13px!important;color:rgba(255,255,255,.7)!important;margin-top:8px!important}
+.wh-code{font-size:12px!important;color:rgba(255,255,255,.45)!important;margin-top:4px!important}
+.wh-actions{display:flex!important;flex-wrap:wrap!important;gap:8px!important;margin-top:14px!important}
+.wh-btn{
+  display:inline-flex!important;align-items:center!important;gap:5px!important;
+  padding:9px 12px!important;border-radius:11px!important;
+  background:rgba(255,255,255,.1)!important;border:1px solid rgba(255,255,255,.12)!important;
+  color:#fff!important;font-size:12px!important;font-weight:700!important;cursor:pointer!important;
+}
+.wh-btn.primary{background:rgba(124,92,252,.4)!important;border-color:rgba(124,92,252,.55)!important}
+@media(max-width:900px){
+  html,body{
+    background:#07070F!important;color:#F0F0FF!important;
+    min-height:100%!important;min-height:100dvh!important;
+  }
+  #loader{background:#07070F!important;color:#fff!important}
+  #app{
+    background:#07070F!important;color:#F0F0FF!important;
+    opacity:1!important;visibility:visible!important;
+  }
+  #app[style*="display: none"],#app[style*="display:none"]{display:none!important}
+  #app[style*="display: flex"],#app[style*="display:flex"],#app:not([style*="none"]){
+    /* when shown by JS */
+  }
+  #main{
+    background:#07070F!important;color:#F0F0FF!important;
+    opacity:1!important;visibility:visible!important;
+    flex:1!important;width:100%!important;min-height:50vh!important;
+  }
+  .page{background:#07070F!important;color:#F0F0FF!important}
+  .page.on{
+    display:flex!important;flex-direction:column!important;
+    opacity:1!important;visibility:visible!important;
+    background:#07070F!important;color:#F0F0FF!important;
+    overflow-y:auto!important;-webkit-overflow-scrolling:touch!important;
+    flex:1!important;min-height:50vh!important;
+  }
+  .ph-title,.sec-title,.wh-amount,.asset-name,.tx-who,h1,h2,b{color:#FFFFFF!important}
+  .ph-sub,.sec-link,.asset-sym,.tx-date{color:#A0A0C0!important}
+  .sec,.wallet-hero,.shop-item,.set-card,.asset-row,.tx-row{
+    background:rgba(255,255,255,.06)!important;color:#fff!important;
+  }
+  #sidebar{
+    position:fixed!important;z-index:800!important;
+    background:#0c0c18!important;color:#fff!important;
+    transform:translateX(-105%)!important;
+  }
+  #sidebar.open{transform:translateX(0)!important}
+  #mobNav{
+    display:flex!important;position:fixed!important;left:0;right:0;bottom:0;
+    z-index:700!important;background:#0c0c18!important;color:#ccc!important;
+    border-top:1px solid rgba(255,255,255,.1)!important;
+    padding-bottom:env(safe-area-inset-bottom,0)!important;
+  }
+  #mobMenuBtn{display:flex!important;position:fixed!important;top:10px;left:10px;z-index:710!important;
+    width:42px;height:42px;align-items:center;justify-content:center;
+    background:#1a1a2e!important;border:1px solid rgba(255,255,255,.15)!important;border-radius:12px!important;color:#fff!important}
+  #fxSnow,body::before{display:none!important}
+}
+
+</style>
+
 </head>
 <body>
 <div id="fxSnow"></div>
@@ -152,12 +320,12 @@
         <div class="wh-sub" id="wSub">Кошелёк BlackVault</div>
         <div class="wh-code" id="wCode" onclick="copyCode()">🔑 <span id="wCodeTxt">BV-??????</span> <span style="opacity:.5">⎘</span></div>
         <div class="wh-actions">
-          <div class="wh-btn" data-goto="pgDeposit"><span class="wh-btn-icon">📥</span>Пополнить</div>
-          <div class="wh-btn primary" data-goto="pgTransfer"><span class="wh-btn-icon">↗️</span>Перевод</div>
-          <div class="wh-btn dis" onclick="toast('Вывод временно недоступен','w')"><span class="wh-btn-icon">📤</span>Вывести</div>
-          <div class="wh-btn" data-goto="pgExchange"><span class="wh-btn-icon">💱</span>Обмен</div>
-          <div class="wh-btn" data-goto="pgChecks"><span class="wh-btn-icon">🧾</span>Чек</div>
-          <div class="wh-btn" data-goto="pgQrPay"><span class="wh-btn-icon">📷</span>QR</div>
+            <button type="button" class="wa" data-goto="pgDeposit"><i>↓</i>Пополнить</button>
+            <button type="button" class="wa on" data-goto="pgTransfer"><i>→</i>Перевод</button>
+            <button type="button" class="wa off" onclick="toast('Вывод временно недоступен','w')"><i>↑</i>Вывести</button>
+            <button type="button" class="wa" data-goto="pgExchange"><i>⇄</i>Обмен</button>
+            <button type="button" class="wa" data-goto="pgChecks"><i>#</i>Чек</button>
+            <button type="button" class="wa" data-goto="pgQrPay"><i>▦</i>QR</button>
         </div>
       </div>
       <div class="sec"><div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все</span></div><div class="asset-list" id="homeAssets"></div></div>
@@ -675,7 +843,7 @@
             <div class="set-row-txt" style="width:100%">
               <b>Установить PIN</b>
               <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
-                <input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:110px;padding:9px 12px"/>
+                <form style="display:flex;gap:8px;margin-top:8px;align-items:center" onsubmit="return false;"><input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:110px;padding:9px 12px" autocomplete="one-time-code"/></form>
                 <button class="btn btn-primary btn-sm" type="button" id="btnSetPin">Сохранить</button>
               </div>
             </div>
@@ -974,6 +1142,91 @@
 
 
 
+
+
+
+
+
+
+
+
+<!-- MARKET CREATE -->
+<div class="overlay" id="sheetMarketCreate">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">+ Новое объявление</div>
+      <button type="button" class="sheet-close" onclick="closeSheet('sheetMarketCreate')">✕</button>
+    </div>
+    <div class="sheet-body" style="padding:0 4px 16px">
+      <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="mTitle" placeholder="AK-47 Redline FT" maxlength="80"/></div>
+      <div class="form-group"><label class="form-label">Описание</label><textarea class="form-input" id="mDesc" rows="3" placeholder="Состояние, детали..."></textarea></div>
+      <div class="form-group"><label class="form-label">Категория</label>
+        <select class="form-input" id="mCat">
+          <option value="skin">Скин / предмет</option>
+          <option value="currency">Игровая валюта</option>
+          <option value="account">Аккаунт</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Игра</label>
+        <select class="form-input" id="mGame">
+          <option value="cs2">Counter-Strike 2</option>
+          <option value="dota2">Dota 2</option>
+          <option value="rust">Rust</option>
+          <option value="tf2">Team Fortress 2</option>
+          <option value="other">Другое</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Выдача</label>
+        <select class="form-input" id="mDelivery">
+          <option value="manual">Вручную</option>
+          <option value="auto">Автовыдача</option>
+        </select>
+      </div>
+      <div class="form-group"><label class="form-label">Текст автовыдачи (если авто)</label><textarea class="form-input" id="mAuto" rows="2" placeholder="Ключ / ссылка / инструкция"></textarea></div>
+      <div class="form-group"><label class="form-label">Фото</label><input class="form-input" id="mPhoto" type="file" accept="image/*"/></div>
+      <div class="form-group" style="display:flex;gap:8px">
+        <div style="flex:1"><label class="form-label">Цена</label><input class="form-input" id="mPrice" type="number" placeholder="0.00" min="0" step="0.01"/></div>
+        <div style="width:110px"><label class="form-label">Валюта</label>
+          <select class="form-input" id="mCur"><option value="UAH">UAH</option><option value="USD">USD</option><option value="RUB">RUB</option></select>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" id="btnMarketCreate" style="width:100%;margin-top:8px">Опубликовать</button>
+    </div>
+  </div>
+</div>
+
+<!-- MARKET ORDER -->
+<div class="overlay" id="sheetMarketOrder">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title" id="mOrderTitle">Сделка</div>
+      <button type="button" class="sheet-close" onclick="closeSheet('sheetMarketOrder')">✕</button>
+    </div>
+    <div class="sheet-body" id="mOrderBody" style="padding:8px 4px 20px">
+      <div class="empty-state">Загрузка...</div>
+    </div>
+  </div>
+</div>
+
+<!-- COMPLAINT -->
+<div class="overlay" id="sheetComplaint">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head">
+      <div class="sheet-title">⚠️ Жалоба на <span id="complaintTargetName"></span></div>
+      <button type="button" class="sheet-close" onclick="closeSheet('sheetComplaint')">✕</button>
+    </div>
+    <div class="sheet-body" style="padding:0 4px 16px">
+      <input type="hidden" id="complaintTarget"/>
+      <div class="form-group"><label class="form-label">Причина</label><div id="complaintReasonsList"></div></div>
+      <div class="form-group"><label class="form-label">Комментарий</label><textarea class="form-input" id="complaintText" rows="3" placeholder="Опишите ситуацию"></textarea></div>
+      <button type="button" class="btn btn-primary" id="btnSendComplaint" style="width:100%">Отправить</button>
+    </div>
+  </div>
+</div>
 
 
 
