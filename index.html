@@ -121,8 +121,9 @@ select.form-input{cursor:pointer}
 #sbOverlay.open{display:block}
 
 /* PAGES */
-#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
-.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0}
+.page{display:none;flex:1;flex-direction:column;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;min-height:0}
+.page.on{display:flex}
 .page.on{display:flex}
 .ph{padding:16px 22px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;background:rgba(10,10,22,.6);backdrop-filter:blur(20px)}
 .ph-top{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px}
@@ -327,7 +328,7 @@ a{color:var(--btn2);text-decoration:none}
 html{color-scheme:dark}
 #app{opacity:1!important;visibility:visible!important;height:100vh;height:100dvh}
 #main,.page.on{opacity:1!important;visibility:visible!important;background:var(--bg);color:var(--c-text)}
-.page{display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0;background:var(--bg)}
+.page{display:none;flex:1;flex-direction:column;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;min-height:0;background:var(--bg)}
 .page.on{display:flex!important}
 .page-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 18px 28px;-webkit-overflow-scrolling:touch;min-height:0}
 
@@ -421,6 +422,22 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
   .page-body{padding:12px 14px 24px}
   #wBalInt,#wBalDec{color:#fff!important;-webkit-text-fill-color:#fff!important}
   #updateBanner{left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom,0px));max-width:none}
+}
+
+
+/* SCROLL FIX v6 */
+#main{min-height:0!important}
+.page,.page.on{
+  overflow-y:auto!important;overflow-x:hidden!important;
+  -webkit-overflow-scrolling:touch!important;
+  min-height:0!important;
+}
+.page > *:last-child{margin-bottom:24px}
+.page-body{overflow-y:auto;flex:1;min-height:0;-webkit-overflow-scrolling:touch}
+#sidebar .sb-nav{overflow-y:auto;-webkit-overflow-scrolling:touch}
+@media(max-width:900px){
+  .page{padding-bottom:calc(20px + env(safe-area-inset-bottom,0px))!important}
+  #main{overflow:hidden}
 }
 
 </style>
@@ -519,6 +536,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
       </div>
 
       <div class="sb-list-item" data-goto="pgMarket"><span class="ic">🛒</span>Площадка</div>
+      <div class="sb-list-item" data-goto="pgQrPay"><span class="ic">📷</span>QR-оплата</div>
       <div class="sb-sep">Сообщество</div>
       <div class="sb-list-item" data-goto="pgHistory"><span class="ic">📋</span>История</div>
       <div class="sb-list-item" data-goto="pgLeaderboard"><span class="ic">🏆</span>Forbes</div>
@@ -555,6 +573,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
           <div class="wh-btn dis" onclick="toast('Вывод временно недоступен','w')"><span class="wh-btn-icon">📤</span>Вывести</div>
           <div class="wh-btn" data-goto="pgExchange"><span class="wh-btn-icon">💱</span>Обмен</div>
           <div class="wh-btn" data-goto="pgChecks"><span class="wh-btn-icon">🧾</span>Чек</div>
+          <div class="wh-btn" data-goto="pgQrPay"><span class="wh-btn-icon">📷</span>QR</div>
         </div>
       </div>
       <div class="sec"><div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все</span></div><div class="asset-list" id="homeAssets"></div></div>
@@ -1003,7 +1022,22 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
         <div class="ach-grid" id="setAchievements" style="padding:0 14px 14px"></div>
       </div>
 
+      
       <div class="settings-section">
+        <div class="settings-row">
+          <div class="settings-row-l"><div class="settings-row-title">Скрыть балансы</div><div class="settings-row-sub">Режим приватности (••••)</div></div>
+          <div class="toggle" id="privacyToggle" onclick="togglePrivacy()"><div class="toggle-k"></div></div>
+        </div>
+        <div class="settings-row clickable" onclick="claimDailyBonus()">
+          <div class="settings-row-l"><div class="settings-row-title">🎁 Ежедневный бонус</div><div class="settings-row-sub" id="dailyBonusHint">+5 ₴ раз в сутки</div></div>
+          <div class="settings-row-v">›</div>
+        </div>
+        <div class="settings-row clickable" onclick="copyReferral()">
+          <div class="settings-row-l"><div class="settings-row-title">🔗 Реферальная ссылка</div><div class="settings-row-sub">Пригласи друга</div></div>
+          <div class="settings-row-v">📋</div>
+        </div>
+      </div>
+<div class="settings-section">
         <div class="settings-row clickable" id="btnLogoutSettings" onclick="doLogout()">
           <div class="settings-row-l"><div class="settings-row-title">Выйти из аккаунта</div><div class="settings-row-sub">Завершить сессию</div></div>
           <div class="settings-row-v">🚪</div>
