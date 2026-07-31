@@ -440,6 +440,137 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
   #main{overflow:hidden}
 }
 
+
+/* ========== MOBILE FULL FIX v7 ========== */
+@media (max-width: 900px) {
+  html, body {
+    background: #07070F !important;
+    color: #F0F0FF !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    overflow: hidden !important;
+  }
+  #app {
+    display: flex !important;
+    flex-direction: row !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: #07070F !important;
+    color: #F0F0FF !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    min-height: 100dvh !important;
+    padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px)) !important;
+    position: relative !important;
+    z-index: 1 !important;
+  }
+  #main {
+    display: flex !important;
+    flex-direction: column !important;
+    flex: 1 !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: #07070F !important;
+    color: #F0F0FF !important;
+    overflow: hidden !important;
+    position: relative !important;
+    z-index: 2 !important;
+  }
+  .page {
+    background: #07070F !important;
+    color: #F0F0FF !important;
+  }
+  .page.on {
+    display: flex !important;
+    flex-direction: column !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+    background: #07070F !important;
+    color: #F0F0FF !important;
+    overflow-y: auto !important;
+    overflow-x: hidden !important;
+    -webkit-overflow-scrolling: touch !important;
+    flex: 1 !important;
+    min-height: 0 !important;
+  }
+  .ph, .ph-title, .ph-sub, .sec-title, .settings-row-title, .wh-label {
+    color: #F0F0FF !important;
+  }
+  .ph-sub, .settings-row-sub, .sec-link, .c-text2 {
+    color: #8080AA !important;
+  }
+  #wBalInt, #wBalDec, .wh-amount {
+    color: #FFFFFF !important;
+    -webkit-text-fill-color: #FFFFFF !important;
+  }
+  /* Sidebar: drawer */
+  #sidebar {
+    display: flex !important;
+    position: fixed !important;
+    left: 0 !important; top: 0 !important; bottom: 0 !important;
+    width: min(280px, 85vw) !important;
+    z-index: 600 !important;
+    transform: translateX(-110%) !important;
+    transition: transform .25s ease !important;
+    background: #0A0A14 !important;
+    color: #F0F0FF !important;
+    box-shadow: none !important;
+  }
+  #sidebar.open {
+    transform: translateX(0) !important;
+    box-shadow: 16px 0 48px rgba(0,0,0,.65) !important;
+  }
+  #sbOverlay {
+    display: none !important;
+    position: fixed !important;
+    inset: 0 !important;
+    background: rgba(0,0,0,.55) !important;
+    z-index: 550 !important;
+  }
+  #sbOverlay.open {
+    display: block !important;
+  }
+  #mobNav {
+    display: block !important;
+    position: fixed !important;
+    left: 0 !important; right: 0 !important; bottom: 0 !important;
+    z-index: 500 !important;
+    background: rgba(10,10,22,.97) !important;
+    border-top: 1px solid rgba(255,255,255,.08) !important;
+    padding-bottom: env(safe-area-inset-bottom, 0px) !important;
+  }
+  #mobMenuBtn {
+    display: flex !important;
+    position: fixed !important;
+    top: 10px !important; left: 10px !important;
+    z-index: 520 !important;
+    width: 40px !important; height: 40px !important;
+    align-items: center !important; justify-content: center !important;
+    background: rgba(20,20,40,.95) !important;
+    border: 1px solid rgba(255,255,255,.12) !important;
+    border-radius: 12px !important;
+    color: #fff !important;
+    font-size: 18px !important;
+  }
+  .ph { padding-left: 56px !important; }
+  /* Kill covering effects */
+  #fxSnow, body::before {
+    pointer-events: none !important;
+    z-index: 0 !important;
+  }
+  #updateBanner {
+    left: 12px !important; right: 12px !important;
+    bottom: calc(72px + env(safe-area-inset-bottom, 0px)) !important;
+    max-width: none !important;
+    z-index: 400 !important;
+  }
+  .overlay.on {
+    z-index: 3000 !important;
+  }
+}
+
 </style>
 </head>
 <body>
@@ -1494,14 +1625,19 @@ window.toast = function (msg, t, dur) {
 };
 
 window.openSheet = function (id) {
-  document.getElementById(id).classList.add('on');
-  if (id === 'sheetCreateTag') { renderColorPicker('ctColors', TAG_COLORS, c => { selectedCtColor = c; updateCtPreview(); }); renderPayRow('ctPayRow', 150, c => ctPayCur = c); updateCtPreview(); }
-  if (id === 'sheetCustomizeTag') setupCustomizeTagSheet();
-  if (id === 'sheetCustomizeUI') setupUiSheet();
-  if (id === 'sheetAvatarFrame') setupFrameSheet();
-  if (id === 'sheetVip') renderPayRow('vipPayRow', 150, c => vipPayCur = c);
+  const el = document.getElementById(id);
+  if (!el) { console.warn('sheet missing:', id); toast('Раздел недоступен','w'); return; }
+  el.classList.add('on');
+  try {
+    if (id === 'sheetCreateTag') { renderColorPicker('ctColors', TAG_COLORS, c => { selectedCtColor = c; updateCtPreview(); }); renderPayRow('ctPayRow', 150, c => ctPayCur = c); updateCtPreview(); }
+    if (id === 'sheetCustomizeTag') setupCustomizeTagSheet();
+    if (id === 'sheetCustomizeUI') setupUiSheet();
+    if (id === 'sheetAvatarFrame') setupFrameSheet();
+    if (id === 'sheetVip') renderPayRow('vipPayRow', 150, c => vipPayCur = c);
+    if (id === 'sheetAccounts' && typeof renderAccountsList === 'function') renderAccountsList();
+  } catch (err) { console.error(err); }
 };
-window.closeSheet = function (id) { document.getElementById(id).classList.remove('on'); };
+window.closeSheet = function (id) { document.getElementById(id)?.classList.remove('on'); };
 document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on'); }));
 
 // ═══ NAV ═══
@@ -3811,15 +3947,8 @@ document.getElementById('btnAddAccount')?.addEventListener('click', async()=>{
   toast('Войдите в другой аккаунт','i');
 });
 // refresh accounts when opening sheet - patch openSheet
-(function(){
-  const _os = window.openSheet;
-  if(typeof openSheet==='function'){
-    window.openSheet=function(id){
-      _os(id);
-      if(id==='sheetAccounts') renderAccountsList();
-    };
-  }
-})();
+/* openSheet already handles sheetAccounts */
+
 // save account on successful login
 (function(){
   const orig = window.renderSidebar;
@@ -3835,6 +3964,32 @@ setTimeout(()=>{
     if(!CU){ try{ showAuth('pgLogin'); }catch(e){} }
   }
 }, 4000);
+
+
+// Mobile visibility + safe navigation (v7)
+(function(){
+  function forceShow(){
+    try {
+      const app = document.getElementById('app');
+      if (app && app.style.display !== 'none') {
+        app.style.opacity = '1';
+        app.style.visibility = 'visible';
+        app.style.background = getComputedStyle(document.documentElement).getPropertyValue('--bg') || '#07070F';
+      }
+      document.querySelectorAll('.page.on').forEach(function(pg){
+        pg.style.opacity = '1';
+        pg.style.visibility = 'visible';
+        pg.style.display = 'flex';
+        pg.style.overflowY = 'auto';
+      });
+      const main = document.getElementById('main');
+      if (main) { main.style.opacity = '1'; main.style.visibility = 'visible'; }
+    } catch(e){}
+  }
+  setInterval(forceShow, 1500);
+  document.addEventListener('visibilitychange', forceShow);
+  window.addEventListener('resize', forceShow);
+})();
 
 </script>
 
@@ -3883,5 +4038,18 @@ setTimeout(()=>{
       <div id="contestEntriesList" style="max-height:65vh;overflow-y:auto"><div class="empty-state"><span class="emo">👥</span>Загрузка...</div></div>
     </div>
   </div>
+
+<div class="overlay" id="sheetAccounts">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-head"><div class="sheet-title">👥 Аккаунты</div><button class="sheet-close" type="button" onclick="closeSheet('sheetAccounts')">✕</button></div>
+    <div class="sheet-body">
+      <div id="accountsList" style="margin-bottom:14px"></div>
+      <button class="btn btn-secondary" id="btnAddAccount" type="button">+ Добавить аккаунт</button>
+      <div style="font-size:12px;color:var(--c-text2);margin-top:10px;line-height:1.45">Сохранённые профили на этом устройстве. «Добавить» — выход и вход под другим email.</div>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
