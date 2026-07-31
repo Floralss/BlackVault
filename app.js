@@ -2635,3 +2635,21 @@ window.goto = function(id) {
 window.nav = window.goto;
 window.goBack = function() { goto(window.prevPage || 'pgWallet'); };
 
+
+
+// Mobile menu v9
+window.openSB = function(){
+  document.getElementById('sidebar')?.classList.add('open');
+  document.getElementById('sbOverlay')?.classList.add('open');
+};
+window.closeSB = function(){
+  document.getElementById('sidebar')?.classList.remove('open');
+  document.getElementById('sbOverlay')?.classList.remove('open');
+};
+document.getElementById('mobMenuBtn')?.addEventListener('click', function(e){
+  e.preventDefault(); e.stopPropagation();
+  const sb = document.getElementById('sidebar');
+  if (sb?.classList.contains('open')) closeSB(); else openSB();
+});
+document.getElementById('sbOverlay')?.addEventListener('click', closeSB);
+
