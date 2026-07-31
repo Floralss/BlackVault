@@ -226,29 +226,14 @@ select option,select.form-input option{
 #sbOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:499;backdrop-filter:blur(4px)}
 #sbOverlay.open{display:block}
 
-/* PAGES + transitions */
+/* PAGES — no opacity tricks (mobile black-screen safe) */
 #main{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;min-width:0;background:var(--bg)}
 .page{
   display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0;
-  opacity:0;transform:translateY(10px);background:var(--bg);
+  background:var(--bg);opacity:1;transform:none;
 }
-.page.on{
-  display:flex;
-  opacity:1;
-  transform:none;
-  animation:pageIn .3s cubic-bezier(.22,1,.36,1) both;
-}
-.page.page-out{
-  display:flex;animation:pageOut .14s ease forwards;pointer-events:none;
-}
-@keyframes pageIn{
-  from{opacity:0;transform:translateY(12px)}
-  to{opacity:1;transform:none}
-}
-@keyframes pageOut{
-  from{opacity:1;transform:none}
-  to{opacity:0;transform:translateY(-6px)}
-}
+.page.on{display:flex;opacity:1!important;transform:none!important;visibility:visible!important}
+.page.page-out{display:none!important}
 .ph{
   padding:14px 18px;border-bottom:1px solid var(--c-border);
   display:flex;align-items:center;justify-content:space-between;gap:12px;
@@ -265,21 +250,12 @@ select option,select.form-input option{
   -webkit-overflow-scrolling:touch;min-height:0;background:transparent;
 }
 
-/* Stagger on page enter */
-.page.on .wallet-hero,
-.page.on .tg-promo,
-.page.on .sec,
-.page.on .auth-card{
-  animation:fadeUp .38s cubic-bezier(.22,1,.36,1) both;
-}
-.page.on .tg-promo{animation-delay:.05s}
-.page.on .sec:nth-of-type(1){animation-delay:.07s}
-.page.on .sec:nth-of-type(2){animation-delay:.12s}
-.page.on .sec:nth-of-type(3){animation-delay:.16s}
+/* Soft content appear — opacity ends at 1 always */
 @keyframes fadeUp{
-  from{opacity:0;transform:translateY(12px)}
+  from{opacity:.6;transform:translateY(8px)}
   to{opacity:1;transform:none}
 }
+.page.on .wallet-hero,.page.on .tg-promo{animation:fadeUp .28s ease both}
 
 /* List hover / tap */
 .asset-row,.tx-row,.report-item,.stock-row,.lb-row{
@@ -302,15 +278,31 @@ select option,select.form-input option{
 }
 .role-tag:hover{transform:translateY(-1px)}
 .rainbow-tag{
-  background-image:linear-gradient(90deg,#FF4D6A,#FF8C00,#FFB23E,#3DDC84,#7C5CFC,#C040FF,#FF4D6A)!important;
-  background-size:200% 100%!important;color:#fff!important;border:none!important;
-  animation:tagIn .35s cubic-bezier(.22,1,.36,1) both, rainbowShift 3s linear infinite;
-  box-shadow:0 0 12px rgba(124,92,252,.35);
+  background-image:linear-gradient(90deg,#FF4D6A 0%,#FF8C00 16%,#FFB23E 33%,#3DDC84 50%,#7C5CFC 66%,#C040FF 83%,#FF4D6A 100%)!important;
+  background-size:400% 100%!important;background-position:0% 50%!important;
+  color:#fff!important;border:none!important;
+  -webkit-background-clip:padding-box!important;background-clip:padding-box!important;
+  animation:rainbowShift 2.2s linear infinite!important;
+  box-shadow:0 0 14px rgba(192,64,255,.4),0 0 4px rgba(255,77,106,.3);
 }
-@keyframes rainbowShift{0%{background-position:0% 50%}100%{background-position:200% 50%}}
-@keyframes tagIn{from{opacity:0;transform:scale(.85)}to{opacity:1;transform:none}}
-.role-tag.glow{animation:tagIn .35s both, tagGlow 2.2s ease-in-out infinite}
-@keyframes tagGlow{0%,100%{box-shadow:0 0 0 0 transparent}50%{box-shadow:0 0 14px rgba(124,92,252,.5)}}
+@keyframes rainbowShift{
+  0%{background-position:0% 50%}
+  100%{background-position:100% 50%}
+}
+@keyframes tagIn{from{transform:scale(.9)}to{transform:none}}
+.role-tag.glow{animation:tagGlow 2s ease-in-out infinite}
+@keyframes tagGlow{0%,100%{box-shadow:0 0 6px rgba(124,92,252,.25)}50%{box-shadow:0 0 16px rgba(124,92,252,.65)}}
+.name-fx-rainbow{
+  background:linear-gradient(90deg,#FF4D6A,#FFB23E,#3DDC84,#7C5CFC,#C040FF,#FF4D6A);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;animation:rainbowShift 2.5s linear infinite;
+  font-weight:900;
+}
+.role-tag.neon{
+  animation:neonPulse 1.6s ease-in-out infinite;
+  text-shadow:0 0 8px currentColor;
+}
+@keyframes neonPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
 
 @media(prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
@@ -755,7 +747,7 @@ a{color:var(--btn2);text-decoration:none}
       <div class="sb-list-item" data-goto="pgDeposit"><span class="ic">＋</span>Пополнить<span class="sb-badge" id="depDot" style="display:none">!</span></div>
       <div class="sb-list-item" data-goto="pgChecks"><span class="ic">🧾</span>Чеки</div>
       <div class="sb-list-item" data-goto="pgContests"><span class="ic">🎉</span>Конкурсы</div>
-      <div class="sb-list-item" data-goto="pgP2P"><span class="ic">🤝</span>P2P Маркет</div>
+      <div class="sb-list-item" data-goto="pgP2P"><span class="ic">🤝</span>Торговая площадка</div>
 
       <div class="sb-sep">Сообщество</div>
       <div class="sb-list-item" data-goto="pgHistory"><span class="ic">📋</span>История</div>
@@ -935,7 +927,7 @@ a{color:var(--btn2);text-decoration:none}
 
     <!-- P2P MARKETPLACE -->
     <div class="page" id="pgP2P">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">🤝 P2P Маркет</div><div class="ph-sub">Покупка и продажа с гарантом</div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">🤝 Торговая площадка</div><div class="ph-sub">Скины, валюта, предметы с гарантом</div></div>
         <button class="btn btn-primary btn-sm" onclick="openSheet('sheetP2PCreate')">+ Объявление</button>
       </div></div>
       <div class="page-body">
@@ -1028,6 +1020,48 @@ a{color:var(--btn2);text-decoration:none}
         <button class="btn btn-gold btn-sm" onclick="openSheet('sheetVip')">Купить VIP</button>
       </div>
 
+      <div class="shop-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:16px;font-weight:800">💍 Аксессуар на аватар</div>
+          <span class="price-tag">120 ₴</span>
+        </div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Корона, очки, ореол или огонь вокруг аватара</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px" id="accPick">
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('crown','👑')">👑 Корона</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('glasses','🕶')">🕶 Очки</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('halo','😇')">😇 Ореол</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('fire','🔥')">🔥 Огонь</button>
+        </div>
+      </div>
+      <div class="shop-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:16px;font-weight:800">🖼 Фон профиля (премиум)</div>
+          <span class="price-tag">150 ₴</span>
+        </div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Готовые градиенты для баннера профиля</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <button class="btn btn-secondary btn-xs" onclick="buyProfileBg('neon')">💜 Неон</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyProfileBg('sunset')">🌅 Закат</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyProfileBg('ocean')">🌊 Океан</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyProfileBg('gold')">✨ Золото</button>
+        </div>
+      </div>
+      <div class="shop-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:16px;font-weight:800">✨ Анимация имени</div>
+          <span class="price-tag">100 ₴</span>
+        </div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Переливающееся имя в профиле и Forbes</div>
+        <button class="btn btn-gold btn-sm" onclick="buyNameFx()">Купить анимацию имени</button>
+      </div>
+      <div class="shop-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:16px;font-weight:800">🔇 Скрыть баланс в Forbes</div>
+          <span class="price-tag">180 ₴</span>
+        </div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Показывать «•••» вместо суммы в рейтинге (30 дней)</div>
+        <button class="btn btn-gold btn-sm" onclick="buyHideBal()">Купить</button>
+      </div>
       <div class="shop-item" style="border:1px solid rgba(0,192,122,.25);background:rgba(0,192,122,.05)">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
           <div style="font-size:16px;font-weight:800">🏪 Доступ к BlackVault Кассе</div>
@@ -1269,21 +1303,25 @@ a{color:var(--btn2);text-decoration:none}
 
     <div class="page" id="pgSettings">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">⚙️ Настройки</div></div></div></div>
-      <div class="settings-section">
+      <div class="page-body">
+      <div class="settings-section sec" style="padding:4px 0">
         <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" id="setUname">—</div><div class="settings-row-sub" id="setCode">BV-??????</div></div><div id="setRoleBadge"></div></div>
         <div class="settings-row clickable" onclick="openSheet('sheetEditProfile')"><div class="settings-row-l"><div class="settings-row-title">Редактировать профиль</div><div class="settings-row-sub">Ник, описание, баннер</div></div><div class="settings-row-v">›</div></div>
         <div class="settings-row clickable" onclick="openSheet('sheetAvatar')"><div class="settings-row-l"><div class="settings-row-title">Аватар</div><div class="settings-row-sub">Загрузить или выбрать из истории</div></div><div class="settings-row-v">›</div></div>
         <div class="settings-row clickable" onclick="openSheet('sheetSocials')"><div class="settings-row-l"><div class="settings-row-title">Telegram / Discord</div><div class="settings-row-sub" id="setSocialsHint">Не привязано</div></div><div class="settings-row-v">›</div></div>
       </div>
-      <div class="settings-section">
+      <div class="settings-section sec" style="padding:8px 14px 14px;margin-top:12px">
+        <div style="font-size:12px;font-weight:800;color:var(--c-text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Интерфейс (5 стилей)</div>
+        <div id="uiPresetGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
+      </div>
+      <div class="settings-section sec" style="padding:4px 0;margin-top:12px">
         <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">PIN-код при входе</div><div class="settings-row-sub">Блокировка при запуске</div></div><div class="toggle" id="pinToggle" onclick="togglePin()"><div class="toggle-k"></div></div></div>
         <div class="settings-row" id="pinSetRow" style="display:none"><div class="settings-row-l"><div class="settings-row-title">Установить PIN</div><div style="display:flex;gap:8px;margin-top:9px"><input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:120px;padding:9px 12px"/><button class="btn btn-primary btn-sm" id="btnSetPin">Сохранить</button></div></div></div>
+        <div class="settings-row clickable" onclick="openSheet('sheetTheme')"><div class="settings-row-l"><div class="settings-row-title">Фон приложения</div><div class="settings-row-sub">Цвет или своё изображение</div></div><div class="settings-row-v">›</div></div>
       </div>
-      <div class="settings-section">
-        <div class="settings-row clickable" onclick="openSheet('sheetTheme')"><div class="settings-row-l"><div class="settings-row-title">Тема оформления</div><div class="settings-row-sub">Цвет фона и изображение</div></div><div class="settings-row-v">›</div></div>
-      </div>
-      <div class="settings-section">
+      <div class="settings-section sec" style="padding:4px 0;margin-top:12px">
         <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" style="color:#FF8FA3">Удалить аккаунт</div><div class="settings-row-sub">Необратимое действие</div></div><button class="btn btn-danger btn-sm" id="btnDeleteSelf">Удалить</button></div>
+      </div>
       </div>
     </div>
 
@@ -1295,7 +1333,7 @@ a{color:var(--btn2);text-decoration:none}
     <div class="mob-item on" data-goto="pgWallet"><div class="ic">💳</div>Wallet</div>
     <div class="mob-item" data-goto="pgExchange"><div class="ic">📈</div>Обмен</div>
     <div class="mob-item" data-goto="pgDeposit"><div class="ic">💰</div>Пополнить</div>
-    <div class="mob-item" data-goto="pgP2P"><div class="ic">🤝</div>P2P</div>
+    <div class="mob-item" data-goto="pgP2P"><div class="ic">🤝</div>Маркет</div>
     <div class="mob-item" data-goto="pgSettings"><div class="ic">⚙️</div>Ещё</div>
   </div>
 </div>
@@ -1410,7 +1448,7 @@ a{color:var(--btn2);text-decoration:none}
     <div class="form-group"><label class="form-label">Название тега</label><input class="form-input" id="ctName" maxlength="16" placeholder="например: PRO, VIP, LEGEND"/></div>
     <div class="form-group"><label class="form-label">Цвет тега</label><div class="swatches" id="ctColors"></div></div>
     <div class="form-group"><label class="form-label">Шрифт</label><select class="form-input" id="ctFont"><option value="normal">Обычный</option><option value="bold">Жирный</option><option value="italic">Курсив</option></select></div>
-    <div class="form-group"><label class="form-label">Эффект</label><select class="form-input" id="ctEffect"><option value="solid">Обычный фон</option><option value="rainbow">🌈 Переливание цветов</option></select></div>
+    <div class="form-group"><label class="form-label">Эффект</label><select class="form-input" id="ctEffect"><option value="solid">Обычный фон</option><option value="rainbow">🌈 Переливание</option><option value="glow">✨ Свечение</option><option value="neon">💜 Неон</option></select></div>
     <div class="form-group"><label class="form-label">Превью</label><div style="background:var(--c-surface2);border-radius:var(--rs);padding:16px;text-align:center"><span id="ctPreview" class="role-tag" style="background:#7C5CFC22;border-color:#7C5CFC55;color:#7C5CFC">PREVIEW</span></div></div>
     <div class="form-group"><label class="form-label">Способ оплаты (150 ₴ или эквивалент)</label><div class="curr-pay-row" id="ctPayRow"></div></div>
     <button class="btn btn-gold" id="btnBuyTag" style="margin-top:6px">Купить тег</button>
@@ -1700,6 +1738,9 @@ function roleBadge(u, compact) {
       style = '';
     } else if (effect === 'redblack') {
       style = 'background:linear-gradient(90deg,#FF4D6A,#1a0a0a);border-color:rgba(255,77,106,.4);color:#fff';
+    } else if (effect === 'neon') {
+      cls += ' neon';
+      style = `background:${color}22;border-color:${color};color:${color}`;
     } else if (effect === 'glow') {
       cls += ' glow';
       style = `background:${color}22;border-color:${color}55;color:${color}`;
@@ -1718,6 +1759,9 @@ function roleBadge(u, compact) {
       style = fontStyle;
     } else if (t.effect === 'redblack') {
       style = `background:linear-gradient(90deg,#FF4D6A,#1a0a0a);border-color:rgba(255,77,106,.4);color:#fff;${fontStyle}`;
+    } else if (t.effect === 'neon') {
+      cls += ' neon';
+      style = `background:${color}22;border-color:${color};color:${color};${fontStyle}`;
     } else if (t.effect === 'glow') {
       cls += ' glow';
       style = `background:${color}22;border-color:${color}55;color:${color};${fontStyle}`;
@@ -1801,20 +1845,11 @@ function goto(id) {
     if (id === 'pgStocks') loadStocks();
     if (id === 'pgContests') loadContests();
     if (id === 'pgP2P') { p2pTab('market'); loadP2PListings(); }
+    if (id === 'pgSettings') renderUiPresets();
   };
 
-  if (cur && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-    _navLock = true;
-    cur.classList.remove('on');
-    cur.classList.add('page-out');
-    setTimeout(() => {
-      cur.classList.remove('page-out');
-      activate();
-      _navLock = false;
-    }, 150);
-  } else {
-    activate();
-  }
+  activate();
+  _navLock = false;
 }
 window.goBack = function () { goto(prevPage || 'pgWallet'); };
 window.nav = goto;
@@ -2432,7 +2467,9 @@ function updateCtPreview() {
   const effect = document.getElementById('ctEffect')?.value || 'solid';
   const prev = document.getElementById('ctPreview');
   const fontStyle = font === 'bold' ? 'font-weight:900;' : font === 'italic' ? 'font-style:italic;' : '';
-  if (effect === 'rainbow') { prev.className = 'role-tag rainbow-tag'; prev.style.cssText = `background-image:linear-gradient(90deg,#FF4D6A,#FF8C00,#FFB23E,#3DDC84,#7C5CFC,#C040FF);${fontStyle}`; }
+  if (effect === 'rainbow') { prev.className = 'role-tag rainbow-tag'; prev.style.cssText = fontStyle || ''; }
+  else if (effect === 'glow') { prev.className = 'role-tag glow'; prev.style.cssText = `background:${selectedCtColor}22;border-color:${selectedCtColor}55;color:${selectedCtColor};${fontStyle}`; }
+  else if (effect === 'neon') { prev.className = 'role-tag neon'; prev.style.cssText = `background:${selectedCtColor}22;border-color:${selectedCtColor};color:${selectedCtColor};${fontStyle}`; }
   else { prev.className = 'role-tag'; prev.style.cssText = `background:${selectedCtColor}22;border-color:${selectedCtColor}55;color:${selectedCtColor};${fontStyle}`; }
   prev.textContent = name;
 }
@@ -3780,7 +3817,7 @@ async function loadP2PListings() {
       <div class="check-card">
         <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
           <div style="flex:1;min-width:0">
-            <div style="font-size:11px;color:var(--c-text3);margin-bottom:4px">${catIco[r.category] || '📦'} ${esc(r.category || '')} · @${esc(r.sellerName || '')}</div>
+            <div style="font-size:11px;color:var(--c-text3);margin-bottom:4px">${catIco[r.category] || '📦'} ${esc(r.category || '')}${r.game ? ' · ' + esc(r.game) : ''} · @${esc(r.sellerName || '')}${r.delivery === 'auto' ? ' · ⚡ авто' : ''}</div>
             <div style="font-weight:800;font-size:15px;margin-bottom:4px">${esc(r.title)}</div>
             <div style="font-size:12.5px;color:var(--c-text2);line-height:1.4">${esc((r.description || '').slice(0, 120))}</div>
           </div>
@@ -3846,10 +3883,15 @@ document.getElementById('btnCreateP2P')?.addEventListener('click', async () => {
   if (!title || title.length < 3) return toast('Название слишком короткое', 'w');
   if (!price || price <= 0) return toast('Укажите цену', 'w');
   try {
+    const game = document.getElementById('p2pGame')?.value || '';
+    const delivery = document.getElementById('p2pDelivery')?.value || 'manual';
+    const autoPayload = (document.getElementById('p2pAutoPayload')?.value || '').trim().slice(0, 1000);
     await addDoc(collection(db, 'p2pListings'), {
       sellerUid: CU.uid, sellerName: UD.username, sellerCode: UD.code,
       title: title.slice(0, 80), description: (description || '').slice(0, 500),
-      category, price, currency, status: 'active', createdAt: serverTimestamp()
+      category, game: (category === 'item' || category === 'game') ? game : '',
+      delivery, autoPayload: delivery === 'auto' ? autoPayload : '',
+      price, currency, status: 'active', createdAt: serverTimestamp()
     });
     toast('Объявление опубликовано', 's');
     closeSheet('sheetP2PCreate');
@@ -3888,9 +3930,10 @@ window.buyP2P = async function (listingId) {
     batch.set(orderRef, {
       listingId, title: L.title, description: L.description,
       price: L.price, currency: L.currency, category: L.category,
+      game: L.game || '', delivery: L.delivery || 'manual',
       sellerUid: L.sellerUid, sellerName: L.sellerName,
       buyerUid: CU.uid, buyerName: UD.username,
-      status: 'paid_held', // paid by buyer, held until confirm
+      status: 'paid_held',
       createdAt: serverTimestamp()
     });
     batch.set(doc(collection(db, 'transactions')), {
@@ -3900,7 +3943,14 @@ window.buyP2P = async function (listingId) {
       orderId: orderRef.id, createdAt: serverTimestamp()
     });
     await batch.commit();
-    toast('Оплачено! Ожидайте товар от продавца', 's', 5000);
+    if (L.delivery === 'auto' && L.autoPayload) {
+      await updateDoc(doc(db, 'p2pOrders', orderRef.id), {
+        status: 'shipped', shippedAt: serverTimestamp(), autoPayload: L.autoPayload
+      });
+      toast('Оплачено! Автовыдача: данные в сделке', 's', 6000);
+    } else {
+      toast('Оплачено! Ожидайте товар от продавца', 's', 5000);
+    }
     openP2POrder(orderRef.id);
     loadP2PListings();
   } catch (e) { toast(e.message || 'Ошибка', 'e'); }
@@ -3933,6 +3983,8 @@ window.openP2POrder = async function (id) {
     <div style="font-size:20px;font-weight:900;margin-bottom:8px">${fmtBal(o.price, o.currency)}</div>
     <div style="font-size:13px;color:var(--c-text2);margin-bottom:6px">Продавец: ${esc(o.sellerName)} · Покупатель: ${esc(o.buyerName)}</div>
     <div style="font-size:13px;line-height:1.5;margin-bottom:14px;padding:12px;background:rgba(255,255,255,.04);border-radius:12px">${esc(o.description || '—')}</div>
+    ${o.autoPayload && isBuyer ? `<div style="margin-bottom:14px;padding:12px;border-radius:12px;background:rgba(34,210,127,.1);border:1px solid rgba(34,210,127,.25)"><div style="font-size:11px;font-weight:800;color:var(--c-green);margin-bottom:4px">⚡ АВТОВЫДАЧА</div><div style="font-size:13px;word-break:break-all">${esc(o.autoPayload)}</div></div>` : ''}
+    ${o.game ? `<div style="font-size:12px;color:var(--c-text2);margin-bottom:10px">Игра: <b>${esc(o.game)}</b></div>` : ''}
     ${actions}`;
   openSheet('sheetP2POrder');
 };
@@ -3984,6 +4036,141 @@ window.p2pDispute = async function (id) {
   } catch (e) { toast(e.message, 'e'); }
 };
 
+
+// ─── TG / Discord binding ───
+document.getElementById('btnTg')?.addEventListener('click', async () => {
+  let v = (document.getElementById('tgIn')?.value || '').trim().replace(/^@/, '');
+  if (!v || v.length < 3) return toast('Введите @username', 'w');
+  try {
+    await updateDoc(doc(db, 'wallets', CU.uid), { tg: '@' + v, tgPending: true, tgVerified: false });
+    await addDoc(collection(db, 'socialRequests'), {
+      uid: CU.uid, username: UD.username, code: UD.code,
+      platform: 'telegram', tg: '@' + v, status: 'pending', createdAt: serverTimestamp()
+    });
+    document.getElementById('tgHint').textContent = '⏳ Заявка отправлена на проверку';
+    toast('Заявка Telegram отправлена', 's');
+  } catch (e) { toast(e.message || 'Ошибка', 'e'); }
+});
+document.getElementById('btnDc')?.addEventListener('click', async () => {
+  let v = (document.getElementById('dcIn')?.value || '').trim();
+  if (!v || v.length < 2) return toast('Введите Discord', 'w');
+  try {
+    await updateDoc(doc(db, 'wallets', CU.uid), { dc: v, dcPending: true, dcVerified: false });
+    await addDoc(collection(db, 'socialRequests'), {
+      uid: CU.uid, username: UD.username, code: UD.code,
+      platform: 'discord', dc: v, status: 'pending', createdAt: serverTimestamp()
+    });
+    toast('Заявка Discord отправлена', 's');
+  } catch (e) { toast(e.message || 'Ошибка', 'e'); }
+});
+
+// ─── 5 UI presets ───
+const UI_PRESETS = {
+  classic: { name: 'Классика', bg: '#06060C', btn1: '#7C5CFC', btn2: '#A78BFA', surface: '#0C0C16', text: '#F2F2FF' },
+  neon:    { name: 'Неон', bg: '#050510', btn1: '#00F0FF', btn2: '#FF00E5', surface: '#0A0A18', text: '#E8FFFF' },
+  light:   { name: 'Светлый', bg: '#F4F4F8', btn1: '#6D28D9', btn2: '#8B5CF6', surface: '#FFFFFF', text: '#1A1A2E' },
+  emerald: { name: 'Изумруд', bg: '#04120C', btn1: '#10B981', btn2: '#34D399', surface: '#0A1A12', text: '#ECFDF5' },
+  crimson: { name: 'Багровый', bg: '#12050A', btn1: '#EF4444', btn2: '#F97316', surface: '#1A0A0E', text: '#FFF1F2' }
+};
+function renderUiPresets() {
+  const el = document.getElementById('uiPresetGrid');
+  if (!el) return;
+  const cur = localStorage.getItem('bv_ui_preset') || 'classic';
+  el.innerHTML = Object.entries(UI_PRESETS).map(([k, p]) => `
+    <button type="button" class="method-opt ${cur === k ? 'on' : ''}" onclick="applyUiPreset('${k}')" style="flex-direction:column;align-items:flex-start;gap:6px;padding:12px">
+      <div style="display:flex;gap:4px">
+        <span style="width:14px;height:14px;border-radius:4px;background:${p.bg};border:1px solid rgba(128,128,128,.4)"></span>
+        <span style="width:14px;height:14px;border-radius:4px;background:${p.btn1}"></span>
+        <span style="width:14px;height:14px;border-radius:4px;background:${p.btn2}"></span>
+      </div>
+      <span style="font-size:13px;font-weight:700">${p.name}</span>
+    </button>`).join('');
+}
+window.applyUiPreset = function (key) {
+  const p = UI_PRESETS[key];
+  if (!p) return;
+  localStorage.setItem('bv_ui_preset', key);
+  const r = document.documentElement;
+  r.style.setProperty('--bg', p.bg);
+  r.style.setProperty('--c-bg', p.bg);
+  r.style.setProperty('--btn1', p.btn1);
+  r.style.setProperty('--btn2', p.btn2);
+  r.style.setProperty('--c-surface', p.surface);
+  r.style.setProperty('--c-text', p.text);
+  document.body.style.backgroundColor = p.bg;
+  // light mode tweaks
+  if (key === 'light') {
+    r.style.setProperty('--c-text2', '#5A5A78');
+    r.style.setProperty('--c-border', 'rgba(0,0,0,.08)');
+    r.style.setProperty('--c-surface3', '#EEEFF5');
+  } else {
+    r.style.setProperty('--c-text2', '#8B8BA8');
+    r.style.setProperty('--c-border', 'rgba(255,255,255,.06)');
+    r.style.setProperty('--c-surface3', '#181826');
+  }
+  renderUiPresets();
+  toast('Интерфейс: ' + p.name, 's');
+};
+setTimeout(() => { try { applyUiPreset(localStorage.getItem('bv_ui_preset') || 'classic'); } catch(_){} }, 400);
+
+// ─── Shop extras ───
+async function shopChargeUAH(price, type, extra) {
+  if (!UD || UD.blocked) throw new Error('Кошелёк недоступен');
+  const bal = UD.balances?.UAH || 0;
+  if (bal < price) throw new Error('Нужно ' + price + ' ₴');
+  const batch = writeBatch(db);
+  batch.update(doc(db, 'wallets', CU.uid), Object.assign({ 'balances.UAH': increment(-price) }, extra || {}));
+  batch.set(doc(collection(db, 'transactions')), {
+    fromUid: CU.uid, fromUsername: UD.username, fromCode: UD.code,
+    toUid: 'shop', toUsername: 'Магазин', toCode: 'SHOP',
+    currency: 'UAH', amount: price, type, createdAt: serverTimestamp()
+  });
+  await batch.commit();
+}
+window.buyAccessory = async function (id, emoji) {
+  try {
+    await shopChargeUAH(120, 'shop_accessory', { avatarAccessory: emoji });
+    toast('Аксессуар ' + emoji + ' куплен!', 's');
+  } catch (e) { toast(e.message, 'e'); }
+};
+const PROFILE_BGS = {
+  neon: 'linear-gradient(135deg,#7C5CFC,#FF00E5,#00F0FF)',
+  sunset: 'linear-gradient(135deg,#FF4D6A,#FFB23E,#FF8C00)',
+  ocean: 'linear-gradient(135deg,#0EA5E9,#6366F1,#1E3A8A)',
+  gold: 'linear-gradient(135deg,#F59E0B,#FDE68A,#B45309)'
+};
+window.buyProfileBg = async function (id) {
+  try {
+    await shopChargeUAH(150, 'shop_profile_bg', { bannerUrl: '', profileBgPreset: id, profileBgCss: PROFILE_BGS[id] });
+    toast('Фон профиля установлен', 's');
+  } catch (e) { toast(e.message, 'e'); }
+};
+window.buyNameFx = async function () {
+  try {
+    await shopChargeUAH(100, 'shop_name_fx', { nameFx: 'rainbow' });
+    toast('Анимация имени включена!', 's');
+  } catch (e) { toast(e.message, 'e'); }
+};
+window.buyHideBal = async function () {
+  try {
+    const until = Date.now() + 30 * 86400000;
+    await shopChargeUAH(180, 'shop_hide_bal', { hideBalUntil: until });
+    toast('Баланс скрыт в Forbes на 30 дней', 's');
+  } catch (e) { toast(e.message, 'e'); }
+};
+
+// P2P cat / delivery UI
+window.p2pCatChanged = function () {
+  const c = document.getElementById('p2pCat')?.value;
+  const g = document.getElementById('p2pGameGroup');
+  if (g) g.style.display = (c === 'item' || c === 'game') ? 'block' : 'none';
+};
+document.getElementById('p2pDelivery')?.addEventListener('change', function () {
+  const g = document.getElementById('p2pAutoGroup');
+  if (g) g.style.display = this.value === 'auto' ? 'block' : 'none';
+});
+
+
 // ─── Global safety net: never leave the user stuck on the loading screen ───
 window.addEventListener('unhandledrejection', e => {
   console.error('Unhandled promise rejection:', e.reason);
@@ -4022,22 +4209,46 @@ setTimeout(() => {
       <div class="sheet-head"><div class="sheet-title">🤝 Новое объявление</div><button class="sheet-close" onclick="closeSheet('sheetP2PCreate')">✕</button></div>
       <div class="sheet-body">
         <div class="form-group"><label class="form-label">Категория</label>
-          <select class="form-input" id="p2pCat">
+          <select class="form-input" id="p2pCat" onchange="p2pCatChanged()">
             <option value="currency">💱 Валюта (крипто / фиат)</option>
             <option value="game">🎮 Игровая валюта / аккаунт</option>
             <option value="item">🎁 Предметы / скины</option>
             <option value="other">📦 Другое</option>
           </select>
         </div>
-        <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="p2pTitle" maxlength="80" placeholder="Например: 1000 UC PUBG"/></div>
+        <div class="form-group" id="p2pGameGroup" style="display:none"><label class="form-label">Игра</label>
+          <select class="form-input" id="p2pGame">
+            <option value="CS2">Counter-Strike 2</option>
+            <option value="Dota2">Dota 2</option>
+            <option value="Rust">Rust</option>
+            <option value="TF2">Team Fortress 2</option>
+            <option value="GTA5">GTA V / FiveM</option>
+            <option value="PUBG">PUBG</option>
+            <option value="Fortnite">Fortnite</option>
+            <option value="Roblox">Roblox</option>
+            <option value="Minecraft">Minecraft</option>
+            <option value="Valorant">Valorant</option>
+            <option value="Other">Другая игра</option>
+          </select>
+        </div>
+        <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="p2pTitle" maxlength="80" placeholder="Например: AK-47 Redline FT"/></div>
         <div class="form-group"><label class="form-label">Описание</label><textarea class="form-input" id="p2pDesc" rows="3" placeholder="Что получит покупатель, как передаёте..."></textarea></div>
+        <div class="form-group"><label class="form-label">Выдача</label>
+          <select class="form-input" id="p2pDelivery">
+            <option value="manual">🖐 Самостоятельно (вручную)</option>
+            <option value="auto">⚡ Автовыдача (код / ссылка после оплаты)</option>
+          </select>
+        </div>
+        <div class="form-group" id="p2pAutoGroup" style="display:none"><label class="form-label">Данные автовыдачи (код, ссылка, логин)</label>
+          <textarea class="form-input" id="p2pAutoPayload" rows="2" placeholder="Покупатель увидит это после оплаты"></textarea>
+        </div>
         <div class="form-group"><label class="form-label">Цена</label>
           <div class="input-row">
             <input class="form-input" id="p2pPrice" type="number" placeholder="0.00" inputmode="decimal"/>
             <select class="form-input" id="p2pCur"><option value="UAH">UAH</option><option value="USD">USD</option><option value="RUB">RUB</option><option value="TON">TON</option></select>
           </div>
         </div>
-        <div style="font-size:12px;color:var(--c-text2);margin-bottom:12px;line-height:1.5">Комиссия сервиса 5% удерживается с продавца при успешной сделке.</div>
+        <div style="font-size:12px;color:var(--c-text2);margin-bottom:12px;line-height:1.5">Комиссия 5%. При автовыдаче данные уходят покупателю сразу после оплаты.</div>
         <button class="btn btn-primary" id="btnCreateP2P">Опубликовать</button>
       </div>
     </div>
