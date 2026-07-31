@@ -426,18 +426,38 @@
       </div>
 
       <!-- Products management -->
-      <div class="sec" style="margin:0 16px 16px">
-        <div class="sec-head" style="display:flex;justify-content:space-between;align-items:center">
-          <span class="sec-title">📦 Товары кассы</span>
-          <button class="btn btn-primary btn-sm" onclick="openSheet('sheetAddKassaProduct')">+ Добавить</button>
+      <div class="kassa-card">
+        <div class="kassa-card-head">
+          <div>
+            <div class="kassa-card-title">📦 Товары кассы</div>
+            <div class="kassa-card-sub">Товары для продажи в вашей кассе</div>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="openSheet('sheetAddKassaProduct')">+ Добавить</button>
         </div>
-        <div id="kassaProductsList"><div class="empty-state"><span class="emo">📦</span>Товаров пока нет</div></div>
+        <div id="kassaProductsList" class="kassa-products">
+          <div class="kassa-empty">
+            <div class="kassa-empty-ico">📦</div>
+            <div class="kassa-empty-title">Товаров пока нет</div>
+            <div class="kassa-empty-sub">Нажмите «+ Добавить», чтобы создать первый товар</div>
+          </div>
+        </div>
       </div>
 
       <!-- Sales history -->
-      <div class="sec" style="margin:0 16px 16px">
-        <div class="sec-head"><span class="sec-title">💰 История продаж</span></div>
-        <div id="kassaSalesList"><div class="empty-state"><span class="emo">💰</span>Продаж ещё нет</div></div>
+      <div class="kassa-card">
+        <div class="kassa-card-head">
+          <div>
+            <div class="kassa-card-title">💰 История продаж</div>
+            <div class="kassa-card-sub">Последние операции кассы</div>
+          </div>
+        </div>
+        <div id="kassaSalesList" class="kassa-products">
+          <div class="kassa-empty">
+            <div class="kassa-empty-ico">💰</div>
+            <div class="kassa-empty-title">Продаж ещё нет</div>
+            <div class="kassa-empty-sub">Здесь появятся продажи из кассы</div>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -931,6 +951,7 @@
     </div>
   </div>
 </div>
+
 
 
 
