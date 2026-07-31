@@ -630,7 +630,7 @@
           <div class="set-label">Безопасность</div>
           <div class="set-row">
             <div class="set-row-txt"><b>PIN-код при входе</b><small>Блокировка при запуске</small></div>
-            <div class="toggle" id="pinToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+            <div class="toggle" id="pinToggle" onclick="window.togglePin&&window.togglePin()" role="button" tabindex="0"><div class="toggle-k"></div></div>
           </div>
           <div class="set-row" id="pinSetRow" style="display:none">
             <div class="set-row-txt" style="width:100%">
@@ -643,7 +643,7 @@
           </div>
           <div class="set-row">
             <div class="set-row-txt"><b>Скрыть балансы</b><small>Режим приватности (••••)</small></div>
-            <div class="toggle" id="privacyToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+            <div class="toggle" id="privacyToggle" onclick="window.togglePrivacy&&window.togglePrivacy()" role="button" tabindex="0"><div class="toggle-k"></div></div>
           </div>
         </div>
 
@@ -667,12 +667,12 @@
 
         <div class="set-card">
           <div class="set-label">Дополнительно</div>
-          <button type="button" class="set-link" id="btnDailyBonus">
+          <button type="button" class="set-link" id="btnDailyBonus" onclick="window.claimDailyBonus&&window.claimDailyBonus()">
             <span class="set-link-ico">🎁</span>
             <span class="set-link-txt"><b>Ежедневный бонус</b><small id="dailyBonusHint">+5 ₴ раз в сутки</small></span>
             <span class="set-link-arr">›</span>
           </button>
-          <button type="button" class="set-link" id="btnCopyRef">
+          <button type="button" class="set-link" id="btnCopyRef" onclick="window.copyReferral&&window.copyReferral()">
             <span class="set-link-ico">🔗</span>
             <span class="set-link-txt"><b>Реферальная ссылка</b><small>Пригласи друга</small></span>
             <span class="set-link-arr">📋</span>
@@ -682,7 +682,7 @@
 
         <div class="set-card">
           <div class="set-label">Аккаунт</div>
-          <button type="button" class="set-link danger" id="btnSettingsLogout">
+          <button type="button" class="set-link danger" id="btnSettingsLogout" onclick="window.doLogout&&window.doLogout()">
             <span class="set-link-ico">🚪</span>
             <span class="set-link-txt"><b>Выйти из аккаунта</b><small>Завершить сессию</small></span>
             <span class="set-link-arr">›</span>
@@ -931,6 +931,8 @@
     </div>
   </div>
 </div>
+
+
 
 
 
