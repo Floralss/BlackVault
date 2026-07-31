@@ -241,7 +241,7 @@ window.toast = function (msg, t, dur) {
 
 window.openSheet = function (id) {
   const el = document.getElementById(id);
-  if (!el) { console.warn('sheet missing:', id); toast('Раздел недоступен','w'); return; }
+  if (!el) { console.warn('sheet missing:', id); return; }
   el.classList.add('on');
   try {
     if (id === 'sheetCreateTag') { renderColorPicker('ctColors', TAG_COLORS, c => { selectedCtColor = c; updateCtPreview(); }); renderPayRow('ctPayRow', 150, c => ctPayCur = c); updateCtPreview(); }
@@ -2775,7 +2775,7 @@ document.addEventListener('click', function(ev){
 // Re-ensure globals after all definitions
 window.openSheet = window.openSheet || function(id){
   const el = document.getElementById(id);
-  if(!el){ console.warn('missing', id); if(typeof toast==='function') toast('Раздел недоступен: '+id,'w'); return; }
+  if(!el){ console.warn('missing', id); return; }
   el.classList.add('on');
   if(id==='sheetAccounts') try{ renderAccountsList(); }catch(e){}
 };
@@ -3194,7 +3194,7 @@ console.log('[BV] auth+ach v16');
 window.openSheet = function(id){
   try{
     const el = document.getElementById(id);
-    if(!el){ console.warn('sheet missing', id); if(window.toast) toast('Раздел недоступен','w'); return; }
+    if(!el){ console.warn('sheet missing', id); return; }
     el.classList.add('on');
     if(id==='sheetAccounts' && typeof renderAccountsList==='function') renderAccountsList();
     if(id==='sheetCreateTag' && typeof renderColorPicker==='function'){
@@ -3204,3 +3204,105 @@ window.openSheet = function(id){
 };
 window.closeSheet = function(id){ try{ document.getElementById(id)?.classList.remove('on'); }catch(e){} };
 console.log('[BV] final v17');
+
+// Re-bind market sheet controls (sheets added late)
+(function rebindMarket(){
+  document.getElementById('mPhoto')?.addEventListener('change', function(){
+    const f=this.files&&this.files[0]; if(!f) return;
+    const r=new FileReader(); r.onload=e=>{ window._mPhoto=e.target.result; _mPhoto=e.target.result; }; r.readAsDataURL(f);
+  });
+  document.getElementById('btnMarketCreate')?.addEventListener('click', async()=>{
+    if(!CU||!UD) return toast('Войдите','e');
+    const title=(document.getElementById('mTitle')?.value||'').trim();
+    const price=parseFloat(document.getElementById('mPrice')?.value);
+    if(!title||title.length<3) return toast('Название','w');
+    if(!price||price<=0) return toast('Цена','w');
+    try{
+      await addDoc(collection(db,'p2pListings'),{
+        sellerUid:CU.uid,sellerName:UD.username,sellerCode:UD.code,
+        title:title.slice(0,80),description:(document.getElementById('mDesc')?.value||'').slice(0,500),
+        category:document.getElementById('mCat')?.value,game:document.getElementById('mGame')?.value||'',
+        delivery:document.getElementById('mDelivery')?.value||'manual',
+        autoPayload:(document.getElementById('mAuto')?.value||'').slice(0,1000),
+        photoUrl:(typeof _mPhoto!=='undefined'&&_mPhoto)||'',price,currency:document.getElementById('mCur')?.value||'UAH',
+        status:'active',createdAt:serverTimestamp()
+      });
+      if(typeof _mPhoto!=='undefined') _mPhoto='';
+      toast('Опубликовано','s'); closeSheet('sheetMarketCreate'); marketTab('my');
+    }catch(e){ toast(e.message,'e'); }
+  });
+  console.log('[BV] market sheets ready');
+})();
+
+// MOBILE FORCE v18
+(function(){
+  function paint(){
+    const dark = '#07070F';
+    const light = '#F0F0FF';
+    try{
+      document.documentElement.style.background = dark;
+      document.body.style.background = dark;
+      document.body.style.color = light;
+      const app = document.getElementById('app');
+      if(app){
+        const hidden = app.style.display === 'none';
+        if(!hidden){
+          app.style.background = dark;
+          app.style.color = light;
+          app.style.opacity = '1';
+          app.style.visibility = 'visible';
+          if(window.innerWidth <= 900){
+            app.style.display = 'flex';
+            app.style.flexDirection = 'column';
+            app.style.minHeight = '100dvh';
+          }
+        }
+      }
+      const main = document.getElementById('main');
+      if(main){
+        main.style.background = dark;
+        main.style.color = light;
+        main.style.opacity = '1';
+        main.style.visibility = 'visible';
+      }
+      document.querySelectorAll('.page').forEach(function(p){
+        if(p.classList.contains('on')){
+          p.style.display = 'flex';
+          p.style.flexDirection = 'column';
+          p.style.opacity = '1';
+          p.style.visibility = 'visible';
+          p.style.background = dark;
+          p.style.color = light;
+          p.style.overflowY = 'auto';
+        }
+      });
+      // balance always white
+      const bi = document.getElementById('wBalInt');
+      const bd = document.getElementById('wBalDec');
+      if(bi){ bi.style.color = '#fff'; bi.style.webkitTextFillColor = '#fff'; }
+      if(bd){ bd.style.color = 'rgba(255,255,255,0.55)'; }
+    }catch(e){}
+  }
+  paint();
+  setInterval(paint, 1200);
+  window.addEventListener('resize', paint);
+  document.addEventListener('visibilitychange', paint);
+  console.log('[BV] mobile+balance v18');
+})();
+
+// file:// protocol guard v20
+(function(){
+  if(location.protocol === 'file:'){
+    console.warn('[BV] Открыто как file:// — для полной работы залейте на GitHub Pages (https).');
+    // prevent self-iframe loops
+    try{
+      if(window.top !== window.self){
+        // already in frame - do nothing aggressive
+      }
+    }catch(e){}
+  }
+  // Block accidental iframe injection to same file
+  const _ci = document.createElement;
+  // don't override createElement - too invasive
+  console.log('[BV] buttons v20');
+})();
