@@ -10,20 +10,19 @@
 /* BlackVault v4 — Premium Dark UI (compatible class names) */
 *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; -webkit-tap-highlight-color:transparent; }
 :root {
-  --bg:#06060C; --c-bg:#06060C;
-  --c-surface:#0C0C16; --c-surface2:#12121E; --c-surface3:#181826; --c-surface4:#1E1E30;
-  --c-border:rgba(255,255,255,.06); --c-border2:rgba(255,255,255,.11);
-  --c-text:#F2F2FF; --c-text2:#8B8BA8; --c-text3:#525270;
+  --bg:#07070F; --c-bg:#07070F;
+  --c-surface:#0F0F1E; --c-surface2:#161626; --c-surface3:#1C1C30; --c-surface4:#222238;
+  --c-border:rgba(255,255,255,.07); --c-border2:rgba(255,255,255,.13);
+  --c-text:#F0F0FF; --c-text2:#8080AA; --c-text3:#4A4A70;
   --c-gold:#FFD166; --c-green:#22D27F; --c-red:#FF4D6A;
-  --btn1:#7C5CFC; --btn2:#A78BFA;
-  --f:'Inter',-apple-system,'SF Pro Display',system-ui,sans-serif;
+  --btn1:#7C5CFC; --btn2:#9B7FFF;
+  --f:'Inter',-apple-system,'SF Pro Display',sans-serif;
   --rs:12px; --r:16px;
-  --shadow:0 8px 32px rgba(0,0,0,.55);
-  --shadow-lg:0 20px 60px rgba(0,0,0,.75);
-  --glow:rgba(124,92,252,.4);
-  --grad:linear-gradient(135deg,#A78BFA 0%,#7C5CFC 45%,#5B4FE9 100%);
+  --shadow:0 8px 32px rgba(0,0,0,.5);
+  --shadow-lg:0 20px 60px rgba(0,0,0,.7);
+  --glow:rgba(124,92,252,.35);
+  --grad:linear-gradient(135deg,#9B7FFF 0%,#7C5CFC 50%,#5B4FE9 100%);
 }
-html{color-scheme:dark}
 html,body{height:100%;overflow:hidden;font-family:var(--f);background:var(--bg);color:var(--c-text);-webkit-font-smoothing:antialiased;}
 ::-webkit-scrollbar{width:3px}::-webkit-scrollbar-thumb{background:rgba(124,92,252,.3);border-radius:4px}
 
@@ -56,334 +55,96 @@ html,body{height:100%;overflow:hidden;font-family:var(--f);background:var(--bg);
 .auth-foot{text-align:center;margin-top:14px;font-size:13px;color:var(--c-text2)}
 .auth-foot a{color:var(--btn2);font-weight:700;cursor:pointer}
 
-/* FORMS — dark everywhere (no white dropdowns) */
+/* FORMS */
 .form-group{margin-bottom:14px}
-.form-label{font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:7px}
-.form-input,input,textarea,select{
-  width:100%;background:#161626!important;border:1px solid rgba(255,255,255,.1)!important;
-  border-radius:14px;padding:13px 15px;color:#F2F2FF!important;font-size:14.5px;
-  font-family:var(--f);outline:none;transition:all .18s;color-scheme:dark;
-  -webkit-appearance:none;appearance:none;
-}
-.form-input:focus,input:focus,textarea:focus,select:focus{
-  border-color:rgba(124,92,252,.55)!important;background:#1C1C30!important;
-  box-shadow:0 0 0 3px rgba(124,92,252,.15);
-}
-.form-input::placeholder,input::placeholder,textarea::placeholder{color:#525270!important}
-textarea.form-input,textarea{resize:vertical;min-height:80px}
-select,select.form-input{
-  cursor:pointer;
-  background-color:#161626!important;color:#F2F2FF!important;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%23A78BFA' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-  background-repeat:no-repeat;background-position:right 14px center;padding-right:36px;
-}
-select option,select.form-input option{
-  background:#12121E!important;color:#F2F2FF!important;padding:10px;
-}
+.form-label{font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase;letter-spacing:.9px;display:block;margin-bottom:7px}
+.form-input{width:100%;background:var(--c-surface3);border:1px solid var(--c-border);border-radius:var(--rs);padding:12px 14px;color:var(--c-text);font-size:14.5px;font-family:var(--f);outline:none;transition:all .2s}
+.form-input:focus{border-color:rgba(124,92,252,.5);background:rgba(124,92,252,.08);box-shadow:0 0 0 4px rgba(124,92,252,.12)}
+.form-input::placeholder{color:var(--c-text3)}
+textarea.form-input{resize:vertical;min-height:80px}
+select.form-input{cursor:pointer}
 .input-row{display:flex;gap:8px}
-.input-row .form-input,.input-row select,.input-row input{flex:1}
 
-/* Method picker cards (instead of ugly native select) */
-.method-grid{display:flex;flex-direction:column;gap:8px}
-.method-opt{
-  display:flex;align-items:center;gap:12px;padding:12px 14px;
-  background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);
-  border-radius:14px;cursor:pointer;transition:.18s;color:var(--c-text);font-weight:600;font-size:14px;
-}
-.method-opt:hover{border-color:rgba(124,92,252,.35);background:rgba(124,92,252,.08)}
-.method-opt.on{border-color:var(--btn1);background:rgba(124,92,252,.14);box-shadow:0 0 0 3px rgba(124,92,252,.12)}
-.method-opt .ico{font-size:20px;width:36px;text-align:center}
-
-/* Check cards */
-.check-card{
-  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);
-  border-radius:16px;padding:14px 16px;margin-bottom:10px;
-  transition:border-color .18s,transform .15s;
-}
-.check-card:hover{border-color:rgba(124,92,252,.3)}
-.check-amount{font-size:20px;font-weight:900;letter-spacing:-.4px;color:#fff}
-.seg-tabs{display:flex;gap:6px;background:rgba(255,255,255,.04);padding:4px;border-radius:12px;margin-bottom:14px}
-.seg-tabs .btn{flex:1;border-radius:10px}
-
-/* BUTTONS — hard premium */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:8px;
-  padding:13px 20px;border-radius:14px;border:none;cursor:pointer;
-  font-size:14.5px;font-weight:700;font-family:var(--f);
-  transition:all .16s;white-space:nowrap;letter-spacing:-.2px;
-}
-.btn:active{transform:scale(.97)}
-.btn-primary{
-  background:var(--grad);color:#fff;width:100%;
-  box-shadow:0 4px 20px var(--glow), inset 0 1px 0 rgba(255,255,255,.15);
-}
-.btn-primary:hover{filter:brightness(1.08);box-shadow:0 8px 28px var(--glow)}
-.btn-secondary{
-  background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.1);
-  color:var(--c-text);width:100%;
-}
-.btn-secondary:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.16)}
-.btn-ghost{
-  background:transparent;border:1px solid rgba(255,255,255,.08);color:var(--c-text2);
-}
-.btn-ghost:hover{border-color:rgba(255,255,255,.14);color:var(--c-text);background:rgba(255,255,255,.05)}
-.btn-danger{background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.28);color:#FF8FA3}
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;padding:13px 20px;border-radius:var(--rs);border:none;cursor:pointer;font-size:14.5px;font-weight:800;font-family:var(--f);transition:all .18s;white-space:nowrap;letter-spacing:-.2px}
+.btn:active{transform:scale(.96)}
+.btn-primary{background:var(--grad);color:#fff;width:100%;box-shadow:0 6px 24px var(--glow)}
+.btn-primary:hover{filter:brightness(1.1);transform:translateY(-1px);box-shadow:0 10px 36px var(--glow)}
+.btn-secondary{background:rgba(255,255,255,.06);border:1px solid var(--c-border);color:var(--c-text);width:100%}
+.btn-secondary:hover{background:rgba(255,255,255,.1);border-color:var(--c-border2)}
+.btn-ghost{background:transparent;border:1px solid var(--c-border);color:var(--c-text2)}
+.btn-ghost:hover{border-color:var(--c-border2);color:var(--c-text);background:rgba(255,255,255,.05)}
+.btn-danger{background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);color:#FF8FA3}
 .btn-danger:hover{background:rgba(255,77,106,.2)}
 .btn-gold{background:linear-gradient(135deg,#FFE08A,#FFB23E);color:#1A0800;box-shadow:0 6px 20px rgba(255,178,62,.3)}
-.btn-sm{padding:8px 14px;font-size:13px;border-radius:10px;width:auto}
-.btn-xs{padding:5px 10px;font-size:12px;border-radius:8px;width:auto}
+.btn-sm{padding:8px 15px;font-size:13px;border-radius:10px;width:auto}
+.btn-xs{padding:5px 11px;font-size:12px;border-radius:8px;width:auto}
 .divider{display:flex;align-items:center;gap:11px;color:var(--c-text3);font-size:12px;margin:14px 0;font-weight:600}
 .divider::before,.divider::after{content:'';flex:1;height:1px;background:var(--c-border)}
 
 /* LAYOUT */
-#app{
-  height:100vh;display:flex;
-  background:radial-gradient(ellipse at 8% 0%,rgba(124,92,252,.09),transparent 45%),var(--bg);
-  animation:appIn .4s cubic-bezier(.22,1,.36,1) both;
-}
-@keyframes appIn{
-  from{opacity:0}
-  to{opacity:1}
-}
+#app{height:100vh;display:flex;background:radial-gradient(ellipse at 8% 0%,rgba(124,92,252,.09),transparent 45%),var(--bg)}
 
-/* SIDEBAR — hard premium */
-#sidebar{
-  width:260px;background:#0A0A14;border-right:1px solid rgba(255,255,255,.06);
-  display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;
-}
-.sb-header,.sb-head{padding:16px 14px 12px;border-bottom:1px solid rgba(255,255,255,.06)}
-.sb-brand{display:flex;align-items:center;gap:10px}
-.sb-brand-ico{
-  width:38px;height:38px;background:var(--grad);border-radius:11px;
-  display:flex;align-items:center;justify-content:center;font-size:18px;
-  box-shadow:0 4px 20px var(--glow);
-}
-.sb-brand-name{font-size:17px;font-weight:900;letter-spacing:-.5px}
-
-.sb-user{
-  display:flex;align-items:center;gap:10px;margin:12px 12px 4px;
-  padding:10px 12px;background:rgba(255,255,255,.04);
-  border:1px solid rgba(255,255,255,.07);border-radius:14px;cursor:pointer;transition:.18s;
-}
-.sb-user:hover{background:rgba(255,255,255,.07);border-color:rgba(255,255,255,.12)}
-.sb-av{
-  width:36px;height:36px;border-radius:50%;background:var(--grad);
-  display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;
-  flex-shrink:0;overflow:hidden;
-}
+/* SIDEBAR */
+#sidebar{width:240px;background:rgba(10,10,22,.96);border-right:1px solid var(--c-border);display:flex;flex-direction:column;overflow:hidden;flex-shrink:0;backdrop-filter:blur(20px)}
+.sb-head{padding:18px 16px 12px;border-bottom:1px solid var(--c-border)}
+.sb-brand{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.sb-brand-ico{width:36px;height:36px;background:var(--grad);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:17px;box-shadow:0 4px 16px var(--glow)}
+.sb-brand-name{font-size:16px;font-weight:900;letter-spacing:-.4px}
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;background:rgba(255,255,255,.05);border:1px solid var(--c-border);border-radius:var(--rs);cursor:pointer;transition:.18s}
+.sb-user:hover{background:rgba(255,255,255,.08);border-color:var(--c-border2)}
+.sb-av{width:34px;height:34px;border-radius:50%;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;flex-shrink:0;overflow:hidden}
 .sb-av img{width:100%;height:100%;object-fit:cover}
-.sb-uname,.sb-user-name{font-size:13.5px;font-weight:700;line-height:1.2;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sb-code,.sb-user-code{font-size:11px;color:var(--c-text2);font-family:ui-monospace,monospace;margin-top:2px}
-
-.sb-nav{flex:1;overflow-y:auto;padding:8px 10px 12px}
-.sb-sep{
-  font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.3px;
-  color:var(--c-text3);padding:14px 10px 6px;
-}
-
-/* Unified nav items — list style (hard, clean) */
-.sb-list-item,.sb-tile{
-  display:flex;align-items:center;gap:11px;padding:11px 12px;
-  border-radius:12px;cursor:pointer;transition:.15s;
-  color:var(--c-text2);font-size:13.5px;font-weight:600;position:relative;
-  background:transparent;border:none;width:100%;text-align:left;font-family:var(--f);
-}
-.sb-list-item:hover,.sb-tile:hover{background:rgba(255,255,255,.05);color:var(--c-text)}
-.sb-list-item.on,.sb-tile.on{
-  background:rgba(124,92,252,.14);color:#C4B5FD;
-}
-.sb-list-item.on::before,.sb-tile.on::before{
-  content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);
-  width:3px;height:55%;background:var(--btn1);border-radius:0 3px 3px 0;
-}
-.sb-list-item .ic,.sb-tile .ic{
-  width:32px;height:32px;border-radius:10px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:16px;flex-shrink:0;background:rgba(255,255,255,.05);
-}
-.sb-list-item.on .ic,.sb-tile.on .ic{background:rgba(124,92,252,.2)}
-.sb-tile .lb{font-size:13.5px;font-weight:600;color:inherit;line-height:1.2}
-.sb-tile.on .lb{color:inherit}
-
-.sb-grid{display:flex;flex-direction:column;gap:2px}
-.sb-badge{
-  background:var(--c-red);color:#fff;border-radius:8px;font-size:10px;font-weight:900;
-  padding:2px 6px;margin-left:auto;flex-shrink:0;
-}
-.sb-footer,.sb-foot{padding:8px 10px 12px;border-top:1px solid rgba(255,255,255,.06)}
-.sb-logout,#btnLogout{
-  display:flex;align-items:center;gap:8px;padding:11px 12px;border-radius:12px;
-  color:var(--c-red);font-size:13.5px;font-weight:600;cursor:pointer;transition:.15s;
-  width:100%;background:transparent;border:none;font-family:var(--f);
-}
-.sb-logout:hover,#btnLogout:hover{background:rgba(255,77,106,.1)}
-
-#mobMenuBtn{
-  display:none;width:36px;height:36px;border-radius:10px;
-  background:rgba(255,255,255,.07);border:1px solid var(--c-border);
-  align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0;
-}
-#sbOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:499;backdrop-filter:blur(4px)}
+.sb-user-name{font-size:13px;font-weight:700;line-height:1.2}
+.sb-user-code{font-size:10.5px;color:var(--c-text2);font-family:monospace}
+.sb-nav{flex:1;overflow-y:auto;padding:6px 8px}
+.sb-sep{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1.2px;color:var(--c-text3);padding:13px 9px 6px}
+.sb-list-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:var(--rs);cursor:pointer;transition:.15s;color:var(--c-text2);font-size:13.5px;font-weight:600;position:relative}
+.sb-list-item:hover{background:rgba(255,255,255,.05);color:var(--c-text)}
+.sb-list-item.on{background:rgba(124,92,252,.12);color:var(--btn2)}
+.sb-list-item.on::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:3px;height:60%;background:var(--btn1);border-radius:0 2px 2px 0}
+.sb-list-item .ic{width:30px;height:30px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;background:rgba(255,255,255,.05)}
+.sb-list-item.on .ic{background:rgba(124,92,252,.15)}
+.sb-badge{background:var(--c-red);color:#fff;border-radius:9px;font-size:10px;font-weight:900;padding:2px 6px;margin-left:auto}
+.sb-foot{padding:8px;border-top:1px solid var(--c-border)}
+#btnLogout{display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:var(--rs);color:var(--c-red);font-size:13px;font-weight:600;cursor:pointer;transition:.15s;width:100%;background:transparent;border:none;font-family:var(--f)}
+#btnLogout:hover{background:rgba(255,77,106,.1)}
+.sb-tiles-sect{padding:8px}
+.tiles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sb-tile{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 6px;background:rgba(255,255,255,.05);border:1px solid var(--c-border);border-radius:var(--rs);cursor:pointer;transition:.18s}
+.sb-tile:hover,.sb-tile.on{background:rgba(124,92,252,.1);border-color:rgba(124,92,252,.25)}
+.sb-tile .ic{font-size:22px}
+.sb-tile .lb{font-size:10px;font-weight:700;text-align:center;color:var(--c-text2);line-height:1.2}
+.sb-tile.on .lb{color:var(--btn2)}
+#mobMenuBtn{display:none;width:36px;height:36px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid var(--c-border);align-items:center;justify-content:center;font-size:18px;cursor:pointer;flex-shrink:0}
+#sbOverlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:499;backdrop-filter:blur(4px)}
 #sbOverlay.open{display:block}
 
-/* PAGES — no opacity tricks (mobile black-screen safe) */
-#main{flex:1;overflow:hidden;display:flex;flex-direction:column;position:relative;min-width:0;background:var(--bg)}
-.page{
-  display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0;
-  background:var(--bg);opacity:1;transform:none;
-}
-.page.on{display:flex;opacity:1!important;transform:none!important;visibility:visible!important}
-.page.page-out{display:none!important}
-.ph{
-  padding:14px 18px;border-bottom:1px solid var(--c-border);
-  display:flex;align-items:center;justify-content:space-between;gap:12px;
-  flex-shrink:0;background:rgba(7,7,15,.9);backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);z-index:2;
-}
+/* PAGES */
+#main{flex:1;overflow:hidden;display:flex;flex-direction:column}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden}
+.page.on{display:flex}
+.ph{padding:16px 22px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-shrink:0;background:rgba(10,10,22,.6);backdrop-filter:blur(20px)}
 .ph-top{display:flex;align-items:center;justify-content:space-between;width:100%;gap:12px}
-.ph-title{font-size:20px;font-weight:800;letter-spacing:-.5px;color:var(--c-text)}
+.ph-title{font-size:19px;font-weight:900;letter-spacing:-.4px}
 .ph-sub{font-size:12.5px;color:var(--c-text2);margin-top:2px}
 
-/* PAGE BODY — always scrollable on mobile */
-.page-body{
-  flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 18px 28px;
-  -webkit-overflow-scrolling:touch;min-height:0;background:transparent;
-}
-
-/* Soft content appear — opacity ends at 1 always */
-@keyframes fadeUp{
-  from{opacity:.6;transform:translateY(8px)}
-  to{opacity:1;transform:none}
-}
-.page.on .wallet-hero,.page.on .tg-promo{animation:fadeUp .28s ease both}
-
-/* List hover / tap */
-.asset-row,.tx-row,.report-item,.stock-row,.lb-row{
-  transition:background .15s,padding-left .2s cubic-bezier(.22,1,.36,1),transform .15s;
-}
-.asset-row:hover,.tx-row:hover,.report-item:hover,.stock-row:hover,.lb-row:hover{padding-left:6px}
-.asset-row:active,.tx-row:active,.report-item:active{transform:scale(.985)}
-
-/* Auth / loader */
-.auth-card{animation:fadeUp .45s cubic-bezier(.22,1,.36,1) both}
-#loader{transition:opacity .35s ease,visibility .35s}
-#loader.hide{opacity:0;visibility:hidden;pointer-events:none}
-
-/* TAGS — animated */
-.role-tag{
-  display:inline-flex;align-items:center;padding:3px 9px;border-radius:9px;
-  font-size:11px;font-weight:800;border:1px solid transparent;
-  transition:transform .2s,box-shadow .25s;
-  animation:tagIn .35s cubic-bezier(.22,1,.36,1) both;
-}
-.role-tag:hover{transform:translateY(-1px)}
-.rainbow-tag{
-  background-image:linear-gradient(90deg,#FF4D6A 0%,#FF8C00 16%,#FFB23E 33%,#3DDC84 50%,#7C5CFC 66%,#C040FF 83%,#FF4D6A 100%)!important;
-  background-size:400% 100%!important;background-position:0% 50%!important;
-  color:#fff!important;border:none!important;
-  -webkit-background-clip:padding-box!important;background-clip:padding-box!important;
-  animation:rainbowShift 2.2s linear infinite!important;
-  box-shadow:0 0 14px rgba(192,64,255,.4),0 0 4px rgba(255,77,106,.3);
-}
-@keyframes rainbowShift{
-  0%{background-position:0% 50%}
-  100%{background-position:100% 50%}
-}
-@keyframes tagIn{from{transform:scale(.9)}to{transform:none}}
-.role-tag.glow{animation:tagGlow 2s ease-in-out infinite}
-@keyframes tagGlow{0%,100%{box-shadow:0 0 6px rgba(124,92,252,.25)}50%{box-shadow:0 0 16px rgba(124,92,252,.65)}}
-.name-fx-rainbow{
-  background:linear-gradient(90deg,#FF4D6A,#FFB23E,#3DDC84,#7C5CFC,#C040FF,#FF4D6A);
-  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
-  -webkit-text-fill-color:transparent;animation:rainbowShift 2.5s linear infinite;
-  font-weight:900;
-}
-.role-tag.neon{
-  animation:neonPulse 1.6s ease-in-out infinite;
-  text-shadow:0 0 8px currentColor;
-}
-@keyframes neonPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.35)}}
-
-@media(prefers-reduced-motion:reduce){
-  *,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
-}
-
-/* WALLET — Telegram style */
-.wallet-hero{
-  background:transparent;border:none;border-radius:0;padding:8px 0 4px;
-  margin-bottom:0;position:relative;overflow:visible;text-align:center;
-}
-.wallet-hero::before{display:none}
-.wh-label{font-size:13px;font-weight:600;color:var(--c-text2);text-transform:none;letter-spacing:0;margin-bottom:10px}
-.wh-amount{
-  display:flex;align-items:baseline;justify-content:center;gap:2px;
-  font-size:42px;font-weight:800;letter-spacing:-1.8px;line-height:1.1;
-  color:#fff;margin-bottom:6px;
-}
-#wBalInt{font-size:42px;font-weight:800;letter-spacing:-1.8px;background:none;-webkit-background-clip:unset;-webkit-text-fill-color:#fff;color:#fff}
-#wBalDec{font-size:28px;font-weight:700;opacity:.55;background:none;-webkit-background-clip:unset;-webkit-text-fill-color:#fff;color:#fff}
-.wh-sub{font-size:13px;color:var(--c-text2);margin-bottom:4px;font-weight:500}
-.wh-code{
-  display:inline-flex;align-items:center;gap:6px;font-size:12.5px;color:var(--c-text2);
-  background:rgba(255,255,255,.05);border:1px solid var(--c-border);border-radius:20px;
-  padding:5px 12px;margin:8px auto 18px;cursor:pointer;font-family:var(--f);transition:.15s;
-}
-.wh-code:hover{background:rgba(255,255,255,.08);color:var(--c-text)}
-
-/* Telegram-style action grid */
-.wh-actions{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;
-  margin:0 auto 18px;max-width:360px;
-}
-.wh-btn{
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;
-  background:rgba(255,255,255,.07);border:none;border-radius:16px;
-  padding:14px 6px 12px;cursor:pointer;transition:all .18s;font-family:var(--f);
-  color:var(--c-text);min-height:78px;font-size:12px;font-weight:600;
-}
-.wh-btn:hover{background:rgba(255,255,255,.11);transform:translateY(-1px)}
-.wh-btn:active{transform:scale(.96)}
-.wh-btn.primary{background:rgba(124,92,252,.2)}
-.wh-btn.primary:hover{background:rgba(124,92,252,.3)}
-.wh-btn.dis{opacity:.45;pointer-events:none}
-.wh-btn-icon{
-  width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;
-  font-size:20px;background:rgba(255,255,255,.08);
-}
-.wh-btn.primary .wh-btn-icon{background:rgba(124,92,252,.3)}
-
-/* Promo banner (Telegram style) */
-.tg-promo{
-  display:flex;align-items:center;gap:12px;
-  background:linear-gradient(135deg,#6B4EFF 0%,#9B7FFF 55%,#C084FC 100%);
-  border-radius:16px;padding:14px 16px;margin-bottom:16px;cursor:pointer;
-  box-shadow:0 8px 24px rgba(107,78,255,.28);transition:.18s;
-}
-.tg-promo:hover{filter:brightness(1.06);transform:translateY(-1px)}
-.tg-promo-text{flex:1;min-width:0}
-.tg-promo-title{font-size:14px;font-weight:700;color:#fff;line-height:1.3}
-.tg-promo-sub{font-size:12px;color:rgba(255,255,255,.85);margin-top:2px}
-.tg-promo-ico{font-size:28px;flex-shrink:0;line-height:1}
-
-.tg-tabs{
-  display:inline-flex;background:rgba(255,255,255,.06);border-radius:12px;padding:3px;margin:0 auto 14px;gap:2px;
-}
-.tg-tab{
-  padding:7px 18px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;
-  color:var(--c-text2);transition:.15s;border:none;background:transparent;font-family:var(--f);
-}
-.tg-tab.on{background:rgba(255,255,255,.12);color:#fff}
-
+/* WALLET HERO */
+.wallet-hero{background:linear-gradient(135deg,rgba(124,92,252,.12),rgba(90,70,200,.05));border:1px solid rgba(124,92,252,.18);border-radius:var(--r);padding:22px;margin-bottom:14px;position:relative;overflow:hidden}
+.wallet-hero::before{content:'';position:absolute;top:-60px;right:-60px;width:220px;height:220px;background:radial-gradient(circle,rgba(124,92,252,.18),transparent 70%);pointer-events:none}
+.wh-label{font-size:11px;font-weight:800;color:var(--c-text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px}
+#wBalInt{font-size:40px;font-weight:900;letter-spacing:-1.5px;background:linear-gradient(135deg,#fff 40%,var(--btn2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+#wBalDec{font-size:26px;font-weight:900;background:linear-gradient(135deg,#fff 40%,var(--btn2));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.wh-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:18px}
+.wh-action-btn{display:flex;align-items:center;gap:6px;padding:9px 14px;background:rgba(255,255,255,.07);border:1px solid var(--c-border2);border-radius:var(--rs);font-size:13px;font-weight:700;cursor:pointer;transition:.18s;color:var(--c-text);font-family:var(--f)}
+.wh-action-btn:hover{background:rgba(124,92,252,.15);border-color:rgba(124,92,252,.3);color:var(--btn2)}
 .blocked-banner{background:rgba(255,77,106,.1);border:1px solid rgba(255,77,106,.22);border-radius:var(--rs);padding:11px 14px;font-size:13px;color:#FF8FA3;font-weight:600;display:flex;align-items:center;gap:8px;margin-bottom:12px}
 
 /* CARDS / SECTIONS */
 .card-p{padding:18px}
-.sec{background:rgba(255,255,255,.04);border:1px solid var(--c-border);border-radius:18px;overflow:hidden;margin-bottom:12px}
-.sec-head{padding:12px 16px 10px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:10px}
-.sec-title{font-size:14px;font-weight:700;letter-spacing:-.2px}
-.sec-link{font-size:13px;font-weight:600;color:var(--btn2);cursor:pointer}
-.sec-link:hover{opacity:.85}
-.asset-list{padding:0 14px}
+.sec{background:rgba(255,255,255,.04);border:1px solid var(--c-border);border-radius:var(--r);overflow:hidden;margin-bottom:13px}
+.sec-head{padding:13px 17px 11px;border-bottom:1px solid var(--c-border);display:flex;align-items:center;justify-content:space-between;gap:10px}
+.sec-title{font-size:13.5px;font-weight:800;letter-spacing:-.2px}
 
 /* ASSETS */
 .asset-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--c-border);cursor:pointer;transition:.15s}
@@ -410,7 +171,7 @@ select option,select.form-input option{
 .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:800}
 .badge-green{background:rgba(34,210,127,.12);color:var(--c-green)}.badge-red{background:rgba(255,77,106,.12);color:var(--c-red)}
 .badge-purple{background:rgba(124,92,252,.12);color:var(--btn2)}.badge-yellow{background:rgba(255,209,102,.12);color:var(--c-gold)}
-/* role-tag / rainbow-tag defined above with animations */
+.role-tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:9px;font-size:11px;font-weight:800;border:1px solid transparent}
 .tag-row{display:flex;flex-wrap:wrap;gap:5px}
 
 /* SHEETS */
@@ -527,41 +288,19 @@ select option,select.form-input option{
 .qr-scan-status{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#fff;font-size:13px;font-weight:700;text-shadow:0 1px 5px #000}
 
 /* PIN */
-#pinWall{
-  position:fixed;inset:0;background:var(--bg);z-index:8500;display:none;
-  flex-direction:column;align-items:center;justify-content:center;padding:24px;color:var(--c-text);
-}
-#pinWall.show{display:flex;animation:fadeUp .35s ease both}
-.pin-ico{font-size:40px;margin-bottom:8px}
-.pin-h{font-size:22px;font-weight:900;margin-bottom:4px}
-.pin-s{font-size:14px;color:var(--c-text2);margin-bottom:8px}
-.pin-track,.pin-dots{display:flex;gap:12px;margin:18px 0;justify-content:center}
-.pin-d,.pin-dot{
-  width:14px;height:14px;border-radius:50%;border:2px solid var(--c-border2);
-  transition:.2s;background:transparent;
-}
-.pin-d.on,.pin-dot.on{background:var(--btn1);border-color:var(--btn1);box-shadow:0 0 12px var(--glow)}
-.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;max-width:280px;width:100%}
-#pinErr{color:var(--c-red);font-size:13px;font-weight:600;margin-top:12px;min-height:20px;text-align:center}
+#pinWall{position:fixed;inset:0;background:var(--bg);z-index:8500;display:none;align-items:center;justify-content:center;padding:24px}
+#pinWall.show{display:flex}
+.pin-dots{display:flex;gap:11px;margin:18px 0;justify-content:center}
+.pin-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--c-border2);transition:.2s}.pin-dot.on{background:var(--btn1);border-color:var(--btn1);box-shadow:0 0 10px var(--glow)}
+.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:270px}
 .pin-k{aspect-ratio:1;border-radius:15px;background:rgba(255,255,255,.07);border:1px solid var(--c-border);font-size:21px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .pin-k:hover{background:rgba(124,92,252,.15);border-color:rgba(124,92,252,.3)}.pin-k:active{transform:scale(.93)}
 
 /* MOBILE NAV */
-#mobNav{
-  display:none;position:fixed;bottom:0;left:0;right:0;
-  background:rgba(8,8,16,.98);border-top:1px solid rgba(255,255,255,.06);
-  backdrop-filter:blur(28px);z-index:500;padding:4px 6px;
-  padding-bottom:max(4px,env(safe-area-inset-bottom));
-}
+#mobNav{display:none;position:fixed;bottom:0;left:0;right:0;background:rgba(8,8,20,.97);border-top:1px solid var(--c-border);backdrop-filter:blur(28px);z-index:500;padding:0 8px;padding-bottom:env(safe-area-inset-bottom)}
 .mob-items{display:flex;justify-content:space-around}
-.mob-item{
-  display:flex;flex-direction:column;align-items:center;gap:3px;
-  padding:8px 6px;border-radius:12px;cursor:pointer;
-  font-size:10px;font-weight:700;color:var(--c-text3);min-width:52px;transition:.15s;
-}
-.mob-item .ic{font-size:22px;line-height:1}
-.mob-item.on{color:#C4B5FD}
-.mob-item:active{transform:scale(.94)}
+.mob-item{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px;border-radius:var(--rs);cursor:pointer;font-size:10px;font-weight:700;color:var(--c-text3);min-width:48px;transition:.15s}
+.mob-item .ic{font-size:21px}.mob-item.on{color:var(--btn2)}
 
 /* EMPTY STATE */
 .empty-state{padding:38px 18px;text-align:center;color:var(--c-text2);font-size:13.5px}
@@ -581,67 +320,113 @@ a{color:var(--btn2);text-decoration:none}
 .pay-method-ico img{width:100%;height:100%;object-fit:cover}
 .pay-method-name{font-size:12px;font-weight:700;text-align:center}
 
+@media(max-width:900px){#sidebar{display:none}#app{padding-bottom:62px}#mobNav{display:block}#mobMenuBtn{display:flex}.page-scroll{padding:13px 14px}.ph{padding:12px 15px}}
+@media(max-width:480px){.auth-card{padding:24px 18px}.tiles-grid{gap:6px}}
+
+/* BlackVault mobile + polish v5 */
+html{color-scheme:dark}
+#app{opacity:1!important;visibility:visible!important;height:100vh;height:100dvh}
+#main,.page.on{opacity:1!important;visibility:visible!important;background:var(--bg);color:var(--c-text)}
+.page{display:none;flex:1;flex-direction:column;overflow:hidden;min-height:0;background:var(--bg)}
+.page.on{display:flex!important}
+.page-body{flex:1;overflow-y:auto;overflow-x:hidden;padding:16px 18px 28px;-webkit-overflow-scrolling:touch;min-height:0}
+
+select,select.form-input,input,textarea{
+  color-scheme:dark!important;background:#161626!important;color:#F2F2FF!important;
+  border:1px solid rgba(255,255,255,.1)!important;border-radius:14px;
+}
+select option{background:#12121E!important;color:#F2F2FF!important}
+
+.method-grid{display:flex;flex-direction:column;gap:8px}
+.method-opt{display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(255,255,255,.04);border:1.5px solid rgba(255,255,255,.08);border-radius:14px;cursor:pointer;color:var(--c-text);font-weight:600}
+.method-opt.on{border-color:var(--btn1);background:rgba(124,92,252,.14)}
+.method-opt .ico{font-size:20px;width:36px;text-align:center}
+
+.check-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px 16px;margin-bottom:10px}
+.check-amount{font-size:20px;font-weight:900;color:#fff}
+.seg-tabs{display:flex;gap:6px;background:rgba(255,255,255,.04);padding:4px;border-radius:12px;margin-bottom:14px}
+.seg-tabs .btn{flex:1;border-radius:10px}
+
+.role-tag{display:inline-flex;align-items:center;padding:3px 9px;border-radius:9px;font-size:11px;font-weight:800;border:1px solid transparent}
+.rainbow-tag{
+  background-image:linear-gradient(90deg,#FF4D6A,#FF8C00,#FFB23E,#3DDC84,#7C5CFC,#C040FF,#FF4D6A)!important;
+  background-size:400% 100%!important;color:#fff!important;border:none!important;
+  animation:rainbowShift 2.2s linear infinite!important;
+  box-shadow:0 0 12px rgba(192,64,255,.35);
+}
+@keyframes rainbowShift{0%{background-position:0% 50%}100%{background-position:100% 50%}}
+.role-tag.glow{animation:tagGlow 2s ease-in-out infinite}
+@keyframes tagGlow{0%,100%{box-shadow:0 0 6px rgba(124,92,252,.2)}50%{box-shadow:0 0 16px rgba(124,92,252,.6)}}
+.role-tag.neon{text-shadow:0 0 8px currentColor;animation:neonPulse 1.6s ease-in-out infinite}
+@keyframes neonPulse{0%,100%{filter:brightness(1)}50%{filter:brightness(1.3)}}
+.name-fx-rainbow{
+  background:linear-gradient(90deg,#FF4D6A,#FFB23E,#3DDC84,#7C5CFC,#C040FF,#FF4D6A);
+  background-size:300% 100%;-webkit-background-clip:text;background-clip:text;
+  -webkit-text-fill-color:transparent;animation:rainbowShift 2.5s linear infinite;font-weight:900;
+}
+
+.profile-wrap{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.profile-banner,#pvBanner{width:100%;height:140px;background:linear-gradient(135deg,#2a1a5e,#0d1b3a,#0a0a14);overflow:hidden}
+.profile-banner img{width:100%;height:100%;object-fit:cover}
+.profile-body{padding:0 16px 28px;margin-top:-40px;position:relative}
+.profile-ava-row{display:flex;align-items:flex-end;gap:12px;margin-bottom:12px}
+.profile-ava,#pvAva{
+  width:84px;height:84px;border-radius:50%;position:relative;overflow:visible;
+  display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;
+  background:var(--grad);border:3px solid var(--bg);flex-shrink:0;
+}
+.profile-ava img,#pvAva img{width:100%;height:100%;object-fit:cover;border-radius:50%}
+.profile-ava .acc-badge{position:absolute;top:-8px;right:-8px;font-size:22px;z-index:2;filter:drop-shadow(0 2px 6px rgba(0,0,0,.5))}
+.profile-name{font-size:22px;font-weight:900;display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-bottom:4px}
+.profile-code{font-size:13px;color:var(--c-text2);font-family:ui-monospace,monospace;margin-bottom:8px}
+.profile-bio{font-size:14px;color:var(--c-text2);line-height:1.5;margin-bottom:10px}
+.profile-links{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.profile-stats{display:grid;gap:10px}
+.profile-stat{background:rgba(255,255,255,.04);border:1px solid var(--c-border);border-radius:14px;padding:14px 16px}
+.profile-stat-label{font-size:10px;font-weight:800;color:var(--c-text3);text-transform:uppercase;margin-bottom:6px}
+.profile-stat-val{font-size:22px;font-weight:900}
+
+.ach-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+.ach-card{background:rgba(255,255,255,.04);border:1px solid var(--c-border);border-radius:14px;padding:12px;text-align:center}
+.ach-card.on{border-color:rgba(124,92,252,.45);background:rgba(124,92,252,.1)}
+.ach-card:not(.on){opacity:.4;filter:grayscale(.8)}
+.ach-ico{font-size:26px;margin-bottom:4px}
+.ach-name{font-size:12px;font-weight:800}
+.ach-desc{font-size:10px;color:var(--c-text3);margin-top:3px}
+
+body.fx-grid::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:linear-gradient(rgba(124,92,252,.07) 1px,transparent 1px),linear-gradient(90deg,rgba(124,92,252,.07) 1px,transparent 1px);background-size:48px 48px}
+body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
+  background-image:radial-gradient(rgba(167,139,250,.35) 1px,transparent 1px);background-size:28px 28px}
+#fxSnow{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+#fxSnow i{position:absolute;top:-12px;animation:snowFall linear infinite;color:rgba(255,255,255,.5)}
+@keyframes snowFall{to{transform:translateY(110vh) rotate(360deg);opacity:0}}
+#app,#main{position:relative;z-index:1}
+
+.dl-hero{text-align:center;padding:32px 18px;background:radial-gradient(ellipse at 50% 0%,rgba(124,92,252,.22),transparent 65%);border-radius:20px;border:1px solid rgba(124,92,252,.2);margin-bottom:14px}
+.dl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;margin:14px 0}
+.dl-card{background:rgba(255,255,255,.04);border:1px solid var(--c-border);border-radius:14px;padding:14px}
+.dl-card .lbl{font-size:10px;font-weight:800;color:var(--c-text3);text-transform:uppercase;margin-bottom:4px}
+.dl-card .val{font-size:15px;font-weight:900}
+.dl-card .sub{font-size:11px;color:var(--c-text2);margin-top:3px}
+
 @media(max-width:900px){
-  html,body{height:100%;height:100dvh;overflow:hidden;background:var(--bg);color:var(--c-text)}
-  #app{
-    height:100%;height:100dvh;padding-bottom:calc(62px + env(safe-area-inset-bottom,0px));
-    background:var(--bg);min-width:0;
-  }
-  #main{min-width:0;width:100%;background:var(--bg)}
-  #sidebar{
-    display:flex;position:fixed;left:0;top:0;bottom:0;z-index:600;width:min(280px,86vw);
-    transform:translateX(-105%);transition:transform .28s cubic-bezier(.34,1,.64,1);
-    box-shadow:none;background:#0A0A14;
-  }
+  #sidebar{display:flex!important;position:fixed;left:0;top:0;bottom:0;z-index:600;width:min(280px,86vw);
+    transform:translateX(-105%);transition:transform .28s ease;background:#0A0A14}
   #sidebar.open{transform:translateX(0);box-shadow:20px 0 60px rgba(0,0,0,.65)}
-  #mobNav{
-    display:block;
-    padding-bottom:max(6px,env(safe-area-inset-bottom,0px));
-  }
-  #mobMenuBtn{
-    display:flex;position:fixed;top:max(10px,env(safe-area-inset-top,0px));
-    left:10px;z-index:550;background:rgba(20,20,36,.95);
-  }
+  #app{padding-bottom:calc(62px + env(safe-area-inset-bottom,0px));opacity:1!important}
+  #mobNav{display:block!important;padding-bottom:max(4px,env(safe-area-inset-bottom,0px))}
+  #mobMenuBtn{display:flex!important;position:fixed;top:10px;left:10px;z-index:550}
   .ph{padding:12px 14px 12px 52px}
-  .page,.page.on{background:var(--bg);opacity:1}
-  .page-body{
-    padding:12px 14px calc(20px + env(safe-area-inset-bottom,0px));
-    -webkit-overflow-scrolling:touch;
-  }
-  /* pages without page-body still scroll */
-  .page{overflow-y:auto;-webkit-overflow-scrolling:touch}
-  .page > .page-body{overflow-y:auto}
-  .wh-actions{grid-template-columns:repeat(4,1fr);gap:8px;max-width:100%}
-  .wh-btn{min-height:72px;padding:12px 4px 10px;font-size:11px}
-  .wh-btn-icon{width:36px;height:36px;font-size:18px}
-  .wh-amount,#wBalInt{font-size:34px}
-  #wBalDec{font-size:22px}
-  .tg-promo{padding:12px 14px}
-  .sec{border-radius:16px}
-  .overlay{align-items:flex-end}
-  .sheet{max-height:88dvh;border-radius:20px 20px 0 0;padding-bottom:max(24px,env(safe-area-inset-bottom,0px))}
-  #notifPanel{width:min(100vw,320px)}
-  #updateBanner{left:12px;right:12px;bottom:calc(72px + env(safe-area-inset-bottom,0px));max-width:none}
-  .input-row{flex-direction:column}
-  .input-row .form-input{width:100%}
+  .page-body{padding:12px 14px 24px}
+  #wBalInt,#wBalDec{color:#fff!important;-webkit-text-fill-color:#fff!important}
+  #updateBanner{left:12px;right:12px;bottom:calc(70px + env(safe-area-inset-bottom,0px));max-width:none}
 }
-@media(max-width:480px){
-  .auth-card{padding:22px 16px;border-radius:20px}
-  .auth-title{font-size:20px}
-  .ph-title{font-size:17px}
-  .wh-actions{gap:6px}
-  .wh-btn{border-radius:14px}
-  .mob-item{min-width:48px;font-size:9.5px}
-  .mob-item .ic{font-size:20px}
-}
-/* Force visible text on WebKit mobile */
-@supports (-webkit-touch-callout:none){
-  .page.on{opacity:1!important;transform:none}
-  body{-webkit-text-size-adjust:100%}
-}
+
 </style>
 </head>
 <body>
+<div id="fxSnow"></div>
 
 
 <div id="updateBanner" style="display:none;position:fixed;bottom:20px;right:20px;z-index:8000;background:linear-gradient(135deg,#1A1430,#251A4D);border:1px solid rgba(124,92,252,.4);border-radius:16px;padding:14px 16px;max-width:340px;box-shadow:0 20px 60px rgba(0,0,0,.6)">
@@ -670,48 +455,27 @@ a{color:var(--btn2);text-decoration:none}
 
 <div id="toastRoot"></div>
 
-<!-- AUTH -->
-<div id="authScreen">
-  <div id="pgLogin" class="auth-screen" style="display:none">
-    <div class="auth-box">
-      <div class="auth-card">
-        <div class="auth-brand"><div class="auth-brand-ico">🔐</div><div class="auth-brand-name">BlackVault</div></div>
-        <div class="auth-title">Вход</div>
-        <div class="auth-sub">Войдите в свой аккаунт</div>
-        <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
-        <div class="form-group"><label class="form-label">Пароль</label><input id="lPass" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
-        <button class="btn btn-primary" id="btnLogin">Войти</button>
-        <div class="divider">или</div>
-        <button class="btn btn-secondary" id="btnGoo1" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt=""/> Google</button>
-        <div class="auth-foot">Нет аккаунта? <a id="toReg">Создать</a></div>
-      </div>
-    </div>
-  </div>
+<!-- UPDATE LOG -->
+
   <div id="pgReg" class="auth-screen" style="display:none">
-    <div class="auth-box">
-      <div class="auth-card">
-        <div class="auth-brand"><div class="auth-brand-ico">🔐</div><div class="auth-brand-name">BlackVault</div></div>
-        <div class="auth-title">Создать аккаунт</div>
-        <div class="auth-sub">Присоединяйтесь к BlackVault</div>
-        <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
-        <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов" autocomplete="new-password"/></div>
-        <div class="form-group"><label class="form-label">Повтор пароля</label><input id="rPass2" class="form-input" type="password" placeholder="••••••••" autocomplete="new-password"/></div>
-        <button class="btn btn-primary" id="btnReg">Создать аккаунт</button>
-        <div class="divider">или</div>
-        <button class="btn btn-secondary" id="btnGoo2" style="display:flex;align-items:center;justify-content:center;gap:8px;width:100%"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt=""/> Google</button>
-        <div class="auth-foot">Уже есть аккаунт? <a id="toLg">Войти</a></div>
-      </div>
+    <div class="auth-card">
+      <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
+      <div class="auth-title">Создать аккаунт</div><div class="auth-sub">Присоединяйтесь к BlackVault</div>
+      <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
+      <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов"/></div>
+      <div class="form-group"><label class="form-label">Повтор пароля</label><input id="rPass2" class="form-input" type="password" placeholder="••••••••"/></div>
+      <button class="btn btn-primary" id="btnReg">Создать аккаунт</button>
+      <div class="divider">или</div>
+      <button class="btn btn-google" id="btnGoo2"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16"/> Google</button>
+      <div class="auth-foot">Уже есть аккаунт? <a id="toLg">Войти</a></div>
     </div>
   </div>
   <div id="pgUname" class="auth-screen" style="display:none">
-    <div class="auth-box">
-      <div class="auth-card">
-        <div class="auth-brand"><div class="auth-brand-ico">🔐</div><div class="auth-brand-name">BlackVault</div></div>
-        <div class="auth-title">Ваш никнейм</div>
-        <div class="auth-sub">Выберите уникальное имя</div>
-        <div class="form-group"><label class="form-label">Никнейм</label><input id="unameI" class="form-input" maxlength="24" placeholder="CryptoKing"/></div>
-        <button class="btn btn-primary" id="btnUname">Продолжить →</button>
-      </div>
+    <div class="auth-card">
+      <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
+      <div class="auth-title">Ваш никнейм</div><div class="auth-sub">Выберите уникальное имя</div>
+      <div class="form-group"><label class="form-label">Никнейм</label><input id="unameI" class="form-input" maxlength="24" placeholder="CryptoKing"/></div>
+      <button class="btn btn-primary" id="btnUname">Продолжить →</button>
     </div>
   </div>
 </div>
@@ -721,40 +485,33 @@ a{color:var(--btn2);text-decoration:none}
   <div id="sbOverlay"></div>
 
   <div id="sidebar">
-    <div class="sb-header">
-      <div class="sb-brand">
-        <div class="sb-brand-ico">🔐</div>
-        <div class="sb-brand-name">BlackVault</div>
-      </div>
-    </div>
-
+    <div class="sb-header"><div class="sb-brand"><div class="sb-brand-ico">🔐</div><div class="sb-brand-name">BlackVault</div></div></div>
     <div class="sb-user" data-goto="pgWallet">
-      <div class="sb-av" id="sbAv"><span id="sbAvT">?</span><img id="sbAvI" alt=""/></div>
-      <div style="flex:1;min-width:0">
-        <div class="sb-uname" id="sbName">—</div>
-        <div class="sb-code" id="sbCode">BV-??????</div>
-      </div>
+      <div class="sb-av" id="sbAv"><span id="sbAvT">?</span><img id="sbAvI"/></div>
+      <div style="flex:1;min-width:0"><div class="sb-uname" id="sbName">—</div><div class="sb-code" id="sbCode">BV-??????</div></div>
       <div id="sbRoleBadge"></div>
     </div>
 
     <div class="sb-nav">
       <div class="sb-sep">Кошелёк</div>
-      <div class="sb-list-item on" data-goto="pgWallet"><span class="ic">💳</span>Главная</div>
-      <div class="sb-list-item" data-goto="pgAssets"><span class="ic">💎</span>Активы</div>
-      <div class="sb-list-item" data-goto="pgTransfer"><span class="ic">↗</span>Перевод</div>
-      <div class="sb-list-item" data-goto="pgExchange"><span class="ic">⇄</span>Обмен</div>
-      <div class="sb-list-item" data-goto="pgStocks"><span class="ic">📈</span>Акции</div>
-      <div class="sb-list-item" data-goto="pgDeposit"><span class="ic">＋</span>Пополнить<span class="sb-badge" id="depDot" style="display:none">!</span></div>
-      <div class="sb-list-item" data-goto="pgChecks"><span class="ic">🧾</span>Чеки</div>
-      <div class="sb-list-item" data-goto="pgContests"><span class="ic">🎉</span>Конкурсы</div>
-      <div class="sb-list-item" data-goto="pgP2P"><span class="ic">🤝</span>Торговая площадка</div>
+      <div class="sb-grid">
+        <div class="sb-tile on" data-goto="pgWallet"><span class="ic">💳</span><span class="lb">Главная</span></div>
+        <div class="sb-tile" data-goto="pgAssets"><span class="ic">💎</span><span class="lb">Активы</span></div>
+        <div class="sb-tile" data-goto="pgTransfer"><span class="ic">↗️</span><span class="lb">Перевод</span></div>
+        <div class="sb-tile" data-goto="pgExchange"><span class="ic">💱</span><span class="lb">Обмен</span></div>
+        <div class="sb-tile" data-goto="pgStocks"><span class="ic">📈</span><span class="lb">Акции</span></div>
+        <div class="sb-tile" data-goto="pgDeposit"><span class="ic">📥</span><span class="lb">Пополнить</span><span class="dot" id="depDot"></span></div>
+        <div class="sb-tile" data-goto="pgChecks"><span class="ic">🧾</span><span class="lb">Чеки</span></div>
+        <div class="sb-tile" data-goto="pgContests"><span class="ic">🎉</span><span class="lb">Конкурсы</span></div>
+      </div>
 
+      <div class="sb-list-item" data-goto="pgMarket"><span class="ic">🛒</span>Площадка</div>
       <div class="sb-sep">Сообщество</div>
       <div class="sb-list-item" data-goto="pgHistory"><span class="ic">📋</span>История</div>
       <div class="sb-list-item" data-goto="pgLeaderboard"><span class="ic">🏆</span>Forbes</div>
       <div class="sb-list-item" data-goto="pgShop"><span class="ic">🛍</span>Магазин</div>
       <div class="sb-list-item" data-goto="pgSupport"><span class="ic">🎧</span>Поддержка<span class="sb-badge" id="sbSupportBadge" style="display:none">!</span></div>
-      <div class="sb-list-item" data-goto="pgDownload"><span class="ic">💻</span>Приложение</div>
+      <div class="sb-list-item" data-goto="pgDownload"><span class="ic">💻</span>Приложение на ПК</div>
       <div class="sb-list-item" id="sbKassaItem" style="display:none" data-goto="pgKassa"><span class="ic">🏪</span>Моя касса</div>
 
       <div id="sbAdminGroup" style="display:none">
@@ -764,88 +521,41 @@ a{color:var(--btn2);text-decoration:none}
     </div>
 
     <div class="sb-footer">
-      <div class="sb-list-item" data-goto="pgSettings"><span class="ic">⚙</span>Настройки</div>
-      <button class="sb-logout" id="btnLogout" type="button">Выйти</button>
+      <div class="sb-list-item" data-goto="pgSettings"><span class="ic">⚙️</span>Настройки</div>
+      <div class="sb-logout" id="btnLogout">⬅️ Выйти</div>
     </div>
   </div>
 
   <div id="main">
 
     <div class="page on" id="pgWallet">
-      <div class="ph">
-        <div class="ph-top">
-          <div style="display:flex;align-items:center;gap:10px">
-            <div>
-              <div class="ph-title" id="homeGreet">Кошелёк</div>
-              <div class="ph-sub" id="homeDate" style="font-size:12px;color:var(--c-text2);margin-top:1px"></div>
-            </div>
-            <span id="homeBadge"></span>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <button class="btn btn-ghost btn-sm" onclick="goto('pgQrPay')" title="QR-оплата" style="width:36px;height:36px;padding:0;border-radius:10px">📱</button>
-            <button class="btn btn-ghost btn-sm" onclick="toggleNotifPanel()" title="Уведомления" style="width:36px;height:36px;padding:0;border-radius:10px;position:relative">🔔<span id="notifDot" style="position:absolute;top:6px;right:6px;width:7px;height:7px;background:var(--c-red);border-radius:50%;border:2px solid var(--bg);display:none"></span></button>
-          </div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title" id="homeGreet">Кошелёк</div><div class="ph-sub" id="homeDate"></div></div><div id="homeBadge"></div></div></div>
+      <div id="homeBlockedBanner" style="display:none;background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);border-radius:var(--rs);padding:13px 17px;margin-bottom:17px;font-size:13px;color:#FF8FA3;font-weight:600">🔒 Кошелёк заблокирован. <span style="text-decoration:underline;cursor:pointer" data-goto="pgSupport">Поддержка</span></div>
+      <div class="wallet-hero">
+        <div class="wh-label">Общий баланс</div>
+        <div class="wh-amount"><span>$</span><span id="wBalInt">0</span><span id="wBalDec" style="opacity:.6">.00</span></div>
+        <div class="wh-sub" id="wSub">Кошелёк BlackVault</div>
+        <div class="wh-code" id="wCode" onclick="copyCode()">🔑 <span id="wCodeTxt">BV-??????</span> <span style="opacity:.5">⎘</span></div>
+        <div class="wh-actions">
+          <div class="wh-btn" data-goto="pgDeposit"><span class="wh-btn-icon">📥</span>Пополнить</div>
+          <div class="wh-btn primary" data-goto="pgTransfer"><span class="wh-btn-icon">↗️</span>Перевод</div>
+          <div class="wh-btn dis" onclick="toast('Вывод временно недоступен','w')"><span class="wh-btn-icon">📤</span>Вывести</div>
+          <div class="wh-btn" data-goto="pgExchange"><span class="wh-btn-icon">💱</span>Обмен</div>
+          <div class="wh-btn" data-goto="pgChecks"><span class="wh-btn-icon">🧾</span>Чек</div>
         </div>
       </div>
-      <div class="page-body">
-        <div id="homeBlockedBanner" style="display:none;background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);border-radius:14px;padding:12px 14px;margin-bottom:14px;font-size:13px;color:#FF8FA3;font-weight:600">🔒 Кошелёк заблокирован. <span style="text-decoration:underline;cursor:pointer" data-goto="pgSupport">Поддержка</span></div>
-
-        <div class="wallet-hero">
-          <div class="tg-tabs">
-            <button class="tg-tab on" type="button">Wallet</button>
-            <button class="tg-tab" type="button" data-goto="pgStocks">Акции</button>
-          </div>
-          <div class="wh-label">Общий баланс</div>
-          <div class="wh-amount"><span style="font-size:28px;opacity:.7;margin-right:2px">$</span><span id="wBalInt">0</span><span id="wBalDec">.00</span></div>
-          <div class="wh-sub" id="wSub">BlackVault</div>
-          <div class="wh-code" id="wCode" onclick="copyCode()">🔑 <span id="wCodeTxt">BV-??????</span> <span style="opacity:.5">⎘</span></div>
-
-          <div class="wh-actions">
-            <div class="wh-btn primary" data-goto="pgTransfer"><span class="wh-btn-icon">↗</span>Перевести</div>
-            <div class="wh-btn" data-goto="pgDeposit"><span class="wh-btn-icon">＋</span>Пополнить</div>
-            <div class="wh-btn" onclick="toast('Вывод временно недоступен','w')"><span class="wh-btn-icon">↑</span>Вывести</div>
-            <div class="wh-btn" data-goto="pgExchange"><span class="wh-btn-icon">⇄</span>Обменять</div>
-          </div>
-        </div>
-
-        <div class="tg-promo" data-goto="pgContests">
-          <div class="tg-promo-text">
-            <div class="tg-promo-title">Участвуйте в конкурсах</div>
-            <div class="tg-promo-sub">Призы и бонусы внутри BlackVault</div>
-          </div>
-          <div class="tg-promo-ico">🎉</div>
-        </div>
-
-        <div class="sec">
-          <div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все ›</span></div>
-          <div class="asset-list" id="homeAssets"></div>
-        </div>
-        <div class="sec">
-          <div class="sec-head"><span class="sec-title">Последние операции</span><span class="sec-link" data-goto="pgHistory">Все ›</span></div>
-          <div id="homeTx" style="padding:0 14px"><div class="empty-state"><span class="emo">📭</span>Операций пока нет</div></div>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px">
-          <div class="wh-btn" data-goto="pgChecks" style="min-height:64px;flex-direction:row;gap:10px;padding:12px 14px;justify-content:flex-start">
-            <span class="wh-btn-icon" style="width:36px;height:36px;font-size:18px">🧾</span>
-            <span style="text-align:left;font-size:13px">Чеки</span>
-          </div>
-          <div class="wh-btn" data-goto="pgQrPay" style="min-height:64px;flex-direction:row;gap:10px;padding:12px 14px;justify-content:flex-start">
-            <span class="wh-btn-icon" style="width:36px;height:36px;font-size:18px">📱</span>
-            <span style="text-align:left;font-size:13px">QR-оплата</span>
-          </div>
-        </div>
-      </div>
+      <div class="sec"><div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все</span></div><div class="asset-list" id="homeAssets"></div></div>
+      <div class="sec"><div class="sec-head"><span class="sec-title">Последние операции</span><span class="sec-link" data-goto="pgHistory">Все</span></div><div id="homeTx"><div class="empty-state"><span class="emo">📭</span>Операций пока нет</div></div></div>
     </div>
 
     <div class="page" id="pgAssets">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">💎 Активы</div><div class="ph-sub">Ваш крипто-портфель</div></div></div></div>
-      <div class="page-body"><div class="sec"><div class="asset-list" id="assetsList"></div></div></div>
+      <div class="sec"><div class="asset-list" id="assetsList"></div></div>
     </div>
 
     <div class="page" id="pgTransfer">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">↗ Перевод</div><div class="ph-sub">Отправить средства</div></div></div></div>
-      <div class="page-body"><div class="sec card-p" style="max-width:480px;margin:0 auto">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">↗️ Перевод</div><div class="ph-sub">Отправить средства</div></div></div></div>
+      <div class="sec card-p" style="max-width:480px">
         <div class="form-group"><label class="form-label">Получатель</label><input class="form-input" id="trTo" placeholder="BV-XXXXXX или @nickname"/></div>
         <div class="form-group"><label class="form-label">Валюта и сумма</label>
           <div class="input-row">
@@ -855,15 +565,17 @@ a{color:var(--btn2);text-decoration:none}
           <div class="form-hint" id="trBalHint">Доступно: —</div>
         </div>
         <div class="form-group"><label class="form-label">Комментарий</label><input class="form-input" id="trComment" placeholder="Необязательно..."/></div>
-        <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:12px 14px;font-size:13px;color:var(--c-text2);margin-bottom:16px;border:1px solid var(--c-border)">⏳ Обработка ~5 секунд · Комиссия 0%</div>
+        <div style="background:var(--c-surface2);border-radius:var(--rs);padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px">⏳ Обработка ~5 секунд. Комиссия 0%</div>
+        <button class="wh-action-btn" onclick="goto('pgQrPay')" style="background:rgba(34,210,127,.1);border-color:rgba(34,210,127,.2);color:#22D27F">📱 QR оплата</button>
+        <button class="wh-action-btn" onclick="toggleNotifPanel()" style="position:relative">🔔 <span id="notifDot" style="position:absolute;top:8px;right:8px;width:7px;height:7px;background:var(--c-red);border-radius:50%;border:2px solid var(--bg);display:none"></span></button>
         <button class="btn btn-primary" id="btnTransfer">Отправить</button>
         <div class="pending-box" id="trPending"><div style="font-size:13px;color:#D4C5FF;font-weight:700">⏳ Выполняем перевод...</div><div class="progress-bar"><div class="progress-fill" id="trBar" style="width:0%"></div></div></div>
-      </div></div>
+      </div>
     </div>
 
     <div class="page" id="pgExchange">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">⇄ Обмен</div><div class="ph-sub">По рыночному курсу</div></div></div></div>
-      <div class="page-body"><div style="max-width:480px;margin:0 auto">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">💱 Обмен</div><div class="ph-sub">По рыночному курсу</div></div></div></div>
+      <div style="max-width:480px">
         <div class="ex-wrap">
           <div class="ex-side"><div class="ex-label">Отдаёте</div>
             <div class="input-row"><select class="form-input" id="exFrom"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select><input class="form-input" id="exAmt" type="number" placeholder="0.00"/></div>
@@ -877,44 +589,33 @@ a{color:var(--btn2);text-decoration:none}
         <div style="background:var(--c-surface);border-radius:var(--rs);padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px;border:1px solid var(--c-border)">⏳ Время обмена: ~1 минута</div>
         <button class="btn btn-primary" id="btnExchange">Обменять</button>
         <div class="pending-box" id="exPending"><div style="font-size:13px;color:#D4C5FF;font-weight:700">💱 Выполняем обмен...</div><div class="progress-bar"><div class="progress-fill" id="exBar" style="width:0%"></div></div></div>
-      </div></div>
+      </div>
     </div>
 
     <!-- STOCKS -->
     <div class="page" id="pgStocks">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">📈 Акции</div><div class="ph-sub">Покупайте акции по реальным ценам</div></div></div></div>
-      <div class="page-body">
-        <div class="sec"><div id="stocksList" class="asset-list"></div></div>
-        <div class="sec"><div class="sec-head"><span class="sec-title">Мои акции</span></div><div id="myStocksList"><div class="empty-state"><span class="emo">📈</span>У вас пока нет акций</div></div></div>
-      </div>
+      <div class="sec"><div id="stocksList" class="asset-list"></div></div>
+      <div class="sec"><div class="sec-head"><span class="sec-title">Мои акции</span></div><div id="myStocksList"><div class="empty-state"><span class="emo">📈</span>У вас пока нет акций</div></div></div>
     </div>
 
     <div class="page" id="pgDeposit">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">＋ Пополнение</div><div class="ph-sub">Заявка обрабатывается администратором</div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">📥 Пополнение</div><div class="ph-sub">Заявка обрабатывается администратором</div></div>
       <button class="btn btn-primary btn-sm" id="btnNewDeposit">+ Новая заявка</button></div></div>
-      <div class="page-body"><div class="sec" id="depRequestsWrap"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div></div>
+      <div class="sec" id="depRequestsWrap"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div>
     </div>
 
     <div class="page" id="pgChecks">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🧾 Чеки</div><div class="ph-sub">Создавайте и принимайте платежи</div></div>
       <button class="btn btn-primary btn-sm" id="btnOpenCheck">+ Создать</button></div></div>
-      <div class="page-body">
-        <div class="seg-tabs">
-          <button class="btn btn-primary btn-sm" id="chkTabMy" onclick="chkTab('my')">Мои чеки</button>
-          <button class="btn btn-secondary btn-sm" id="chkTabPay" onclick="chkTab('pay')">Оплатить</button>
-        </div>
-        <div id="myChecksWrap">
-          <div id="myChecksList"><div class="empty-state"><span class="emo">🧾</span>Чеков нет</div></div>
-        </div>
-        <div id="payCheckWrap" style="display:none">
-          <div class="sec card-p">
-            <div class="form-group"><label class="form-label">ID чека</label>
-              <div style="display:flex;gap:8px;flex-wrap:wrap">
-                <input class="form-input" id="payChkId" placeholder="Введите ID" style="flex:1;min-width:140px"/>
-                <button class="btn btn-primary btn-sm" id="btnPayChk">Оплатить</button>
-              </div>
-            </div>
-          </div>
+      <div style="display:flex;gap:8px;margin-bottom:17px">
+        <button class="btn btn-primary btn-sm" id="chkTabMy" onclick="chkTab('my')">Мои чеки</button>
+        <button class="btn btn-secondary btn-sm" id="chkTabPay" onclick="chkTab('pay')">Оплатить</button>
+      </div>
+      <div id="myChecksWrap"><div id="myChecksList"><div class="empty-state"><span class="emo">🧾</span>Чеков нет</div></div></div>
+      <div id="payCheckWrap" style="display:none">
+        <div class="sec card-p" style="max-width:480px">
+          <div class="form-group"><label class="form-label">ID чека</label><div style="display:flex;gap:8px"><input class="form-input" id="payChkId" placeholder="Введите ID"/><button class="btn btn-primary btn-sm" id="btnPayChk" style="white-space:nowrap">Оплатить</button></div></div>
         </div>
       </div>
     </div>
@@ -922,55 +623,41 @@ a{color:var(--btn2);text-decoration:none}
     <!-- CONTESTS -->
     <div class="page" id="pgContests">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🎉 Конкурсы</div><div class="ph-sub">Участвуйте и выигрывайте призы</div></div></div></div>
-      <div class="page-body"><div id="contestsList"><div class="empty-state"><span class="emo">🎉</span>Активных конкурсов нет</div></div></div>
+      <div id="contestsList"><div class="empty-state"><span class="emo">🎉</span>Активных конкурсов нет</div></div>
     </div>
 
-    <!-- P2P MARKETPLACE -->
-    <div class="page" id="pgP2P">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">🤝 Торговая площадка</div><div class="ph-sub">Скины, валюта, предметы с гарантом</div></div>
-        <button class="btn btn-primary btn-sm" onclick="openSheet('sheetP2PCreate')">+ Объявление</button>
+    
+    <div class="page" id="pgMarket">
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">🛒 Торговая площадка</div><div class="ph-sub">Скины, валюта, предметы с гарантом</div></div>
+        <button class="btn btn-primary btn-sm" onclick="openSheet('sheetMarketCreate')">+ Объявление</button>
       </div></div>
       <div class="page-body">
         <div class="seg-tabs">
-          <button class="btn btn-primary btn-sm" id="p2pTabMarket" onclick="p2pTab('market')">Маркет</button>
-          <button class="btn btn-secondary btn-sm" id="p2pTabMy" onclick="p2pTab('my')">Мои сделки</button>
-          <button class="btn btn-secondary btn-sm" id="p2pTabOrders" onclick="p2pTab('orders')">Покупки</button>
+          <button class="btn btn-primary btn-sm" id="mTabMarket" onclick="marketTab('market')">Маркет</button>
+          <button class="btn btn-secondary btn-sm" id="mTabMy" onclick="marketTab('my')">Мои</button>
+          <button class="btn btn-secondary btn-sm" id="mTabOrders" onclick="marketTab('orders')">Сделки</button>
         </div>
-        <div id="p2pMarketWrap">
-          <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px" id="p2pCatFilters">
-            <button class="btn btn-secondary btn-xs p2p-cat on" data-cat="all" onclick="p2pFilterCat(this)">Все</button>
-            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="currency" onclick="p2pFilterCat(this)">💱 Валюта</button>
-            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="game" onclick="p2pFilterCat(this)">🎮 Игры</button>
-            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="item" onclick="p2pFilterCat(this)">🎁 Предметы</button>
-            <button class="btn btn-secondary btn-xs p2p-cat" data-cat="other" onclick="p2pFilterCat(this)">📦 Другое</button>
-          </div>
-          <div id="p2pListings"><div class="empty-state"><span class="emo">🤝</span>Загрузка...</div></div>
-        </div>
-        <div id="p2pMyWrap" style="display:none"><div id="p2pMyListings"><div class="empty-state"><span class="emo">📋</span>Нет объявлений</div></div></div>
-        <div id="p2pOrdersWrap" style="display:none"><div id="p2pOrdersList"><div class="empty-state"><span class="emo">🛒</span>Нет покупок</div></div></div>
-        <div class="sec card-p" style="margin-top:14px;font-size:12.5px;color:var(--c-text2);line-height:1.55">
-          <b style="color:var(--c-text)">Как работает гарант</b><br>
-          1) Покупатель оплачивает с баланса — деньги холдятся<br>
-          2) Продавец передаёт товар и отмечает «Отправлено»<br>
-          3) Покупатель подтверждает получение → продавцу зачисляется оплата<br>
-          4) При обмане — жалоба в поддержку, средства можно вернуть, скамера блокируют
+        <div id="marketListWrap"><div id="marketList"><div class="empty-state"><span class="emo">🛒</span>Загрузка...</div></div></div>
+        <div id="marketMyWrap" style="display:none"><div id="marketMyList"></div></div>
+        <div id="marketOrdersWrap" style="display:none"><div id="marketOrdersList"></div></div>
+        <div class="sec card-p" style="margin-top:12px;font-size:12.5px;color:var(--c-text2);line-height:1.5">
+          <b style="color:var(--c-text)">Гарант</b>: оплата холдится → продавец отдаёт товар → покупатель подтверждает → продавцу зачисление (−5%). Спор → поддержка.
         </div>
       </div>
     </div>
-
-    <div class="page" id="pgHistory">
+<div class="page" id="pgHistory">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">📋 История</div><div class="ph-sub">Все операции</div></div></div></div>
-      <div class="page-body"><div class="sec" id="histWrap"><div class="empty-state"><span class="emo">📭</span>Нет операций</div></div></div>
+      <div class="sec" id="histWrap"><div class="empty-state"><span class="emo">📭</span>Нет операций</div></div>
     </div>
 
     <div class="page" id="pgLeaderboard">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🏆 Forbes</div><div class="ph-sub">Рейтинг богатейших</div></div></div></div>
-      <div class="page-body"><div class="sec" id="lbWrap"><div class="empty-state"><span class="emo">⏳</span>Загрузка...</div></div></div>
+      <div class="sec" id="lbWrap"><div class="empty-state"><span class="emo">⏳</span>Загрузка...</div></div>
     </div>
 
     <div class="page" id="pgShop">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🛍 Магазин</div><div class="ph-sub">Кастомизация, привилегии и интерфейсы</div></div></div></div>
-      <div class="page-body">
+
       <div class="shop-item">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
           <div style="font-size:16px;font-weight:800">⭐ Уникальный тег</div>
@@ -1011,35 +698,24 @@ a{color:var(--btn2);text-decoration:none}
         <button class="btn btn-gold btn-sm" onclick="openSheet('sheetAvatarFrame')">Выбрать рамку</button>
       </div>
 
+      
       <div class="shop-item">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <div style="font-size:16px;font-weight:800">⭐ VIP статус в Forbes</div>
-          <span class="price-tag">от 150 ₴</span>
+          <div style="font-size:16px;font-weight:800">💍 Аксессуар на аватар</div><span class="price-tag">120 ₴</span>
         </div>
-        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Звёздочка ⭐ рядом с именем в рейтинге на 30 дней</div>
-        <button class="btn btn-gold btn-sm" onclick="openSheet('sheetVip')">Купить VIP</button>
-      </div>
-
-      <div class="shop-item">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <div style="font-size:16px;font-weight:800">💍 Аксессуар на аватар</div>
-          <span class="price-tag">120 ₴</span>
-        </div>
-        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Корона, очки, ореол или огонь вокруг аватара</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px" id="accPick">
-          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('crown','👑')">👑 Корона</button>
-          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('glasses','🕶')">🕶 Очки</button>
-          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('halo','😇')">😇 Ореол</button>
-          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('fire','🔥')">🔥 Огонь</button>
-        </div>
-      </div>
-      <div class="shop-item">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <div style="font-size:16px;font-weight:800">🖼 Фон профиля (премиум)</div>
-          <span class="price-tag">150 ₴</span>
-        </div>
-        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Готовые градиенты для баннера профиля</div>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Корона, очки, ореол или огонь</div>
         <div style="display:flex;flex-wrap:wrap;gap:6px">
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('crown','👑')">👑</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('glasses','🕶')">🕶</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('halo','😇')">😇</button>
+          <button class="btn btn-secondary btn-xs" onclick="buyAccessory('fire','🔥')">🔥</button>
+        </div>
+      </div>
+      <div class="shop-item">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+          <div style="font-size:16px;font-weight:800">🖼 Фон профиля</div><span class="price-tag">150 ₴</span>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:8px">
           <button class="btn btn-secondary btn-xs" onclick="buyProfileBg('neon')">💜 Неон</button>
           <button class="btn btn-secondary btn-xs" onclick="buyProfileBg('sunset')">🌅 Закат</button>
           <button class="btn btn-secondary btn-xs" onclick="buyProfileBg('ocean')">🌊 Океан</button>
@@ -1048,20 +724,19 @@ a{color:var(--btn2);text-decoration:none}
       </div>
       <div class="shop-item">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <div style="font-size:16px;font-weight:800">✨ Анимация имени</div>
-          <span class="price-tag">100 ₴</span>
+          <div style="font-size:16px;font-weight:800">✨ Анимация имени</div><span class="price-tag">100 ₴</span>
         </div>
-        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Переливающееся имя в профиле и Forbes</div>
-        <button class="btn btn-gold btn-sm" onclick="buyNameFx()">Купить анимацию имени</button>
+        <button class="btn btn-gold btn-sm" onclick="buyNameFx()">Купить</button>
       </div>
-      <div class="shop-item">
+<div class="shop-item">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
-          <div style="font-size:16px;font-weight:800">🔇 Скрыть баланс в Forbes</div>
-          <span class="price-tag">180 ₴</span>
+          <div style="font-size:16px;font-weight:800">⭐ VIP статус в Forbes</div>
+          <span class="price-tag">от 150 ₴</span>
         </div>
-        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Показывать «•••» вместо суммы в рейтинге (30 дней)</div>
-        <button class="btn btn-gold btn-sm" onclick="buyHideBal()">Купить</button>
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Звёздочка ⭐ рядом с именем в рейтинге на 30 дней</div>
+        <button class="btn btn-gold btn-sm" onclick="openSheet('sheetVip')">Купить VIP</button>
       </div>
+
       <div class="shop-item" style="border:1px solid rgba(0,192,122,.25);background:rgba(0,192,122,.05)">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
           <div style="font-size:16px;font-weight:800">🏪 Доступ к BlackVault Кассе</div>
@@ -1071,59 +746,33 @@ a{color:var(--btn2);text-decoration:none}
         <div id="kassaAccessStatus" style="margin-bottom:10px"></div>
         <button class="btn btn-primary btn-sm" id="btnBuyKassa" onclick="buyKassaAccess()">Открыть доступ к кассе</button>
       </div>
-      </div>
     </div>
 
     <div class="page" id="pgSupport">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">Поддержка</div><div class="ph-sub">Обращения и тикеты</div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">🎧 Поддержка</div><div class="ph-sub">Обращения и тикеты</div></div>
       <button class="btn btn-primary btn-sm" id="btnNewReport">+ Обращение</button></div></div>
-      <div class="page-body" style="padding-top:12px">
-        <div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
-      </div>
+      <div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
     </div>
 
     <!-- DOWNLOAD DESKTOP APP -->
     <div class="page" id="pgDownload">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">💻 Приложение на ПК</div><div class="ph-sub">Полноценный десктоп-клиент BlackVault для Windows</div></div></div></div>
-
-      <div class="wallet-hero" style="text-align:center;padding:40px 28px">
-        <div style="width:84px;height:84px;background:linear-gradient(150deg,#9B7FFF,var(--btn1) 55%,#4A38C9);border-radius:26px;display:flex;align-items:center;justify-content:center;font-size:38px;margin:0 auto 20px;box-shadow:0 0 60px rgba(124,92,252,.45)">🔐</div>
-        <div style="font-size:24px;font-weight:900;color:#fff;margin-bottom:8px;letter-spacing:-.5px">BlackVault Desktop</div>
-        <div style="font-size:14px;color:rgba(255,255,255,.6);margin-bottom:26px">Версия 1.0.0 · Windows 10/11 · 64-bit</div>
-        <a href="downloads/BlackVault-Setup-1.0.0.exe" download class="btn btn-primary" style="max-width:320px;margin:0 auto;padding:16px 28px;font-size:16px;display:flex">
-          <span style="font-size:20px">⬇️</span> Скачать установщик (.exe)
-        </a>
-        <div style="font-size:12px;color:rgba(255,255,255,.4);margin-top:14px">~85 МБ · Бесплатно · Без рекламы</div>
-      </div>
-
-      <div class="sec">
-        <div class="sec-head"><span class="sec-title">Почему стоит установить приложение</span></div>
-        <div style="padding:6px 0">
-          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">⚡ Быстрее браузера</div><div class="settings-row-sub">Запускается отдельным окном, не зависит от вкладок и расширений</div></div></div>
-          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">🔔 Уведомления на рабочий стол</div><div class="settings-row-sub">Узнаёте о пополнениях, переводах и сделках с акциями мгновенно</div></div></div>
-          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">📌 Сворачивается в трей</div><div class="settings-row-sub">Работает в фоне, не занимает панель задач</div></div></div>
-          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">🚀 Автозапуск с системой</div><div class="settings-row-sub">Включается по желанию через меню в трее</div></div></div>
-          <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">🎨 Нативный интерфейс</div><div class="settings-row-sub">Свой тайтлбар в стиле приложения, без браузерных панелей</div></div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">💻 Приложение на ПК</div><div class="ph-sub">Desktop BlackVault</div></div></div></div>
+      <div class="page-body">
+        <div class="dl-hero">
+          <div style="width:72px;height:72px;margin:0 auto 14px;border-radius:20px;background:var(--grad);display:flex;align-items:center;justify-content:center;font-size:34px;box-shadow:0 12px 40px var(--glow)">🔐</div>
+          <div style="font-size:24px;font-weight:900;margin-bottom:6px">BlackVault Desktop</div>
+          <div style="font-size:13px;color:var(--c-text2);margin-bottom:18px">v1.0.0 · Windows 10/11 x64</div>
+          <a href="downloads/BlackVault-Setup-1.0.0.exe" download class="btn btn-primary" style="max-width:260px;margin:0 auto">⬇ Скачать .exe</a>
         </div>
-      </div>
-
-      <div class="sec card-p">
-        <div style="font-size:14px;font-weight:800;margin-bottom:12px">📋 Как установить</div>
-        <div style="display:flex;flex-direction:column;gap:10px;font-size:13.5px;color:var(--c-text2);line-height:1.6">
-          <div><strong style="color:var(--c-text)">1.</strong> Скачайте файл <code style="background:var(--c-surface2);padding:2px 7px;border-radius:5px;font-size:12.5px">BlackVault-Setup-1.0.0.exe</code> кнопкой выше</div>
-          <div><strong style="color:var(--c-text)">2.</strong> Запустите установщик и следуйте подсказкам (можно выбрать папку установки)</div>
-          <div><strong style="color:var(--c-text)">3.</strong> Если Windows SmartScreen покажет предупреждение — нажмите «Подробнее» → «Выполнить в любом случае» (приложение не подписано сертификатом, но безопасно)</div>
-          <div><strong style="color:var(--c-text)">4.</strong> После установки войдите в тот же аккаунт, что и на сайте — все данные синхронизированы</div>
+        <div class="dl-grid">
+          <div class="dl-card"><div class="lbl">ОС</div><div class="val">Windows</div><div class="sub">10/11 64-bit</div></div>
+          <div class="dl-card"><div class="lbl">Размер</div><div class="val">~85 МБ</div><div class="sub">Установщик</div></div>
+          <div class="dl-card"><div class="lbl">Защита</div><div class="val">PIN</div><div class="sub">Локально</div></div>
+          <div class="dl-card"><div class="lbl">Синхр.</div><div class="val">Облако</div><div class="sub">С веб-версией</div></div>
         </div>
-      </div>
-
-      <div style="background:rgba(124,92,252,.07);border:1px solid rgba(124,92,252,.18);border-radius:var(--rs);padding:14px 16px;font-size:13px;color:#D4C5FF;display:flex;gap:10px;align-items:flex-start">
-        <span style="font-size:16px">ℹ️</span>
-        <span>Приложение использует тот же аккаунт и баланс, что и веб-версия. Можно пользоваться и сайтом, и приложением одновременно — данные всегда синхронизированы.</span>
       </div>
     </div>
 
-    <!-- QR PAYMENT PAGE -->
     <div class="page" id="pgQrPay">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">📱 QR-оплата</div><div class="ph-sub">Сканируйте QR-код кассы камерой</div></div><button class="btn btn-secondary btn-sm" onclick="stopQrScanner();goBack()">✕ Закрыть</button></div></div>
       <div class="sec card-p" style="max-width:500px;margin:0 auto">
@@ -1171,16 +820,16 @@ a{color:var(--btn2);text-decoration:none}
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🏪 Моя касса</div><div class="ph-sub">Управление, доходы, товары</div></div>
         <a href="kassa.html" target="_blank" class="btn btn-primary btn-sm">Открыть кассу →</a>
       </div></div>
-      <div class="page-body">
+
       <!-- Stats -->
-      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px;margin-bottom:12px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;padding:0 16px 16px">
         <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">Сегодня</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatToday">0 ₴</div></div>
         <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">За 7 дней</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatWeek">0 ₴</div></div>
         <div class="sec card-p" style="text-align:center"><div style="font-size:11px;color:var(--c-text2);font-weight:700;text-transform:uppercase;margin-bottom:6px">Всего</div><div style="font-size:22px;font-weight:900;color:var(--c-green)" id="kassaStatTotal">0 ₴</div></div>
       </div>
 
       <!-- Products management -->
-      <div class="sec">
+      <div class="sec" style="margin:0 16px 16px">
         <div class="sec-head" style="display:flex;justify-content:space-between;align-items:center">
           <span class="sec-title">📦 Товары кассы</span>
           <button class="btn btn-primary btn-sm" onclick="openSheet('sheetAddKassaProduct')">+ Добавить</button>
@@ -1189,10 +838,9 @@ a{color:var(--btn2);text-decoration:none}
       </div>
 
       <!-- Sales history -->
-      <div class="sec">
+      <div class="sec" style="margin:0 16px 16px">
         <div class="sec-head"><span class="sec-title">💰 История продаж</span></div>
         <div id="kassaSalesList"><div class="empty-state"><span class="emo">💰</span>Продаж ещё нет</div></div>
-      </div>
       </div>
     </div>
 
@@ -1291,37 +939,58 @@ a{color:var(--btn2);text-decoration:none}
       <div class="profile-wrap">
         <div class="profile-banner" id="pvBanner"></div>
         <div class="profile-body">
-          <div class="profile-ava-row"><div class="profile-ava" id="pvAva"><img id="pvAvaImg"/><span id="pvAvaTxt"></span></div></div>
+          <div class="profile-ava-row">
+            <div class="profile-ava" id="pvAva">
+              <img id="pvAvaImg" alt=""/><span id="pvAvaTxt"></span>
+              <span class="acc-badge" id="pvAcc" style="display:none"></span>
+            </div>
+          </div>
           <div class="profile-name" id="pvName">—</div>
           <div class="profile-code" id="pvCode"></div>
           <div class="profile-bio" id="pvBio"></div>
           <div class="profile-links" id="pvLinks"></div>
           <div class="profile-stats" id="pvStats"></div>
+          <div style="margin-top:16px"><div style="font-size:13px;font-weight:800;margin-bottom:10px">🏆 Достижения</div>
+            <div class="ach-grid" id="pvAchievements"></div>
+          </div>
         </div>
       </div>
     </div>
-
     <div class="page" id="pgSettings">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">⚙️ Настройки</div></div></div></div>
-      <div class="page-body">
-      <div class="settings-section sec" style="padding:4px 0">
+      <div class="settings-section">
         <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" id="setUname">—</div><div class="settings-row-sub" id="setCode">BV-??????</div></div><div id="setRoleBadge"></div></div>
         <div class="settings-row clickable" onclick="openSheet('sheetEditProfile')"><div class="settings-row-l"><div class="settings-row-title">Редактировать профиль</div><div class="settings-row-sub">Ник, описание, баннер</div></div><div class="settings-row-v">›</div></div>
         <div class="settings-row clickable" onclick="openSheet('sheetAvatar')"><div class="settings-row-l"><div class="settings-row-title">Аватар</div><div class="settings-row-sub">Загрузить или выбрать из истории</div></div><div class="settings-row-v">›</div></div>
         <div class="settings-row clickable" onclick="openSheet('sheetSocials')"><div class="settings-row-l"><div class="settings-row-title">Telegram / Discord</div><div class="settings-row-sub" id="setSocialsHint">Не привязано</div></div><div class="settings-row-v">›</div></div>
       </div>
-      <div class="settings-section sec" style="padding:8px 14px 14px;margin-top:12px">
-        <div style="font-size:12px;font-weight:800;color:var(--c-text3);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px">Интерфейс (5 стилей)</div>
-        <div id="uiPresetGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px"></div>
-      </div>
-      <div class="settings-section sec" style="padding:4px 0;margin-top:12px">
+      <div class="settings-section">
         <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">PIN-код при входе</div><div class="settings-row-sub">Блокировка при запуске</div></div><div class="toggle" id="pinToggle" onclick="togglePin()"><div class="toggle-k"></div></div></div>
         <div class="settings-row" id="pinSetRow" style="display:none"><div class="settings-row-l"><div class="settings-row-title">Установить PIN</div><div style="display:flex;gap:8px;margin-top:9px"><input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:120px;padding:9px 12px"/><button class="btn btn-primary btn-sm" id="btnSetPin">Сохранить</button></div></div></div>
-        <div class="settings-row clickable" onclick="openSheet('sheetTheme')"><div class="settings-row-l"><div class="settings-row-title">Фон приложения</div><div class="settings-row-sub">Цвет или своё изображение</div></div><div class="settings-row-v">›</div></div>
       </div>
-      <div class="settings-section sec" style="padding:4px 0;margin-top:12px">
+      <div class="settings-section">
+        <div class="settings-row clickable" onclick="openSheet('sheetTheme')"><div class="settings-row-l"><div class="settings-row-title">Тема оформления</div><div class="settings-row-sub">Цвет фона и изображение</div></div><div class="settings-row-v">›</div></div>
+      </div>
+      
+      <div class="settings-section">
+        <div style="padding:12px 16px 4px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Интерфейс</div>
+        <div id="uiPresetGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 14px 14px"></div>
+      </div>
+      <div class="settings-section">
+        <div style="padding:12px 16px 8px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Анимация фона</div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px">
+          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('none')">Нет</button>
+          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('grid')">▦ Сетка</button>
+          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('dots')">··· Точки</button>
+          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('snow')">❄ Снег</button>
+        </div>
+      </div>
+      <div class="settings-section">
+        <div style="padding:12px 16px 8px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Достижения</div>
+        <div class="ach-grid" id="setAchievements" style="padding:0 14px 14px"></div>
+      </div>
+<div class="settings-section">
         <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" style="color:#FF8FA3">Удалить аккаунт</div><div class="settings-row-sub">Необратимое действие</div></div><button class="btn btn-danger btn-sm" id="btnDeleteSelf">Удалить</button></div>
-      </div>
       </div>
     </div>
 
@@ -1330,11 +999,11 @@ a{color:var(--btn2);text-decoration:none}
 
 <div id="mobNav">
   <div class="mob-items">
-    <div class="mob-item on" data-goto="pgWallet"><div class="ic">💳</div>Wallet</div>
-    <div class="mob-item" data-goto="pgExchange"><div class="ic">📈</div>Обмен</div>
-    <div class="mob-item" data-goto="pgDeposit"><div class="ic">💰</div>Пополнить</div>
-    <div class="mob-item" data-goto="pgP2P"><div class="ic">🤝</div>Маркет</div>
-    <div class="mob-item" data-goto="pgSettings"><div class="ic">⚙️</div>Ещё</div>
+    <div class="mob-item on" data-goto="pgWallet"><div class="ic">💳</div>Кошелёк</div>
+    <div class="mob-item" data-goto="pgTransfer"><div class="ic">↗️</div>Перевод</div>
+    <div class="mob-item" data-goto="pgShop"><div class="ic">🛍</div>Магазин</div>
+    <div class="mob-item" data-goto="pgLeaderboard"><div class="ic">🏆</div>Forbes</div>
+    <div class="mob-item" data-goto="pgSettings"><div class="ic">⚙️</div>Настройки</div>
   </div>
 </div>
 
@@ -1376,19 +1045,10 @@ a{color:var(--btn2);text-decoration:none}
 <div class="overlay" id="sheetNewDeposit"><div class="sheet"><div class="sheet-handle"></div>
   <div class="sheet-head"><div class="sheet-title">📥 Заявка на пополнение</div><button class="sheet-close" onclick="closeSheet('sheetNewDeposit')">✕</button></div>
   <div class="sheet-body">
-    <div class="form-group"><label class="form-label">Способ</label>
-      <input type="hidden" id="ndMethod" value="crypto"/>
-      <div class="method-grid" id="ndMethodGrid">
-        <div class="method-opt on" data-v="crypto" onclick="selNdMethod(this)"><span class="ico">🔐</span><span>Крипто (BTC/ETH/TON)</span></div>
-        <div class="method-opt" data-v="steam" onclick="selNdMethod(this)"><span class="ico">🎮</span><span>Steam Gift</span></div>
-        <div class="method-opt" data-v="fiat" onclick="selNdMethod(this)"><span class="ico">💳</span><span>Фиат (UAH/RUB/USD)</span></div>
-      </div>
-    </div>
-    <div class="form-group"><label class="form-label">Валюта зачисления</label>
-      <select class="form-input" id="ndCur"><option value="USD">💵 USD</option><option value="UAH">🇺🇦 UAH</option><option value="RUB">🇷🇺 RUB</option><option value="TON">💎 TON</option><option value="BTC">₿ BTC</option><option value="ETH">⟠ ETH</option></select>
-    </div>
-    <div class="form-group"><label class="form-label">Сумма</label><input class="form-input" id="ndAmt" type="number" placeholder="0.00" inputmode="decimal"/></div>
-    <div style="background:rgba(255,255,255,.04);border-radius:14px;padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px;border:1px solid var(--c-border)">ℹ️ После отправки администратор свяжется в чате и пришлёт реквизиты</div>
+    <div class="form-group"><label class="form-label">Способ</label><select class="form-input" id="ndMethod"><option value="crypto">🔐 Крипто (BTC/ETH/TON)</option><option value="steam">🎮 Steam Gift</option><option value="fiat">💳 Фиат (UAH/RUB/USD)</option></select></div>
+    <div class="form-group"><label class="form-label">Валюта зачисления</label><select class="form-input" id="ndCur"><option value="USD">USD</option><option value="UAH">UAH</option><option value="RUB">RUB</option><option value="TON">TON</option><option value="BTC">BTC</option><option value="ETH">ETH</option></select></div>
+    <div class="form-group"><label class="form-label">Сумма</label><input class="form-input" id="ndAmt" type="number" placeholder="0.00"/></div>
+    <div style="background:var(--c-surface2);border-radius:var(--rs);padding:13px 15px;font-size:13px;color:var(--c-text2);margin-bottom:15px">ℹ️ После отправки администратор свяжется в чате и пришлёт реквизиты</div>
     <button class="btn btn-primary" id="btnSubmitDeposit">Отправить заявку</button>
   </div></div>
 </div>
@@ -1447,8 +1107,12 @@ a{color:var(--btn2);text-decoration:none}
   <div class="sheet-body">
     <div class="form-group"><label class="form-label">Название тега</label><input class="form-input" id="ctName" maxlength="16" placeholder="например: PRO, VIP, LEGEND"/></div>
     <div class="form-group"><label class="form-label">Цвет тега</label><div class="swatches" id="ctColors"></div></div>
-    <div class="form-group"><label class="form-label">Шрифт</label><select class="form-input" id="ctFont"><option value="normal">Обычный</option><option value="bold">Жирный</option><option value="italic">Курсив</option></select></div>
-    <div class="form-group"><label class="form-label">Эффект</label><select class="form-input" id="ctEffect"><option value="solid">Обычный фон</option><option value="rainbow">🌈 Переливание</option><option value="glow">✨ Свечение</option><option value="neon">💜 Неон</option></select></div>
+    <div class="form-group"><label class="form-label">Шрифт</label><select class="form-input" id="ctFont">
+      <option value="normal">Обычный</option><option value="bold">Жирный</option><option value="italic">Курсив</option>
+      <option value="mono">Моно</option><option value="serif">С засечками</option>
+      <option value="wide">Широкий</option><option value="narrow">Узкий</option>
+    </select></div>
+    <div class="form-group"><label class="form-label">Эффект</label><select class="form-input" id="ctEffect"><option value="solid">Обычный</option><option value="rainbow">🌈 Переливание</option><option value="glow">✨ Свечение</option><option value="neon">💜 Неон</option></select></div>
     <div class="form-group"><label class="form-label">Превью</label><div style="background:var(--c-surface2);border-radius:var(--rs);padding:16px;text-align:center"><span id="ctPreview" class="role-tag" style="background:#7C5CFC22;border-color:#7C5CFC55;color:#7C5CFC">PREVIEW</span></div></div>
     <div class="form-group"><label class="form-label">Способ оплаты (150 ₴ или эквивалент)</label><div class="curr-pay-row" id="ctPayRow"></div></div>
     <button class="btn btn-gold" id="btnBuyTag" style="margin-top:6px">Купить тег</button>
@@ -1665,7 +1329,13 @@ const COINS = {
   ETH: { n: 'Ethereum', ico: '⟠', col: '#627eea' }
 };
 const BGS = [{ n: 'Тёмный', v: '#0D0D13' }, { n: 'Полночь', v: '#070710' }, { n: 'Синий', v: '#050c1a' }, { n: 'Зелёный', v: '#050c08' }, { n: 'Серый', v: '#0c0c10' }];
-const TAG_COLORS = [{ n: 'Фиолет', v: '#7C5CFC' }, { n: 'Золото', v: '#FFB23E' }, { n: 'Красный', v: '#FF4D6A' }, { n: 'Зелёный', v: '#3DDC84' }, { n: 'Бирюза', v: '#00D9B5' }, { n: 'Розовый', v: '#FF6BCB' }, { n: 'Синий', v: '#3498DB' }, { n: 'Оранж', v: '#FF8C00' }];
+const TAG_COLORS = [
+  {n:'Фиолет',v:'#7C5CFC'},{n:'Розов',v:'#FF6BCB'},{n:'Красн',v:'#FF4D6A'},{n:'Оранж',v:'#FF8C00'},
+  {n:'Золот',v:'#FFB23E'},{n:'Лайм',v:'#A3E635'},{n:'Зелён',v:'#22D27F'},{n:'Бирюз',v:'#2DD4BF'},
+  {n:'Голуб',v:'#38BDF8'},{n:'Синий',v:'#3B82F6'},{n:'Индиго',v:'#6366F1'},{n:'Пурпур',v:'#C040FF'},
+  {n:'Белый',v:'#F8FAFC'},{n:'Серый',v:'#94A3B8'},{n:'Неон',v:'#00F0FF'},{n:'Малина',v:'#E11D48'},
+  {n:'Мята',v:'#5EEAD4'},{n:'Янтарь',v:'#FBBF24'},{n:'Коралл',v:'#FB7185'},{n:'Чёрный',v:'#1E1E2E'}
+];
 const PAY_CURRENCIES = ['UAH', 'RUB', 'USD'];
 // Live stock prices - simulate real market movement every 30 seconds
 const STOCKS_BASE = {
@@ -1730,48 +1400,25 @@ function roleBadge(u, compact) {
   let svcKey = u.isOwner ? 'owner' : (u.role && serviceMap[u.role] ? u.role : null);
   if (svcKey) {
     const s = serviceMap[svcKey];
-    const color = u.tagColor || s.defColor;
-    const effect = u.tagEffect || (svcKey === 'owner' ? 'rainbow' : '');
-    let style = '', cls = 'role-tag';
-    if (effect === 'rainbow' || svcKey === 'owner') {
-      cls += ' rainbow-tag';
-      style = '';
-    } else if (effect === 'redblack') {
-      style = 'background:linear-gradient(90deg,#FF4D6A,#1a0a0a);border-color:rgba(255,77,106,.4);color:#fff';
-    } else if (effect === 'neon') {
-      cls += ' neon';
-      style = `background:${color}22;border-color:${color};color:${color}`;
-    } else if (effect === 'glow') {
-      cls += ' glow';
-      style = `background:${color}22;border-color:${color}55;color:${color}`;
-    } else {
-      style = `background:${color}22;border-color:${color}55;color:${color}`;
-    }
-    tags.push(`<span class="${cls}"${style ? ` style="${style}"` : ''}>${s.ic} ${esc(u.tagName || s.def)}</span>`);
+    const color = u.tagColor || s.defColor; const effect = u.tagEffect || (svcKey === 'owner' ? 'rainbow' : '');
+    let style, cls = 'role-tag';
+    if (effect === 'rainbow' || svcKey === 'owner') { cls += ' rainbow-tag'; style = ''; }
+    else if (effect === 'redblack') { style = `background:linear-gradient(90deg,#FF4D6A,#1a0a0a);border-color:rgba(255,77,106,.4);color:#fff`; }
+    else style = `background:${color}22;border-color:${color}55;color:${color}`;
+    tags.push(`<span class="${cls}" style="${style}">${s.ic} ${esc(u.tagName || s.def)}</span>`);
   }
   const customTags = u.customTags || (u.customTag ? [u.customTag] : []);
   customTags.forEach(t => {
     const color = t.color || '#7C5CFC';
-    let style = '', cls = 'role-tag';
+    let style, cls = 'role-tag';
     const fontStyle = t.font === 'bold' ? 'font-weight:900;' : t.font === 'italic' ? 'font-style:italic;' : '';
-    if (t.effect === 'rainbow') {
-      cls += ' rainbow-tag';
-      style = fontStyle;
-    } else if (t.effect === 'redblack') {
-      style = `background:linear-gradient(90deg,#FF4D6A,#1a0a0a);border-color:rgba(255,77,106,.4);color:#fff;${fontStyle}`;
-    } else if (t.effect === 'neon') {
-      cls += ' neon';
-      style = `background:${color}22;border-color:${color};color:${color};${fontStyle}`;
-    } else if (t.effect === 'glow') {
-      cls += ' glow';
-      style = `background:${color}22;border-color:${color}55;color:${color};${fontStyle}`;
-    } else {
-      style = `background:${color}22;border-color:${color}55;color:${color};${fontStyle}`;
-    }
-    tags.push(`<span class="${cls}"${style ? ` style="${style}"` : ''}>${esc(t.name)}</span>`);
+    if (t.effect === 'rainbow') { cls += ' rainbow-tag'; style = fontStyle; }
+    else if (t.effect === 'redblack') { style = `background:linear-gradient(90deg,#FF4D6A,#1a0a0a);border-color:rgba(255,77,106,.4);color:#fff;${fontStyle}`; }
+    else style = `background:${color}22;border-color:${color}55;color:${color};${fontStyle}`;
+    tags.push(`<span class="${cls}" style="${style}">${esc(t.name)}</span>`);
   });
   if (compact) return tags.slice(0, 1).join('');
-  return `<div class="tag-row" style="display:inline-flex;flex-wrap:wrap;gap:5px">${tags.join('')}</div>`;
+  return `<div class="tag-row" style="display:inline-flex">${tags.join('')}</div>`;
 }
 function avatarFrameStyle(u) { if (u && u.avatarFrame) return `box-shadow:0 0 0 3px ${u.avatarFrame},0 0 14px ${u.avatarFrame}88`; return ''; }
 function isStaffUser(u) { return u && (u.isOwner || ['admin', 'helper', 'media', 'sponsor'].includes(u.role)); }
@@ -1789,117 +1436,71 @@ window.toast = function (msg, t, dur) {
 };
 
 window.openSheet = function (id) {
-  const el = document.getElementById(id);
-  if (!el) return;
-  el.classList.add('on');
+  document.getElementById(id).classList.add('on');
   if (id === 'sheetCreateTag') { renderColorPicker('ctColors', TAG_COLORS, c => { selectedCtColor = c; updateCtPreview(); }); renderPayRow('ctPayRow', 150, c => ctPayCur = c); updateCtPreview(); }
   if (id === 'sheetCustomizeTag') setupCustomizeTagSheet();
   if (id === 'sheetCustomizeUI') setupUiSheet();
   if (id === 'sheetAvatarFrame') setupFrameSheet();
   if (id === 'sheetVip') renderPayRow('vipPayRow', 150, c => vipPayCur = c);
 };
-window.closeSheet = function (id) {
-  const el = document.getElementById(id);
-  if (el) el.classList.remove('on');
-};
+window.closeSheet = function (id) { document.getElementById(id).classList.remove('on'); };
 document.querySelectorAll('.overlay').forEach(o => o.addEventListener('click', e => { if (e.target === o) o.classList.remove('on'); }));
 
 // ═══ NAV ═══
-let _navLock = false;
 function goto(id) {
-  if (!id || _navLock) return;
-  const pg = document.getElementById(id);
-  if (!pg) return;
+  if (!id) return;
   const cur = document.querySelector('.page.on');
-  if (cur && cur.id === id) return;
-  if (cur) prevPage = cur.id;
-
-  const activate = () => {
-    document.querySelectorAll('.page').forEach(p => {
-      p.classList.remove('on', 'page-out');
-    });
-    // force reflow so animation restarts
-    void pg.offsetWidth;
-    pg.classList.add('on');
-    // mobile safety: never leave page invisible
-    pg.style.opacity = '1';
-    pg.style.transform = 'none';
-    document.querySelectorAll('[data-goto]').forEach(el =>
-      el.classList.toggle('on', el.getAttribute('data-goto') === id)
-    );
-    closeSB();
-    // scroll page body / page to top
-    const body = pg.querySelector('.page-body');
-    if (body) body.scrollTop = 0;
-    else pg.scrollTop = 0;
-
-    if (id === 'pgLeaderboard') loadLB();
-    if (id === 'pgHistory') loadHistory();
-    if (id === 'pgChecks') loadMyChecks();
-    if (id === 'pgSupport') loadReports();
-    if (id === 'pgAdmin') loadAdminData();
-    if (id === 'pgDeposit') loadMyDeposits();
-    if (id === 'pgWallet') { loadRecentTx(); loadHomeAssets(); }
-    if (id === 'pgAssets') loadAssets();
-    if (id === 'pgShop') loadShopState();
-    if (id === 'pgStocks') loadStocks();
-    if (id === 'pgContests') loadContests();
-    if (id === 'pgP2P') { p2pTab('market'); loadP2PListings(); }
-    if (id === 'pgSettings') renderUiPresets();
-  };
-
-  activate();
-  _navLock = false;
+  if (cur && cur.id !== id) prevPage = cur.id;
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('on'));
+  const pg = document.getElementById(id); if (pg) pg.classList.add('on');
+  document.querySelectorAll('[data-goto]').forEach(el => el.classList.toggle('on', el.getAttribute('data-goto') === id));
+  closeSB();
+  if (id === 'pgLeaderboard') loadLB();
+  if (id === 'pgHistory') loadHistory();
+  if (id === 'pgChecks') loadMyChecks();
+  if (id === 'pgSupport') loadReports();
+  if (id === 'pgAdmin') loadAdminData();
+  if (id === 'pgDeposit') loadMyDeposits();
+  if (id === 'pgWallet') { loadRecentTx(); loadHomeAssets(); }
+  if (id === 'pgAssets') loadAssets();
+  if (id === 'pgShop') loadShopState();
+  if (id === 'pgStocks') loadStocks();
+  if (id === 'pgContests') loadContests();
 }
 window.goBack = function () { goto(prevPage || 'pgWallet'); };
 window.nav = goto;
 document.querySelectorAll('[data-goto]').forEach(el => el.addEventListener('click', () => goto(el.getAttribute('data-goto'))));
 
-function closeSB() {
-  document.getElementById('sidebar')?.classList.remove('open');
-  document.getElementById('sbOverlay')?.classList.remove('open');
-}
-document.getElementById('mobMenuBtn')?.addEventListener('click', () => {
-  document.getElementById('sidebar')?.classList.toggle('open');
-  document.getElementById('sbOverlay')?.classList.toggle('open');
-});
-document.getElementById('sbOverlay')?.addEventListener('click', closeSB);
-document.getElementById('btnLogout')?.addEventListener('click', () => signOut(auth).then(() => toast('Вышли из аккаунта', 'i')));
+function closeSB() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('sbOverlay').classList.remove('open'); }
+document.getElementById('mobMenuBtn').addEventListener('click', () => { document.getElementById('sidebar').classList.toggle('open'); document.getElementById('sbOverlay').classList.toggle('open'); });
+document.getElementById('sbOverlay').addEventListener('click', closeSB);
+document.getElementById('btnLogout').addEventListener('click', () => signOut(auth).then(() => toast('Вышли из аккаунта', 'i')));
 
 // ═══ AUTH ═══
-function showAuth(id) {
-  ['pgLogin', 'pgReg', 'pgUname'].forEach(p => {
-    const el = document.getElementById(p);
-    if (el) el.style.display = p === id ? 'flex' : 'none';
-  });
-  const auth = document.getElementById('authScreen');
-  if (auth) auth.style.display = 'flex';
-  const app = document.getElementById('app');
-  if (app) app.style.display = 'none';
-}
-document.getElementById('toReg')?.addEventListener('click', () => showAuth('pgReg'));
-document.getElementById('toLg')?.addEventListener('click', () => showAuth('pgLogin'));
+function showAuth(id) { ['pgLogin', 'pgReg', 'pgUname'].forEach(p => document.getElementById(p).style.display = p === id ? 'flex' : 'none'); document.getElementById('authScreen').style.display = 'flex'; document.getElementById('app').style.display = 'none'; }
+document.getElementById('toReg').addEventListener('click', () => showAuth('pgReg'));
+document.getElementById('toLg').addEventListener('click', () => showAuth('pgLogin'));
 
-document.getElementById('btnLogin')?.addEventListener('click', async () => {
+document.getElementById('btnLogin').addEventListener('click', async () => {
   if (Date.now() < loginAttempts.until) return toast(`Подождите ${Math.ceil((loginAttempts.until - Date.now()) / 1000)}с`, 'e');
-  const e = document.getElementById('lEmail')?.value.trim(), p = document.getElementById('lPass')?.value;
+  const e = document.getElementById('lEmail').value.trim(), p = document.getElementById('lPass').value;
   if (!e || !p) return toast('Заполните поля', 'w');
   try { await signInWithEmailAndPassword(auth, e, p); loginAttempts.n = 0; }
   catch { loginAttempts.n++; if (loginAttempts.n >= 5) { loginAttempts.until = Date.now() + 60000; loginAttempts.n = 0; } toast('Неверный email или пароль', 'e'); }
 });
-document.getElementById('btnReg')?.addEventListener('click', async () => {
-  const e = document.getElementById('rEmail')?.value.trim(), p = document.getElementById('rPass')?.value, p2 = document.getElementById('rPass2')?.value;
+document.getElementById('btnReg').addEventListener('click', async () => {
+  const e = document.getElementById('rEmail').value.trim(), p = document.getElementById('rPass').value, p2 = document.getElementById('rPass2').value;
   if (!e || !p) return toast('Заполните поля', 'w');
   if (p !== p2) return toast('Пароли не совпадают', 'e');
   if (p.length < 6) return toast('Мин. 6 символов', 'w');
   try { await createUserWithEmailAndPassword(auth, e, p); } catch (err) { toast(err.code === 'auth/email-already-in-use' ? 'Email занят' : 'Ошибка', 'e'); }
 });
 async function goo() { try { await signInWithPopup(auth, new GoogleAuthProvider()); } catch { toast('Ошибка Google', 'e'); } }
-document.getElementById('btnGoo1')?.addEventListener('click', goo);
-document.getElementById('btnGoo2')?.addEventListener('click', goo);
-document.getElementById('btnUname')?.addEventListener('click', async () => {
-  const n = document.getElementById('unameI')?.value.trim();
-  if (!n || n.length < 2) return toast('Мин. 2 символа', 'w');
+document.getElementById('btnGoo1').addEventListener('click', goo);
+document.getElementById('btnGoo2').addEventListener('click', goo);
+document.getElementById('btnUname').addEventListener('click', async () => {
+  const n = document.getElementById('unameI').value.trim();
+  if (n.length < 2) return toast('Мин. 2 символа', 'w');
   if (n.length > 24) return toast('Макс. 24', 'w');
   if (!/^[\w\sа-яА-ЯёЁ\-]+$/.test(n)) return toast('Недопустимые символы', 'w');
   await updateDoc(doc(db, 'wallets', CU.uid), { username: n });
@@ -1908,8 +1509,7 @@ document.getElementById('btnUname')?.addEventListener('click', async () => {
 
 
 onAuthStateChanged(auth, async user => {
-  const loader = document.getElementById('loader');
-  if (loader) { loader.classList.add('hide'); setTimeout(() => { loader.style.display = 'none'; }, 350); }
+  document.getElementById('loader').style.display = 'none';
   if (UNSUB) { UNSUB(); UNSUB = null; }
   if (!user) { CU = null; UD = null; document.getElementById('app').style.display = 'none'; showAuth('pgLogin'); return; }
   CU = user;
@@ -2283,8 +1883,7 @@ async function checkDepositNotifications() {
   const snap = await getDocs(query(collection(db, 'depositRequests'), where('uid', '==', CU.uid), limit(10)));
   let hasActive = false;
   snap.forEach(d => { const r = d.data(); if (r.status === 'pending' || r.status === 'inprogress') hasActive = true; });
-  const depDot = document.getElementById('depDot');
-  if (depDot) depDot.style.display = hasActive ? 'inline-flex' : 'none';
+  document.getElementById('depDot').classList.toggle('show', hasActive);
 }
 
 // ═══ CHECKS (via Cloud Function) ═══
@@ -2350,21 +1949,7 @@ async function loadMyChecks() {
   if (snap.empty) { el.innerHTML = '<div class="empty-state"><span class="emo">🧾</span>Нет чеков</div>'; return; }
   let rows = []; snap.forEach(d => rows.push(d.data()));
   rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-  el.innerHTML = rows.map(c => `
-    <div class="check-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
-        <div style="flex:1;min-width:0">
-          <div class="check-amount">${fmtBal(c.amount, c.currency)}</div>
-          ${c.description ? `<div style="font-size:13px;color:var(--c-text2);margin-top:6px;word-break:break-word">${esc(c.description)}</div>` : ''}
-          <div style="font-family:ui-monospace,monospace;font-size:11px;color:var(--c-text3);margin-top:8px;word-break:break-all">ID: ${esc(c.id)}</div>
-          <div style="font-size:11px;color:var(--c-text3);margin-top:3px">${fmtDate(c.createdAt)}</div>
-        </div>
-        <div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px;flex-shrink:0">
-          <span class="badge ${c.status === 'active' ? 'badge-green' : 'badge-purple'}">${c.status === 'active' ? 'Активен' : 'Оплачен'}</span>
-          <button class="btn btn-secondary btn-sm" type="button" onclick="navigator.clipboard.writeText('${String(c.id).replace(/'/g,'')}').then(()=>toast('Скопировано','s'))">📋</button>
-        </div>
-      </div>
-    </div>`).join('');
+  el.innerHTML = rows.map(c => `<div class="check-card"><div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px"><div><div class="check-amount">${fmtBal(c.amount, c.currency)}</div>${c.description ? `<div style="font-size:13px;color:var(--c-text2);margin-top:6px">${esc(c.description)}</div>` : ''}<div style="font-family:monospace;font-size:11px;color:var(--c-text3);margin-top:7px">ID: ${c.id}</div><div style="font-size:11px;color:var(--c-text3);margin-top:3px">${fmtDate(c.createdAt)}</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:8px"><span class="badge ${c.status === 'active' ? 'badge-green' : 'badge-purple'}">${c.status === 'active' ? 'Активен' : 'Оплачен'}</span><button class="btn btn-secondary btn-sm" onclick="navigator.clipboard.writeText('${c.id}').then(()=>toast('Скопировано','s'))">📋</button></div></div></div>`).join('');
 }
 
 // ═══ LEADERBOARD ═══
@@ -2468,8 +2053,6 @@ function updateCtPreview() {
   const prev = document.getElementById('ctPreview');
   const fontStyle = font === 'bold' ? 'font-weight:900;' : font === 'italic' ? 'font-style:italic;' : '';
   if (effect === 'rainbow') { prev.className = 'role-tag rainbow-tag'; prev.style.cssText = fontStyle || ''; }
-  else if (effect === 'glow') { prev.className = 'role-tag glow'; prev.style.cssText = `background:${selectedCtColor}22;border-color:${selectedCtColor}55;color:${selectedCtColor};${fontStyle}`; }
-  else if (effect === 'neon') { prev.className = 'role-tag neon'; prev.style.cssText = `background:${selectedCtColor}22;border-color:${selectedCtColor};color:${selectedCtColor};${fontStyle}`; }
   else { prev.className = 'role-tag'; prev.style.cssText = `background:${selectedCtColor}22;border-color:${selectedCtColor}55;color:${selectedCtColor};${fontStyle}`; }
   prev.textContent = name;
 }
@@ -3771,406 +3354,6 @@ setTimeout(maybeShowUpdateBanner, 1500);
 
 
 
-// ─── Deposit method picker ───
-window.selNdMethod = function (el) {
-  document.querySelectorAll('#ndMethodGrid .method-opt').forEach(x => x.classList.remove('on'));
-  el.classList.add('on');
-  document.getElementById('ndMethod').value = el.getAttribute('data-v');
-};
-
-// ═══ P2P MARKETPLACE ═══
-let _p2pCat = 'all', _curP2POrder = null;
-const P2P_FEE = 0.05;
-
-window.p2pTab = function (t) {
-  document.getElementById('p2pMarketWrap').style.display = t === 'market' ? 'block' : 'none';
-  document.getElementById('p2pMyWrap').style.display = t === 'my' ? 'block' : 'none';
-  document.getElementById('p2pOrdersWrap').style.display = t === 'orders' ? 'block' : 'none';
-  ['market', 'my', 'orders'].forEach(k => {
-    const b = document.getElementById('p2pTab' + k.charAt(0).toUpperCase() + k.slice(1));
-    if (b) b.className = 'btn btn-' + (t === k ? 'primary' : 'secondary') + ' btn-sm';
-  });
-  if (t === 'market') loadP2PListings();
-  if (t === 'my') loadP2PMy();
-  if (t === 'orders') loadP2POrders();
-};
-window.p2pFilterCat = function (el) {
-  document.querySelectorAll('.p2p-cat').forEach(x => x.classList.remove('on'));
-  el.classList.add('on');
-  _p2pCat = el.getAttribute('data-cat');
-  loadP2PListings();
-};
-
-async function loadP2PListings() {
-  const el = document.getElementById('p2pListings');
-  if (!el) return;
-  try {
-    const snap = await getDocs(query(collection(db, 'p2pListings'), limit(50)));
-    let rows = [];
-    snap.forEach(d => rows.push({ ...d.data(), _id: d.id }));
-    rows = rows.filter(r => r.status === 'active' && r.sellerUid !== CU?.uid);
-    if (_p2pCat !== 'all') rows = rows.filter(r => r.category === _p2pCat);
-    rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-    if (!rows.length) { el.innerHTML = '<div class="empty-state"><span class="emo">🤝</span>Объявлений нет</div>'; return; }
-    const catIco = { currency: '💱', game: '🎮', item: '🎁', other: '📦' };
-    el.innerHTML = rows.map(r => `
-      <div class="check-card">
-        <div style="display:flex;justify-content:space-between;gap:12px;align-items:flex-start">
-          <div style="flex:1;min-width:0">
-            <div style="font-size:11px;color:var(--c-text3);margin-bottom:4px">${catIco[r.category] || '📦'} ${esc(r.category || '')}${r.game ? ' · ' + esc(r.game) : ''} · @${esc(r.sellerName || '')}${r.delivery === 'auto' ? ' · ⚡ авто' : ''}</div>
-            <div style="font-weight:800;font-size:15px;margin-bottom:4px">${esc(r.title)}</div>
-            <div style="font-size:12.5px;color:var(--c-text2);line-height:1.4">${esc((r.description || '').slice(0, 120))}</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0">
-            <div class="check-amount" style="font-size:16px">${fmtBal(r.price, r.currency)}</div>
-            <button class="btn btn-primary btn-sm" style="margin-top:8px" onclick="buyP2P('${r._id}')">Купить</button>
-          </div>
-        </div>
-      </div>`).join('');
-  } catch (e) { el.innerHTML = '<div class="empty-state"><span class="emo">⚠️</span>Ошибка загрузки</div>'; console.error(e); }
-}
-
-async function loadP2PMy() {
-  const el = document.getElementById('p2pMyListings');
-  if (!el || !CU) return;
-  const snap = await getDocs(query(collection(db, 'p2pListings'), where('sellerUid', '==', CU.uid), limit(30)));
-  let rows = []; snap.forEach(d => rows.push({ ...d.data(), _id: d.id }));
-  rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-  if (!rows.length) { el.innerHTML = '<div class="empty-state"><span class="emo">📋</span>Нет объявлений</div>'; return; }
-  el.innerHTML = rows.map(r => `
-    <div class="check-card">
-      <div style="display:flex;justify-content:space-between;gap:10px">
-        <div><div style="font-weight:800">${esc(r.title)}</div>
-        <div style="font-size:12px;color:var(--c-text2);margin-top:4px">${fmtBal(r.price, r.currency)} · ${esc(r.status)}</div></div>
-        <div style="display:flex;flex-direction:column;gap:6px">
-          <span class="badge ${r.status === 'active' ? 'badge-green' : 'badge-purple'}">${r.status === 'active' ? 'Активен' : esc(r.status)}</span>
-          ${r.status === 'active' ? `<button class="btn btn-danger btn-xs" onclick="closeP2PListing('${r._id}')">Снять</button>` : ''}
-        </div>
-      </div>
-    </div>`).join('');
-}
-
-async function loadP2POrders() {
-  const el = document.getElementById('p2pOrdersList');
-  if (!el || !CU) return;
-  const snap = await getDocs(query(collection(db, 'p2pOrders'), where('buyerUid', '==', CU.uid), limit(30)));
-  let rows = []; snap.forEach(d => rows.push({ ...d.data(), _id: d.id }));
-  // also seller side
-  try {
-    const s2 = await getDocs(query(collection(db, 'p2pOrders'), where('sellerUid', '==', CU.uid), limit(30)));
-    s2.forEach(d => { if (!rows.find(x => x._id === d.id)) rows.push({ ...d.data(), _id: d.id }); });
-  } catch (_) {}
-  rows.sort((a, b) => (b.createdAt?.seconds || 0) - (a.createdAt?.seconds || 0));
-  if (!rows.length) { el.innerHTML = '<div class="empty-state"><span class="emo">🛒</span>Нет сделок</div>'; return; }
-  el.innerHTML = rows.map(r => `
-    <div class="check-card" onclick="openP2POrder('${r._id}')" style="cursor:pointer">
-      <div style="display:flex;justify-content:space-between;gap:10px">
-        <div><div style="font-weight:800">${esc(r.title)}</div>
-        <div style="font-size:12px;color:var(--c-text2);margin-top:4px">${fmtBal(r.price, r.currency)} · ${fmtDate(r.createdAt)}</div></div>
-        <span class="badge badge-purple">${esc(r.status)}</span>
-      </div>
-    </div>`).join('');
-}
-
-document.getElementById('btnCreateP2P')?.addEventListener('click', async () => {
-  if (!CU || !UD) return toast('Войдите в аккаунт', 'e');
-  if (UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
-  const title = document.getElementById('p2pTitle')?.value.trim();
-  const description = document.getElementById('p2pDesc')?.value.trim();
-  const category = document.getElementById('p2pCat')?.value;
-  const price = parseFloat(document.getElementById('p2pPrice')?.value);
-  const currency = document.getElementById('p2pCur')?.value;
-  if (!title || title.length < 3) return toast('Название слишком короткое', 'w');
-  if (!price || price <= 0) return toast('Укажите цену', 'w');
-  try {
-    const game = document.getElementById('p2pGame')?.value || '';
-    const delivery = document.getElementById('p2pDelivery')?.value || 'manual';
-    const autoPayload = (document.getElementById('p2pAutoPayload')?.value || '').trim().slice(0, 1000);
-    await addDoc(collection(db, 'p2pListings'), {
-      sellerUid: CU.uid, sellerName: UD.username, sellerCode: UD.code,
-      title: title.slice(0, 80), description: (description || '').slice(0, 500),
-      category, game: (category === 'item' || category === 'game') ? game : '',
-      delivery, autoPayload: delivery === 'auto' ? autoPayload : '',
-      price, currency, status: 'active', createdAt: serverTimestamp()
-    });
-    toast('Объявление опубликовано', 's');
-    closeSheet('sheetP2PCreate');
-    document.getElementById('p2pTitle').value = '';
-    document.getElementById('p2pDesc').value = '';
-    document.getElementById('p2pPrice').value = '';
-    p2pTab('my');
-  } catch (e) { toast(cfError ? cfError(e) : e.message, 'e'); }
-});
-
-window.closeP2PListing = async function (id) {
-  try {
-    await updateDoc(doc(db, 'p2pListings', id), { status: 'closed' });
-    toast('Снято с публикации', 'i');
-    loadP2PMy();
-  } catch (e) { toast(e.message, 'e'); }
-};
-
-window.buyP2P = async function (listingId) {
-  if (!CU || !UD) return toast('Войдите', 'e');
-  if (UD.blocked || UD.frozen) return toast('Кошелёк недоступен', 'e');
-  try {
-    const snap = await getDoc(doc(db, 'p2pListings', listingId));
-    if (!snap.exists()) return toast('Объявление не найдено', 'e');
-    const L = snap.data();
-    if (L.status !== 'active') return toast('Уже недоступно', 'w');
-    if (L.sellerUid === CU.uid) return toast('Это ваше объявление', 'w');
-    const bal = (UD.balances && UD.balances[L.currency]) || 0;
-    if (bal < L.price) return toast(`Недостаточно ${L.currency}`, 'e');
-    if (!confirm(`Оплатить ${fmtBal(L.price, L.currency)}? Деньги будут удержаны до подтверждения получения.`)) return;
-
-    const batch = writeBatch(db);
-    batch.update(doc(db, 'wallets', CU.uid), { [`balances.${L.currency}`]: increment(-L.price) });
-    batch.update(doc(db, 'p2pListings', listingId), { status: 'sold' });
-    const orderRef = doc(collection(db, 'p2pOrders'));
-    batch.set(orderRef, {
-      listingId, title: L.title, description: L.description,
-      price: L.price, currency: L.currency, category: L.category,
-      game: L.game || '', delivery: L.delivery || 'manual',
-      sellerUid: L.sellerUid, sellerName: L.sellerName,
-      buyerUid: CU.uid, buyerName: UD.username,
-      status: 'paid_held',
-      createdAt: serverTimestamp()
-    });
-    batch.set(doc(collection(db, 'transactions')), {
-      fromUid: CU.uid, fromUsername: UD.username, fromCode: UD.code,
-      toUid: 'p2p_escrow', toUsername: 'P2P Гарант', toCode: 'P2P',
-      currency: L.currency, amount: L.price, type: 'p2p_hold',
-      orderId: orderRef.id, createdAt: serverTimestamp()
-    });
-    await batch.commit();
-    if (L.delivery === 'auto' && L.autoPayload) {
-      await updateDoc(doc(db, 'p2pOrders', orderRef.id), {
-        status: 'shipped', shippedAt: serverTimestamp(), autoPayload: L.autoPayload
-      });
-      toast('Оплачено! Автовыдача: данные в сделке', 's', 6000);
-    } else {
-      toast('Оплачено! Ожидайте товар от продавца', 's', 5000);
-    }
-    openP2POrder(orderRef.id);
-    loadP2PListings();
-  } catch (e) { toast(e.message || 'Ошибка', 'e'); }
-};
-
-window.openP2POrder = async function (id) {
-  const snap = await getDoc(doc(db, 'p2pOrders', id));
-  if (!snap.exists()) return toast('Сделка не найдена', 'e');
-  const o = { ...snap.data(), _id: id };
-  _curP2POrder = o;
-  document.getElementById('p2pOrderTitle').textContent = o.title || 'Сделка';
-  const isBuyer = o.buyerUid === CU?.uid;
-  const isSeller = o.sellerUid === CU?.uid;
-  let actions = '';
-  if (o.status === 'paid_held' && isSeller) {
-    actions = `<button class="btn btn-primary" onclick="p2pMarkShipped('${id}')">📦 Товар передан</button>`;
-  } else if (o.status === 'shipped' && isBuyer) {
-    actions = `<button class="btn btn-primary" onclick="p2pConfirmReceive('${id}')">✅ Подтвердить получение</button>
-      <button class="btn btn-danger" style="margin-top:8px" onclick="p2pDispute('${id}')">⚠️ Спор / обман</button>`;
-  } else if (o.status === 'paid_held' && isBuyer) {
-    actions = `<div style="font-size:13px;color:var(--c-text2);margin-bottom:10px">Ожидаем передачу товара продавцом...</div>
-      <button class="btn btn-danger" onclick="p2pDispute('${id}')">⚠️ Спор / обман</button>`;
-  } else if (o.status === 'completed') {
-    actions = '<div style="color:var(--c-green);font-weight:700">✅ Сделка завершена</div>';
-  } else if (o.status === 'disputed') {
-    actions = '<div style="color:var(--c-gold);font-weight:700">⚠️ Спор открыт — разберёт поддержка</div>';
-  }
-  document.getElementById('p2pOrderBody').innerHTML = `
-    <div style="font-size:13px;color:var(--c-text2);margin-bottom:8px">Статус: <b style="color:var(--c-text)">${esc(o.status)}</b></div>
-    <div style="font-size:20px;font-weight:900;margin-bottom:8px">${fmtBal(o.price, o.currency)}</div>
-    <div style="font-size:13px;color:var(--c-text2);margin-bottom:6px">Продавец: ${esc(o.sellerName)} · Покупатель: ${esc(o.buyerName)}</div>
-    <div style="font-size:13px;line-height:1.5;margin-bottom:14px;padding:12px;background:rgba(255,255,255,.04);border-radius:12px">${esc(o.description || '—')}</div>
-    ${o.autoPayload && isBuyer ? `<div style="margin-bottom:14px;padding:12px;border-radius:12px;background:rgba(34,210,127,.1);border:1px solid rgba(34,210,127,.25)"><div style="font-size:11px;font-weight:800;color:var(--c-green);margin-bottom:4px">⚡ АВТОВЫДАЧА</div><div style="font-size:13px;word-break:break-all">${esc(o.autoPayload)}</div></div>` : ''}
-    ${o.game ? `<div style="font-size:12px;color:var(--c-text2);margin-bottom:10px">Игра: <b>${esc(o.game)}</b></div>` : ''}
-    ${actions}`;
-  openSheet('sheetP2POrder');
-};
-
-window.p2pMarkShipped = async function (id) {
-  try {
-    await updateDoc(doc(db, 'p2pOrders', id), { status: 'shipped', shippedAt: serverTimestamp() });
-    toast('Отмечено: товар передан', 's');
-    openP2POrder(id);
-  } catch (e) { toast(e.message, 'e'); }
-};
-
-window.p2pConfirmReceive = async function (id) {
-  try {
-    const snap = await getDoc(doc(db, 'p2pOrders', id));
-    if (!snap.exists()) return;
-    const o = snap.data();
-    if (o.status !== 'shipped' && o.status !== 'paid_held') return toast('Нельзя подтвердить', 'w');
-    const fee = o.price * P2P_FEE;
-    const sellerGets = o.price - fee;
-    const batch = writeBatch(db);
-    batch.update(doc(db, 'wallets', o.sellerUid), { [`balances.${o.currency}`]: increment(sellerGets) });
-    batch.update(doc(db, 'p2pOrders', id), { status: 'completed', completedAt: serverTimestamp() });
-    batch.set(doc(collection(db, 'transactions')), {
-      fromUid: 'p2p_escrow', fromUsername: 'P2P Гарант', fromCode: 'P2P',
-      toUid: o.sellerUid, toUsername: o.sellerName, toCode: '',
-      currency: o.currency, amount: sellerGets, type: 'p2p_release',
-      orderId: id, fee, createdAt: serverTimestamp()
-    });
-    await batch.commit();
-    toast('Сделка завершена! Продавцу зачислено', 's', 5000);
-    openP2POrder(id);
-    loadP2POrders();
-  } catch (e) { toast(e.message, 'e'); }
-};
-
-window.p2pDispute = async function (id) {
-  try {
-    await updateDoc(doc(db, 'p2pOrders', id), { status: 'disputed', disputedAt: serverTimestamp(), disputedBy: CU.uid });
-    await addDoc(collection(db, 'reports'), {
-      fromUid: CU.uid, fromUsername: UD.username, fromCode: UD.code,
-      subject: 'P2P спор / возможный обман',
-      body: `Сделка ${id}. Прошу проверить и вернуть средства при подтверждении обмана.`,
-      type: 'p2p_dispute', orderId: id, status: 'open', createdAt: serverTimestamp()
-    });
-    toast('Спор открыт. Напишите детали в Поддержке', 'w', 6000);
-    openP2POrder(id);
-    goto('pgSupport');
-  } catch (e) { toast(e.message, 'e'); }
-};
-
-
-// ─── TG / Discord binding ───
-document.getElementById('btnTg')?.addEventListener('click', async () => {
-  let v = (document.getElementById('tgIn')?.value || '').trim().replace(/^@/, '');
-  if (!v || v.length < 3) return toast('Введите @username', 'w');
-  try {
-    await updateDoc(doc(db, 'wallets', CU.uid), { tg: '@' + v, tgPending: true, tgVerified: false });
-    await addDoc(collection(db, 'socialRequests'), {
-      uid: CU.uid, username: UD.username, code: UD.code,
-      platform: 'telegram', tg: '@' + v, status: 'pending', createdAt: serverTimestamp()
-    });
-    document.getElementById('tgHint').textContent = '⏳ Заявка отправлена на проверку';
-    toast('Заявка Telegram отправлена', 's');
-  } catch (e) { toast(e.message || 'Ошибка', 'e'); }
-});
-document.getElementById('btnDc')?.addEventListener('click', async () => {
-  let v = (document.getElementById('dcIn')?.value || '').trim();
-  if (!v || v.length < 2) return toast('Введите Discord', 'w');
-  try {
-    await updateDoc(doc(db, 'wallets', CU.uid), { dc: v, dcPending: true, dcVerified: false });
-    await addDoc(collection(db, 'socialRequests'), {
-      uid: CU.uid, username: UD.username, code: UD.code,
-      platform: 'discord', dc: v, status: 'pending', createdAt: serverTimestamp()
-    });
-    toast('Заявка Discord отправлена', 's');
-  } catch (e) { toast(e.message || 'Ошибка', 'e'); }
-});
-
-// ─── 5 UI presets ───
-const UI_PRESETS = {
-  classic: { name: 'Классика', bg: '#06060C', btn1: '#7C5CFC', btn2: '#A78BFA', surface: '#0C0C16', text: '#F2F2FF' },
-  neon:    { name: 'Неон', bg: '#050510', btn1: '#00F0FF', btn2: '#FF00E5', surface: '#0A0A18', text: '#E8FFFF' },
-  light:   { name: 'Светлый', bg: '#F4F4F8', btn1: '#6D28D9', btn2: '#8B5CF6', surface: '#FFFFFF', text: '#1A1A2E' },
-  emerald: { name: 'Изумруд', bg: '#04120C', btn1: '#10B981', btn2: '#34D399', surface: '#0A1A12', text: '#ECFDF5' },
-  crimson: { name: 'Багровый', bg: '#12050A', btn1: '#EF4444', btn2: '#F97316', surface: '#1A0A0E', text: '#FFF1F2' }
-};
-function renderUiPresets() {
-  const el = document.getElementById('uiPresetGrid');
-  if (!el) return;
-  const cur = localStorage.getItem('bv_ui_preset') || 'classic';
-  el.innerHTML = Object.entries(UI_PRESETS).map(([k, p]) => `
-    <button type="button" class="method-opt ${cur === k ? 'on' : ''}" onclick="applyUiPreset('${k}')" style="flex-direction:column;align-items:flex-start;gap:6px;padding:12px">
-      <div style="display:flex;gap:4px">
-        <span style="width:14px;height:14px;border-radius:4px;background:${p.bg};border:1px solid rgba(128,128,128,.4)"></span>
-        <span style="width:14px;height:14px;border-radius:4px;background:${p.btn1}"></span>
-        <span style="width:14px;height:14px;border-radius:4px;background:${p.btn2}"></span>
-      </div>
-      <span style="font-size:13px;font-weight:700">${p.name}</span>
-    </button>`).join('');
-}
-window.applyUiPreset = function (key) {
-  const p = UI_PRESETS[key];
-  if (!p) return;
-  localStorage.setItem('bv_ui_preset', key);
-  const r = document.documentElement;
-  r.style.setProperty('--bg', p.bg);
-  r.style.setProperty('--c-bg', p.bg);
-  r.style.setProperty('--btn1', p.btn1);
-  r.style.setProperty('--btn2', p.btn2);
-  r.style.setProperty('--c-surface', p.surface);
-  r.style.setProperty('--c-text', p.text);
-  document.body.style.backgroundColor = p.bg;
-  // light mode tweaks
-  if (key === 'light') {
-    r.style.setProperty('--c-text2', '#5A5A78');
-    r.style.setProperty('--c-border', 'rgba(0,0,0,.08)');
-    r.style.setProperty('--c-surface3', '#EEEFF5');
-  } else {
-    r.style.setProperty('--c-text2', '#8B8BA8');
-    r.style.setProperty('--c-border', 'rgba(255,255,255,.06)');
-    r.style.setProperty('--c-surface3', '#181826');
-  }
-  renderUiPresets();
-  toast('Интерфейс: ' + p.name, 's');
-};
-setTimeout(() => { try { applyUiPreset(localStorage.getItem('bv_ui_preset') || 'classic'); } catch(_){} }, 400);
-
-// ─── Shop extras ───
-async function shopChargeUAH(price, type, extra) {
-  if (!UD || UD.blocked) throw new Error('Кошелёк недоступен');
-  const bal = UD.balances?.UAH || 0;
-  if (bal < price) throw new Error('Нужно ' + price + ' ₴');
-  const batch = writeBatch(db);
-  batch.update(doc(db, 'wallets', CU.uid), Object.assign({ 'balances.UAH': increment(-price) }, extra || {}));
-  batch.set(doc(collection(db, 'transactions')), {
-    fromUid: CU.uid, fromUsername: UD.username, fromCode: UD.code,
-    toUid: 'shop', toUsername: 'Магазин', toCode: 'SHOP',
-    currency: 'UAH', amount: price, type, createdAt: serverTimestamp()
-  });
-  await batch.commit();
-}
-window.buyAccessory = async function (id, emoji) {
-  try {
-    await shopChargeUAH(120, 'shop_accessory', { avatarAccessory: emoji });
-    toast('Аксессуар ' + emoji + ' куплен!', 's');
-  } catch (e) { toast(e.message, 'e'); }
-};
-const PROFILE_BGS = {
-  neon: 'linear-gradient(135deg,#7C5CFC,#FF00E5,#00F0FF)',
-  sunset: 'linear-gradient(135deg,#FF4D6A,#FFB23E,#FF8C00)',
-  ocean: 'linear-gradient(135deg,#0EA5E9,#6366F1,#1E3A8A)',
-  gold: 'linear-gradient(135deg,#F59E0B,#FDE68A,#B45309)'
-};
-window.buyProfileBg = async function (id) {
-  try {
-    await shopChargeUAH(150, 'shop_profile_bg', { bannerUrl: '', profileBgPreset: id, profileBgCss: PROFILE_BGS[id] });
-    toast('Фон профиля установлен', 's');
-  } catch (e) { toast(e.message, 'e'); }
-};
-window.buyNameFx = async function () {
-  try {
-    await shopChargeUAH(100, 'shop_name_fx', { nameFx: 'rainbow' });
-    toast('Анимация имени включена!', 's');
-  } catch (e) { toast(e.message, 'e'); }
-};
-window.buyHideBal = async function () {
-  try {
-    const until = Date.now() + 30 * 86400000;
-    await shopChargeUAH(180, 'shop_hide_bal', { hideBalUntil: until });
-    toast('Баланс скрыт в Forbes на 30 дней', 's');
-  } catch (e) { toast(e.message, 'e'); }
-};
-
-// P2P cat / delivery UI
-window.p2pCatChanged = function () {
-  const c = document.getElementById('p2pCat')?.value;
-  const g = document.getElementById('p2pGameGroup');
-  if (g) g.style.display = (c === 'item' || c === 'game') ? 'block' : 'none';
-};
-document.getElementById('p2pDelivery')?.addEventListener('change', function () {
-  const g = document.getElementById('p2pAutoGroup');
-  if (g) g.style.display = this.value === 'auto' ? 'block' : 'none';
-});
-
-
 // ─── Global safety net: never leave the user stuck on the loading screen ───
 window.addEventListener('unhandledrejection', e => {
   console.error('Unhandled promise rejection:', e.reason);
@@ -4200,68 +3383,325 @@ setTimeout(() => {
 
 
 
+
+// ===== BV v5 extras: themes, market, TG/DC, achievements, fx =====
+const UI_PRESETS = {
+  classic:{name:'Классика',bg:'#06060C',btn1:'#7C5CFC',btn2:'#A78BFA',surface:'#0C0C16',text:'#F2F2FF'},
+  neon:{name:'Неон',bg:'#050510',btn1:'#00F0FF',btn2:'#FF00E5',surface:'#0A0A18',text:'#E8FFFF'},
+  light:{name:'Светлый',bg:'#F4F4F8',btn1:'#6D28D9',btn2:'#8B5CF6',surface:'#FFFFFF',text:'#1A1A2E'},
+  emerald:{name:'Изумруд',bg:'#04120C',btn1:'#10B981',btn2:'#34D399',surface:'#0A1A12',text:'#ECFDF5'},
+  crimson:{name:'Багровый',bg:'#12050A',btn1:'#EF4444',btn2:'#F97316',surface:'#1A0A0E',text:'#FFF1F2'}
+};
+window.applyUiPreset = function(key){
+  const p = UI_PRESETS[key]; if(!p) return;
+  localStorage.setItem('bv_ui_preset', key);
+  const r = document.documentElement;
+  r.style.setProperty('--bg', p.bg); r.style.setProperty('--c-bg', p.bg);
+  r.style.setProperty('--btn1', p.btn1); r.style.setProperty('--btn2', p.btn2);
+  r.style.setProperty('--c-surface', p.surface); r.style.setProperty('--c-text', p.text);
+  document.body.style.backgroundColor = p.bg;
+  if(key==='light'){ r.style.setProperty('--c-text2','#5A5A78'); r.style.setProperty('--c-border','rgba(0,0,0,.08)'); }
+  else { r.style.setProperty('--c-text2','#8B8BA8'); r.style.setProperty('--c-border','rgba(255,255,255,.06)'); }
+  renderUiPresets(); toast('Тема: '+p.name,'s');
+};
+function renderUiPresets(){
+  const el=document.getElementById('uiPresetGrid'); if(!el) return;
+  const cur=localStorage.getItem('bv_ui_preset')||'classic';
+  el.innerHTML=Object.entries(UI_PRESETS).map(([k,p])=>`<button type="button" class="method-opt ${cur===k?'on':''}" onclick="applyUiPreset('${k}')" style="flex-direction:column;align-items:flex-start;gap:6px;padding:10px">
+    <span style="display:flex;gap:4px"><i style="width:12px;height:12px;border-radius:3px;background:${p.bg};border:1px solid #666;display:inline-block"></i>
+    <i style="width:12px;height:12px;border-radius:3px;background:${p.btn1};display:inline-block"></i>
+    <i style="width:12px;height:12px;border-radius:3px;background:${p.btn2};display:inline-block"></i></span>
+    <span style="font-size:12px;font-weight:700">${p.name}</span></button>`).join('');
+}
+window.setBgFx=function(type){
+  localStorage.setItem('bv_bg_fx',type);
+  document.body.classList.remove('fx-grid','fx-dots');
+  const snow=document.getElementById('fxSnow'); if(snow) snow.innerHTML='';
+  if(type==='grid') document.body.classList.add('fx-grid');
+  else if(type==='dots') document.body.classList.add('fx-dots');
+  else if(type==='snow'&&snow){
+    for(let i=0;i<36;i++){ const el=document.createElement('i'); el.textContent='❄';
+      el.style.left=(Math.random()*100)+'%'; el.style.animationDuration=(6+Math.random()*10)+'s';
+      el.style.animationDelay=(Math.random()*6)+'s'; el.style.fontSize=(8+Math.random()*10)+'px'; snow.appendChild(el); }
+  }
+  toast(type==='none'?'Без эффекта':'Эффект: '+type,'s');
+};
+try{ const fx=localStorage.getItem('bv_bg_fx'); if(fx&&fx!=='none') setTimeout(()=>setBgFx(fx),300); applyUiPreset(localStorage.getItem('bv_ui_preset')||'classic'); }catch(e){}
+
+const ACHIEVEMENTS=[
+  {id:'first_login',ico:'🚀',name:'Старт',desc:'Вход в кошелёк'},
+  {id:'social',ico:'💬',name:'Связь',desc:'Соцсеть привязана'},
+  {id:'rich',ico:'💰',name:'Капитал',desc:'>$1000'},
+  {id:'tagged',ico:'🏷',name:'Стиль',desc:'Свой тег'},
+  {id:'vip',ico:'⭐',name:'VIP',desc:'VIP статус'},
+  {id:'secure',ico:'🔐',name:'PIN',desc:'PIN установлен'},
+  {id:'seller',ico:'🛒',name:'Продавец',desc:'Объявление'},
+  {id:'buyer',ico:'🛍',name:'Покупатель',desc:'Покупка'}
+];
+function userAchievements(u){
+  const s=new Set(u?.achievements||[]);
+  if(u) s.add('first_login');
+  if(u?.tgVerified||u?.dcVerified) s.add('social');
+  try{ if(typeof toUSD==='function' && toUSD(u?.balances)>=1000) s.add('rich'); }catch(e){}
+  if(u?.customTags?.length||u?.customTag) s.add('tagged');
+  if(u?.vipUntil&&u.vipUntil>Date.now()) s.add('vip');
+  if(localStorage.getItem('bv_pin')) s.add('secure');
+  return s;
+}
+window.renderAchievements=function(elId,u){
+  const el=document.getElementById(elId); if(!el) return;
+  const got=userAchievements(u||UD);
+  el.innerHTML=ACHIEVEMENTS.map(a=>`<div class="ach-card ${got.has(a.id)?'on':''}"><div class="ach-ico">${a.ico}</div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>`).join('');
+};
+
+// TG / Discord
+document.getElementById('btnTg')?.addEventListener('click', async()=>{
+  let v=(document.getElementById('tgIn')?.value||'').trim().replace(/^@/,'');
+  if(!v||v.length<3) return toast('Введите username','w');
+  try{
+    await updateDoc(doc(db,'wallets',CU.uid),{tg:'@'+v,tgPending:true,tgVerified:false});
+    await addDoc(collection(db,'socialRequests'),{uid:CU.uid,username:UD.username,code:UD.code,platform:'telegram',tg:'@'+v,status:'pending',createdAt:serverTimestamp()});
+    document.getElementById('tgHint').textContent='⏳ На проверке';
+    toast('Заявка Telegram отправлена','s');
+  }catch(e){ toast(e.message||'Ошибка','e'); }
+});
+document.getElementById('btnDc')?.addEventListener('click', async()=>{
+  let v=(document.getElementById('dcIn')?.value||'').trim();
+  if(!v||v.length<2) return toast('Введите Discord','w');
+  try{
+    await updateDoc(doc(db,'wallets',CU.uid),{dc:v,dcPending:true,dcVerified:false});
+    await addDoc(collection(db,'socialRequests'),{uid:CU.uid,username:UD.username,code:UD.code,platform:'discord',dc:v,status:'pending',createdAt:serverTimestamp()});
+    toast('Заявка Discord отправлена','s');
+  }catch(e){ toast(e.message||'Ошибка','e'); }
+});
+
+// Market
+let _mPhoto='';
+document.getElementById('mPhoto')?.addEventListener('change',function(){
+  const f=this.files?.[0]; if(!f) return;
+  if(f.size>900000){ toast('Фото до 900КБ','w'); return; }
+  const r=new FileReader(); r.onload=e=>{ _mPhoto=e.target.result; }; r.readAsDataURL(f);
+});
+window.marketTab=function(t){
+  document.getElementById('marketListWrap').style.display=t==='market'?'block':'none';
+  document.getElementById('marketMyWrap').style.display=t==='my'?'block':'none';
+  document.getElementById('marketOrdersWrap').style.display=t==='orders'?'block':'none';
+  ['market','my','orders'].forEach(k=>{
+    const b=document.getElementById('mTab'+k.charAt(0).toUpperCase()+k.slice(1));
+    if(b) b.className='btn btn-'+(t===k?'primary':'secondary')+' btn-sm';
+  });
+  if(t==='market') loadMarket();
+  if(t==='my') loadMarketMy();
+  if(t==='orders') loadMarketOrders();
+};
+async function loadMarket(){
+  const el=document.getElementById('marketList'); if(!el||!CU) return;
+  try{
+    const snap=await getDocs(query(collection(db,'p2pListings'),limit(40)));
+    let rows=[]; snap.forEach(d=>rows.push({...d.data(),_id:d.id}));
+    rows=rows.filter(r=>r.status==='active'&&r.sellerUid!==CU.uid);
+    rows.sort((a,b)=>(b.createdAt?.seconds||0)-(a.createdAt?.seconds||0));
+    if(!rows.length){ el.innerHTML='<div class="empty-state"><span class="emo">🛒</span>Пока пусто</div>'; return; }
+    el.innerHTML=rows.map(r=>`<div class="check-card">
+      <div style="display:flex;gap:12px">
+        ${r.photoUrl?`<img src="${esc(r.photoUrl)}" style="width:64px;height:64px;border-radius:12px;object-fit:cover"/>`:''}
+        <div style="flex:1;min-width:0">
+          <div style="font-size:11px;color:var(--c-text3)">${esc(r.category||'')}${r.game?' · '+esc(r.game):''}${r.delivery==='auto'?' · ⚡':''} · @${esc(r.sellerName||'')}</div>
+          <div style="font-weight:800;margin:4px 0">${esc(r.title)}</div>
+          <div style="font-size:12px;color:var(--c-text2)">${esc((r.description||'').slice(0,80))}</div>
+        </div>
+        <div style="text-align:right"><div class="check-amount" style="font-size:15px">${fmtBal(r.price,r.currency)}</div>
+          <button class="btn btn-primary btn-sm" style="margin-top:6px" onclick="buyMarket('${r._id}')">Купить</button></div>
+      </div></div>`).join('');
+  }catch(e){ el.innerHTML='<div class="empty-state">Ошибка загрузки</div>'; }
+}
+async function loadMarketMy(){
+  const el=document.getElementById('marketMyList'); if(!el||!CU) return;
+  const snap=await getDocs(query(collection(db,'p2pListings'),where('sellerUid','==',CU.uid),limit(20)));
+  let rows=[]; snap.forEach(d=>rows.push({...d.data(),_id:d.id}));
+  el.innerHTML=rows.length?rows.map(r=>`<div class="check-card"><b>${esc(r.title)}</b> · ${fmtBal(r.price,r.currency)} · ${esc(r.status)}</div>`).join(''):'<div class="empty-state">Нет объявлений</div>';
+}
+async function loadMarketOrders(){
+  const el=document.getElementById('marketOrdersList'); if(!el||!CU) return;
+  const snap=await getDocs(query(collection(db,'p2pOrders'),where('buyerUid','==',CU.uid),limit(20)));
+  let rows=[]; snap.forEach(d=>rows.push({...d.data(),_id:d.id}));
+  try{ const s2=await getDocs(query(collection(db,'p2pOrders'),where('sellerUid','==',CU.uid),limit(20))); s2.forEach(d=>{ if(!rows.find(x=>x._id===d.id)) rows.push({...d.data(),_id:d.id}); }); }catch(e){}
+  el.innerHTML=rows.length?rows.map(r=>`<div class="check-card" style="cursor:pointer" onclick="openMarketOrder('${r._id}')"><b>${esc(r.title)}</b> · ${fmtBal(r.price,r.currency)} · ${esc(r.status)}</div>`).join(''):'<div class="empty-state">Нет сделок</div>';
+}
+document.getElementById('btnMarketCreate')?.addEventListener('click', async()=>{
+  if(!CU||!UD) return toast('Войдите','e');
+  const title=(document.getElementById('mTitle')?.value||'').trim();
+  const price=parseFloat(document.getElementById('mPrice')?.value);
+  if(!title||title.length<3) return toast('Название','w');
+  if(!price||price<=0) return toast('Цена','w');
+  try{
+    await addDoc(collection(db,'p2pListings'),{
+      sellerUid:CU.uid,sellerName:UD.username,sellerCode:UD.code,
+      title:title.slice(0,80),description:(document.getElementById('mDesc')?.value||'').slice(0,500),
+      category:document.getElementById('mCat')?.value,game:document.getElementById('mGame')?.value||'',
+      delivery:document.getElementById('mDelivery')?.value||'manual',
+      autoPayload:(document.getElementById('mAuto')?.value||'').slice(0,1000),
+      photoUrl:_mPhoto||'',price,currency:document.getElementById('mCur')?.value||'UAH',
+      status:'active',createdAt:serverTimestamp()
+    });
+    _mPhoto=''; toast('Опубликовано','s'); closeSheet('sheetMarketCreate'); marketTab('my');
+  }catch(e){ toast(e.message,'e'); }
+});
+window.buyMarket=async function(id){
+  if(!CU||!UD) return;
+  try{
+    const snap=await getDoc(doc(db,'p2pListings',id)); if(!snap.exists()) return toast('Не найдено','e');
+    const L=snap.data(); if(L.status!=='active') return toast('Недоступно','w');
+    if(L.sellerUid===CU.uid) return toast('Своё объявление','w');
+    const bal=UD.balances?.[L.currency]||0; if(bal<L.price) return toast('Недостаточно средств','e');
+    if(!confirm('Оплатить '+fmtBal(L.price,L.currency)+'?')) return;
+    const batch=writeBatch(db);
+    batch.update(doc(db,'wallets',CU.uid),{['balances.'+L.currency]:increment(-L.price)});
+    batch.update(doc(db,'p2pListings',id),{status:'sold'});
+    const orderRef=doc(collection(db,'p2pOrders'));
+    batch.set(orderRef,{listingId:id,title:L.title,description:L.description,price:L.price,currency:L.currency,
+      category:L.category,game:L.game||'',delivery:L.delivery||'manual',
+      sellerUid:L.sellerUid,sellerName:L.sellerName,buyerUid:CU.uid,buyerName:UD.username,
+      status:'paid_held',createdAt:serverTimestamp()});
+    await batch.commit();
+    if(L.delivery==='auto'&&L.autoPayload){
+      await updateDoc(doc(db,'p2pOrders',orderRef.id),{status:'shipped',autoPayload:L.autoPayload,shippedAt:serverTimestamp()});
+      toast('Оплачено + автовыдача','s');
+    } else toast('Оплачено, ждите товар','s');
+    openMarketOrder(orderRef.id); loadMarket();
+  }catch(e){ toast(e.message,'e'); }
+};
+window.openMarketOrder=async function(id){
+  const snap=await getDoc(doc(db,'p2pOrders',id)); if(!snap.exists()) return;
+  const o={...snap.data(),_id:id};
+  const isBuyer=o.buyerUid===CU?.uid, isSeller=o.sellerUid===CU?.uid;
+  let actions='';
+  if(o.status==='paid_held'&&isSeller) actions=`<button class="btn btn-primary" onclick="mShip('${id}')">📦 Товар передан</button>`;
+  if((o.status==='shipped'||o.status==='paid_held')&&isBuyer) actions+=`<button class="btn btn-primary" onclick="mConfirm('${id}')">✅ Получено</button>
+    <button class="btn btn-danger" style="margin-top:8px" onclick="mDispute('${id}')">⚠️ Спор</button>`;
+  if(o.status==='completed') actions='<div style="color:var(--c-green);font-weight:700">✅ Завершено</div>';
+  if(o.status==='disputed') actions='<div style="color:var(--c-gold);font-weight:700">⚠️ Спор</div>';
+  document.getElementById('mOrderTitle').textContent=o.title||'Сделка';
+  document.getElementById('mOrderBody').innerHTML=`
+    <div style="font-size:13px;color:var(--c-text2);margin-bottom:8px">Статус: <b>${esc(o.status)}</b></div>
+    <div style="font-size:20px;font-weight:900;margin-bottom:8px">${fmtBal(o.price,o.currency)}</div>
+    <div style="font-size:13px;margin-bottom:10px;padding:12px;background:rgba(255,255,255,.04);border-radius:12px">${esc(o.description||'—')}</div>
+    ${o.autoPayload&&isBuyer?`<div style="padding:12px;border-radius:12px;background:rgba(34,210,127,.1);border:1px solid rgba(34,210,127,.25);margin-bottom:12px"><b style="color:var(--c-green)">⚡ Автовыдача</b><div style="word-break:break-all;margin-top:4px">${esc(o.autoPayload)}</div></div>`:''}
+    ${actions}`;
+  openSheet('sheetMarketOrder');
+};
+window.mShip=async function(id){ await updateDoc(doc(db,'p2pOrders',id),{status:'shipped',shippedAt:serverTimestamp()}); toast('Отмечено','s'); openMarketOrder(id); };
+window.mConfirm=async function(id){
+  const snap=await getDoc(doc(db,'p2pOrders',id)); if(!snap.exists()) return;
+  const o=snap.data(); const fee=o.price*0.05, get=o.price-fee;
+  const batch=writeBatch(db);
+  batch.update(doc(db,'wallets',o.sellerUid),{['balances.'+o.currency]:increment(get)});
+  batch.update(doc(db,'p2pOrders',id),{status:'completed',completedAt:serverTimestamp()});
+  await batch.commit(); toast('Сделка завершена','s'); openMarketOrder(id);
+};
+window.mDispute=async function(id){
+  await updateDoc(doc(db,'p2pOrders',id),{status:'disputed',disputedBy:CU.uid});
+  await addDoc(collection(db,'reports'),{fromUid:CU.uid,fromUsername:UD.username,subject:'Спор на площадке',body:'Сделка '+id,type:'p2p_dispute',orderId:id,status:'open',createdAt:serverTimestamp()});
+  toast('Спор открыт','w'); openMarketOrder(id);
+};
+
+// Shop accessories quick
+window.buyAccessory=async function(id,emoji){
+  try{
+    const bal=UD.balances?.UAH||0; if(bal<120) return toast('Нужно 120 ₴','e');
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(-120),avatarAccessory:emoji});
+    toast('Аксессуар '+emoji+' куплен','s');
+  }catch(e){ toast(e.message,'e'); }
+};
+window.buyProfileBg=async function(id){
+  const map={neon:'linear-gradient(135deg,#7C5CFC,#FF00E5,#00F0FF)',sunset:'linear-gradient(135deg,#FF4D6A,#FFB23E)',ocean:'linear-gradient(135deg,#0EA5E9,#1E3A8A)',gold:'linear-gradient(135deg,#F59E0B,#FDE68A)'};
+  try{
+    if((UD.balances?.UAH||0)<150) return toast('Нужно 150 ₴','e');
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(-150),profileBgCss:map[id]||map.neon});
+    toast('Фон профиля установлен','s');
+  }catch(e){ toast(e.message,'e'); }
+};
+window.buyNameFx=async function(){
+  try{
+    if((UD.balances?.UAH||0)<100) return toast('Нужно 100 ₴','e');
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(-100),nameFx:'rainbow'});
+    toast('Анимация имени','s');
+  }catch(e){ toast(e.message,'e'); }
+};
+
+// Patch showProfile for accessory if function exists
+(function(){
+  const _sp = window.showProfile;
+  if(typeof _sp==='function'){
+    window.showProfile=async function(uid){
+      await _sp(uid);
+      try{
+        const snap=await getDoc(doc(db,'wallets',uid));
+        const u=snap.data()||{};
+        const acc=document.getElementById('pvAcc');
+        if(acc){ if(u.avatarAccessory){ acc.textContent=u.avatarAccessory; acc.style.display='block'; } else acc.style.display='none'; }
+        if(u.profileBgCss){ const b=document.getElementById('pvBanner'); if(b) b.style.background=u.profileBgCss; }
+        if(u.nameFx==='rainbow'){ const n=document.getElementById('pvName'); if(n){ const t=n.childNodes[0]; if(t&&t.nodeType===3){ const s=document.createElement('span'); s.className='name-fx-rainbow'; s.textContent=t.textContent; n.replaceChild(s,t);} } }
+        renderAchievements('pvAchievements', u);
+      }catch(e){}
+    };
+  }
+})();
+
+// Hook goto
+(function(){
+  const g = window.nav || window.goto;
+  // patch via wrapping after definition - use MutationObserver-less approach
+  const _goto = typeof goto==='function' ? goto : null;
+  if(_goto){
+    window.goto=function(id){
+      _goto(id);
+      if(id==='pgMarket') marketTab('market');
+      if(id==='pgSettings'){ renderUiPresets(); renderAchievements('setAchievements', UD); }
+      // force visible
+      const app=document.getElementById('app'); if(app){ app.style.opacity='1'; app.style.visibility='visible'; }
+      document.querySelectorAll('.page.on').forEach(p=>{ p.style.opacity='1'; p.style.display='flex'; });
+    };
+    window.nav=window.goto;
+  }
+})();
+
+// Mobile visibility heartbeat
+setInterval(()=>{
+  const app=document.getElementById('app');
+  if(app && app.style.display!=='none'){ app.style.opacity='1'; app.style.visibility='visible'; }
+  document.querySelectorAll('.page.on').forEach(p=>{ p.style.opacity='1'; if(getComputedStyle(p).display==='none') p.style.display='flex'; });
+}, 2500);
+
+// Deposit method cards helper
+window.selNdMethod=function(el){
+  document.querySelectorAll('#ndMethodGrid .method-opt').forEach(x=>x.classList.remove('on'));
+  el.classList.add('on');
+  const h=document.getElementById('ndMethod'); if(h) h.value=el.getAttribute('data-v');
+};
+
+
+
+setTimeout(function(){
+  if(typeof goto==='function' && !goto._bvWrapped){
+    const _g=goto;
+    window.goto=function(id){
+      _g(id);
+      try{
+        if(id==='pgMarket') marketTab('market');
+        if(id==='pgSettings'){ renderUiPresets(); renderAchievements('setAchievements', UD); }
+        const app=document.getElementById('app'); if(app){ app.style.opacity='1'; app.style.visibility='visible'; }
+        document.querySelectorAll('.page.on').forEach(p=>{ p.style.opacity='1'; p.style.display='flex'; });
+      }catch(e){}
+    };
+    window.goto._bvWrapped=true;
+    window.nav=window.goto;
+  }
+}, 0);
+
 </script>
 
   <!-- COMPLAINT SHEET -->
-  <div class="overlay" id="sheetP2PCreate">
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-head"><div class="sheet-title">🤝 Новое объявление</div><button class="sheet-close" onclick="closeSheet('sheetP2PCreate')">✕</button></div>
-      <div class="sheet-body">
-        <div class="form-group"><label class="form-label">Категория</label>
-          <select class="form-input" id="p2pCat" onchange="p2pCatChanged()">
-            <option value="currency">💱 Валюта (крипто / фиат)</option>
-            <option value="game">🎮 Игровая валюта / аккаунт</option>
-            <option value="item">🎁 Предметы / скины</option>
-            <option value="other">📦 Другое</option>
-          </select>
-        </div>
-        <div class="form-group" id="p2pGameGroup" style="display:none"><label class="form-label">Игра</label>
-          <select class="form-input" id="p2pGame">
-            <option value="CS2">Counter-Strike 2</option>
-            <option value="Dota2">Dota 2</option>
-            <option value="Rust">Rust</option>
-            <option value="TF2">Team Fortress 2</option>
-            <option value="GTA5">GTA V / FiveM</option>
-            <option value="PUBG">PUBG</option>
-            <option value="Fortnite">Fortnite</option>
-            <option value="Roblox">Roblox</option>
-            <option value="Minecraft">Minecraft</option>
-            <option value="Valorant">Valorant</option>
-            <option value="Other">Другая игра</option>
-          </select>
-        </div>
-        <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="p2pTitle" maxlength="80" placeholder="Например: AK-47 Redline FT"/></div>
-        <div class="form-group"><label class="form-label">Описание</label><textarea class="form-input" id="p2pDesc" rows="3" placeholder="Что получит покупатель, как передаёте..."></textarea></div>
-        <div class="form-group"><label class="form-label">Выдача</label>
-          <select class="form-input" id="p2pDelivery">
-            <option value="manual">🖐 Самостоятельно (вручную)</option>
-            <option value="auto">⚡ Автовыдача (код / ссылка после оплаты)</option>
-          </select>
-        </div>
-        <div class="form-group" id="p2pAutoGroup" style="display:none"><label class="form-label">Данные автовыдачи (код, ссылка, логин)</label>
-          <textarea class="form-input" id="p2pAutoPayload" rows="2" placeholder="Покупатель увидит это после оплаты"></textarea>
-        </div>
-        <div class="form-group"><label class="form-label">Цена</label>
-          <div class="input-row">
-            <input class="form-input" id="p2pPrice" type="number" placeholder="0.00" inputmode="decimal"/>
-            <select class="form-input" id="p2pCur"><option value="UAH">UAH</option><option value="USD">USD</option><option value="RUB">RUB</option><option value="TON">TON</option></select>
-          </div>
-        </div>
-        <div style="font-size:12px;color:var(--c-text2);margin-bottom:12px;line-height:1.5">Комиссия 5%. При автовыдаче данные уходят покупателю сразу после оплаты.</div>
-        <button class="btn btn-primary" id="btnCreateP2P">Опубликовать</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="overlay" id="sheetP2POrder">
-    <div class="sheet">
-      <div class="sheet-handle"></div>
-      <div class="sheet-head"><div class="sheet-title" id="p2pOrderTitle">Сделка</div><button class="sheet-close" onclick="closeSheet('sheetP2POrder')">✕</button></div>
-      <div class="sheet-body" id="p2pOrderBody"></div>
-    </div>
-  </div>
-
   <div class="overlay" id="sheetComplaint">
     <div class="sheet">
       <div class="sheet-head">
