@@ -779,3 +779,23 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
   .set-wrap{padding:0 12px 24px}
   .ui-preset-grid{grid-template-columns:1fr 1fr}
 }
+
+/* LAYOUT FIX v12 */
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;min-width:0}
+.sb-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;overflow:hidden}
+.sb-uname,.sb-user-name{font-size:13px;font-weight:700;line-height:1.25;color:var(--c-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.sb-code,.sb-user-code{font-size:11px;color:var(--c-text2);font-family:ui-monospace,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user>div:nth-child(2){flex:1;min-width:0;overflow:hidden}
+.swatches,#ctColors,#colorSwatches,#custTagColors,#frameColors{display:flex!important;flex-wrap:wrap!important;gap:8px!important;padding:4px 0 8px!important;max-width:100%!important}
+.swatch{width:32px!important;height:32px!important;border-radius:10px!important;cursor:pointer;flex-shrink:0;border:2px solid transparent!important}
+.swatch.sel{border-color:#fff!important;box-shadow:0 0 0 2px var(--btn1)!important}
+.ex-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin:0 16px 16px;max-width:480px}
+.ex-label{font-size:12px;font-weight:700;color:var(--c-text2);margin-bottom:8px}
+.ex-mid{display:flex;justify-content:center;padding:6px 0}
+.ex-swap-btn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.3);cursor:pointer;font-size:18px}
+.input-row{display:flex;gap:8px;align-items:stretch}
+.input-row .form-input{flex:1;min-width:0}
+.input-row select.form-input{flex:0 0 130px}
+.form-input{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;color:var(--c-text)!important;border-radius:12px;padding:12px 14px;font-size:14px;font-weight:600}
+.form-input option{background:#1a1a2e;color:#fff}
+.wh-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-size:12px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap}
