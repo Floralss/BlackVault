@@ -896,3 +896,53 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 .tx-amt.pos{color:#22D27F}
 .ph-title{font-size:20px;font-weight:900;color:#fff}
 .ph-sub{font-size:13px;color:rgba(255,255,255,.5)}
+
+/* KASSA + WALLET v15 */
+.kassa-card{
+  margin:0 14px 14px;border-radius:16px;overflow:hidden;
+  background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.09);
+}
+.kassa-card-head{
+  display:flex;align-items:center;justify-content:space-between;gap:12px;
+  padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06);
+}
+.kassa-card-title{font-size:15px;font-weight:800;color:#fff}
+.kassa-card-sub{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px}
+.kassa-products{min-height:100px;padding:8px 0}
+.kassa-empty{text-align:center;padding:28px 16px}
+.kassa-empty-ico{font-size:36px;margin-bottom:8px;opacity:.9}
+.kassa-empty-title{font-size:14px;font-weight:700;color:#fff;margin-bottom:4px}
+.kassa-empty-sub{font-size:12px;color:rgba(255,255,255,.45);max-width:260px;margin:0 auto;line-height:1.4}
+.kassa-item{
+  display:flex;align-items:center;gap:12px;padding:12px 16px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.kassa-item:last-child{border-bottom:none}
+.kassa-item-ico{
+  width:42px;height:42px;border-radius:12px;background:rgba(124,92,252,.15);
+  display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;
+}
+.kassa-item-name{font-size:14px;font-weight:700;color:#fff}
+.kassa-item-meta{font-size:12px;color:rgba(255,255,255,.45);margin-top:2px}
+.kassa-item-price{margin-left:auto;font-size:15px;font-weight:800;color:#22D27F}
+
+.wallet-hero{
+  margin:0 14px 14px;padding:22px 18px;border-radius:20px;
+  background:linear-gradient(135deg,rgba(99,70,220,.22),rgba(15,12,30,.95) 55%,rgba(20,18,40,.9));
+  border:1px solid rgba(124,92,252,.22);position:relative;overflow:hidden;
+}
+.wh-label{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,.5);margin-bottom:8px}
+.wh-amount{font-size:40px;font-weight:900;color:#fff;line-height:1.05;letter-spacing:-.03em}
+.wh-amount #wBalDec{font-size:28px;opacity:.55}
+.wh-sub{font-size:13px;color:rgba(255,255,255,.7);margin-top:8px;font-weight:600}
+.wh-code{font-size:12px;font-family:ui-monospace,monospace;color:rgba(255,255,255,.45);margin-top:4px;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.wh-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:18px}
+.wh-btn{
+  display:inline-flex;align-items:center;gap:6px;padding:10px 14px;
+  border-radius:12px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.1);
+  font-size:12.5px;font-weight:700;color:#fff;cursor:pointer;user-select:none;
+}
+.wh-btn.primary{background:rgba(124,92,252,.35);border-color:rgba(124,92,252,.5)}
+.wh-btn.dis{opacity:.55}
+.wh-btn:hover{background:rgba(124,92,252,.28)}
+.wh-btn-icon{font-size:14px}
