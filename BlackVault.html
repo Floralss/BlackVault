@@ -789,6 +789,26 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
   .ui-preset-grid{grid-template-columns:1fr 1fr}
 }
 
+/* LAYOUT FIX v12 */
+.sb-user{display:flex;align-items:center;gap:10px;padding:10px 12px;min-width:0}
+.sb-av{width:40px;height:40px;border-radius:50%;flex-shrink:0;overflow:hidden}
+.sb-uname,.sb-user-name{font-size:13px;font-weight:700;line-height:1.25;color:var(--c-text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:130px}
+.sb-code,.sb-user-code{font-size:11px;color:var(--c-text2);font-family:ui-monospace,monospace;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.sb-user>div:nth-child(2){flex:1;min-width:0;overflow:hidden}
+.swatches,#ctColors,#colorSwatches,#custTagColors,#frameColors{display:flex!important;flex-wrap:wrap!important;gap:8px!important;padding:4px 0 8px!important;max-width:100%!important}
+.swatch{width:32px!important;height:32px!important;border-radius:10px!important;cursor:pointer;flex-shrink:0;border:2px solid transparent!important}
+.swatch.sel{border-color:#fff!important;box-shadow:0 0 0 2px var(--btn1)!important}
+.ex-wrap{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:16px;margin:0 16px 16px;max-width:480px}
+.ex-label{font-size:12px;font-weight:700;color:var(--c-text2);margin-bottom:8px}
+.ex-mid{display:flex;justify-content:center;padding:6px 0}
+.ex-swap-btn{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(124,92,252,.15);border:1px solid rgba(124,92,252,.3);cursor:pointer;font-size:18px}
+.input-row{display:flex;gap:8px;align-items:stretch}
+.input-row .form-input{flex:1;min-width:0}
+.input-row select.form-input{flex:0 0 130px}
+.form-input{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;color:var(--c-text)!important;border-radius:12px;padding:12px 14px;font-size:14px;font-weight:600}
+.form-input option{background:#1a1a2e;color:#fff}
+.wh-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-size:12px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap}
+
 </style>
 </head>
 <body>
@@ -1240,6 +1260,9 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
       <div class="ph"><div class="ph-top"><div><div class="ph-title">👑 Панель</div><div class="ph-sub" id="adminRoleSub">Управление</div></div><div id="adminTopBadge"></div></div></div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:19px" id="adminTabs">
         <button class="btn btn-primary btn-sm" onclick="admTab('wallets')">Кошельки</button>
+        <button class="btn btn-secondary btn-sm" type="button" onclick="admTab('achievements')">🏆 Достижения</button>
+        <button class="btn btn-secondary btn-sm" type="button" onclick="admTab('broadcast')">📢 Рассылка</button>
+        <button class="btn btn-secondary btn-sm" type="button" onclick="admTab('freeze')">❄️ Заморозка</button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('deposits')">Пополнения<span id="admDepCount" style="margin-left:5px"></span></button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('tx')">Транзакции</button>
         <button class="btn btn-secondary btn-sm" onclick="admTab('reports')">Тикеты</button>
@@ -1251,7 +1274,47 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
         <button class="btn btn-secondary btn-sm" id="admContestTabBtn" style="display:none" onclick="admTab('contest')">Конкурсы</button>
         <button class="btn btn-secondary btn-sm" id="admComplaintsTabBtn" style="display:flex" onclick="admTab('complaints');loadComplaints()">⚠️ Жалобы</button>
       </div>
-      <div id="admWallets"><div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Роль</th><th>Действия</th></tr></thead><tbody id="admWalletsTb"><tr><td colspan="6" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
+      
+      <div id="admAchievements" style="display:none;padding:0 16px 20px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">СОЗДАТЬ ДОСТИЖЕНИЕ</div>
+          <input class="form-input" id="achNewId" placeholder="ID (first_transfer)" style="margin-bottom:8px"/>
+          <input class="form-input" id="achNewTitle" placeholder="Название" style="margin-bottom:8px"/>
+          <input class="form-input" id="achNewIcon" placeholder="Иконка 🏆" style="margin-bottom:8px"/>
+          <input class="form-input" id="achNewDesc" placeholder="Описание" style="margin-bottom:8px"/>
+          <button class="btn btn-primary" type="button" onclick="adminCreateAchievement()">Создать</button>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px;margin-bottom:12px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">ВЫДАТЬ ДОСТИЖЕНИЕ</div>
+          <input class="form-input" id="achGiveUser" placeholder="BV-XXXXXX или ник" style="margin-bottom:8px"/>
+          <input class="form-input" id="achGiveId" placeholder="ID достижения" style="margin-bottom:8px"/>
+          <button class="btn btn-primary" type="button" onclick="adminGiveAchievement()">Выдать</button>
+        </div>
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">СПИСОК</div>
+          <div id="achAdminList"></div>
+        </div>
+      </div>
+      <div id="admBroadcast" style="display:none;padding:0 16px 20px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">РАССЫЛКА</div>
+          <input class="form-input" id="bcTitle" placeholder="Заголовок" style="margin-bottom:8px"/>
+          <textarea class="form-input" id="bcBody" rows="3" placeholder="Текст" style="margin-bottom:8px"></textarea>
+          <button class="btn btn-primary" type="button" onclick="adminBroadcast()">Отправить</button>
+        </div>
+      </div>
+      <div id="admFreeze" style="display:none;padding:0 16px 20px">
+        <div style="background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:16px;padding:14px">
+          <div style="font-size:11px;font-weight:800;color:var(--c-text3);margin-bottom:10px">ЗАМОРОЗКА</div>
+          <input class="form-input" id="fzUser" placeholder="BV-XXXXXX или ник" style="margin-bottom:8px"/>
+          <input class="form-input" id="fzReason" placeholder="Причина" style="margin-bottom:8px"/>
+          <div style="display:flex;gap:8px">
+            <button class="btn btn-primary" type="button" style="background:#FF4D6A" onclick="adminFreeze(true)">Заморозить</button>
+            <button class="btn btn-secondary" type="button" onclick="adminFreeze(false)">Разморозить</button>
+          </div>
+        </div>
+      </div>
+<div id="admWallets"><div class="table-wrap"><table class="data-table"><thead><tr><th>Пользователь</th><th>Код</th><th>Баланс</th><th>Статус</th><th>Роль</th><th>Действия</th></tr></thead><tbody id="admWalletsTb"><tr><td colspan="6" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
       <div id="admDeposits" style="display:none"><div class="sec" id="admDepositsList"><div class="empty-state"><span class="emo">📥</span>Нет заявок</div></div></div>
       <div id="admTx" style="display:none"><div class="table-wrap"><table class="data-table"><thead><tr><th>От</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr></thead><tbody id="admTxTb"><tr><td colspan="5" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
       <div id="admReports" style="display:none"><div class="sec" id="admReportsList"><div class="empty-state"><span class="emo">🎧</span>Нет</div></div></div>
@@ -1673,6 +1736,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 </div>
 
 
+
 <script type="module">
 
 
@@ -1682,8 +1746,24 @@ import {
   signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc,
-  query, where, getDocs, limit, serverTimestamp, arrayUnion, increment, writeBatch, onSnapshot
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  limit,
+  serverTimestamp,
+  arrayUnion,
+  increment,
+  writeBatch,
+  onSnapshot,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
@@ -2476,9 +2556,16 @@ window.showProfile = async function (uid) {
 // ═══ SHOP (via Cloud Functions) ═══
 function renderColorPicker(elId, colors, onSelect) {
   const el = document.getElementById(elId);
-  el.innerHTML = colors.map((c, i) => `<div class="swatch${i === 0 ? ' sel' : ''}" style="background:${c.v}" data-c="${c.v}" title="${c.n}"></div>`).join('');
-  el.querySelectorAll('.swatch').forEach(s => s.addEventListener('click', () => { el.querySelectorAll('.swatch').forEach(x => x.classList.remove('sel')); s.classList.add('sel'); onSelect(s.getAttribute('data-c')); }));
+  if (!el) return;
+  el.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;max-width:100%';
+  el.innerHTML = colors.map((c, i) => '<div class="swatch'+(i===0?' sel':'')+'" style="background:'+c.v+';width:32px;height:32px;border-radius:10px;cursor:pointer;flex-shrink:0" data-c="'+c.v+'" title="'+(c.n||'')+'"></div>').join('');
+  el.querySelectorAll('.swatch').forEach(s => s.addEventListener('click', () => {
+    el.querySelectorAll('.swatch').forEach(x => x.classList.remove('sel'));
+    s.classList.add('sel');
+    if (onSelect) onSelect(s.getAttribute('data-c'));
+  }));
 }
+window.renderColorPicker = renderColorPicker;
 function renderPayRow(elId, uahPrice, onSelect) {
   const el = document.getElementById(elId);
   el.innerHTML = PAY_CURRENCIES.map((cur, i) => { const amt = cur === 'UAH' ? uahPrice : (uahPrice / RATES.UAH) * RATES.USD / RATES[cur]; return `<div class="curr-pay-opt${i === 0 ? ' sel' : ''}" data-cur="${cur}">${cur}<br><span style="font-size:11px;font-weight:600;color:var(--c-text2)">${fmtBal(amt, cur)}</span></div>`; }).join('');
@@ -4531,6 +4618,151 @@ console.log('[BV] settings handlers ready', typeof openSheet, typeof setBgFx, ty
   });
 })();
 
+
+// ===== GLOBAL EXPORTS v12 =====
+window.togglePin = function(){
+  const row = document.getElementById('pinSetRow');
+  const tog = document.getElementById('pinToggle');
+  if (localStorage.getItem('bv_pin')) {
+    localStorage.removeItem('bv_pin');
+    tog && tog.classList.remove('on');
+    if(row) row.style.display = 'none';
+    if(typeof toast==='function') toast('PIN отключён','i');
+  } else {
+    if(row) row.style.display = 'block';
+    tog && tog.classList.add('on');
+  }
+};
+window.togglePrivacy = function(){
+  const on = localStorage.getItem('bv_privacy') === '1';
+  localStorage.setItem('bv_privacy', on ? '0' : '1');
+  const t = document.getElementById('privacyToggle');
+  if(t) t.classList.toggle('on', !on);
+  if(typeof toast==='function') toast(!on ? 'Балансы скрыты' : 'Балансы видны','i');
+  if(on) setTimeout(()=>location.reload(), 400);
+};
+window.claimDailyBonus = async function(){
+  if(typeof CU==='undefined'||!CU) return toast('Войдите','e');
+  const key = 'bv_daily_'+CU.uid;
+  const last = parseInt(localStorage.getItem(key)||'0',10);
+  if(Date.now()-last < 86400000) return toast('Уже получено сегодня','w');
+  try{
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(5)});
+    localStorage.setItem(key, String(Date.now()));
+    toast('🎁 +5 ₴ начислено!','s');
+  }catch(e){ console.error(e); toast(e.message||'Ошибка бонуса','e'); }
+};
+window.copyReferral = function(){
+  if(typeof UD==='undefined'||!UD) return toast('Войдите','e');
+  const link = location.href.split('?')[0] + '?ref=' + encodeURIComponent(UD.code||UD.username||'');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(()=>toast('Реферал скопирован!','s')).catch(()=>prompt('Ссылка:', link));
+  } else prompt('Ссылка:', link);
+};
+window.doLogout = async function(){
+  try{
+    await signOut(auth);
+    toast('Вышли из аккаунта','i');
+  }catch(e){ toast(e.message||'Ошибка','e'); }
+};
+document.addEventListener('click', function(e){
+  const sheetBtn = e.target.closest('[data-sheet]');
+  if(sheetBtn){ e.preventDefault(); openSheet(sheetBtn.getAttribute('data-sheet')); return; }
+  if(e.target.closest('#btnSettingsLogout') || (e.target.closest('#btnLogout') && e.target.closest('.set-link, .sb-logout, #btnLogout'))){
+    if(e.target.closest('#btnSettingsLogout') || e.target.id==='btnLogout' || e.target.closest('#btnLogout')){
+      e.preventDefault(); doLogout(); return;
+    }
+  }
+  if(e.target.closest('#btnDailyBonus')){ e.preventDefault(); claimDailyBonus(); return; }
+  if(e.target.closest('#btnCopyRef')){ e.preventDefault(); copyReferral(); return; }
+  if(e.target.closest('#privacyToggle')){ e.preventDefault(); togglePrivacy(); return; }
+  if(e.target.closest('#pinToggle')){ e.preventDefault(); togglePin(); return; }
+  const preset = e.target.closest('[data-preset]');
+  if(preset && typeof applyUiPreset==='function'){ applyUiPreset(preset.getAttribute('data-preset')); return; }
+  const fx = e.target.closest('[data-fx]');
+  if(fx && typeof setBgFx==='function'){ setBgFx(fx.getAttribute('data-fx')); return; }
+});
+document.getElementById('btnSetPin') && document.getElementById('btnSetPin').addEventListener('click', function(){
+  const p = (document.getElementById('newPinIn')||{}).value||'';
+  if(!/^\d{4}$/.test(p)) return toast('Введите 4 цифры','w');
+  localStorage.setItem('bv_pin', p);
+  document.getElementById('pinToggle') && document.getElementById('pinToggle').classList.add('on');
+  const row = document.getElementById('pinSetRow'); if(row) row.style.display='none';
+  toast('PIN сохранён','s');
+});
+console.log('[BV] exports v12 ready');
+
+// Admin extras v12
+window.admTab = function(t){
+  const map = {wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze'};
+  Object.keys(map).forEach(k=>{
+    const el=document.getElementById(map[k]);
+    if(el) el.style.display = (k===t)?'block':'none';
+  });
+  document.querySelectorAll('#adminTabs .btn').forEach(b=>{ b.className='btn btn-secondary btn-sm'; });
+  if(t==='achievements') adminLoadAchievements();
+};
+window.adminCreateAchievement = async function(){
+  const id=(document.getElementById('achNewId')||{}).value.trim();
+  const title=(document.getElementById('achNewTitle')||{}).value.trim();
+  const icon=(document.getElementById('achNewIcon')||{}).value.trim()||'🏆';
+  const desc=(document.getElementById('achNewDesc')||{}).value.trim();
+  if(!id||!title) return toast('ID и название','w');
+  try{ await setDoc(doc(db,'achievements',id),{id,title,icon,desc,createdAt:serverTimestamp()}); toast('Создано','s'); adminLoadAchievements(); }
+  catch(e){ toast(e.message,'e'); }
+};
+window.adminGiveAchievement = async function(){
+  const user=(document.getElementById('achGiveUser')||{}).value.trim();
+  const achId=(document.getElementById('achGiveId')||{}).value.trim();
+  if(!user||!achId) return toast('Заполните','w');
+  try{
+    const w = await findWalletByCodeOrName(user);
+    if(!w) return toast('Не найден','e');
+    const achs = w.data.achievements||[];
+    if(!achs.includes(achId)) achs.push(achId);
+    await updateDoc(doc(db,'wallets',w.id),{achievements:achs});
+    toast('Выдано','s');
+  }catch(e){ toast(e.message,'e'); }
+};
+window.adminLoadAchievements = async function(){
+  const el=document.getElementById('achAdminList'); if(!el) return;
+  try{
+    const snap=await getDocs(collection(db,'achievements'));
+    if(snap.empty){ el.innerHTML='<div style="opacity:.6">Пусто</div>'; return; }
+    el.innerHTML=snap.docs.map(d=>{const a=d.data();return '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><b>'+(a.icon||'🏆')+' '+(a.title||d.id)+'</b><div style="font-size:12px;color:var(--c-text2)">'+(a.desc||'')+' · '+d.id+'</div></div>';}).join('');
+  }catch(e){ el.textContent=e.message; }
+};
+window.adminBroadcast = async function(){
+  const title=(document.getElementById('bcTitle')||{}).value.trim();
+  const body=(document.getElementById('bcBody')||{}).value.trim();
+  if(!title||!body) return toast('Заполните','w');
+  try{ await addDoc(collection(db,'broadcasts'),{title,body,createdAt:serverTimestamp(),by:CU&&CU.uid}); toast('Сохранено','s'); }
+  catch(e){ toast(e.message,'e'); }
+};
+window.adminFreeze = async function(freeze){
+  const user=(document.getElementById('fzUser')||{}).value.trim();
+  const reason=(document.getElementById('fzReason')||{}).value.trim();
+  if(!user) return toast('Укажите пользователя','w');
+  try{
+    const w=await findWalletByCodeOrName(user);
+    if(!w) return toast('Не найден','e');
+    await updateDoc(doc(db,'wallets',w.id),{frozen:!!freeze,freezeReason:reason||null});
+    toast(freeze?'Заморожен':'Разморожен','s');
+  }catch(e){ toast(e.message,'e'); }
+};
+window.findWalletByCodeOrName = async function(q){
+  q=(q||'').trim(); if(!q) return null;
+  try{
+    let snap=await getDocs(query(collection(db,'wallets'),where('code','==',q),limit(1)));
+    if(!snap.empty) return {id:snap.docs[0].id,data:snap.docs[0].data()};
+    snap=await getDocs(query(collection(db,'wallets'),where('username','==',q),limit(1)));
+    if(!snap.empty) return {id:snap.docs[0].id,data:snap.docs[0].data()};
+    const code=q.toUpperCase().startsWith('BV-')?q.toUpperCase():('BV-'+q.toUpperCase());
+    snap=await getDocs(query(collection(db,'wallets'),where('code','==',code),limit(1)));
+    if(!snap.empty) return {id:snap.docs[0].id,data:snap.docs[0].data()};
+  }catch(e){ console.error(e); }
+  return null;
+};
 
 </script>
 </body>
