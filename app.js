@@ -1782,16 +1782,17 @@ async function loadKassaPage() {
     const pEl = document.getElementById('kassaProductsList');
     if (pEl) {
       if (!products.length) {
-        pEl.innerHTML = '<div class="empty-state"><span class="emo">📦</span>Товаров нет — добавьте в кассе</div>';
+        pEl.innerHTML = '<div class="kassa-empty"><div class="kassa-empty-ico">📦</div><div class="kassa-empty-title">Товаров пока нет</div><div class="kassa-empty-sub">Нажмите «+ Добавить», чтобы создать первый товар</div></div>';
       } else {
-        pEl.innerHTML = '<div>' + products.map(p => `
-          <div style="display:flex;align-items:center;gap:12px;padding:11px 16px;border-bottom:1px solid var(--c-border)">
-            <div style="width:38px;height:38px;border-radius:10px;background:var(--c-surface2);display:flex;align-items:center;justify-content:center;overflow:hidden;flex-shrink:0">
-              ${p.photo ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover"/>` : `<span style="font-size:20px">${esc(p.icon||'📦')}</span>`}
+        pEl.innerHTML = products.map(p => `
+          <div class="kassa-item">
+            <div class="kassa-item-ico">${p.photo ? `<img src="${p.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:12px"/>` : (p.icon||'📦')}</div>
+            <div style="flex:1;min-width:0">
+              <div class="kassa-item-name">${esc(p.name)}</div>
+              <div class="kassa-item-meta">${esc(p.category||'Без категории')}</div>
             </div>
-            <div style="flex:1"><div style="font-weight:700;font-size:13.5px">${esc(p.name)}</div><div style="font-size:11px;color:var(--c-text2)">${esc(p.category||'')}</div></div>
-            <div style="font-weight:800;color:var(--c-green)">${fmtBal(p.price,'UAH')}</div>
-          </div>`).join('') + '</div>';
+            <div class="kassa-item-price">${fmtBal(p.price,'UAH')}</div>
+          </div>`).join('');
       }
     }
   } catch(e) { console.error('kassa products:', e); }
