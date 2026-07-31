@@ -554,68 +554,106 @@
       </div>
     </div>
     <div class="page" id="pgSettings">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">⚙️ Настройки</div></div></div></div>
-      <div class="settings-section">
-        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" id="setUname">—</div><div class="settings-row-sub" id="setCode">BV-??????</div></div><div id="setRoleBadge"></div></div>
-        <div class="settings-row clickable" onclick="openSheet('sheetEditProfile')"><div class="settings-row-l"><div class="settings-row-title">Редактировать профиль</div><div class="settings-row-sub">Ник, описание, баннер</div></div><div class="settings-row-v">›</div></div>
-        <div class="settings-row clickable" onclick="openSheet('sheetAvatar')"><div class="settings-row-l"><div class="settings-row-title">Аватар</div><div class="settings-row-sub">Загрузить или выбрать из истории</div></div><div class="settings-row-v">›</div></div>
-        <div class="settings-row clickable" onclick="openSheet('sheetSocials')"><div class="settings-row-l"><div class="settings-row-title">Telegram / Discord</div><div class="settings-row-sub" id="setSocialsHint">Не привязано</div></div><div class="settings-row-v">›</div></div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">PIN-код при входе</div><div class="settings-row-sub">Блокировка при запуске</div></div><div class="toggle" id="pinToggle" onclick="togglePin()"><div class="toggle-k"></div></div></div>
-        <div class="settings-row" id="pinSetRow" style="display:none"><div class="settings-row-l"><div class="settings-row-title">Установить PIN</div><div style="display:flex;gap:8px;margin-top:9px"><input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:120px;padding:9px 12px"/><button class="btn btn-primary btn-sm" id="btnSetPin">Сохранить</button></div></div></div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-row clickable" onclick="openSheet('sheetTheme')"><div class="settings-row-l"><div class="settings-row-title">Тема оформления</div><div class="settings-row-sub">Цвет фона и изображение</div></div><div class="settings-row-v">›</div></div>
-      </div>
-      
-      <div class="settings-section">
-        <div style="padding:12px 16px 4px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Интерфейс</div>
-        <div id="uiPresetGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 14px 14px"></div>
-      </div>
-      <div class="settings-section">
-        <div style="padding:12px 16px 8px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Анимация фона</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px">
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('none')">Нет</button>
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('grid')">▦ Сетка</button>
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('dots')">··· Точки</button>
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('snow')">❄ Снег</button>
-        </div>
-      </div>
-      <div class="settings-section">
-        <div style="padding:12px 16px 8px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Достижения</div>
-        <div class="ach-grid" id="setAchievements" style="padding:0 14px 14px"></div>
-      </div>
 
-      
-      <div class="settings-section">
-        <div class="settings-row">
-          <div class="settings-row-l"><div class="settings-row-title">Скрыть балансы</div><div class="settings-row-sub">Режим приватности (••••)</div></div>
-          <div class="toggle" id="privacyToggle" onclick="togglePrivacy()"><div class="toggle-k"></div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">⚙️ Настройки</div><div class="ph-sub">Профиль, безопасность, оформление</div></div></div></div>
+      <div class="set-wrap">
+
+        <div class="set-card">
+          <div class="set-card-head">
+            <div>
+              <div class="set-name" id="setUname">—</div>
+              <div class="set-code" id="setCode">BV-??????</div>
+            </div>
+            <div id="setRoleBadge"></div>
+          </div>
+          <button type="button" class="set-link" data-sheet="sheetEditProfile">
+            <span class="set-link-ico">✏️</span>
+            <span class="set-link-txt"><b>Редактировать профиль</b><small>Ник, описание, баннер</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" data-sheet="sheetAvatar">
+            <span class="set-link-ico">🖼</span>
+            <span class="set-link-txt"><b>Аватар</b><small>Загрузить или выбрать</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" data-sheet="sheetSocials">
+            <span class="set-link-ico">📱</span>
+            <span class="set-link-txt"><b>Telegram / Discord</b><small id="setSocialsHint">Не привязано</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
         </div>
-        <div class="settings-row clickable" onclick="claimDailyBonus()">
-          <div class="settings-row-l"><div class="settings-row-title">🎁 Ежедневный бонус</div><div class="settings-row-sub" id="dailyBonusHint">+5 ₴ раз в сутки</div></div>
-          <div class="settings-row-v">›</div>
+
+        <div class="set-card">
+          <div class="set-label">Безопасность</div>
+          <div class="set-row">
+            <div class="set-row-txt"><b>PIN-код при входе</b><small>Блокировка при запуске</small></div>
+            <div class="toggle" id="pinToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+          </div>
+          <div class="set-row" id="pinSetRow" style="display:none">
+            <div class="set-row-txt" style="width:100%">
+              <b>Установить PIN</b>
+              <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+                <input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:110px;padding:9px 12px"/>
+                <button class="btn btn-primary btn-sm" type="button" id="btnSetPin">Сохранить</button>
+              </div>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-row-txt"><b>Скрыть балансы</b><small>Режим приватности (••••)</small></div>
+            <div class="toggle" id="privacyToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+          </div>
         </div>
-        <div class="settings-row clickable" onclick="copyReferral()">
-          <div class="settings-row-l"><div class="settings-row-title">🔗 Реферальная ссылка</div><div class="settings-row-sub">Пригласи друга</div></div>
-          <div class="settings-row-v">📋</div>
+
+        <div class="set-card">
+          <div class="set-label">Оформление</div>
+          <button type="button" class="set-link" data-sheet="sheetTheme">
+            <span class="set-link-ico">🎨</span>
+            <span class="set-link-txt"><b>Тема оформления</b><small>Цвет фона и изображение</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <div class="set-label" style="margin-top:8px">Интерфейс</div>
+          <div id="uiPresetGrid" class="ui-preset-grid"></div>
+          <div class="set-label" style="margin-top:8px">Анимация фона</div>
+          <div class="fx-btns">
+            <button type="button" class="fx-btn" data-fx="none">Нет</button>
+            <button type="button" class="fx-btn" data-fx="grid">▦ Сетка</button>
+            <button type="button" class="fx-btn" data-fx="dots">··· Точки</button>
+            <button type="button" class="fx-btn" data-fx="snow">❄ Снег</button>
+          </div>
         </div>
-      </div>
-<div class="settings-section">
-        <div class="settings-row clickable" id="btnLogoutSettings" onclick="doLogout()">
-          <div class="settings-row-l"><div class="settings-row-title">Выйти из аккаунта</div><div class="settings-row-sub">Завершить сессию</div></div>
-          <div class="settings-row-v">🚪</div>
+
+        <div class="set-card">
+          <div class="set-label">Дополнительно</div>
+          <button type="button" class="set-link" id="btnDailyBonus">
+            <span class="set-link-ico">🎁</span>
+            <span class="set-link-txt"><b>Ежедневный бонус</b><small id="dailyBonusHint">+5 ₴ раз в сутки</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" id="btnCopyRef">
+            <span class="set-link-ico">🔗</span>
+            <span class="set-link-txt"><b>Реферальная ссылка</b><small>Пригласи друга</small></span>
+            <span class="set-link-arr">📋</span>
+          </button>
+          <div id="setAchievements"></div>
         </div>
-        <div class="settings-row clickable" onclick="openSheet('sheetAccounts')">
-          <div class="settings-row-l"><div class="settings-row-title">Аккаунты</div><div class="settings-row-sub">Переключение между профилями</div></div>
-          <div class="settings-row-v">›</div>
+
+        <div class="set-card">
+          <div class="set-label">Аккаунт</div>
+          <button type="button" class="set-link danger" id="btnSettingsLogout">
+            <span class="set-link-ico">🚪</span>
+            <span class="set-link-txt"><b>Выйти из аккаунта</b><small>Завершить сессию</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" data-sheet="sheetAccounts">
+            <span class="set-link-ico">👥</span>
+            <span class="set-link-txt"><b>Аккаунты</b><small>Переключение между профилями</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
         </div>
-      </div>
-<div class="settings-section">
-        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" style="color:#FF8FA3">Удалить аккаунт</div><div class="settings-row-sub">Необратимое действие</div></div><button class="btn btn-danger btn-sm" id="btnDeleteSelf">Удалить</button></div>
+
       </div>
     </div>
+
 
   </div>
 </div>
@@ -850,6 +888,7 @@
     </div>
   </div>
 </div>
+
 
 <script type="module" src="app.js"></script>
 </body>
