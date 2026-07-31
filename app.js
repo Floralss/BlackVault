@@ -2209,13 +2209,19 @@ window.applyUiPreset = function(key){
   renderUiPresets(); toast('Тема: '+p.name,'s');
 };
 function renderUiPresets(){
-  const el=document.getElementById('uiPresetGrid'); if(!el) return;
-  const cur=localStorage.getItem('bv_ui_preset')||'classic';
-  el.innerHTML=Object.entries(UI_PRESETS).map(([k,p])=>`<button type="button" class="method-opt ${cur===k?'on':''}" onclick="applyUiPreset('${k}')" style="flex-direction:column;align-items:flex-start;gap:6px;padding:10px">
-    <span style="display:flex;gap:4px"><i style="width:12px;height:12px;border-radius:3px;background:${p.bg};border:1px solid #666;display:inline-block"></i>
-    <i style="width:12px;height:12px;border-radius:3px;background:${p.btn1};display:inline-block"></i>
-    <i style="width:12px;height:12px;border-radius:3px;background:${p.btn2};display:inline-block"></i></span>
-    <span style="font-size:12px;font-weight:700">${p.name}</span></button>`).join('');
+  const el = document.getElementById('uiPresetGrid');
+  if(!el) return;
+  const cur = localStorage.getItem('bv_ui_preset') || 'classic';
+  el.innerHTML = Object.entries(UI_PRESETS).map(([k,p]) =>
+    `<button type="button" class="ui-chip ${cur===k?'on':''}" data-preset="${k}">
+      <span class="ui-chip-dots">
+        <i style="background:${p.bg}"></i>
+        <i style="background:${p.btn1}"></i>
+        <i style="background:${p.btn2}"></i>
+      </span>
+      <span class="ui-chip-name">${p.name}</span>
+    </button>`
+  ).join('');
 }
 window.setBgFx=function(type){
   localStorage.setItem('bv_bg_fx',type);
@@ -2790,4 +2796,62 @@ setTimeout(function(){
 }, 500);
 
 console.log('[BV] settings handlers ready', typeof openSheet, typeof setBgFx, typeof applyUiPreset);
+
+
+
+// ===== SETTINGS BIND v11 =====
+(function bindSettings(){
+  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn); else fn(); }
+  ready(function(){
+    // Sheets via data-sheet
+    document.querySelectorAll('[data-sheet]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        const id = btn.getAttribute('data-sheet');
+        if(typeof openSheet==='function') openSheet(id);
+        else console.warn('openSheet missing', id);
+      });
+    });
+    // Theme presets (delegated)
+    document.getElementById('uiPresetGrid')?.addEventListener('click', function(e){
+      const chip = e.target.closest('[data-preset]');
+      if(!chip) return;
+      const key = chip.getAttribute('data-preset');
+      if(typeof applyUiPreset==='function') applyUiPreset(key);
+    });
+    // BG fx
+    document.querySelectorAll('[data-fx]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const t = btn.getAttribute('data-fx');
+        if(typeof setBgFx==='function') setBgFx(t);
+        document.querySelectorAll('[data-fx]').forEach(b=>b.classList.toggle('on', b.getAttribute('data-fx')===t));
+      });
+    });
+    // Toggles
+    document.getElementById('pinToggle')?.addEventListener('click', function(){
+      if(typeof togglePin==='function') togglePin();
+    });
+    document.getElementById('privacyToggle')?.addEventListener('click', function(){
+      if(typeof togglePrivacy==='function') togglePrivacy();
+    });
+    document.getElementById('btnDailyBonus')?.addEventListener('click', function(){
+      if(typeof claimDailyBonus==='function') claimDailyBonus();
+    });
+    document.getElementById('btnCopyRef')?.addEventListener('click', function(){
+      if(typeof copyReferral==='function') copyReferral();
+    });
+    document.getElementById('btnSettingsLogout')?.addEventListener('click', async function(){
+      try{
+        if(typeof signOut==='function') await signOut(auth);
+        else if(auth) await signOut(auth);
+        if(typeof toast==='function') toast('Вышли из аккаунта','i');
+      }catch(err){ if(typeof toast==='function') toast(err.message||'Ошибка','e'); }
+    });
+    // mark current fx
+    const curFx = localStorage.getItem('bv_bg_fx')||'none';
+    document.querySelectorAll('[data-fx]').forEach(b=>b.classList.toggle('on', b.getAttribute('data-fx')===curFx));
+    try{ renderUiPresets(); }catch(e){}
+    console.log('[BV] settings bind v11 ok');
+  });
+})();
 
