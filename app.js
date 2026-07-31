@@ -3160,3 +3160,32 @@ console.log('[BV] hard fix v13');
   else bind();
   setTimeout(bind, 800);
 })();
+
+// AUTH + ACH v16
+document.querySelectorAll('.pass-eye').forEach(btn=>{
+  btn.addEventListener('click',()=>{
+    const id=btn.getAttribute('data-for');
+    const inp=document.getElementById(id);
+    if(!inp) return;
+    inp.type = inp.type==='password' ? 'text' : 'password';
+  });
+});
+document.getElementById('formLogin')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('btnLogin')?.click();
+});
+document.getElementById('formReg')?.addEventListener('submit', e=>{
+  e.preventDefault();
+  document.getElementById('btnReg')?.click();
+});
+// Force achievements when settings visible
+setInterval(()=>{
+  try{
+    const pg=document.getElementById('pgSettings');
+    const el=document.getElementById('setAchievements');
+    if(pg&&pg.classList.contains('on')&&el&&!el.children.length&&typeof renderAchievements==='function'){
+      renderAchievements('setAchievements', typeof UD!=='undefined'?UD:null);
+    }
+  }catch(e){}
+}, 2000);
+console.log('[BV] auth+ach v16');
