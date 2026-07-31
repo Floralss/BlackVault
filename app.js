@@ -6,8 +6,24 @@ import {
   signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
-  getFirestore, doc, getDoc, setDoc, updateDoc, deleteDoc, collection, addDoc,
-  query, where, getDocs, limit, serverTimestamp, arrayUnion, increment, writeBatch, onSnapshot
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc,
+  deleteDoc,
+  collection,
+  addDoc,
+  query,
+  where,
+  getDocs,
+  limit,
+  serverTimestamp,
+  arrayUnion,
+  increment,
+  writeBatch,
+  onSnapshot,
+  orderBy
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
 
 
@@ -800,9 +816,16 @@ window.showProfile = async function (uid) {
 // ═══ SHOP (via Cloud Functions) ═══
 function renderColorPicker(elId, colors, onSelect) {
   const el = document.getElementById(elId);
-  el.innerHTML = colors.map((c, i) => `<div class="swatch${i === 0 ? ' sel' : ''}" style="background:${c.v}" data-c="${c.v}" title="${c.n}"></div>`).join('');
-  el.querySelectorAll('.swatch').forEach(s => s.addEventListener('click', () => { el.querySelectorAll('.swatch').forEach(x => x.classList.remove('sel')); s.classList.add('sel'); onSelect(s.getAttribute('data-c')); }));
+  if (!el) return;
+  el.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;max-width:100%';
+  el.innerHTML = colors.map((c, i) => '<div class="swatch'+(i===0?' sel':'')+'" style="background:'+c.v+';width:32px;height:32px;border-radius:10px;cursor:pointer;flex-shrink:0" data-c="'+c.v+'" title="'+(c.n||'')+'"></div>').join('');
+  el.querySelectorAll('.swatch').forEach(s => s.addEventListener('click', () => {
+    el.querySelectorAll('.swatch').forEach(x => x.classList.remove('sel'));
+    s.classList.add('sel');
+    if (onSelect) onSelect(s.getAttribute('data-c'));
+  }));
 }
+window.renderColorPicker = renderColorPicker;
 function renderPayRow(elId, uahPrice, onSelect) {
   const el = document.getElementById(elId);
   el.innerHTML = PAY_CURRENCIES.map((cur, i) => { const amt = cur === 'UAH' ? uahPrice : (uahPrice / RATES.UAH) * RATES.USD / RATES[cur]; return `<div class="curr-pay-opt${i === 0 ? ' sel' : ''}" data-cur="${cur}">${cur}<br><span style="font-size:11px;font-weight:600;color:var(--c-text2)">${fmtBal(amt, cur)}</span></div>`; }).join('');
@@ -2855,3 +2878,148 @@ console.log('[BV] settings handlers ready', typeof openSheet, typeof setBgFx, ty
   });
 })();
 
+
+// ===== GLOBAL EXPORTS v12 =====
+window.togglePin = function(){
+  const row = document.getElementById('pinSetRow');
+  const tog = document.getElementById('pinToggle');
+  if (localStorage.getItem('bv_pin')) {
+    localStorage.removeItem('bv_pin');
+    tog && tog.classList.remove('on');
+    if(row) row.style.display = 'none';
+    if(typeof toast==='function') toast('PIN отключён','i');
+  } else {
+    if(row) row.style.display = 'block';
+    tog && tog.classList.add('on');
+  }
+};
+window.togglePrivacy = function(){
+  const on = localStorage.getItem('bv_privacy') === '1';
+  localStorage.setItem('bv_privacy', on ? '0' : '1');
+  const t = document.getElementById('privacyToggle');
+  if(t) t.classList.toggle('on', !on);
+  if(typeof toast==='function') toast(!on ? 'Балансы скрыты' : 'Балансы видны','i');
+  if(on) setTimeout(()=>location.reload(), 400);
+};
+window.claimDailyBonus = async function(){
+  if(typeof CU==='undefined'||!CU) return toast('Войдите','e');
+  const key = 'bv_daily_'+CU.uid;
+  const last = parseInt(localStorage.getItem(key)||'0',10);
+  if(Date.now()-last < 86400000) return toast('Уже получено сегодня','w');
+  try{
+    await updateDoc(doc(db,'wallets',CU.uid),{'balances.UAH':increment(5)});
+    localStorage.setItem(key, String(Date.now()));
+    toast('🎁 +5 ₴ начислено!','s');
+  }catch(e){ console.error(e); toast(e.message||'Ошибка бонуса','e'); }
+};
+window.copyReferral = function(){
+  if(typeof UD==='undefined'||!UD) return toast('Войдите','e');
+  const link = location.href.split('?')[0] + '?ref=' + encodeURIComponent(UD.code||UD.username||'');
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(link).then(()=>toast('Реферал скопирован!','s')).catch(()=>prompt('Ссылка:', link));
+  } else prompt('Ссылка:', link);
+};
+window.doLogout = async function(){
+  try{
+    await signOut(auth);
+    toast('Вышли из аккаунта','i');
+  }catch(e){ toast(e.message||'Ошибка','e'); }
+};
+document.addEventListener('click', function(e){
+  const sheetBtn = e.target.closest('[data-sheet]');
+  if(sheetBtn){ e.preventDefault(); openSheet(sheetBtn.getAttribute('data-sheet')); return; }
+  if(e.target.closest('#btnSettingsLogout') || (e.target.closest('#btnLogout') && e.target.closest('.set-link, .sb-logout, #btnLogout'))){
+    if(e.target.closest('#btnSettingsLogout') || e.target.id==='btnLogout' || e.target.closest('#btnLogout')){
+      e.preventDefault(); doLogout(); return;
+    }
+  }
+  if(e.target.closest('#btnDailyBonus')){ e.preventDefault(); claimDailyBonus(); return; }
+  if(e.target.closest('#btnCopyRef')){ e.preventDefault(); copyReferral(); return; }
+  if(e.target.closest('#privacyToggle')){ e.preventDefault(); togglePrivacy(); return; }
+  if(e.target.closest('#pinToggle')){ e.preventDefault(); togglePin(); return; }
+  const preset = e.target.closest('[data-preset]');
+  if(preset && typeof applyUiPreset==='function'){ applyUiPreset(preset.getAttribute('data-preset')); return; }
+  const fx = e.target.closest('[data-fx]');
+  if(fx && typeof setBgFx==='function'){ setBgFx(fx.getAttribute('data-fx')); return; }
+});
+document.getElementById('btnSetPin') && document.getElementById('btnSetPin').addEventListener('click', function(){
+  const p = (document.getElementById('newPinIn')||{}).value||'';
+  if(!/^\d{4}$/.test(p)) return toast('Введите 4 цифры','w');
+  localStorage.setItem('bv_pin', p);
+  document.getElementById('pinToggle') && document.getElementById('pinToggle').classList.add('on');
+  const row = document.getElementById('pinSetRow'); if(row) row.style.display='none';
+  toast('PIN сохранён','s');
+});
+console.log('[BV] exports v12 ready');
+
+// Admin extras v12
+window.admTab = function(t){
+  const map = {wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze'};
+  Object.keys(map).forEach(k=>{
+    const el=document.getElementById(map[k]);
+    if(el) el.style.display = (k===t)?'block':'none';
+  });
+  document.querySelectorAll('#adminTabs .btn').forEach(b=>{ b.className='btn btn-secondary btn-sm'; });
+  if(t==='achievements') adminLoadAchievements();
+};
+window.adminCreateAchievement = async function(){
+  const id=(document.getElementById('achNewId')||{}).value.trim();
+  const title=(document.getElementById('achNewTitle')||{}).value.trim();
+  const icon=(document.getElementById('achNewIcon')||{}).value.trim()||'🏆';
+  const desc=(document.getElementById('achNewDesc')||{}).value.trim();
+  if(!id||!title) return toast('ID и название','w');
+  try{ await setDoc(doc(db,'achievements',id),{id,title,icon,desc,createdAt:serverTimestamp()}); toast('Создано','s'); adminLoadAchievements(); }
+  catch(e){ toast(e.message,'e'); }
+};
+window.adminGiveAchievement = async function(){
+  const user=(document.getElementById('achGiveUser')||{}).value.trim();
+  const achId=(document.getElementById('achGiveId')||{}).value.trim();
+  if(!user||!achId) return toast('Заполните','w');
+  try{
+    const w = await findWalletByCodeOrName(user);
+    if(!w) return toast('Не найден','e');
+    const achs = w.data.achievements||[];
+    if(!achs.includes(achId)) achs.push(achId);
+    await updateDoc(doc(db,'wallets',w.id),{achievements:achs});
+    toast('Выдано','s');
+  }catch(e){ toast(e.message,'e'); }
+};
+window.adminLoadAchievements = async function(){
+  const el=document.getElementById('achAdminList'); if(!el) return;
+  try{
+    const snap=await getDocs(collection(db,'achievements'));
+    if(snap.empty){ el.innerHTML='<div style="opacity:.6">Пусто</div>'; return; }
+    el.innerHTML=snap.docs.map(d=>{const a=d.data();return '<div style="padding:8px 0;border-bottom:1px solid rgba(255,255,255,.06)"><b>'+(a.icon||'🏆')+' '+(a.title||d.id)+'</b><div style="font-size:12px;color:var(--c-text2)">'+(a.desc||'')+' · '+d.id+'</div></div>';}).join('');
+  }catch(e){ el.textContent=e.message; }
+};
+window.adminBroadcast = async function(){
+  const title=(document.getElementById('bcTitle')||{}).value.trim();
+  const body=(document.getElementById('bcBody')||{}).value.trim();
+  if(!title||!body) return toast('Заполните','w');
+  try{ await addDoc(collection(db,'broadcasts'),{title,body,createdAt:serverTimestamp(),by:CU&&CU.uid}); toast('Сохранено','s'); }
+  catch(e){ toast(e.message,'e'); }
+};
+window.adminFreeze = async function(freeze){
+  const user=(document.getElementById('fzUser')||{}).value.trim();
+  const reason=(document.getElementById('fzReason')||{}).value.trim();
+  if(!user) return toast('Укажите пользователя','w');
+  try{
+    const w=await findWalletByCodeOrName(user);
+    if(!w) return toast('Не найден','e');
+    await updateDoc(doc(db,'wallets',w.id),{frozen:!!freeze,freezeReason:reason||null});
+    toast(freeze?'Заморожен':'Разморожен','s');
+  }catch(e){ toast(e.message,'e'); }
+};
+window.findWalletByCodeOrName = async function(q){
+  q=(q||'').trim(); if(!q) return null;
+  try{
+    let snap=await getDocs(query(collection(db,'wallets'),where('code','==',q),limit(1)));
+    if(!snap.empty) return {id:snap.docs[0].id,data:snap.docs[0].data()};
+    snap=await getDocs(query(collection(db,'wallets'),where('username','==',q),limit(1)));
+    if(!snap.empty) return {id:snap.docs[0].id,data:snap.docs[0].data()};
+    const code=q.toUpperCase().startsWith('BV-')?q.toUpperCase():('BV-'+q.toUpperCase());
+    snap=await getDocs(query(collection(db,'wallets'),where('code','==',code),limit(1)));
+    if(!snap.empty) return {id:snap.docs[0].id,data:snap.docs[0].data()};
+  }catch(e){ console.error(e); }
+  return null;
+};
