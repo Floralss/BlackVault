@@ -704,6 +704,91 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 .toggle-k{width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:transform .2s;box-shadow:0 2px 6px rgba(0,0,0,.3)}
 .toggle.on .toggle-k{transform:translateX(18px)}
 
+/* ===== SETTINGS LAYOUT v11 ===== */
+.set-wrap{padding:0 16px 28px;max-width:720px}
+.set-card{
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:16px;
+  padding:6px 8px;
+  margin-bottom:14px;
+}
+.set-card-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:12px 10px 10px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  margin-bottom:4px;
+}
+.set-name{font-size:16px;font-weight:800;color:var(--c-text);line-height:1.2}
+.set-code{font-size:12px;color:var(--c-text2);margin-top:3px;font-family:ui-monospace,monospace}
+.set-label{
+  font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;
+  color:var(--c-text3);padding:10px 10px 4px;
+}
+.set-link{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:12px 10px;border:none;background:transparent;
+  border-radius:12px;cursor:pointer;text-align:left;
+  color:var(--c-text);transition:background .15s;
+  font-family:inherit;
+}
+.set-link:hover{background:rgba(255,255,255,.05)}
+.set-link.danger .set-link-txt b{color:#FF6B7A}
+.set-link-ico{
+  width:36px;height:36px;border-radius:10px;
+  background:rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;flex-shrink:0;
+}
+.set-link-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.set-link-txt b{font-size:14px;font-weight:700;line-height:1.25}
+.set-link-txt small{font-size:12px;color:var(--c-text2);font-weight:500;line-height:1.3}
+.set-link-arr{color:var(--c-text3);font-size:18px;flex-shrink:0;padding:0 4px}
+.set-row{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:12px;padding:12px 10px;
+}
+.set-row-txt{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.set-row-txt b{font-size:14px;font-weight:700;color:var(--c-text)}
+.set-row-txt small{font-size:12px;color:var(--c-text2)}
+
+.ui-preset-grid{
+  display:grid;grid-template-columns:1fr 1fr;gap:8px;
+  padding:6px 8px 10px;
+}
+.ui-chip{
+  display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  padding:12px;border-radius:12px;cursor:pointer;
+  background:rgba(255,255,255,.03);
+  border:1.5px solid rgba(255,255,255,.1);
+  color:var(--c-text);font-family:inherit;text-align:left;
+  transition:border-color .15s, background .15s;
+}
+.ui-chip:hover{background:rgba(255,255,255,.06)}
+.ui-chip.on{border-color:var(--btn1);background:rgba(124,92,252,.12);box-shadow:0 0 0 1px var(--btn1)}
+.ui-chip-dots{display:flex;gap:5px}
+.ui-chip-dots i{width:14px;height:14px;border-radius:4px;display:block;border:1px solid rgba(255,255,255,.15)}
+.ui-chip-name{font-size:13px;font-weight:700}
+
+.fx-btns{display:flex;flex-wrap:wrap;gap:6px;padding:4px 8px 12px}
+.fx-btn{
+  padding:8px 12px;border-radius:10px;cursor:pointer;
+  background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);
+  color:var(--c-text);font-size:12px;font-weight:700;font-family:inherit;
+}
+.fx-btn:hover{background:rgba(255,255,255,.08)}
+.fx-btn.on{border-color:var(--btn1);background:rgba(124,92,252,.15);color:#fff}
+
+.toggle{width:48px;height:28px;border-radius:14px;background:rgba(255,255,255,.12);position:relative;cursor:pointer;flex-shrink:0;transition:background .2s}
+.toggle.on{background:var(--btn1)}
+.toggle-k{width:22px;height:22px;border-radius:50%;background:#fff;position:absolute;top:3px;left:3px;transition:transform .2s;box-shadow:0 2px 6px rgba(0,0,0,.35)}
+.toggle.on .toggle-k{transform:translateX(20px)}
+
+@media(max-width:900px){
+  .set-wrap{padding:0 12px 24px}
+  .ui-preset-grid{grid-template-columns:1fr 1fr}
+}
+
 </style>
 </head>
 <body>
@@ -1252,68 +1337,106 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
       </div>
     </div>
     <div class="page" id="pgSettings">
-      <div class="ph"><div class="ph-top"><div><div class="ph-title">⚙️ Настройки</div></div></div></div>
-      <div class="settings-section">
-        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" id="setUname">—</div><div class="settings-row-sub" id="setCode">BV-??????</div></div><div id="setRoleBadge"></div></div>
-        <div class="settings-row clickable" onclick="openSheet('sheetEditProfile')"><div class="settings-row-l"><div class="settings-row-title">Редактировать профиль</div><div class="settings-row-sub">Ник, описание, баннер</div></div><div class="settings-row-v">›</div></div>
-        <div class="settings-row clickable" onclick="openSheet('sheetAvatar')"><div class="settings-row-l"><div class="settings-row-title">Аватар</div><div class="settings-row-sub">Загрузить или выбрать из истории</div></div><div class="settings-row-v">›</div></div>
-        <div class="settings-row clickable" onclick="openSheet('sheetSocials')"><div class="settings-row-l"><div class="settings-row-title">Telegram / Discord</div><div class="settings-row-sub" id="setSocialsHint">Не привязано</div></div><div class="settings-row-v">›</div></div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title">PIN-код при входе</div><div class="settings-row-sub">Блокировка при запуске</div></div><div class="toggle" id="pinToggle" onclick="togglePin()"><div class="toggle-k"></div></div></div>
-        <div class="settings-row" id="pinSetRow" style="display:none"><div class="settings-row-l"><div class="settings-row-title">Установить PIN</div><div style="display:flex;gap:8px;margin-top:9px"><input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:120px;padding:9px 12px"/><button class="btn btn-primary btn-sm" id="btnSetPin">Сохранить</button></div></div></div>
-      </div>
-      <div class="settings-section">
-        <div class="settings-row clickable" onclick="openSheet('sheetTheme')"><div class="settings-row-l"><div class="settings-row-title">Тема оформления</div><div class="settings-row-sub">Цвет фона и изображение</div></div><div class="settings-row-v">›</div></div>
-      </div>
-      
-      <div class="settings-section">
-        <div style="padding:12px 16px 4px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Интерфейс</div>
-        <div id="uiPresetGrid" style="display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:8px 14px 14px"></div>
-      </div>
-      <div class="settings-section">
-        <div style="padding:12px 16px 8px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Анимация фона</div>
-        <div style="display:flex;flex-wrap:wrap;gap:6px;padding:0 14px 14px">
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('none')">Нет</button>
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('grid')">▦ Сетка</button>
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('dots')">··· Точки</button>
-          <button class="btn btn-secondary btn-xs" type="button" onclick="setBgFx('snow')">❄ Снег</button>
-        </div>
-      </div>
-      <div class="settings-section">
-        <div style="padding:12px 16px 8px;font-size:11px;font-weight:800;color:var(--c-text3);text-transform:uppercase">Достижения</div>
-        <div class="ach-grid" id="setAchievements" style="padding:0 14px 14px"></div>
-      </div>
 
-      
-      <div class="settings-section">
-        <div class="settings-row">
-          <div class="settings-row-l"><div class="settings-row-title">Скрыть балансы</div><div class="settings-row-sub">Режим приватности (••••)</div></div>
-          <div class="toggle" id="privacyToggle" onclick="togglePrivacy()"><div class="toggle-k"></div></div>
+      <div class="ph"><div class="ph-top"><div><div class="ph-title">⚙️ Настройки</div><div class="ph-sub">Профиль, безопасность, оформление</div></div></div></div>
+      <div class="set-wrap">
+
+        <div class="set-card">
+          <div class="set-card-head">
+            <div>
+              <div class="set-name" id="setUname">—</div>
+              <div class="set-code" id="setCode">BV-??????</div>
+            </div>
+            <div id="setRoleBadge"></div>
+          </div>
+          <button type="button" class="set-link" data-sheet="sheetEditProfile">
+            <span class="set-link-ico">✏️</span>
+            <span class="set-link-txt"><b>Редактировать профиль</b><small>Ник, описание, баннер</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" data-sheet="sheetAvatar">
+            <span class="set-link-ico">🖼</span>
+            <span class="set-link-txt"><b>Аватар</b><small>Загрузить или выбрать</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" data-sheet="sheetSocials">
+            <span class="set-link-ico">📱</span>
+            <span class="set-link-txt"><b>Telegram / Discord</b><small id="setSocialsHint">Не привязано</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
         </div>
-        <div class="settings-row clickable" onclick="claimDailyBonus()">
-          <div class="settings-row-l"><div class="settings-row-title">🎁 Ежедневный бонус</div><div class="settings-row-sub" id="dailyBonusHint">+5 ₴ раз в сутки</div></div>
-          <div class="settings-row-v">›</div>
+
+        <div class="set-card">
+          <div class="set-label">Безопасность</div>
+          <div class="set-row">
+            <div class="set-row-txt"><b>PIN-код при входе</b><small>Блокировка при запуске</small></div>
+            <div class="toggle" id="pinToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+          </div>
+          <div class="set-row" id="pinSetRow" style="display:none">
+            <div class="set-row-txt" style="width:100%">
+              <b>Установить PIN</b>
+              <div style="display:flex;gap:8px;margin-top:8px;align-items:center">
+                <input class="form-input" id="newPinIn" type="password" maxlength="4" placeholder="4 цифры" style="width:110px;padding:9px 12px"/>
+                <button class="btn btn-primary btn-sm" type="button" id="btnSetPin">Сохранить</button>
+              </div>
+            </div>
+          </div>
+          <div class="set-row">
+            <div class="set-row-txt"><b>Скрыть балансы</b><small>Режим приватности (••••)</small></div>
+            <div class="toggle" id="privacyToggle" role="button" tabindex="0"><div class="toggle-k"></div></div>
+          </div>
         </div>
-        <div class="settings-row clickable" onclick="copyReferral()">
-          <div class="settings-row-l"><div class="settings-row-title">🔗 Реферальная ссылка</div><div class="settings-row-sub">Пригласи друга</div></div>
-          <div class="settings-row-v">📋</div>
+
+        <div class="set-card">
+          <div class="set-label">Оформление</div>
+          <button type="button" class="set-link" data-sheet="sheetTheme">
+            <span class="set-link-ico">🎨</span>
+            <span class="set-link-txt"><b>Тема оформления</b><small>Цвет фона и изображение</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <div class="set-label" style="margin-top:8px">Интерфейс</div>
+          <div id="uiPresetGrid" class="ui-preset-grid"></div>
+          <div class="set-label" style="margin-top:8px">Анимация фона</div>
+          <div class="fx-btns">
+            <button type="button" class="fx-btn" data-fx="none">Нет</button>
+            <button type="button" class="fx-btn" data-fx="grid">▦ Сетка</button>
+            <button type="button" class="fx-btn" data-fx="dots">··· Точки</button>
+            <button type="button" class="fx-btn" data-fx="snow">❄ Снег</button>
+          </div>
         </div>
-      </div>
-<div class="settings-section">
-        <div class="settings-row clickable" id="btnLogoutSettings" onclick="doLogout()">
-          <div class="settings-row-l"><div class="settings-row-title">Выйти из аккаунта</div><div class="settings-row-sub">Завершить сессию</div></div>
-          <div class="settings-row-v">🚪</div>
+
+        <div class="set-card">
+          <div class="set-label">Дополнительно</div>
+          <button type="button" class="set-link" id="btnDailyBonus">
+            <span class="set-link-ico">🎁</span>
+            <span class="set-link-txt"><b>Ежедневный бонус</b><small id="dailyBonusHint">+5 ₴ раз в сутки</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" id="btnCopyRef">
+            <span class="set-link-ico">🔗</span>
+            <span class="set-link-txt"><b>Реферальная ссылка</b><small>Пригласи друга</small></span>
+            <span class="set-link-arr">📋</span>
+          </button>
+          <div id="setAchievements"></div>
         </div>
-        <div class="settings-row clickable" onclick="openSheet('sheetAccounts')">
-          <div class="settings-row-l"><div class="settings-row-title">Аккаунты</div><div class="settings-row-sub">Переключение между профилями</div></div>
-          <div class="settings-row-v">›</div>
+
+        <div class="set-card">
+          <div class="set-label">Аккаунт</div>
+          <button type="button" class="set-link danger" id="btnSettingsLogout">
+            <span class="set-link-ico">🚪</span>
+            <span class="set-link-txt"><b>Выйти из аккаунта</b><small>Завершить сессию</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
+          <button type="button" class="set-link" data-sheet="sheetAccounts">
+            <span class="set-link-ico">👥</span>
+            <span class="set-link-txt"><b>Аккаунты</b><small>Переключение между профилями</small></span>
+            <span class="set-link-arr">›</span>
+          </button>
         </div>
-      </div>
-<div class="settings-section">
-        <div class="settings-row"><div class="settings-row-l"><div class="settings-row-title" style="color:#FF8FA3">Удалить аккаунт</div><div class="settings-row-sub">Необратимое действие</div></div><button class="btn btn-danger btn-sm" id="btnDeleteSelf">Удалить</button></div>
+
       </div>
     </div>
+
 
   </div>
 </div>
@@ -1548,6 +1671,7 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
     </div>
   </div>
 </div>
+
 
 <script type="module">
 
@@ -3761,13 +3885,19 @@ window.applyUiPreset = function(key){
   renderUiPresets(); toast('Тема: '+p.name,'s');
 };
 function renderUiPresets(){
-  const el=document.getElementById('uiPresetGrid'); if(!el) return;
-  const cur=localStorage.getItem('bv_ui_preset')||'classic';
-  el.innerHTML=Object.entries(UI_PRESETS).map(([k,p])=>`<button type="button" class="method-opt ${cur===k?'on':''}" onclick="applyUiPreset('${k}')" style="flex-direction:column;align-items:flex-start;gap:6px;padding:10px">
-    <span style="display:flex;gap:4px"><i style="width:12px;height:12px;border-radius:3px;background:${p.bg};border:1px solid #666;display:inline-block"></i>
-    <i style="width:12px;height:12px;border-radius:3px;background:${p.btn1};display:inline-block"></i>
-    <i style="width:12px;height:12px;border-radius:3px;background:${p.btn2};display:inline-block"></i></span>
-    <span style="font-size:12px;font-weight:700">${p.name}</span></button>`).join('');
+  const el = document.getElementById('uiPresetGrid');
+  if(!el) return;
+  const cur = localStorage.getItem('bv_ui_preset') || 'classic';
+  el.innerHTML = Object.entries(UI_PRESETS).map(([k,p]) =>
+    `<button type="button" class="ui-chip ${cur===k?'on':''}" data-preset="${k}">
+      <span class="ui-chip-dots">
+        <i style="background:${p.bg}"></i>
+        <i style="background:${p.btn1}"></i>
+        <i style="background:${p.btn2}"></i>
+      </span>
+      <span class="ui-chip-name">${p.name}</span>
+    </button>`
+  ).join('');
 }
 window.setBgFx=function(type){
   localStorage.setItem('bv_bg_fx',type);
@@ -4342,6 +4472,64 @@ setTimeout(function(){
 }, 500);
 
 console.log('[BV] settings handlers ready', typeof openSheet, typeof setBgFx, typeof applyUiPreset);
+
+
+
+// ===== SETTINGS BIND v11 =====
+(function bindSettings(){
+  function ready(fn){ if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',fn); else fn(); }
+  ready(function(){
+    // Sheets via data-sheet
+    document.querySelectorAll('[data-sheet]').forEach(function(btn){
+      btn.addEventListener('click', function(e){
+        e.preventDefault();
+        const id = btn.getAttribute('data-sheet');
+        if(typeof openSheet==='function') openSheet(id);
+        else console.warn('openSheet missing', id);
+      });
+    });
+    // Theme presets (delegated)
+    document.getElementById('uiPresetGrid')?.addEventListener('click', function(e){
+      const chip = e.target.closest('[data-preset]');
+      if(!chip) return;
+      const key = chip.getAttribute('data-preset');
+      if(typeof applyUiPreset==='function') applyUiPreset(key);
+    });
+    // BG fx
+    document.querySelectorAll('[data-fx]').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        const t = btn.getAttribute('data-fx');
+        if(typeof setBgFx==='function') setBgFx(t);
+        document.querySelectorAll('[data-fx]').forEach(b=>b.classList.toggle('on', b.getAttribute('data-fx')===t));
+      });
+    });
+    // Toggles
+    document.getElementById('pinToggle')?.addEventListener('click', function(){
+      if(typeof togglePin==='function') togglePin();
+    });
+    document.getElementById('privacyToggle')?.addEventListener('click', function(){
+      if(typeof togglePrivacy==='function') togglePrivacy();
+    });
+    document.getElementById('btnDailyBonus')?.addEventListener('click', function(){
+      if(typeof claimDailyBonus==='function') claimDailyBonus();
+    });
+    document.getElementById('btnCopyRef')?.addEventListener('click', function(){
+      if(typeof copyReferral==='function') copyReferral();
+    });
+    document.getElementById('btnSettingsLogout')?.addEventListener('click', async function(){
+      try{
+        if(typeof signOut==='function') await signOut(auth);
+        else if(auth) await signOut(auth);
+        if(typeof toast==='function') toast('Вышли из аккаунта','i');
+      }catch(err){ if(typeof toast==='function') toast(err.message||'Ошибка','e'); }
+    });
+    // mark current fx
+    const curFx = localStorage.getItem('bv_bg_fx')||'none';
+    document.querySelectorAll('[data-fx]').forEach(b=>b.classList.toggle('on', b.getAttribute('data-fx')===curFx));
+    try{ renderUiPresets(); }catch(e){}
+    console.log('[BV] settings bind v11 ok');
+  });
+})();
 
 
 </script>
