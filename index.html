@@ -44,9 +44,16 @@
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
       <div class="auth-title">Вход</div>
       <div class="auth-sub">Добро пожаловать обратно</div>
-      <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="email"/></div>
-      <div class="form-group"><label class="form-label">Пароль</label><input id="lPass" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password"/></div>
-      <button class="btn btn-primary" id="btnLogin" type="button">Войти</button>
+      <form id="formLogin" autocomplete="on" onsubmit="return false;">
+        <div class="form-group"><label class="form-label">Email</label><input id="lEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="username" required/></div>
+        <div class="form-group"><label class="form-label">Пароль</label>
+          <div class="pass-wrap">
+            <input id="lPass" class="form-input" type="password" placeholder="••••••••" autocomplete="current-password" required/>
+            <button type="button" class="pass-eye" data-for="lPass" aria-label="Показать">👁</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btnLogin" type="submit">Войти</button>
+      </form>
       <div class="divider">или</div>
       <button class="btn btn-google" id="btnGoo1" type="button"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16" alt=""/> Google</button>
       <div class="auth-foot">Нет аккаунта? <a id="toReg" href="javascript:void(0)">Регистрация</a></div>
@@ -56,10 +63,22 @@
     <div class="auth-card">
       <div class="auth-logo"><div class="auth-logo-ico">🔐</div><span class="auth-logo-name">BlackVault</span></div>
       <div class="auth-title">Создать аккаунт</div><div class="auth-sub">Присоединяйтесь к BlackVault</div>
-      <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com"/></div>
-      <div class="form-group"><label class="form-label">Пароль</label><input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов"/></div>
-      <div class="form-group"><label class="form-label">Повтор пароля</label><input id="rPass2" class="form-input" type="password" placeholder="••••••••"/></div>
-      <button class="btn btn-primary" id="btnReg">Создать аккаунт</button>
+      <form id="formReg" autocomplete="on" onsubmit="return false;">
+        <div class="form-group"><label class="form-label">Email</label><input id="rEmail" class="form-input" type="email" placeholder="you@example.com" autocomplete="username" required/></div>
+        <div class="form-group"><label class="form-label">Пароль</label>
+          <div class="pass-wrap">
+            <input id="rPass" class="form-input" type="password" placeholder="Минимум 6 символов" autocomplete="new-password" required minlength="6"/>
+            <button type="button" class="pass-eye" data-for="rPass" aria-label="Показать">👁</button>
+          </div>
+        </div>
+        <div class="form-group"><label class="form-label">Повтор пароля</label>
+          <div class="pass-wrap">
+            <input id="rPass2" class="form-input" type="password" placeholder="••••••••" autocomplete="new-password" required/>
+            <button type="button" class="pass-eye" data-for="rPass2" aria-label="Показать">👁</button>
+          </div>
+        </div>
+        <button class="btn btn-primary" id="btnReg" type="submit">Создать аккаунт</button>
+      </form>
       <div class="divider">или</div>
       <button class="btn btn-google" id="btnGoo2"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="16"/> Google</button>
       <div class="auth-foot">Уже есть аккаунт? <a id="toLg">Войти</a></div>
@@ -697,7 +716,8 @@
             <span class="set-link-txt"><b>Реферальная ссылка</b><small>Пригласи друга</small></span>
             <span class="set-link-arr">📋</span>
           </button>
-          <div id="setAchievements"></div>
+          <div class="set-label" style="margin-top:4px">Достижения</div>
+          <div id="setAchievements" class="ach-grid"></div>
         </div>
 
         <div class="set-card">
@@ -951,6 +971,7 @@
     </div>
   </div>
 </div>
+
 
 
 
