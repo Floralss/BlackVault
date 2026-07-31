@@ -799,3 +799,55 @@ body.fx-dots::before{content:'';position:fixed;inset:0;pointer-events:none;z-ind
 .form-input{background:rgba(255,255,255,.06)!important;border:1px solid rgba(255,255,255,.12)!important;color:var(--c-text)!important;border-radius:12px;padding:12px 14px;font-size:14px;font-weight:600}
 .form-input option{background:#1a1a2e;color:#fff}
 .wh-btn{display:inline-flex;align-items:center;gap:5px;padding:8px 12px;border-radius:10px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.1);font-size:12px;font-weight:700;color:#fff;cursor:pointer;white-space:nowrap}
+
+/* MOBILE NUCLEAR v13 */
+@media (max-width:900px){
+  html,body{
+    background:#0a0a14!important;color:#f0f0ff!important;
+    height:100%!important;min-height:100dvh!important;overflow:hidden!important;
+  }
+  #app{
+    background:#0a0a14!important;color:#f0f0ff!important;
+    opacity:1!important;visibility:visible!important;
+    min-height:100dvh!important;height:100dvh!important;
+    display:flex!important;flex-direction:column!important;
+    padding-bottom:60px!important;position:relative!important;z-index:1!important;
+  }
+  #app[style*="display: none"],#app[style*="display:none"]{display:none!important}
+  #main{
+    background:#0a0a14!important;color:#f0f0ff!important;
+    opacity:1!important;visibility:visible!important;
+    flex:1!important;min-height:0!important;width:100%!important;
+    display:flex!important;flex-direction:column!important;
+    overflow:hidden!important;position:relative!important;z-index:2!important;
+  }
+  .page{display:none!important;background:#0a0a14!important;color:#f0f0ff!important}
+  .page.on{
+    display:flex!important;flex-direction:column!important;
+    opacity:1!important;visibility:visible!important;
+    background:#0a0a14!important;color:#f0f0ff!important;
+    overflow-y:auto!important;flex:1!important;min-height:40vh!important;
+    -webkit-overflow-scrolling:touch!important;
+  }
+  .ph-title,.sec-title,.set-name,.wh-amount,#wBalInt,.asset-name,.tx-who,b,h1,h2,h3{color:#fff!important}
+  .ph-sub,.set-code,.settings-row-sub,small,.sec-link{color:#a0a0c0!important}
+  .sec,.wallet-hero,.shop-item,.set-card{
+    background:rgba(30,30,50,.9)!important;border:1px solid rgba(255,255,255,.12)!important;
+    color:#fff!important;
+  }
+  #sidebar{
+    position:fixed!important;left:0;top:0;bottom:0;width:min(300px,88vw)!important;
+    transform:translateX(-105%)!important;z-index:800!important;
+    background:#0c0c18!important;color:#fff!important;
+  }
+  #sidebar.open{transform:translateX(0)!important}
+  #mobNav{
+    display:flex!important;position:fixed!important;left:0;right:0;bottom:0;
+    z-index:700!important;background:#0c0c18!important;color:#fff!important;
+    border-top:1px solid rgba(255,255,255,.1)!important;
+    padding-bottom:env(safe-area-inset-bottom)!important;
+  }
+  #mobMenuBtn{display:flex!important;z-index:710!important}
+  #loader{background:#0a0a14!important;color:#fff!important}
+  #updateBanner{z-index:600!important}
+}
