@@ -3308,67 +3308,175 @@ console.log('[BV] final v17');
   console.log('[BV] buttons v20');
 })();
 
-// MOBILE TAP FIX v22 — event delegation for all navigation
-(function(){
-  function handleNav(e){
-    try{
-      const t = e.target && e.target.closest ? e.target.closest('[data-goto], .wa[data-goto], .sb-tile[data-goto], .sb-list-item[data-goto], #mobNav [data-goto]') : null;
-      if(t){
-        const id = t.getAttribute('data-goto');
-        if(id){
-          e.preventDefault();
-          e.stopPropagation();
-          // close mobile sidebar
-          document.getElementById('sidebar')?.classList.remove('open');
-          document.getElementById('sbOverlay')?.classList.remove('open');
-          if(typeof window.goto === 'function') window.goto(id);
-          else if(typeof goto === 'function') goto(id);
-          return true;
-        }
-      }
-      const sheet = e.target && e.target.closest ? e.target.closest('[data-sheet]') : null;
-      if(sheet){
-        e.preventDefault();
-        const sid = sheet.getAttribute('data-sheet');
-        if(sid && typeof window.openSheet === 'function') window.openSheet(sid);
-        return true;
-      }
-    }catch(err){ console.error('nav', err); }
-    return false;
-  }
-  document.addEventListener('click', handleNav, true);
-  document.addEventListener('touchend', function(e){
-    // only for nav targets to avoid double-firing with click
-    const t = e.target && e.target.closest ? e.target.closest('[data-goto], [data-sheet]') : null;
-    if(t) handleNav(e);
-  }, {passive:false, capture:true});
 
-  // Clear stuck overlays that block taps
-  function clearBlockers(){
-    try{
-      const app = document.getElementById('app');
-      if(app && app.style.display !== 'none'){
-        const auth = document.getElementById('authScreen');
-        if(auth){ auth.style.display = 'none'; auth.style.pointerEvents = 'none'; }
-        const loader = document.getElementById('loader');
-        if(loader){ loader.style.display = 'none'; loader.style.pointerEvents = 'none'; }
-        document.querySelectorAll('.overlay:not(.on)').forEach(o=>{
-          o.style.pointerEvents = 'none';
-        });
-        const sb = document.getElementById('sbOverlay');
-        if(sb && !sb.classList.contains('open')){
-          sb.style.display = 'none';
-          sb.style.pointerEvents = 'none';
+
+// ═══════════════════════════════════════════
+// MOBILE NAV FIX v23 — reliable taps + goto
+// ═══════════════════════════════════════════
+(function () {
+  function doGoto(id) {
+    if (!id) return;
+    try {
+      var pages = document.querySelectorAll('.page');
+      for (var i = 0; i < pages.length; i++) {
+        pages[i].classList.remove('on');
+        pages[i].style.display = 'none';
+        pages[i].style.opacity = '';
+        pages[i].style.visibility = '';
+      }
+      var pg = document.getElementById(id);
+      if (!pg) {
+        console.warn('[BV] page missing', id);
+        return;
+      }
+      pg.classList.add('on');
+      pg.style.display = 'flex';
+      pg.style.flexDirection = 'column';
+      pg.style.opacity = '1';
+      pg.style.visibility = 'visible';
+      pg.style.overflowY = 'auto';
+      pg.style.webkitOverflowScrolling = 'touch';
+
+      var navs = document.querySelectorAll('[data-goto]');
+      for (var j = 0; j < navs.length; j++) {
+        navs[j].classList.toggle('on', navs[j].getAttribute('data-goto') === id);
+      }
+
+      // close mobile drawer
+      var sb = document.getElementById('sidebar');
+      var ov = document.getElementById('sbOverlay');
+      if (sb) sb.classList.remove('open');
+      if (ov) {
+        ov.classList.remove('open');
+        ov.style.display = 'none';
+        ov.style.pointerEvents = 'none';
+      }
+
+      // ensure app visible
+      var app = document.getElementById('app');
+      if (app && app.style.display !== 'none') {
+        app.style.opacity = '1';
+        app.style.visibility = 'visible';
+      }
+      var main = document.getElementById('main');
+      if (main) {
+        main.style.opacity = '1';
+        main.style.visibility = 'visible';
+      }
+
+      // page-specific loaders
+      try {
+        if (id === 'pgLeaderboard' && typeof loadLB === 'function') loadLB();
+        if (id === 'pgHistory' && typeof loadHistory === 'function') loadHistory();
+        if (id === 'pgChecks' && typeof loadMyChecks === 'function') loadMyChecks();
+        if (id === 'pgSupport' && typeof loadReports === 'function') loadReports();
+        if (id === 'pgShop' && typeof loadShopState === 'function') loadShopState();
+        if (id === 'pgMarket' && typeof marketTab === 'function') marketTab('market');
+        if (id === 'pgKassa' && typeof loadKassaPage === 'function') loadKassaPage();
+        if (id === 'pgSettings') {
+          if (typeof renderUiPresets === 'function') renderUiPresets();
+          if (typeof renderAchievements === 'function') renderAchievements('setAchievements', typeof UD !== 'undefined' ? UD : null);
+        }
+        if (id === 'pgAssets' && typeof renderAssets === 'function') renderAssets();
+        if (id === 'pgStocks' && typeof loadStocks === 'function') loadStocks();
+        if (id === 'pgAdmin' && typeof loadAdmin === 'function') loadAdmin();
+      } catch (e) {
+        console.error('[BV] page load', e);
+      }
+
+      // scroll page to top
+      try { pg.scrollTop = 0; } catch (e) {}
+      console.log('[BV] goto', id);
+    } catch (err) {
+      console.error('[BV] goto error', err);
+    }
+  }
+
+  window.goto = doGoto;
+  window.nav = doGoto;
+
+  // Single delegated handler — click only (mobile synthesizes click after touch)
+  // Do NOT preventDefault on touchend (that kills the click on many phones)
+  var lastNav = 0;
+  function onNavEvent(e) {
+    var t = e.target;
+    if (!t || !t.closest) return;
+    var el = t.closest('[data-goto]');
+    if (!el) return;
+    var id = el.getAttribute('data-goto');
+    if (!id) return;
+    // debounce double fire (touch + click)
+    var now = Date.now();
+    if (now - lastNav < 400) {
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+    lastNav = now;
+    e.preventDefault();
+    e.stopPropagation();
+    doGoto(id);
+  }
+  document.addEventListener('click', onNavEvent, true);
+
+  // Mobile menu button
+  document.getElementById('mobMenuBtn')?.addEventListener('click', function (e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var sb = document.getElementById('sidebar');
+    var ov = document.getElementById('sbOverlay');
+    if (sb) sb.classList.toggle('open');
+    if (ov) {
+      var open = sb && sb.classList.contains('open');
+      ov.classList.toggle('open', !!open);
+      ov.style.display = open ? 'block' : 'none';
+      ov.style.pointerEvents = open ? 'auto' : 'none';
+    }
+  });
+  document.getElementById('sbOverlay')?.addEventListener('click', function () {
+    document.getElementById('sidebar')?.classList.remove('open');
+    var ov = document.getElementById('sbOverlay');
+    if (ov) {
+      ov.classList.remove('open');
+      ov.style.display = 'none';
+      ov.style.pointerEvents = 'none';
+    }
+  });
+
+  // Clear stuck blockers that steal taps
+  function clearBlockers() {
+    try {
+      var app = document.getElementById('app');
+      if (!app || app.style.display === 'none') return;
+      var auth = document.getElementById('authScreen');
+      if (auth && auth.style.display !== 'none' && auth.style.display !== '') {
+        // only hide if app is showing
+        if (app.style.display === 'flex' || app.classList.contains('on') || getComputedStyle(app).display !== 'none') {
+          // if user is logged in (app visible), auth must not cover
+          if (document.querySelector('.page.on')) {
+            auth.style.display = 'none';
+            auth.style.pointerEvents = 'none';
+          }
         }
       }
-    }catch(e){}
+      var loader = document.getElementById('loader');
+      if (loader && getComputedStyle(loader).display !== 'none') {
+        // leave loader if still loading
+      }
+      document.querySelectorAll('.overlay').forEach(function (o) {
+        if (!o.classList.contains('on')) {
+          o.style.pointerEvents = 'none';
+        }
+      });
+      var ov = document.getElementById('sbOverlay');
+      if (ov && !ov.classList.contains('open')) {
+        ov.style.display = 'none';
+        ov.style.pointerEvents = 'none';
+      }
+    } catch (e) {}
   }
   clearBlockers();
-  setInterval(clearBlockers, 2000);
+  setInterval(clearBlockers, 2500);
 
-  // Ensure window.goto exists
-  if(typeof window.goto !== 'function' && typeof goto === 'function'){
-    window.goto = goto;
-  }
-  console.log('[BV] mobile tap v22');
+  console.log('[BV] mobile nav v23');
 })();
