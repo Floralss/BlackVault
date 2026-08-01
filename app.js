@@ -376,14 +376,27 @@ document.addEventListener('visibilitychange', () => { });
 // ═══ PIN ═══
 let pinBuf = '', pinMode = 'verify';
 async function sha(s) { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return Array.from(new Uint8Array(b)).map(x => x.toString(16).padStart(2, '0')).join(''); }
-function showPinWall(mode) { pinBuf = ''; pinMode = mode; updatePinDots(); document.getElementById('pinWall').classList.add('show'); document.getElementById('pinErr').textContent = ''; }
+function showPinWall(mode) { pinBuf = ''; window.pinBuf = ''; pinMode = mode; updatePinDots(); document.getElementById('pinWall').classList.add('show'); document.getElementById('pinErr').textContent = ''; }
 function hidePinWall() { document.getElementById('pinWall').classList.remove('show'); }
 function updatePinDots() { for (let i = 0; i < 4; i++) document.getElementById('pd' + i).classList.toggle('on', i < pinBuf.length); }
-document.querySelectorAll('.pin-k[data-v]').forEach(k => k.addEventListener('click', () => {
+// Single delegated PIN handler with debounce (prevents double-tap on mobile)
+let _pinLastTs = 0;
+function onPinKey(e) {
+  const k = e.target && e.target.closest && e.target.closest('.pin-k[data-v]');
+  if (!k) return;
+  e.preventDefault();
+  e.stopPropagation();
+  const now = Date.now();
+  if (now - _pinLastTs < 280) return; // ignore double fire (touch+click / double bind)
+  _pinLastTs = now;
   const v = k.getAttribute('data-v');
-  if (v === 'del') pinBuf = pinBuf.slice(0, -1); else if (pinBuf.length < 4) pinBuf += v;
-  updatePinDots(); if (pinBuf.length === 4) handlePinInput();
-}));
+  if (v === 'del') pinBuf = pinBuf.slice(0, -1);
+  else if (pinBuf.length < 4) pinBuf += v;
+  window.pinBuf = pinBuf;
+  updatePinDots();
+  if (pinBuf.length === 4) handlePinInput();
+}
+document.addEventListener('click', onPinKey, true);
 async function handlePinInput() {
   if (pinMode === 'verify') {
     const h = await sha(pinBuf + CU.uid);
@@ -3570,22 +3583,8 @@ window.loadAdminData = async function() {
 };
 console.log('[BV] buttons+admin v24');
 
-// ADMIN + PIN v25
+// ADMIN + PIN v25 (pin re-bind removed — was causing double digit input)
 (function(){
-  // Re-bind pin keys (in case early bind failed)
-  document.querySelectorAll('.pin-k[data-v]').forEach(function(k){
-    k.onclick = function(){
-      try {
-        var v = k.getAttribute('data-v');
-        if (typeof pinBuf === 'undefined') window.pinBuf = '';
-        if (v === 'del') pinBuf = pinBuf.slice(0, -1);
-        else if (pinBuf.length < 4) pinBuf += v;
-        if (typeof updatePinDots === 'function') updatePinDots();
-        if (pinBuf.length === 4 && typeof handlePinInput === 'function') handlePinInput();
-      } catch(e){ console.error(e); }
-    };
-  });
-
   window.loadAdminData = async function(){
     try {
       if (!UD) {
