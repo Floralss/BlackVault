@@ -1294,3 +1294,55 @@ button.wa.off{
     pointer-events: auto !important;
   }
 }
+
+/* ACTION BUTTONS v24 — always visible text */
+#whActions, .wh-actions {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 8px !important;
+  margin-top: 14px !important;
+  width: 100% !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+}
+.act-btn, button.act-btn {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 4px !important;
+  height: 40px !important;
+  min-height: 40px !important;
+  padding: 0 12px !important;
+  margin: 0 !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(255,255,255,0.15) !important;
+  background: rgba(255,255,255,0.1) !important;
+  color: #ffffff !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  font-family: inherit !important;
+  line-height: 40px !important;
+  white-space: nowrap !important;
+  cursor: pointer !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  -webkit-text-fill-color: #ffffff !important;
+  text-shadow: none !important;
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  touch-action: manipulation !important;
+  pointer-events: auto !important;
+}
+.act-btn.act-primary {
+  background: rgba(124,92,252,0.45) !important;
+  border-color: rgba(167,139,250,0.6) !important;
+}
+.act-btn.act-muted {
+  opacity: 0.5 !important;
+}
+.act-btn:active {
+  transform: scale(0.97);
+}
+/* kill old hidden buttons */
+.wh-btn { display: none !important; }
+.wa { display: none !important; }
