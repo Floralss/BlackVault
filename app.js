@@ -2288,9 +2288,23 @@ function userAchievements(u){
 }
 window.renderAchievements=function(elId,u){
   const el=document.getElementById(elId); if(!el) return;
-  const got=userAchievements(u||UD);
-  el.innerHTML=ACHIEVEMENTS.map(a=>`<div class="ach-card ${got.has(a.id)?'on':''}"><div class="ach-ico">${a.ico}</div><div class="ach-name">${a.name}</div><div class="ach-desc">${a.desc}</div></div>`).join('');
+  const user=u||UD||{};
+  const got=typeof userAchievements==='function'?userAchievements(user):new Set(user.achievements||[]);
+  // base catalog
+  const byId={};
+  (ACHIEVEMENTS||[]).forEach(a=>{ byId[a.id]=a; });
+  // custom from user.achievements not in catalog
+  (user.achievements||[]).forEach(id=>{
+    if(!byId[id]) byId[id]={id:id,ico:'🏅',name:id,desc:'Выдано администратором'};
+  });
+  // merge catalog from window._achCatalog if loaded from firestore
+  (window._achCatalog||[]).forEach(a=>{ if(a&&a.id) byId[a.id]={id:a.id,ico:a.icon||a.ico||'🏅',name:a.title||a.name||a.id,desc:a.desc||''}; });
+  const list=Object.values(byId);
+  el.innerHTML=list.map(a=>`<div class="ach-card ${got.has(a.id)?'on':''}"><div class="ach-ico">${a.ico||'🏅'}</div><div class="ach-name">${a.name||a.id}</div><div class="ach-desc">${a.desc||''}</div></div>`).join('')
+    || '<div style="color:#888;padding:8px;font-size:13px">Нет достижений</div>';
 };
+window.userAchievements=typeof userAchievements==='function'?userAchievements:function(u){return new Set((u&&u.achievements)||[]);};
+
 
 // TG / Discord
 document.getElementById('btnTg')?.addEventListener('click', async()=>{
@@ -3529,3 +3543,196 @@ window.loadAdminData = async function() {
   }
 };
 console.log('[BV] buttons+admin v24');
+
+// ADMIN + PIN v25
+(function(){
+  // Re-bind pin keys (in case early bind failed)
+  document.querySelectorAll('.pin-k[data-v]').forEach(function(k){
+    k.onclick = function(){
+      try {
+        var v = k.getAttribute('data-v');
+        if (typeof pinBuf === 'undefined') window.pinBuf = '';
+        if (v === 'del') pinBuf = pinBuf.slice(0, -1);
+        else if (pinBuf.length < 4) pinBuf += v;
+        if (typeof updatePinDots === 'function') updatePinDots();
+        if (pinBuf.length === 4 && typeof handlePinInput === 'function') handlePinInput();
+      } catch(e){ console.error(e); }
+    };
+  });
+
+  window.loadAdminData = async function(){
+    try {
+      if (!UD) {
+        console.warn('[BV] admin: no user');
+        return;
+      }
+      var ars = document.getElementById('adminRoleSub');
+      if (ars) ars.textContent = UD.isOwner ? 'Владелец проекта' : (UD.role === 'admin' ? 'Администратор' : (UD.role || 'staff'));
+      var atb = document.getElementById('adminTopBadge');
+      if (atb && typeof roleBadge === 'function') atb.innerHTML = roleBadge(UD);
+
+      if (typeof window.admTab === 'function') window.admTab('wallets');
+      else if (typeof admTab === 'function') admTab('wallets');
+
+      var panel = document.getElementById('admWallets');
+      if (panel) panel.style.display = 'block';
+
+      var tb = document.getElementById('admWalletsTb');
+      if (!tb) {
+        console.error('[BV] admWalletsTb missing');
+        return;
+      }
+      tb.innerHTML = '<tr><td colspan="6" style="padding:20px;text-align:center;color:#888">Загрузка кошельков...</td></tr>';
+
+      var snap;
+      try {
+        snap = await getDocs(collection(db, 'wallets'));
+      } catch (fe) {
+        console.error('[BV] firestore wallets', fe);
+        tb.innerHTML = '<tr><td colspan="6" style="padding:20px;text-align:center;color:#f66">Ошибка Firestore: ' + (fe.message || fe) + '</td></tr>';
+        return;
+      }
+
+      var isOwner = !!UD.isOwner, isAdmin = UD.role === 'admin';
+      var rows = [];
+      snap.forEach(function(d){
+        var u = d.data() || {};
+        var tot = 0;
+        try { tot = (typeof toUSD === 'function' ? toUSD(u.balances) : 0); } catch(e){}
+        var st = u.blocked ? '<span style="color:#f66">Заблок</span>' : u.frozen ? '<span style="color:#fc0">Заморозка</span>' : '<span style="color:#2d6">Активен</span>';
+        var acts = '';
+        if (isOwner || isAdmin) {
+          acts = '<button class="btn btn-ghost btn-sm" type="button" onclick="typeof admToggle===\'function\'&&admToggle(\'' + (u.code||'') + '\',\'blocked\',' + (!u.blocked) + ')">' + (u.blocked ? '🔓' : '🔒') + '</button>';
+        }
+        rows.push(
+          '<tr style="border-bottom:1px solid rgba(255,255,255,.06)">' +
+          '<td style="padding:10px 12px;color:#fff;font-weight:700">' + (u.username || '—') + '</td>' +
+          '<td style="padding:10px 12px;color:#999;font-size:12px;font-family:monospace">' + (u.code || '—') + '</td>' +
+          '<td style="padding:10px 12px;color:#fff">$' + Number(tot).toFixed(2) + '</td>' +
+          '<td style="padding:10px 12px">' + st + '</td>' +
+          '<td style="padding:10px 12px;color:#aaa">' + (u.role || 'user') + '</td>' +
+          '<td style="padding:10px 12px">' + acts + '</td></tr>'
+        );
+      });
+      tb.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="6" style="padding:20px;text-align:center;color:#888">Нет кошельков</td></tr>';
+      console.log('[BV] admin wallets', rows.length);
+    } catch (e) {
+      console.error('[BV] loadAdminData', e);
+      var tb = document.getElementById('admWalletsTb');
+      if (tb) tb.innerHTML = '<tr><td colspan="6" style="padding:20px;text-align:center;color:#f66">' + (e.message || e) + '</td></tr>';
+    }
+  };
+
+  // Hook goto to always refresh admin
+  var _prevGoto = window.goto;
+  window.goto = function(id){
+    if (typeof _prevGoto === 'function') _prevGoto(id);
+    if (id === 'pgAdmin') {
+      setTimeout(function(){ window.loadAdminData(); }, 100);
+    }
+  };
+  window.nav = window.goto;
+
+  console.log('[BV] pin+admin v25');
+})();
+
+// FIX v26 — assets, admin, achievements
+window.adminGiveAchievement = async function(){
+  try{
+    const user=(document.getElementById('achGiveUser')||{}).value.trim();
+    const achId=(document.getElementById('achGiveId')||{}).value.trim();
+    if(!user||!achId) return (window.toast||alert)('Заполните поля','w');
+    let w = null;
+    if(typeof findWalletByCodeOrName==='function') w = await findWalletByCodeOrName(user);
+    if(!w){
+      // fallback search
+      try{
+        let snap = await getDocs(query(collection(db,'wallets'), where('code','==', user.toUpperCase().startsWith('BV-')?user.toUpperCase():('BV-'+user.toUpperCase())), limit(1)));
+        if(snap.empty) snap = await getDocs(query(collection(db,'wallets'), where('username','==', user), limit(1)));
+        if(!snap.empty) w = {id: snap.docs[0].id, data: snap.docs[0].data()};
+      }catch(e){ console.error(e); }
+    }
+    if(!w) return (window.toast||alert)('Пользователь не найден','e');
+    const achs = Array.isArray(w.data.achievements) ? w.data.achievements.slice() : [];
+    if(!achs.includes(achId)) achs.push(achId);
+    await updateDoc(doc(db,'wallets', w.id), {achievements: achs});
+    (window.toast||alert)('Достижение выдано: '+achId,'s');
+    // if giving to self, update UD and re-render
+    if(CU && w.id===CU.uid){
+      UD.achievements = achs;
+      if(typeof renderAchievements==='function'){
+        renderAchievements('setAchievements', UD);
+        renderAchievements('pvAchievements', UD);
+      }
+    }
+  }catch(e){
+    console.error(e);
+    (window.toast||alert)(e.message||'Ошибка','e');
+  }
+};
+
+window.loadAssets = function(){
+  try{
+    if(!UD) return;
+    const el = document.getElementById('assetsList');
+    if(!el) return;
+    const b = UD.balances || {};
+    const coins = (typeof COINS!=='undefined' && COINS) ? COINS : {
+      USD:{n:'US Dollar',col:'#22D27F'},
+      UAH:{n:'Гривна',col:'#4C8BF5'},
+      RUB:{n:'Рубль',col:'#FF6B7A'},
+      TON:{n:'Toncoin',col:'#0098EA'},
+      BTC:{n:'Bitcoin',col:'#F7931A'},
+      ETH:{n:'Ethereum',col:'#627EEA'}
+    };
+    const rates = (typeof RATES!=='undefined' && RATES) ? RATES : {USD:1,UAH:41,RUB:90,TON:5,BTC:60000,ETH:3000};
+    el.innerHTML = Object.keys(coins).map(function(k){
+      const c = coins[k];
+      const amt = Number(b[k]||0);
+      const rate = (rates[k]||1)/(rates.USD||1);
+      const usdV = amt * rate;
+      const ico = k==='USD'?'💵':k==='UAH'?'🇺🇦':k==='RUB'?'🇷🇺':k==='BTC'?'₿':k==='ETH'?'Ξ':k==='TON'?'💎':'●';
+      return '<div class="asset-row" style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid rgba(255,255,255,.06)">' +
+        '<div class="asset-ico" style="width:42px;height:42px;border-radius:12px;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.08);font-size:18px">'+ico+'</div>' +
+        '<div style="flex:1"><div style="font-weight:700;color:#fff">'+c.n+'</div><div style="font-size:12px;color:#888">'+k+'</div></div>' +
+        '<div style="text-align:right"><div style="font-weight:800;color:#fff">'+amt.toLocaleString('ru-RU',{maximumFractionDigits:4})+'</div>' +
+        '<div style="font-size:11px;color:#666">$'+usdV.toFixed(2)+'</div></div></div>';
+    }).join('');
+  }catch(e){ console.error('loadAssets', e); }
+};
+
+// Patch goto to load assets + achievements
+(function(){
+  var prev = window.goto;
+  window.goto = function(id){
+    if(typeof prev==='function') prev(id);
+    try{
+      if(id==='pgAssets') window.loadAssets();
+      if(id==='pgSettings'){
+        if(typeof renderAchievements==='function') renderAchievements('setAchievements', UD);
+        if(typeof renderUiPresets==='function') renderUiPresets();
+      }
+      if(id==='pgAdmin') setTimeout(function(){ if(window.loadAdminData) window.loadAdminData(); }, 50);
+    }catch(e){ console.error(e); }
+  };
+  window.nav = window.goto;
+})();
+
+// Load achievement catalog from firestore (optional)
+(async function(){
+  try{
+    if(typeof getDocs==='undefined'||typeof collection==='undefined'||typeof db==='undefined') return;
+    const snap = await getDocs(collection(db,'achievements'));
+    window._achCatalog = [];
+    snap.forEach(function(d){ window._achCatalog.push(Object.assign({id:d.id}, d.data())); });
+    if(UD && typeof renderAchievements==='function'){
+      renderAchievements('setAchievements', UD);
+      renderAchievements('pvAchievements', UD);
+    }
+  }catch(e){ /* collection may not exist */ }
+})();
+
+// Force admin table load helper
+window.refreshAdminWallets = window.loadAdminData;
+
+console.log('[BV] fix v26 assets+ach+admin');
