@@ -342,6 +342,7 @@ onAuthStateChanged(auth, async user => {
       avatarUrl: '', avatarHistory: [], avatarFrame: '', bannerUrl: '', bio: '',
       balances: { USD: 0, UAH: 0, RUB: 0, TON: 0, BTC: 0, ETH: 0 },
       role: 'user', isOwner: false, blocked: false, frozen: false, hideRole: false,
+      ageVerified: false, ageVerifyPending: false, phone: '',
       tg: '', dc: '', tgVerified: false, dcVerified: false, vipUntil: 0,
       customTags: [], stocks: {}, createdAt: serverTimestamp()
     });
@@ -361,11 +362,13 @@ onAuthStateChanged(auth, async user => {
     if (!snap.exists()) return;
     UD = snap.data();
     renderSidebar(); loadHomeAssets(); applyUiTheme();
+    if (typeof applyAgeGate==='function') applyAgeGate();
   });
 
   renderSidebar(); loadHomeAssets(); loadRecentTx(); setTimeout(()=>{ if(typeof loadNotifications==='function') loadNotifications(); },1500); applyTheme(); applyUiTheme(); renderColorSwatches();
   if (localStorage.getItem('bv_pin')) showPinWall('verify');
   checkDepositNotifications();
+  setTimeout(function(){ if (typeof applyAgeGate==='function') applyAgeGate(); }, 200);
   });
 
 document.addEventListener('visibilitychange', () => { });
@@ -1309,6 +1312,29 @@ window.openTicket = async function (id, subject, status) {
   document.getElementById('btnCloseTicket').style.display = isStaff ? 'flex' : 'none';
   document.getElementById('chatBar').style.display = status === 'closed' ? 'none' : 'flex';
   await loadChatMsgs(id);
+  // Helper application approve button
+  try {
+    let haBtn = document.getElementById('btnApproveHelper');
+    if (!haBtn) {
+      const closeBtn = document.getElementById('btnCloseTicket');
+      if (closeBtn && closeBtn.parentNode) {
+        haBtn = document.createElement('button');
+        haBtn.id = 'btnApproveHelper';
+        haBtn.className = 'btn btn-primary btn-sm';
+        haBtn.type = 'button';
+        haBtn.textContent = '✅ Выдать хелпера';
+        haBtn.style.display = 'none';
+        haBtn.onclick = function(){ if (window.approveHelperFromTicket && curTicketId) window.approveHelperFromTicket(curTicketId); };
+        closeBtn.parentNode.insertBefore(haBtn, closeBtn);
+      }
+    }
+    if (haBtn) {
+      const snap = await getDoc(doc(db, 'reports', id));
+      const data = snap.exists() ? snap.data() : {};
+      const showHa = isStaff && data.category === 'helper_app' && data.status !== 'closed';
+      haBtn.style.display = showHa ? 'flex' : 'none';
+    }
+  } catch (e) { console.error(e); }
   if (isStaff && status === 'open') requireFreshStaff().then(() => updateDoc(doc(db, 'reports', id), { status: 'inprogress' })).catch(() => { });
   openSheet('sheetReportChat');
 };
@@ -1337,7 +1363,7 @@ document.getElementById('btnCloseTicket')?.addEventListener('click', async () =>
 
 // ═══ ADMIN PANEL ═══
 function admTab(t) {
-  ['wallets', 'deposits', 'tx', 'reports', 'tgreq', 'give', 'take', 'staff', 'grantTag', 'contest', 'complaints'].forEach(id => {
+  ['wallets', 'deposits', 'tx', 'reports', 'tgreq', 'give', 'take', 'staff', 'grantTag', 'contest', 'complaints', 'age', 'achievements', 'broadcast', 'freeze'].forEach(id => {
     const el = document.getElementById('adm' + id.charAt(0).toUpperCase() + id.slice(1));
     if (el) el.style.display = id === t ? 'block' : 'none';
   });
@@ -1352,7 +1378,7 @@ async function loadAdminData() {
   const isOwner = UD.isOwner, isAdmin = UD.role === 'admin';
   const _ars=document.getElementById('adminRoleSub'); if(_ars) _ars.textContent = isOwner ? 'Владелец проекта' : isAdmin ? 'Администратор' : UD.role === 'media' ? 'Медиа' : UD.role === 'sponsor' ? 'Спонсор' : 'Хелпер';
   const _atb=document.getElementById('adminTopBadge'); if(_atb) _atb.innerHTML = roleBadge(UD);
-  document.getElementById('admGiveTabBtn') && ((function(){ var _e=document.getElementById('admGiveTabBtn'); if(_e) _e.style.display = isOwner || isAdmin ? 'flex' : 'none'; })();
+  document.getElementById('admGiveTabBtn') && ((function(){ var _e=document.getElementById('admGiveTabBtn'); if(_e) _e.style.display = isOwner || isAdmin ? 'flex' : 'none'; })());
   (function(){ var _e=document.getElementById('admTakeTabBtn'); if(_e) _e.style.display = isOwner || isAdmin ? 'flex' : 'none'; })();
   (function(){ var _e=document.getElementById('admStaffTabBtn'); if(_e) _e.style.display = isOwner ? 'flex' : 'none'; })();
   (function(){ var _e=document.getElementById('admTagTabBtn'); if(_e) _e.style.display = canModerate(UD) ? 'flex' : 'none'; })();
@@ -2973,7 +2999,7 @@ console.log('[BV] exports v12 ready');
 
 // Admin extras v12
 window.admTab = function(t){
-  const map = {wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze'};
+  const map = {wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze',age:'admAge'};
   Object.keys(map).forEach(k=>{
     const el=document.getElementById(map[k]);
     if(el) el.style.display = (k===t)?'block':'none';
@@ -3097,9 +3123,9 @@ window.doLogout = async function(){
 };
 
 window.admTab = function(t){
-  const ids=['admWallets','admDeposits','admTx','admReports','admTgreq','admGive','admTake','admStaff','admGrantTag','admContest','admComplaints','admAchievements','admBroadcast','admFreeze'];
+  const ids=['admWallets','admDeposits','admTx','admReports','admTgreq','admGive','admTake','admStaff','admGrantTag','admContest','admComplaints','admAchievements','admBroadcast','admFreeze','admAge'];
   ids.forEach(id=>{ const el=document.getElementById(id); if(el) el.style.display='none'; });
-  const map={wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze'};
+  const map={wallets:'admWallets',deposits:'admDeposits',tx:'admTx',reports:'admReports',tgreq:'admTgreq',give:'admGive',take:'admTake',staff:'admStaff',grantTag:'admGrantTag',contest:'admContest',complaints:'admComplaints',achievements:'admAchievements',broadcast:'admBroadcast',freeze:'admFreeze',age:'admAge'};
   const show=document.getElementById(map[t]);
   if(show) show.style.display='block';
   else console.warn('admin panel missing', t, map[t]);
@@ -3736,3 +3762,495 @@ window.loadAssets = function(){
 window.refreshAdminWallets = window.loadAdminData;
 
 console.log('[BV] fix v26 assets+ach+admin');
+
+// ═══════════════════════════════════════════════════════════
+// BV FEATURES v27 — age verify, phone, helper apps, positions
+// + ensure give/take always available for money roles
+// ═══════════════════════════════════════════════════════════
+(function(){
+  'use strict';
+
+  // --- Country phone validation (E.164-ish) ---
+  const PHONE_COUNTRIES = [
+    {c:'UA', name:'Украина', dial:'+380', re:/^\+380\d{9}$/},
+    {c:'RU', name:'Россия', dial:'+7', re:/^\+7\d{10}$/},
+    {c:'US', name:'США/Канада', dial:'+1', re:/^\+1\d{10}$/},
+    {c:'PL', name:'Польша', dial:'+48', re:/^\+48\d{9}$/},
+    {c:'DE', name:'Германия', dial:'+49', re:/^\+49\d{10,11}$/},
+    {c:'GB', name:'Великобритания', dial:'+44', re:/^\+44\d{10}$/},
+    {c:'KZ', name:'Казахстан', dial:'+7', re:/^\+7\d{10}$/},
+    {c:'BY', name:'Беларусь', dial:'+375', re:/^\+375\d{9}$/},
+    {c:'MD', name:'Молдова', dial:'+373', re:/^\+373\d{8}$/},
+    {c:'TR', name:'Турция', dial:'+90', re:/^\+90\d{10}$/},
+    {c:'CZ', name:'Чехия', dial:'+420', re:/^\+420\d{9}$/},
+    {c:'RO', name:'Румыния', dial:'+40', re:/^\+40\d{9}$/},
+    {c:'IT', name:'Италия', dial:'+39', re:/^\+39\d{9,10}$/},
+    {c:'FR', name:'Франция', dial:'+33', re:/^\+33\d{9}$/},
+    {c:'ES', name:'Испания', dial:'+34', re:/^\+34\d{9}$/},
+    {c:'NL', name:'Нидерланды', dial:'+31', re:/^\+31\d{9}$/},
+    {c:'GE', name:'Грузия', dial:'+995', re:/^\+995\d{9}$/},
+    {c:'AZ', name:'Азербайджан', dial:'+994', re:/^\+994\d{9}$/},
+    {c:'AM', name:'Армения', dial:'+374', re:/^\+374\d{8}$/},
+    {c:'IL', name:'Израиль', dial:'+972', re:/^\+972\d{8,9}$/}
+  ];
+  window.PHONE_COUNTRIES = PHONE_COUNTRIES;
+
+  function normalizePhone(raw) {
+    let s = String(raw || '').trim().replace(/[\s\-().]/g, '');
+    if (s.startsWith('00')) s = '+' + s.slice(2);
+    if (!s.startsWith('+') && /^\d+$/.test(s)) s = '+' + s;
+    return s;
+  }
+  function validatePhone(raw) {
+    const s = normalizePhone(raw);
+    for (const p of PHONE_COUNTRIES) {
+      if (p.re.test(s)) return { ok: true, e164: s, country: p };
+    }
+    return { ok: false, e164: s };
+  }
+  window.validatePhone = validatePhone;
+  window.normalizePhone = normalizePhone;
+
+  // --- Ensure wallet locked until age verified ---
+  function isAgeVerified(u) {
+    return !!(u && (u.ageVerified === true || u.isOwner === true));
+  }
+  window.isAgeVerified = isAgeVerified;
+
+  function applyAgeGate() {
+    try {
+      if (!UD) return;
+      const ok = isAgeVerified(UD);
+      const banner = document.getElementById('ageGateBanner');
+      if (banner) banner.style.display = ok ? 'none' : 'block';
+      // disable action buttons if not verified
+      document.querySelectorAll('#whActions .act-btn, #whActions .wa, #whActions .wh-btn').forEach(function(b){
+        if (!ok) {
+          b.classList.add('act-muted');
+          b.setAttribute('data-age-locked','1');
+        } else {
+          b.classList.remove('act-muted');
+          b.removeAttribute('data-age-locked');
+        }
+      });
+      // block transfer/exchange pages
+      ['pgTransfer','pgExchange','pgDeposit','pgQrPay','pgChecks','pgMarket','pgStocks'].forEach(function(id){
+        const pg = document.getElementById(id);
+        if (!pg) return;
+        let gate = pg.querySelector('.age-page-gate');
+        if (!ok) {
+          if (!gate) {
+            gate = document.createElement('div');
+            gate.className = 'age-page-gate';
+            gate.innerHTML = '<div style="padding:28px 18px;text-align:center"><div style="font-size:40px;margin-bottom:10px">🪪</div><div style="font-weight:800;font-size:16px;margin-bottom:8px">Требуется подтверждение возраста</div><div style="color:#888;font-size:13px;line-height:1.5;margin-bottom:16px">Чтобы пользоваться кошельком, подтвердите возраст в настройках.</div><button type="button" class="btn btn-primary btn-sm" onclick="goto(\'pgSettings\');setTimeout(function(){var e=document.getElementById(\'ageVerifyCard\');if(e)e.scrollIntoView({behavior:\'smooth\'});},200)">Перейти к проверке</button></div>';
+            pg.insertBefore(gate, pg.firstChild.nextSibling);
+          }
+          gate.style.display = 'block';
+        } else if (gate) {
+          gate.style.display = 'none';
+        }
+      });
+    } catch(e) { console.error('[BV] age gate', e); }
+  }
+  window.applyAgeGate = applyAgeGate;
+
+  // intercept data-goto for locked actions
+  document.addEventListener('click', function(e){
+    var el = e.target && e.target.closest && e.target.closest('[data-age-locked="1"]');
+    if (!el) return;
+    e.preventDefault();
+    e.stopPropagation();
+    (window.toast||alert)('Сначала подтвердите возраст в Настройках','w');
+    goto('pgSettings');
+  }, true);
+
+  // --- Submit age verification ---
+  window.submitAgeVerify = async function() {
+    try {
+      if (!CU || !UD) return toast('Войдите в аккаунт','w');
+      const firstName = (document.getElementById('avFirstName')||{}).value.trim();
+      const lastName = (document.getElementById('avLastName')||{}).value.trim();
+      const age = parseInt((document.getElementById('avAge')||{}).value, 10);
+      const from = (document.getElementById('avFrom')||{}).value.trim();
+      const method = (document.querySelector('input[name="avMethod"]:checked')||{}).value;
+      if (!firstName || !lastName || !age || age < 1 || age > 120 || !from) {
+        return toast('Заполните имя, фамилию, возраст и откуда вы','w');
+      }
+      if (!method) return toast('Выберите способ подтверждения','w');
+
+      let photoData = null;
+      if (method === 'face') {
+        const video = document.getElementById('avCamVideo');
+        const canvas = document.getElementById('avCamCanvas');
+        if (!video || !video.srcObject) return toast('Включите камеру','w');
+        canvas.width = video.videoWidth || 640;
+        canvas.height = video.videoHeight || 480;
+        canvas.getContext('2d').drawImage(video, 0, 0, canvas.width, canvas.height);
+        photoData = canvas.toDataURL('image/jpeg', 0.7);
+        stopAgeCam();
+      } else if (method === 'doc') {
+        const file = (document.getElementById('avDocFile')||{}).files;
+        if (!file || !file[0]) return toast('Загрузите фото документа','w');
+        photoData = await new Promise(function(res, rej){
+          const r = new FileReader();
+          r.onload = function(){ res(r.result); };
+          r.onerror = rej;
+          r.readAsDataURL(file[0]);
+        });
+        // limit size roughly
+        if (photoData.length > 900000) return toast('Фото слишком большое, сожмите и попробуйте снова','w');
+      }
+
+      await addDoc(collection(db, 'ageVerifications'), {
+        uid: CU.uid,
+        username: UD.username || '',
+        code: UD.code || '',
+        firstName, lastName, age, from,
+        method,
+        photoData: photoData || null,
+        status: 'pending',
+        createdAt: serverTimestamp()
+      });
+      await updateDoc(doc(db, 'wallets', CU.uid), {
+        ageVerifyPending: true,
+        ageInfo: { firstName, lastName, age, from }
+      });
+      if (UD) {
+        UD.ageVerifyPending = true;
+        UD.ageInfo = { firstName, lastName, age, from };
+      }
+      toast('Заявка отправлена. Ожидайте проверки администратором.','s');
+      const st = document.getElementById('avStatus');
+      if (st) st.innerHTML = '<span style="color:#fc0">⏳ На проверке</span>';
+    } catch(e) {
+      console.error(e);
+      toast(e.message || 'Ошибка','e');
+    }
+  };
+
+  window.startAgeCam = async function() {
+    try {
+      const video = document.getElementById('avCamVideo');
+      if (!video) return;
+      const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' }, audio: false });
+      video.srcObject = stream;
+      video.style.display = 'block';
+      document.getElementById('avCamWrap').style.display = 'block';
+    } catch(e) {
+      toast('Нет доступа к камере: ' + (e.message||e),'e');
+    }
+  };
+  window.stopAgeCam = function() {
+    const video = document.getElementById('avCamVideo');
+    if (video && video.srcObject) {
+      video.srcObject.getTracks().forEach(t => t.stop());
+      video.srcObject = null;
+    }
+  };
+
+  // Admin: load age verifications
+  window.loadAgeVerifications = async function() {
+    const el = document.getElementById('admAgeList');
+    if (!el) return;
+    el.innerHTML = '<div style="padding:16px;color:#888">Загрузка...</div>';
+    try {
+      const snap = await getDocs(query(collection(db, 'ageVerifications'), orderBy('createdAt', 'desc'), limit(80)));
+      const rows = [];
+      snap.forEach(function(d){
+        const a = d.data();
+        const st = a.status === 'approved' ? '<span style="color:#2d6">✅ Одобрено</span>' :
+                   a.status === 'rejected' ? '<span style="color:#f66">❌ Отклонено</span>' :
+                   '<span style="color:#fc0">⏳ Ожидает</span>';
+        const acts = (a.status === 'pending' && UD && (UD.isOwner || UD.role === 'admin'))
+          ? '<div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-primary btn-sm" type="button" onclick="reviewAge(\''+d.id+'\',true)">Одобрить</button><button class="btn btn-danger btn-sm" type="button" onclick="reviewAge(\''+d.id+'\',false)">Отклонить</button></div>'
+          : '';
+        rows.push(
+          '<div class="sec card-p" style="margin-bottom:12px">' +
+          '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div>' +
+          '<div style="font-weight:800;color:#fff">' + esc(a.firstName||'') + ' ' + esc(a.lastName||'') + '</div>' +
+          '<div style="font-size:12px;color:#999">@' + esc(a.username||'') + ' · ' + esc(a.code||'') + '</div>' +
+          '<div style="font-size:13px;margin-top:6px">Возраст: <b>' + (a.age||'—') + '</b> · Откуда: ' + esc(a.from||'—') + '</div>' +
+          '<div style="font-size:12px;color:#888">Способ: ' + (a.method==='face'?'Селфи':'Документ') + ' · ' + st + '</div>' +
+          acts + '</div>' +
+          (a.photoData ? '<img src="'+a.photoData+'" style="max-width:140px;max-height:140px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,.1)"/>' : '') +
+          '</div></div>'
+        );
+      });
+      el.innerHTML = rows.length ? rows.join('') : '<div class="empty-state">Нет заявок</div>';
+    } catch(e) {
+      el.innerHTML = '<div style="color:#f66;padding:16px">'+(e.message||e)+'</div>';
+    }
+  };
+
+  window.reviewAge = async function(id, approve) {
+    try {
+      await requireFreshMoneyRole();
+      const ref = doc(db, 'ageVerifications', id);
+      const snap = await getDoc(ref);
+      if (!snap.exists()) return toast('Не найдено','e');
+      const a = snap.data();
+      await updateDoc(ref, {
+        status: approve ? 'approved' : 'rejected',
+        reviewedAt: serverTimestamp(),
+        reviewedBy: UD.username || CU.uid
+      });
+      if (approve && a.uid) {
+        await updateDoc(doc(db, 'wallets', a.uid), {
+          ageVerified: true,
+          ageVerifyPending: false,
+          ageInfo: { firstName: a.firstName, lastName: a.lastName, age: a.age, from: a.from }
+        });
+        if (CU && a.uid === CU.uid) {
+          UD.ageVerified = true;
+          UD.ageVerifyPending = false;
+          applyAgeGate();
+        }
+      } else if (a.uid) {
+        await updateDoc(doc(db, 'wallets', a.uid), { ageVerifyPending: false });
+      }
+      toast(approve ? 'Возраст подтверждён' : 'Заявка отклонена', approve ? 's' : 'w');
+      loadAgeVerifications();
+    } catch(e) { toast(e.message||e,'e'); }
+  };
+
+  // --- Phone bind ---
+  window.savePhone = async function() {
+    try {
+      if (!CU) return;
+      const raw = (document.getElementById('phoneIn')||{}).value;
+      const v = validatePhone(raw);
+      if (!v.ok) return toast('Номер недействителен для поддерживаемых стран','e');
+      // uniqueness check
+      const q1 = await getDocs(query(collection(db,'wallets'), where('phone','==', v.e164), limit(1)));
+      if (!q1.empty && q1.docs[0].id !== CU.uid) return toast('Этот номер уже привязан к другому аккаунту','e');
+      await updateDoc(doc(db,'wallets', CU.uid), { phone: v.e164, phoneCountry: v.country.c });
+      UD.phone = v.e164;
+      UD.phoneCountry = v.country.c;
+      toast('Телефон привязан: ' + v.e164 + ' (' + v.country.name + ')','s');
+      const h = document.getElementById('phoneHint');
+      if (h) h.textContent = v.e164 + ' · ' + v.country.name;
+    } catch(e) { toast(e.message||e,'e'); }
+  };
+
+  // --- Helper application ---
+  window.submitHelperApp = async function() {
+    try {
+      if (!CU || !UD) return toast('Войдите','w');
+      const name = (document.getElementById('haName')||{}).value.trim();
+      const age = parseInt((document.getElementById('haAge')||{}).value, 10);
+      const from = (document.getElementById('haFrom')||{}).value.trim();
+      const about = (document.getElementById('haAbout')||{}).value.trim();
+      const exp = (document.getElementById('haExp')||{}).value.trim();
+      if (!name || !age || !from || !about) return toast('Заполните обязательные поля','w');
+      // create support ticket + helperApps record
+      const appRef = await addDoc(collection(db, 'helperApps'), {
+        uid: CU.uid, username: UD.username, code: UD.code,
+        name, age, from, about, exp,
+        status: 'pending', createdAt: serverTimestamp()
+      });
+      const ticket = await addDoc(collection(db, 'reports'), {
+        uid: CU.uid, username: UD.username, code: UD.code,
+        subject: 'Заявка на хелпера',
+        category: 'helper_app',
+        text: 'Имя: '+name+'\nВозраст: '+age+'\nОткуда: '+from+'\nО себе: '+about+'\nОпыт: '+exp,
+        status: 'open',
+        helperAppId: appRef.id,
+        createdAt: serverTimestamp(),
+        messages: [{
+          by: 'user', username: UD.username, text: 'Подал заявку на должность хелпера.\nИмя: '+name+', '+age+' лет, '+from+'\n'+about,
+          at: Date.now()
+        }]
+      });
+      await updateDoc(appRef, { ticketId: ticket.id });
+      toast('Заявка отправлена в поддержку','s');
+      ['haName','haAge','haFrom','haAbout','haExp'].forEach(function(id){
+        const e=document.getElementById(id); if(e) e.value='';
+      });
+      if (typeof loadReports === 'function') loadReports();
+    } catch(e) { toast(e.message||e,'e'); }
+  };
+
+  // Approve helper from ticket
+  window.approveHelperFromTicket = async function(ticketId) {
+    try {
+      await requireFreshStaff();
+      const tRef = doc(db, 'reports', ticketId);
+      const tSnap = await getDoc(tRef);
+      if (!tSnap.exists()) return toast('Тикет не найден','e');
+      const t = tSnap.data();
+      if (!t.uid) return toast('Нет пользователя','e');
+      await updateDoc(doc(db, 'wallets', t.uid), { role: 'helper' });
+      if (t.helperAppId) {
+        await updateDoc(doc(db, 'helperApps', t.helperAppId), {
+          status: 'approved', reviewedAt: serverTimestamp(), reviewedBy: UD.username
+        });
+      }
+      const msgs = Array.isArray(t.messages) ? t.messages.slice() : [];
+      msgs.push({ by: 'staff', username: UD.username, text: '✅ Заявка одобрена. Вам выдана роль хелпера.', at: Date.now() });
+      await updateDoc(tRef, { status: 'closed', messages: msgs, resolvedAt: serverTimestamp() });
+      toast('Хелпер выдан','s');
+      if (typeof loadReports === 'function') loadReports();
+    } catch(e) { toast(e.message||e,'e'); }
+  };
+
+  // --- Custom positions (owner) ---
+  window.createPosition = async function() {
+    try {
+      await requireFreshOwner();
+      const id = (document.getElementById('posId')||{}).value.trim().toLowerCase().replace(/[^a-z0-9_]/g,'');
+      const title = (document.getElementById('posTitle')||{}).value.trim();
+      if (!id || !title) return toast('Укажите id и название','w');
+      const perms = {
+        moderate: !!(document.getElementById('posPermMod')||{}).checked,
+        money: !!(document.getElementById('posPermMoney')||{}).checked,
+        support: !!(document.getElementById('posPermSupport')||{}).checked,
+        staff: !!(document.getElementById('posPermStaff')||{}).checked
+      };
+      await setDoc(doc(db, 'positions', id), {
+        title, perms, createdAt: serverTimestamp(), createdBy: UD.username
+      }, { merge: true });
+      toast('Должность создана: ' + title, 's');
+      loadPositions();
+    } catch(e) { toast(e.message||e,'e'); }
+  };
+
+  window.loadPositions = async function() {
+    const el = document.getElementById('posList');
+    if (!el) return;
+    try {
+      const snap = await getDocs(collection(db, 'positions'));
+      const rows = [];
+      snap.forEach(function(d){
+        const p = d.data();
+        const perms = p.perms || {};
+        rows.push('<div style="padding:10px 0;border-bottom:1px solid rgba(255,255,255,.06)"><b style="color:#fff">'+esc(p.title||d.id)+'</b> <code style="font-size:11px;color:#888">'+d.id+'</code><div style="font-size:12px;color:#999">права: '+
+          (perms.moderate?'модерация ':'')+(perms.money?'деньги ':'')+(perms.support?'поддержка ':'')+(perms.staff?'персонал ':'')+
+          '</div></div>');
+      });
+      el.innerHTML = rows.length ? rows.join('') : '<div style="color:#888;padding:8px">Пока нет кастомных должностей</div>';
+      // fill assign select
+      const sel = document.getElementById('stRole');
+      if (sel) {
+        // keep built-in, add custom
+        const builtins = ['admin','helper','media','sponsor','user'];
+        Array.from(sel.options).forEach(function(o){
+          if (!builtins.includes(o.value)) o.remove();
+        });
+        snap.forEach(function(d){
+          const p = d.data();
+          const opt = document.createElement('option');
+          opt.value = d.id;
+          opt.textContent = p.title || d.id;
+          sel.appendChild(opt);
+        });
+      }
+    } catch(e) { /* ok */ }
+  };
+
+  window.assignPosition = async function() {
+    // uses existing btnSetStaff flow if present; also support custom
+    try {
+      await requireFreshOwner();
+      const target = (document.getElementById('stTarget')||{}).value.trim();
+      const role = (document.getElementById('stRole')||{}).value;
+      if (!target || !role) return toast('Заполните поля','w');
+      const { id, data } = await (typeof findUserByCodeOrName==='function' ? findUserByCodeOrName(target) : findWalletByCodeOrName(target));
+      const patch = { role: role === 'user' ? 'user' : role };
+      // load custom perms if any
+      try {
+        const pref = await getDoc(doc(db, 'positions', role));
+        if (pref.exists()) patch.customPerms = pref.data().perms || {};
+        else patch.customPerms = null;
+      } catch(e) {}
+      await updateDoc(doc(db, 'wallets', id), patch);
+      toast('Роль обновлена: ' + data.username + ' → ' + role, 's');
+    } catch(e) { toast(e.message||e,'e'); }
+  };
+
+  // Hook admin tab
+  const _admTab = window.admTab;
+  window.admTab = function(t) {
+    if (typeof _admTab === 'function') _admTab(t);
+    try {
+      // ensure panels exist
+      if (t === 'age') {
+        const panel = document.getElementById('admAge');
+        if (panel) {
+          document.querySelectorAll('[id^="adm"]').forEach(function(el){
+            if (el.id && el.id.startsWith('adm') && el.id !== 'adminTabs' && el.id !== 'adminRoleSub' && el.id !== 'adminTopBadge' && !el.id.includes('Tab') && !el.id.includes('Count') && el.tagName !== 'BUTTON') {
+              // don't hide everything blindly
+            }
+          });
+          panel.style.display = 'block';
+          loadAgeVerifications();
+        }
+      }
+      if (t === 'staff') loadPositions();
+      if (t === 'give' || t === 'take') {
+        const p = document.getElementById(t === 'give' ? 'admGive' : 'admTake');
+        if (p) p.style.display = 'block';
+      }
+    } catch(e) {}
+  };
+
+  // Force show give/take when loading admin
+  const _loadAdmin = window.loadAdminData;
+  window.loadAdminData = async function() {
+    if (typeof _loadAdmin === 'function') {
+      try { await _loadAdmin(); } catch(e) { console.error(e); }
+    }
+    try {
+      if (!UD) return;
+      const isOwner = !!UD.isOwner, isAdmin = UD.role === 'admin';
+      ['admGiveTabBtn','admTakeTabBtn'].forEach(function(id){
+        const e = document.getElementById(id);
+        if (e) e.style.display = (isOwner || isAdmin) ? '' : 'none';
+      });
+      const ageBtn = document.getElementById('admAgeTabBtn');
+      if (ageBtn) ageBtn.style.display = (isOwner || isAdmin) ? '' : 'none';
+      const staff = document.getElementById('admStaffTabBtn');
+      if (staff) staff.style.display = isOwner ? '' : 'none';
+    } catch(e) {}
+  };
+
+  // After user data load — age gate
+  const _prevGoto = window.goto;
+  window.goto = function(id) {
+    if (typeof _prevGoto === 'function') _prevGoto(id);
+    setTimeout(function(){
+      applyAgeGate();
+      if (id === 'pgAdmin') window.loadAdminData && window.loadAdminData();
+      if (id === 'pgSettings') {
+        try {
+          const st = document.getElementById('avStatus');
+          if (st && UD) {
+            if (UD.ageVerified) st.innerHTML = '<span style="color:#2d6">✅ Возраст подтверждён</span>';
+            else if (UD.ageVerifyPending) st.innerHTML = '<span style="color:#fc0">⏳ На проверке</span>';
+            else st.innerHTML = '<span style="color:#888">Не подтверждён</span>';
+          }
+          const ph = document.getElementById('phoneHint');
+          if (ph && UD && UD.phone) ph.textContent = UD.phone;
+          const pi = document.getElementById('phoneIn');
+          if (pi && UD && UD.phone) pi.value = UD.phone;
+        } catch(e) {}
+      }
+    }, 80);
+  };
+  window.nav = window.goto;
+
+  // Apply gate periodically when UD exists
+  setInterval(function(){ if (UD) applyAgeGate(); }, 4000);
+
+  // Safety: always hide loader if app is visible
+  setInterval(function(){
+    try {
+      const app = document.getElementById('app');
+      const loader = document.getElementById('loader');
+      if (app && loader && (app.style.display === 'flex' || getComputedStyle(app).display === 'flex')) {
+        if (loader.style.display !== 'none') loader.style.display = 'none';
+      }
+    } catch(e) {}
+  }, 2000);
+
+  console.log('[BV] features v27 age/phone/helper/positions');
+})();
