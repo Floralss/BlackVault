@@ -319,13 +319,13 @@
         <div class="wh-amount"><span>$</span><span id="wBalInt">0</span><span id="wBalDec" style="opacity:.6">.00</span></div>
         <div class="wh-sub" id="wSub">Кошелёк BlackVault</div>
         <div class="wh-code" id="wCode" onclick="copyCode()">🔑 <span id="wCodeTxt">BV-??????</span> <span style="opacity:.5">⎘</span></div>
-        <div class="wh-actions">
-            <button type="button" class="wa" data-goto="pgDeposit"><i>↓</i>Пополнить</button>
-            <button type="button" class="wa on" data-goto="pgTransfer"><i>→</i>Перевод</button>
-            <button type="button" class="wa off" onclick="toast('Вывод временно недоступен','w')"><i>↑</i>Вывести</button>
-            <button type="button" class="wa" data-goto="pgExchange"><i>⇄</i>Обмен</button>
-            <button type="button" class="wa" data-goto="pgChecks"><i>#</i>Чек</button>
-            <button type="button" class="wa" data-goto="pgQrPay"><i>▦</i>QR</button>
+        <div class="wh-actions" id="whActions">
+          <button type="button" class="act-btn" data-goto="pgDeposit">↓ Пополнить</button>
+          <button type="button" class="act-btn act-primary" data-goto="pgTransfer">→ Перевод</button>
+          <button type="button" class="act-btn act-muted" onclick="toast('Вывод временно недоступен','w')">↑ Вывести</button>
+          <button type="button" class="act-btn" data-goto="pgExchange">⇄ Обмен</button>
+          <button type="button" class="act-btn" data-goto="pgChecks"># Чек</button>
+          <button type="button" class="act-btn" data-goto="pgQrPay">▦ QR</button>
         </div>
       </div>
       <div class="sec"><div class="sec-head"><span class="sec-title">Активы</span><span class="sec-link" data-goto="pgAssets">Все</span></div><div class="asset-list" id="homeAssets"></div></div>
@@ -1227,6 +1227,7 @@
     </div>
   </div>
 </div>
+
 
 
 
