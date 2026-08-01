@@ -313,6 +313,7 @@
 
     <div class="page on" id="pgWallet">
       <div class="ph"><div class="ph-top"><div><div class="ph-title" id="homeGreet">Кошелёк</div><div class="ph-sub" id="homeDate"></div></div><div id="homeBadge"></div></div></div>
+      <div id="ageGateBanner" style="display:none;background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.25);border-radius:var(--rs);padding:13px 17px;margin:0 14px 12px;font-size:13px;color:#FFD166;font-weight:600">🪪 Подтвердите возраст в <span style="text-decoration:underline;cursor:pointer" data-goto="pgSettings">Настройках</span>, чтобы пользоваться кошельком.</div>
       <div id="homeBlockedBanner" style="display:none;background:rgba(255,77,106,.12);border:1px solid rgba(255,77,106,.25);border-radius:var(--rs);padding:13px 17px;margin-bottom:17px;font-size:13px;color:#FF8FA3;font-weight:600">🔒 Кошелёк заблокирован. <span style="text-decoration:underline;cursor:pointer" data-goto="pgSupport">Поддержка</span></div>
       <div class="wallet-hero">
         <div class="wh-label">Общий баланс</div>
@@ -535,7 +536,19 @@
     <div class="page" id="pgSupport">
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🎧 Поддержка</div><div class="ph-sub">Обращения и тикеты</div></div>
       <button class="btn btn-primary btn-sm" id="btnNewReport">+ Обращение</button></div></div>
-      <div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
+      
+      <div class="sec card-p" style="max-width:520px;margin:0 14px 14px" id="helperAppCard">
+        <div style="font-size:15px;font-weight:800;margin-bottom:8px">🙋 Заявка на хелпера</div>
+        <div style="font-size:12.5px;color:var(--c-text2);margin-bottom:12px;line-height:1.45">Заполните форму. Администратор рассмотрит заявку в тикете поддержки. При одобрении вам выдадут роль хелпера.</div>
+        <div class="form-group"><label class="form-label">Имя</label><input class="form-input" id="haName" placeholder="Как к вам обращаться"/></div>
+        <div class="form-group"><label class="form-label">Сколько лет</label><input class="form-input" id="haAge" type="number" min="14" max="99" placeholder="18"/></div>
+        <div class="form-group"><label class="form-label">Откуда вы</label><input class="form-input" id="haFrom" placeholder="Город / страна"/></div>
+        <div class="form-group"><label class="form-label">О себе</label><textarea class="form-input" id="haAbout" rows="3" placeholder="Почему хотите быть хелпером"></textarea></div>
+        <div class="form-group"><label class="form-label">Опыт (необязательно)</label><input class="form-input" id="haExp" placeholder="Модерация, поддержка..."/></div>
+        <button type="button" class="btn btn-primary" onclick="submitHelperApp()">Подать заявку</button>
+      </div>
+
+<div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
     </div>
 
     <!-- DOWNLOAD DESKTOP APP -->
@@ -676,6 +689,7 @@
         <button class="btn btn-secondary btn-sm" id="admStaffTabBtn" style="display:none" onclick="admTab('staff')">Персонал</button>
         <button class="btn btn-secondary btn-sm" id="admTagTabBtn" style="display:none" onclick="admTab('grantTag')">Выдать тег</button>
         <button class="btn btn-secondary btn-sm" id="admContestTabBtn" style="display:none" onclick="admTab('contest')">Конкурсы</button>
+        <button class="btn btn-secondary btn-sm" id="admAgeTabBtn" style="display:none" onclick="admTab('age');loadAgeVerifications()">🪪 Возраст</button>
         <button class="btn btn-secondary btn-sm" id="admComplaintsTabBtn" style="display:flex" onclick="admTab('complaints');loadComplaints()">⚠️ Жалобы</button>
       </div>
       
@@ -723,6 +737,18 @@
       <div id="admTx" style="display:none"><div class="table-wrap"><table class="data-table"><thead><tr><th>От</th><th>Кому</th><th>Сумма</th><th>Тип</th><th>Дата</th></tr></thead><tbody id="admTxTb"><tr><td colspan="5" class="empty-state">Загрузка...</td></tr></tbody></table></div></div>
       <div id="admReports" style="display:none"><div class="sec" id="admReportsList"><div class="empty-state"><span class="emo">🎧</span>Нет</div></div></div>
       <div id="admTgReq" style="display:none"><div class="sec" id="admTgReqList"><div class="empty-state"><span class="emo">📱</span>Нет заявок</div></div></div>
+      
+      <div id="admAge" style="display:none">
+        <div class="sec card-p" style="margin-bottom:14px">
+          <div style="font-size:15px;font-weight:800;margin-bottom:8px">🪪 Подтверждение возраста</div>
+          <div style="font-size:12.5px;color:var(--c-text2);line-height:1.55;margin-bottom:12px">
+            Этот раздел нужен <b>для безопасности пользователей</b>. Фото и данные сохраняются, чтобы в случае мошенничества можно было установить личность и при необходимости связаться с родителями / опекунами.
+            Мы не публикуем эти данные. Используйте их только для защиты сообщества от обмана.
+          </div>
+          <div id="admAgeList"><div class="empty-state">Загрузка...</div></div>
+        </div>
+      </div>
+
       <div id="admGive" style="display:none">
         <div class="sec card-p" style="max-width:480px">
           <div style="font-size:15px;font-weight:800;margin-bottom:17px">💰 Выдать деньги пользователю</div>
@@ -753,6 +779,21 @@
             <div class="toggle" id="hideRoleToggle" onclick="toggleHideRole()"><div class="toggle-k"></div></div>
           </div>
         </div>
+        
+        <div class="sec card-p" style="max-width:520px;margin-bottom:17px">
+          <div style="font-size:15px;font-weight:800;margin-bottom:12px">🏛 Создать должность (владелец)</div>
+          <div class="form-group"><label class="form-label">ID должности (латиница)</label><input class="form-input" id="posId" placeholder="moderator"/></div>
+          <div class="form-group"><label class="form-label">Название</label><input class="form-input" id="posTitle" placeholder="Модератор"/></div>
+          <div class="form-group"><label class="form-label">Права</label>
+            <label style="display:flex;gap:8px;align-items:center;margin:6px 0;font-size:13px"><input type="checkbox" id="posPermMod"/> Модерация</label>
+            <label style="display:flex;gap:8px;align-items:center;margin:6px 0;font-size:13px"><input type="checkbox" id="posPermMoney"/> Деньги (выдача/изъятие)</label>
+            <label style="display:flex;gap:8px;align-items:center;margin:6px 0;font-size:13px"><input type="checkbox" id="posPermSupport"/> Поддержка</label>
+            <label style="display:flex;gap:8px;align-items:center;margin:6px 0;font-size:13px"><input type="checkbox" id="posPermStaff"/> Управление персоналом</label>
+          </div>
+          <button class="btn btn-primary" type="button" onclick="createPosition()">Создать должность</button>
+          <div id="posList" style="margin-top:14px"></div>
+        </div>
+
         <div class="sec" id="staffListWrap"><div class="empty-state"><span class="emo">👥</span>Загрузка...</div></div>
       </div>
       <div id="admGrantTag" style="display:none">
@@ -831,6 +872,37 @@
             <span class="set-link-txt"><b>Telegram / Discord</b><small id="setSocialsHint">Не привязано</small></span>
             <span class="set-link-arr">›</span>
           </button>
+        </div>
+
+        
+        <div class="set-card" id="ageVerifyCard">
+          <div class="set-label">Подтверждение возраста</div>
+          <div style="font-size:12.5px;color:var(--c-text2);line-height:1.5;padding:0 4px 10px">Как в Telegram Wallet: укажите данные и подтвердите личность фото лица или документом с датой рождения. После одобрения кошелёк разблокируется.</div>
+          <div id="avStatus" style="padding:0 4px 10px;font-size:13px;color:#888">Статус загружается...</div>
+          <div class="form-group" style="padding:0 4px"><label class="form-label">Имя</label><input class="form-input" id="avFirstName" placeholder="Иван"/></div>
+          <div class="form-group" style="padding:0 4px"><label class="form-label">Фамилия</label><input class="form-input" id="avLastName" placeholder="Иванов"/></div>
+          <div class="form-group" style="padding:0 4px"><label class="form-label">Возраст</label><input class="form-input" id="avAge" type="number" min="1" max="120" placeholder="18"/></div>
+          <div class="form-group" style="padding:0 4px"><label class="form-label">Откуда вы</label><input class="form-input" id="avFrom" placeholder="Город, страна"/></div>
+          <div class="form-group" style="padding:0 4px"><label class="form-label">Способ подтверждения</label>
+            <label style="display:flex;gap:8px;align-items:center;margin:8px 0;font-size:13px"><input type="radio" name="avMethod" value="face" onchange="document.getElementById('avCamSection').style.display='block';document.getElementById('avDocSection').style.display='none'"/> 📷 Селфи / фото лица (камера)</label>
+            <label style="display:flex;gap:8px;align-items:center;margin:8px 0;font-size:13px"><input type="radio" name="avMethod" value="doc" onchange="document.getElementById('avCamSection').style.display='none';document.getElementById('avDocSection').style.display='block'"/> 📄 Документ (паспорт/ID с датой рождения)</label>
+          </div>
+          <div id="avCamSection" style="display:none;padding:0 4px 10px">
+            <div id="avCamWrap" style="display:none;margin-bottom:8px"><video id="avCamVideo" autoplay playsinline style="width:100%;max-height:240px;border-radius:12px;background:#000"></video><canvas id="avCamCanvas" style="display:none"></canvas></div>
+            <button type="button" class="btn btn-secondary btn-sm" onclick="startAgeCam()">Включить камеру</button>
+          </div>
+          <div id="avDocSection" style="display:none;padding:0 4px 10px">
+            <input type="file" id="avDocFile" accept="image/*" class="form-input"/>
+          </div>
+          <div style="padding:8px 4px 12px"><button type="button" class="btn btn-primary" onclick="submitAgeVerify()">Отправить на проверку</button></div>
+        </div>
+
+        <div class="set-card" id="phoneBindCard">
+          <div class="set-label">Телефон</div>
+          <div style="font-size:12.5px;color:var(--c-text2);padding:0 4px 8px">Привязка номера (международный формат). Несуществующий / неподдерживаемый номер будет отклонён.</div>
+          <div class="form-group" style="padding:0 4px"><label class="form-label">Номер (+код страны)</label><input class="form-input" id="phoneIn" placeholder="+380XXXXXXXXX"/></div>
+          <div id="phoneHint" style="font-size:12px;color:#888;padding:0 4px 8px">Не привязан</div>
+          <div style="padding:0 4px 12px"><button type="button" class="btn btn-primary btn-sm" onclick="savePhone()">Сохранить номер</button></div>
         </div>
 
         <div class="set-card">
