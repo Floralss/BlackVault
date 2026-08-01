@@ -537,18 +537,7 @@
       <div class="ph"><div class="ph-top"><div><div class="ph-title">🎧 Поддержка</div><div class="ph-sub">Обращения и тикеты</div></div>
       <button class="btn btn-primary btn-sm" id="btnNewReport">+ Обращение</button></div></div>
       
-      <div class="sec card-p" style="max-width:520px;margin:0 14px 14px" id="helperAppCard">
-        <div style="font-size:15px;font-weight:800;margin-bottom:8px">🙋 Заявка на хелпера</div>
-        <div style="font-size:12.5px;color:var(--c-text2);margin-bottom:12px;line-height:1.45">Заполните форму. Администратор рассмотрит заявку в тикете поддержки. При одобрении вам выдадут роль хелпера.</div>
-        <div class="form-group"><label class="form-label">Имя</label><input class="form-input" id="haName" placeholder="Как к вам обращаться"/></div>
-        <div class="form-group"><label class="form-label">Сколько лет</label><input class="form-input" id="haAge" type="number" min="14" max="99" placeholder="18"/></div>
-        <div class="form-group"><label class="form-label">Откуда вы</label><input class="form-input" id="haFrom" placeholder="Город / страна"/></div>
-        <div class="form-group"><label class="form-label">О себе</label><textarea class="form-input" id="haAbout" rows="3" placeholder="Почему хотите быть хелпером"></textarea></div>
-        <div class="form-group"><label class="form-label">Опыт (необязательно)</label><input class="form-input" id="haExp" placeholder="Модерация, поддержка..."/></div>
-        <button type="button" class="btn btn-primary" onclick="submitHelperApp()">Подать заявку</button>
-      </div>
-
-<div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
+      <div class="sec" id="reportsWrap"><div class="empty-state"><span class="emo">🎧</span>Нет обращений</div></div>
     </div>
 
     <!-- DOWNLOAD DESKTOP APP -->
@@ -1001,14 +990,22 @@
 </div>
 
 <div class="overlay" id="sheetNewReport"><div class="sheet"><div class="sheet-handle"></div>
-  <div class="sheet-head"><div class="sheet-title">🎧 Новое обращение</div><button class="sheet-close" onclick="closeSheet('sheetNewReport')">✕</button></div>
+  <div class="sheet-head"><div class="sheet-title">🎧 Новое обращение</div><button type="button" class="sheet-close" data-close="sheetNewReport" aria-label="Закрыть">✕</button></div>
   <div class="sheet-body">
-    <div class="form-group"><label class="form-label">Тип</label><select class="form-input" id="repType"><option value="question">❓ Вопрос</option><option value="report">🚨 Репорт</option><option value="request">📋 Просьба</option><option value="unban">🔓 Разбан / разморозка</option><option value="complaint_admin">⚠️ Жалоба на администратора</option><option value="complaint_user">⚠️ Жалоба на пользователя</option></select></div>
+    <div class="form-group"><label class="form-label">Тип</label><select class="form-input" id="repType"><option value="question">❓ Вопрос</option><option value="report">🚨 Репорт</option><option value="request">📋 Просьба</option><option value="unban">🔓 Разбан / разморозка</option><option value="complaint_admin">⚠️ Жалоба на администратора</option><option value="complaint_user">⚠️ Жалоба на пользователя</option><option value="helper_app">🙋 Заявка на хелпера</option></select></div>
     <div class="form-group" id="repTargetGroup" style="display:none">
         <label class="form-label">На кого жалуетесь (ник или BV-код)</label>
         <input class="form-input" id="repTargetUser" placeholder="@username или BV-XXXXXX"/>
       </div>
-      <div class="form-group"><label class="form-label">Тема</label><input class="form-input" id="repSubj" placeholder="Кратко опишите"/></div>
+      <div id="repHelperFields" style="display:none">
+        <div style="font-size:13px;color:var(--c-text2);margin-bottom:12px;line-height:1.45">Заполните анкету. После отправки создастся обращение, администратор рассмотрит его в чате. При одобрении вам выдадут роль хелпера.</div>
+        <div class="form-group"><label class="form-label">Имя</label><input class="form-input" id="haName" placeholder="Как к вам обращаться"/></div>
+        <div class="form-group"><label class="form-label">Сколько лет</label><input class="form-input" id="haAge" type="number" min="14" max="99" placeholder="18"/></div>
+        <div class="form-group"><label class="form-label">Откуда вы</label><input class="form-input" id="haFrom" placeholder="Город / страна"/></div>
+        <div class="form-group"><label class="form-label">О себе / почему хотите быть хелпером</label><textarea class="form-input" id="haAbout" rows="3" placeholder="Расскажите о себе"></textarea></div>
+        <div class="form-group"><label class="form-label">Опыт (необязательно)</label><input class="form-input" id="haExp" placeholder="Модерация, поддержка..."/></div>
+      </div>
+      <div class="form-group" id="repSubjGroup"><label class="form-label">Тема</label><input class="form-input" id="repSubj" placeholder="Кратко опишите"/></div>
     <div class="form-group"><label class="form-label">Подробности</label><textarea class="form-input" id="repBody" placeholder="Подробное описание..."></textarea></div>
     <button class="btn btn-primary" id="btnSendReport">Отправить</button>
   </div></div>
@@ -1016,7 +1013,7 @@
 
 <div class="overlay" id="sheetReportChat"><div class="sheet" style="max-height:96vh"><div class="sheet-handle"></div>
   <div class="sheet-head"><div><div class="sheet-title" id="chatTitle">Тикет</div><div style="font-size:12px;color:var(--c-text2);margin-top:2px" id="chatStatus"></div></div>
-  <div style="display:flex;gap:8px;align-items:center"><button class="btn btn-danger btn-sm" id="btnCloseTicket" style="display:none">Закрыть</button><button class="sheet-close" onclick="closeSheet('sheetReportChat')">✕</button></div></div>
+  <div style="display:flex;gap:8px;align-items:center"><button type="button" class="btn btn-danger btn-sm" id="btnCloseTicket" style="display:none">Закрыть тикет</button><button type="button" class="sheet-close" data-close="sheetReportChat" aria-label="Закрыть">✕</button></div></div>
   <div class="sheet-body" style="padding-top:9px"><div class="chat-area"><div class="chat-msgs" id="chatMsgs"></div><div class="chat-bar" id="chatBar"><input id="chatIn" placeholder="Сообщение..."/><button class="btn btn-primary btn-sm" id="btnSendChat">→</button></div></div></div>
 </div></div>
 
