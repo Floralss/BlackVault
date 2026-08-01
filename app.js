@@ -1350,17 +1350,18 @@ window.admTab = admTab;
 async function loadAdminData() {
   if (!UD) return;
   const isOwner = UD.isOwner, isAdmin = UD.role === 'admin';
-  document.getElementById('adminRoleSub').textContent = isOwner ? 'Владелец проекта' : isAdmin ? 'Администратор' : UD.role === 'media' ? 'Медиа' : UD.role === 'sponsor' ? 'Спонсор' : 'Хелпер';
-  document.getElementById('adminTopBadge').innerHTML = roleBadge(UD);
-  document.getElementById('admGiveTabBtn').style.display = isOwner || isAdmin ? 'flex' : 'none';
-  document.getElementById('admTakeTabBtn').style.display = isOwner || isAdmin ? 'flex' : 'none';
-  document.getElementById('admStaffTabBtn').style.display = isOwner ? 'flex' : 'none';
-  document.getElementById('admTagTabBtn').style.display = canModerate(UD) ? 'flex' : 'none';
-  document.getElementById('admContestTabBtn').style.display = isOwner ? 'flex' : 'none';
+  const _ars=document.getElementById('adminRoleSub'); if(_ars) _ars.textContent = isOwner ? 'Владелец проекта' : isAdmin ? 'Администратор' : UD.role === 'media' ? 'Медиа' : UD.role === 'sponsor' ? 'Спонсор' : 'Хелпер';
+  const _atb=document.getElementById('adminTopBadge'); if(_atb) _atb.innerHTML = roleBadge(UD);
+  document.getElementById('admGiveTabBtn') && ((function(){ var _e=document.getElementById('admGiveTabBtn'); if(_e) _e.style.display = isOwner || isAdmin ? 'flex' : 'none'; })();
+  (function(){ var _e=document.getElementById('admTakeTabBtn'); if(_e) _e.style.display = isOwner || isAdmin ? 'flex' : 'none'; })();
+  (function(){ var _e=document.getElementById('admStaffTabBtn'); if(_e) _e.style.display = isOwner ? 'flex' : 'none'; })();
+  (function(){ var _e=document.getElementById('admTagTabBtn'); if(_e) _e.style.display = canModerate(UD) ? 'flex' : 'none'; })();
+  (function(){ var _e=document.getElementById('admContestTabBtn'); if(_e) _e.style.display = isOwner ? 'flex' : 'none'; })();
   admTab('wallets');
 
   const snap = await getDocs(collection(db, 'wallets'));
   const tb = document.getElementById('admWalletsTb');
+  if (!tb) return;
   tb.innerHTML = snap.docs.map(d => {
     const u = d.data(); const tot = toUSD(u.balances).toFixed(2);
     const st = u.blocked ? '<span class="badge badge-red">Заблок</span>' : u.frozen ? '<span class="badge badge-yellow">Заморожен</span>' : '<span class="badge badge-green">Активен</span>';
@@ -3379,7 +3380,7 @@ console.log('[BV] final v17');
         }
         if (id === 'pgAssets' && typeof renderAssets === 'function') renderAssets();
         if (id === 'pgStocks' && typeof loadStocks === 'function') loadStocks();
-        if (id === 'pgAdmin' && typeof loadAdmin === 'function') loadAdmin();
+        if (id === 'pgAdmin' && typeof loadAdminData === 'function') loadAdminData();
       } catch (e) {
         console.error('[BV] page load', e);
       }
@@ -3480,3 +3481,51 @@ console.log('[BV] final v17');
 
   console.log('[BV] mobile nav v23');
 })();
+
+// Admin + buttons v24
+window.loadAdminData = async function() {
+  try {
+    if (!UD) { console.warn('no UD'); return; }
+    const isOwner = !!UD.isOwner, isAdmin = UD.role === 'admin';
+    const ars = document.getElementById('adminRoleSub');
+    if (ars) ars.textContent = isOwner ? 'Владелец проекта' : isAdmin ? 'Администратор' : (UD.role || 'staff');
+    const atb = document.getElementById('adminTopBadge');
+    if (atb && typeof roleBadge === 'function') atb.innerHTML = roleBadge(UD);
+    ['admGiveTabBtn','admTakeTabBtn'].forEach(function(id){
+      var e = document.getElementById(id);
+      if (e) e.style.display = (isOwner || isAdmin) ? '' : 'none';
+    });
+    var staff = document.getElementById('admStaffTabBtn');
+    if (staff) staff.style.display = isOwner ? '' : 'none';
+    if (typeof admTab === 'function') admTab('wallets');
+    else if (typeof window.admTab === 'function') window.admTab('wallets');
+    const tb = document.getElementById('admWalletsTb');
+    if (!tb) {
+      // show any admin panel content
+      var panel = document.getElementById('admWallets');
+      if (panel) panel.style.display = 'block';
+      console.warn('admWalletsTb missing');
+      return;
+    }
+    tb.innerHTML = '<tr><td colspan="5" style="padding:16px;color:#888">Загрузка...</td></tr>';
+    const snap = await getDocs(collection(db, 'wallets'));
+    const rows = snap.docs.map(function(d) {
+      const u = d.data();
+      const tot = (typeof toUSD === 'function' ? toUSD(u.balances) : 0).toFixed(2);
+      const st = u.blocked ? '🔒' : u.frozen ? '❄️' : '✅';
+      return '<tr style="border-bottom:1px solid rgba(255,255,255,.06)">' +
+        '<td style="padding:10px;color:#fff;font-weight:700">' + (u.username || '—') + '</td>' +
+        '<td style="padding:10px;color:#aaa;font-size:12px">' + (u.code || '') + '</td>' +
+        '<td style="padding:10px;color:#fff">$' + tot + '</td>' +
+        '<td style="padding:10px">' + st + '</td>' +
+        '<td style="padding:10px;color:#888;font-size:11px">' + (u.role || 'user') + '</td></tr>';
+    });
+    tb.innerHTML = rows.length ? rows.join('') : '<tr><td colspan="5" style="padding:16px;color:#888">Нет кошельков</td></tr>';
+    console.log('[BV] admin loaded', snap.size);
+  } catch (e) {
+    console.error('[BV] admin', e);
+    const tb = document.getElementById('admWalletsTb');
+    if (tb) tb.innerHTML = '<tr><td colspan="5" style="padding:16px;color:#f66">Ошибка: ' + (e.message || e) + '</td></tr>';
+  }
+};
+console.log('[BV] buttons+admin v24');
