@@ -4253,3 +4253,381 @@ console.log('[BV] fix v26 assets+ach+admin');
 
   console.log('[BV] features v27 age/phone/helper/positions');
 })();
+
+// ═══════════════════════════════════════════════════════════
+// SUPPORT FIX v28 — close X, dedupe msgs, helper in report form
+// ═══════════════════════════════════════════════════════════
+(function () {
+  'use strict';
+
+  // Reliable closeSheet
+  window.closeSheet = function (id) {
+    try {
+      var el = document.getElementById(id);
+      if (!el) return;
+      el.classList.remove('on');
+      el.style.pointerEvents = 'none';
+      // reset after transition
+      setTimeout(function () {
+        if (!el.classList.contains('on')) el.style.pointerEvents = '';
+      }, 300);
+      if (id === 'sheetReportChat') {
+        // optional: don't clear curTicketId so reopen is ok
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  window.openSheet = function (id) {
+    try {
+      var el = document.getElementById(id);
+      if (!el) { console.warn('sheet missing', id); return; }
+      el.style.pointerEvents = 'auto';
+      el.classList.add('on');
+      if (id === 'sheetAccounts' && typeof renderAccountsList === 'function') renderAccountsList();
+      if (id === 'sheetCreateTag' && typeof renderColorPicker === 'function') {
+        try { renderColorPicker('ctColors', TAG_COLORS, function (c) { selectedCtColor = c; updateCtPreview(); }); } catch (e) {}
+      }
+      if (id === 'sheetNewReport') {
+        try { onRepTypeChange(); } catch (e) {}
+      }
+    } catch (e) { console.error(e); }
+  };
+
+  // Delegated close for all [data-close] and .sheet-close
+  document.addEventListener('click', function (e) {
+    var btn = e.target && e.target.closest && (e.target.closest('[data-close]') || e.target.closest('.sheet-close'));
+    if (!btn) return;
+    // if it's inside overlay and is close
+    var closeId = btn.getAttribute('data-close');
+    if (!closeId) {
+      var ov = btn.closest('.overlay');
+      if (ov && ov.id) closeId = ov.id;
+    }
+    if (!closeId) return;
+    e.preventDefault();
+    e.stopPropagation();
+    window.closeSheet(closeId);
+  }, true);
+
+  // Click on overlay backdrop closes
+  document.addEventListener('click', function (e) {
+    if (e.target && e.target.classList && e.target.classList.contains('overlay') && e.target.classList.contains('on')) {
+      e.preventDefault();
+      window.closeSheet(e.target.id);
+    }
+  }, true);
+
+  // Show/hide fields by report type
+  function onRepTypeChange() {
+    var typeEl = document.getElementById('repType');
+    if (!typeEl) return;
+    var t = typeEl.value;
+    var targetG = document.getElementById('repTargetGroup');
+    var helperG = document.getElementById('repHelperFields');
+    var subjG = document.getElementById('repSubjGroup');
+    var bodyG = document.getElementById('repBody');
+    if (targetG) targetG.style.display = (t === 'complaint_admin' || t === 'complaint_user') ? 'block' : 'none';
+    if (helperG) helperG.style.display = (t === 'helper_app') ? 'block' : 'none';
+    // For helper app, auto-fill subject and hide optional details a bit
+    if (t === 'helper_app') {
+      var subj = document.getElementById('repSubj');
+      if (subj && !subj.value) subj.value = 'Заявка на хелпера';
+      if (bodyG && bodyG.closest) {
+        var fg = bodyG.closest('.form-group');
+        if (fg) fg.style.display = 'none';
+      }
+    } else {
+      if (bodyG && bodyG.closest) {
+        var fg2 = bodyG.closest('.form-group');
+        if (fg2) fg2.style.display = '';
+      }
+    }
+  }
+  document.getElementById('repType')?.addEventListener('change', onRepTypeChange);
+  window.onRepTypeChange = onRepTypeChange;
+
+  // Replace send report handler (clone to drop old listeners)
+  var sendBtn = document.getElementById('btnSendReport');
+  if (sendBtn) {
+    var sendBtn2 = sendBtn.cloneNode(true);
+    sendBtn.parentNode.replaceChild(sendBtn2, sendBtn);
+    sendBtn2.addEventListener('click', async function () {
+      try {
+        if (!CU || !UD) return toast('Войдите', 'w');
+        var type = document.getElementById('repType').value;
+        var subj = (document.getElementById('repSubj') || {}).value.trim().slice(0, 100);
+        var body = (document.getElementById('repBody') || {}).value.trim().slice(0, 1000);
+        var targetUser = (document.getElementById('repTargetUser') || {}).value.trim() || '';
+
+        if (type === 'helper_app') {
+          var name = (document.getElementById('haName') || {}).value.trim();
+          var age = parseInt((document.getElementById('haAge') || {}).value, 10);
+          var from = (document.getElementById('haFrom') || {}).value.trim();
+          var about = (document.getElementById('haAbout') || {}).value.trim();
+          var exp = (document.getElementById('haExp') || {}).value.trim();
+          if (!name || !age || !from || !about) return toast('Заполните анкету хелпера', 'w');
+          subj = subj || 'Заявка на хелпера';
+          body = 'Имя: ' + name + '\nВозраст: ' + age + '\nОткуда: ' + from + '\nО себе: ' + about + (exp ? '\nОпыт: ' + exp : '');
+          var appRef = await addDoc(collection(db, 'helperApps'), {
+            uid: CU.uid, username: UD.username, code: UD.code || '',
+            name: name, age: age, from: from, about: about, exp: exp,
+            status: 'pending', createdAt: serverTimestamp()
+          });
+          await addDoc(collection(db, 'reports'), {
+            uid: CU.uid, username: UD.username, code: UD.code || '',
+            type: 'helper_app', category: 'helper_app',
+            subject: subj, status: 'open',
+            helperAppId: appRef.id,
+            messages: [{ uid: CU.uid, username: UD.username, text: body, ts: Date.now() }],
+            createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+          });
+          toast('Заявка на хелпера отправлена', 's');
+        } else {
+          if (!subj) return toast('Введите тему', 'w');
+          if ((type === 'complaint_admin' || type === 'complaint_user') && !targetUser) {
+            return toast('Укажите на кого жалуетесь', 'w');
+          }
+          if (!body) return toast('Опишите подробности', 'w');
+          await addDoc(collection(db, 'reports'), {
+            uid: CU.uid, username: UD.username, code: UD.code || '',
+            type: type, subject: subj, status: 'open',
+            targetUser: targetUser || null,
+            messages: [{ uid: CU.uid, username: UD.username, text: body, ts: Date.now() }],
+            createdAt: serverTimestamp(), updatedAt: serverTimestamp()
+          });
+          toast('Обращение отправлено', 's');
+        }
+        closeSheet('sheetNewReport');
+        document.getElementById('repSubj').value = '';
+        document.getElementById('repBody').value = '';
+        var tu = document.getElementById('repTargetUser'); if (tu) tu.value = '';
+        ['haName', 'haAge', 'haFrom', 'haAbout', 'haExp'].forEach(function (id) {
+          var e = document.getElementById(id); if (e) e.value = '';
+        });
+        if (typeof loadReports === 'function') loadReports();
+      } catch (err) {
+        console.error(err);
+        toast(err.message || 'Ошибка', 'e');
+      }
+    });
+  }
+
+  // Deduplicate messages when rendering
+  function dedupeMsgs(msgs) {
+    if (!Array.isArray(msgs)) return [];
+    var seen = {};
+    var out = [];
+    msgs.forEach(function (m) {
+      var key = (m.uid || '') + '|' + (m.text || '') + '|' + String(m.ts || 0);
+      if (seen[key]) return;
+      seen[key] = 1;
+      out.push(m);
+    });
+    return out;
+  }
+
+  window.loadChatMsgs = async function (id) {
+    try {
+      var snap = await getDoc(doc(db, 'reports', id));
+      if (!snap.exists()) return;
+      var data = snap.data();
+      var msgs = dedupeMsgs(data.messages || []);
+      var box = document.getElementById('chatMsgs');
+      if (!box) return;
+      box.innerHTML = msgs.map(function (m) {
+        var mine = m.uid === (CU && CU.uid);
+        return '<div class="msg-bubble ' + (mine ? 'mine' : 'theirs') + '"><div>' + esc(m.text) + '</div>' +
+          '<div class="msg-meta">' + esc(m.username || '') + ' · ' +
+          (m.ts ? new Date(m.ts).toLocaleTimeString('ru-RU', { hour: '2-digit', minute: '2-digit' }) : '') +
+          '</div></div>';
+      }).join('');
+      box.scrollTop = 99999;
+    } catch (e) { console.error(e); }
+  };
+
+  // Debounced single send
+  var _sendLock = false;
+  function bindChatSend() {
+    var btn = document.getElementById('btnSendChat');
+    var inp = document.getElementById('chatIn');
+    if (btn) {
+      var b2 = btn.cloneNode(true);
+      btn.parentNode.replaceChild(b2, btn);
+      b2.addEventListener('click', async function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        if (_sendLock) return;
+        var text = (document.getElementById('chatIn') || {}).value.trim().slice(0, 500);
+        if (!text || !curTicketId) return;
+        _sendLock = true;
+        try {
+          await updateDoc(doc(db, 'reports', curTicketId), {
+            messages: arrayUnion({ uid: CU.uid, username: UD.username, text: text, ts: Date.now() }),
+            updatedAt: serverTimestamp()
+          });
+          document.getElementById('chatIn').value = '';
+          await loadChatMsgs(curTicketId);
+        } catch (err) {
+          toast(err.message || 'Ошибка', 'e');
+        } finally {
+          setTimeout(function () { _sendLock = false; }, 400);
+        }
+      });
+    }
+    if (inp) {
+      var i2 = inp.cloneNode(true);
+      inp.parentNode.replaceChild(i2, inp);
+      i2.addEventListener('keydown', function (e) {
+        if (e.key === 'Enter' && !e.shiftKey) {
+          e.preventDefault();
+          document.getElementById('btnSendChat')?.click();
+        }
+      });
+    }
+  }
+  bindChatSend();
+
+  // Close ticket button
+  function bindCloseTicket() {
+    var btn = document.getElementById('btnCloseTicket');
+    if (!btn) return;
+    var b2 = btn.cloneNode(true);
+    btn.parentNode.replaceChild(b2, btn);
+    b2.addEventListener('click', async function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!curTicketId) return;
+      try {
+        await requireFreshStaff();
+        await updateDoc(doc(db, 'reports', curTicketId), { status: 'closed', closedAt: serverTimestamp() });
+        document.getElementById('chatStatus').textContent = '⚫ Закрыт';
+        document.getElementById('chatBar').style.display = 'none';
+        b2.style.display = 'none';
+        var ha = document.getElementById('btnApproveHelper');
+        if (ha) ha.style.display = 'none';
+        toast('Тикет закрыт', 's');
+        if (typeof loadReports === 'function') loadReports();
+        // close sheet after short delay optional
+      } catch (err) { toast(cfError(err), 'e'); }
+    });
+  }
+  bindCloseTicket();
+
+  // Robust openTicket
+  window.openTicket = async function (id, subject, status) {
+    try {
+      curTicketId = id;
+      var title = document.getElementById('chatTitle');
+      var st = document.getElementById('chatStatus');
+      if (title) title.textContent = subject || 'Тикет';
+      if (st) st.textContent = status === 'open' ? '🟠 Открыт' : status === 'inprogress' ? '🔵 В работе' : '⚫ Закрыт';
+
+      var isStaff = typeof canModerate === 'function' ? canModerate(UD) : false;
+      var closeBtn = document.getElementById('btnCloseTicket');
+      if (closeBtn) closeBtn.style.display = isStaff && status !== 'closed' ? 'flex' : 'none';
+      var chatBar = document.getElementById('chatBar');
+      if (chatBar) chatBar.style.display = status === 'closed' ? 'none' : 'flex';
+
+      await loadChatMsgs(id);
+
+      // helper approve btn
+      var haBtn = document.getElementById('btnApproveHelper');
+      if (!haBtn) {
+        var parent = closeBtn && closeBtn.parentNode;
+        if (parent) {
+          haBtn = document.createElement('button');
+          haBtn.id = 'btnApproveHelper';
+          haBtn.type = 'button';
+          haBtn.className = 'btn btn-primary btn-sm';
+          haBtn.textContent = '✅ Выдать хелпера';
+          haBtn.style.display = 'none';
+          haBtn.addEventListener('click', function (e) {
+            e.preventDefault();
+            if (window.approveHelperFromTicket && curTicketId) window.approveHelperFromTicket(curTicketId);
+          });
+          parent.insertBefore(haBtn, closeBtn);
+        }
+      }
+      if (haBtn) {
+        var snap = await getDoc(doc(db, 'reports', id));
+        var data = snap.exists() ? snap.data() : {};
+        var showHa = isStaff && (data.category === 'helper_app' || data.type === 'helper_app') && data.status !== 'closed';
+        haBtn.style.display = showHa ? 'flex' : 'none';
+      }
+
+      if (isStaff && status === 'open') {
+        requireFreshStaff().then(function () {
+          return updateDoc(doc(db, 'reports', id), { status: 'inprogress' });
+        }).catch(function () {});
+        if (st) st.textContent = '🔵 В работе';
+      }
+
+      openSheet('sheetReportChat');
+    } catch (e) {
+      console.error(e);
+      toast(e.message || 'Ошибка открытия', 'e');
+    }
+  };
+
+  // Improve loadReports labels
+  var _loadReports = window.loadReports || loadReports;
+  window.loadReports = async function () {
+    if (typeof _loadReports === 'function') {
+      // patch type labels after
+      await _loadReports();
+    }
+    try {
+      // re-enhance list items if needed — ensure openTicket works
+      var wrap = document.getElementById('reportsWrap');
+      if (!wrap) return;
+      // type labels already in original; add helper icon via nothing extra
+    } catch (e) {}
+  };
+
+  // Fix original loadReports type labels to include helper
+  // monkey-patch by redefining fully if possible
+  window.loadReports = async function () {
+    if (!CU) return;
+    var isStaff = typeof canModerate === 'function' && canModerate(UD);
+    var snap;
+    if (isStaff) snap = await getDocs(query(collection(db, 'reports'), limit(50)));
+    else snap = await getDocs(query(collection(db, 'reports'), where('uid', '==', CU.uid), limit(20)));
+    var el = document.getElementById('reportsWrap');
+    if (!el) return;
+    if (snap.empty) {
+      el.innerHTML = '<div class="empty-state"><span class="emo">🎧</span>Нет обращений</div>';
+      return;
+    }
+    var rows = [];
+    snap.forEach(function (d) { rows.push(Object.assign({}, d.data(), { _id: d.id })); });
+    rows.sort(function (a, b) {
+      return ((b.updatedAt && b.updatedAt.seconds) || (b.createdAt && b.createdAt.seconds) || 0) -
+        ((a.updatedAt && a.updatedAt.seconds) || (a.createdAt && a.createdAt.seconds) || 0);
+    });
+    var tL = {
+      question: '❓', report: '🚨', request: '📋', unban: '🔓',
+      complaint_admin: '⚠️', complaint_user: '⚠️', helper_app: '🙋'
+    };
+    el.innerHTML = '<div class="sec" style="margin:0">' + rows.map(function (r) {
+      var stBadge = r.status === 'open' ? 'badge-yellow' : r.status === 'inprogress' ? 'badge-purple' : 'badge-red';
+      var stText = r.status === 'open' ? 'Открыт' : r.status === 'inprogress' ? 'В работе' : 'Закрыт';
+      var stDot = r.status === 'open' ? 'dot-open' : r.status === 'inprogress' ? 'dot-prog' : 'dot-closed';
+      return '<div class="report-item" data-tid="' + r._id + '">' +
+        '<div class="report-dot ' + stDot + '"></div>' +
+        '<div style="flex:1;min-width:0"><div style="font-size:14px;font-weight:700">' + esc(r.subject || '') + '</div>' +
+        '<div style="font-size:12px;color:var(--c-text2);margin-top:2px">' + (tL[r.type] || '') + ' · ' + esc(r.username || '') +
+        (typeof fmtDate === 'function' ? ' · ' + fmtDate(r.createdAt) : '') + '</div></div>' +
+        '<span class="badge ' + stBadge + '">' + stText + '</span></div>';
+    }).join('') + '</div>';
+
+    el.querySelectorAll('.report-item[data-tid]').forEach(function (item) {
+      item.addEventListener('click', function () {
+        var id = item.getAttribute('data-tid');
+        var row = rows.find(function (x) { return x._id === id; });
+        if (row) openTicket(id, row.subject, row.status);
+      });
+    });
+  };
+
+  console.log('[BV] support fix v28');
+})();
