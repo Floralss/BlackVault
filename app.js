@@ -3950,34 +3950,66 @@ console.log('[BV] fix v26 assets+ach+admin');
   // Admin: load age verifications
   window.loadAgeVerifications = async function() {
     const el = document.getElementById('admAgeList');
-    if (!el) return;
-    el.innerHTML = '<div style="padding:16px;color:#888">Загрузка...</div>';
+    const panel = document.getElementById('admAge');
+    if (panel) panel.style.display = 'block';
+    if (!el) {
+      console.warn('[BV] admAgeList missing');
+      return;
+    }
+    el.innerHTML = '<div style="padding:16px;color:#888">Загрузка заявок...</div>';
     try {
-      const snap = await getDocs(query(collection(db, 'ageVerifications'), orderBy('createdAt', 'desc'), limit(80)));
+      let snap;
+      try {
+        snap = await getDocs(query(collection(db, 'ageVerifications'), orderBy('createdAt', 'desc'), limit(80)));
+      } catch (orderErr) {
+        console.warn('[BV] age orderBy failed, fallback', orderErr);
+        snap = await getDocs(query(collection(db, 'ageVerifications'), limit(80)));
+      }
       const rows = [];
-      snap.forEach(function(d){
-        const a = d.data();
+      const docs = [];
+      snap.forEach(function(d){ docs.push({ id: d.id, data: d.data() }); });
+      // sort client-side
+      docs.sort(function(a, b) {
+        const ta = (a.data.createdAt && a.data.createdAt.seconds) || a.data.ts || 0;
+        const tb = (b.data.createdAt && b.data.createdAt.seconds) || b.data.ts || 0;
+        return tb - ta;
+      });
+      docs.forEach(function(item){
+        const a = item.data || {};
+        const id = item.id;
         const st = a.status === 'approved' ? '<span style="color:#2d6">✅ Одобрено</span>' :
                    a.status === 'rejected' ? '<span style="color:#f66">❌ Отклонено</span>' :
                    '<span style="color:#fc0">⏳ Ожидает</span>';
-        const acts = (a.status === 'pending' && UD && (UD.isOwner || UD.role === 'admin'))
-          ? '<div style="display:flex;gap:6px;margin-top:8px"><button class="btn btn-primary btn-sm" type="button" onclick="reviewAge(\''+d.id+'\',true)">Одобрить</button><button class="btn btn-danger btn-sm" type="button" onclick="reviewAge(\''+d.id+'\',false)">Отклонить</button></div>'
+        const canAct = (!a.status || a.status === 'pending') && UD && (UD.isOwner || UD.role === 'admin');
+        const acts = canAct
+          ? '<div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">' +
+            '<button class="btn btn-primary btn-sm" type="button" onclick="reviewAge(\'' + id + '\',true)">Одобрить</button>' +
+            '<button class="btn btn-danger btn-sm" type="button" onclick="reviewAge(\'' + id + '\',false)">Отклонить</button></div>'
           : '';
+        const photo = a.photoData
+          ? '<img src="' + a.photoData + '" alt="doc" style="max-width:140px;max-height:140px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,.1)"/>'
+          : '<div style="width:140px;height:90px;border-radius:10px;background:rgba(255,255,255,.04);display:flex;align-items:center;justify-content:center;color:#666;font-size:12px">нет фото</div>';
         rows.push(
           '<div class="sec card-p" style="margin-bottom:12px">' +
-          '<div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap"><div>' +
-          '<div style="font-weight:800;color:#fff">' + esc(a.firstName||'') + ' ' + esc(a.lastName||'') + '</div>' +
-          '<div style="font-size:12px;color:#999">@' + esc(a.username||'') + ' · ' + esc(a.code||'') + '</div>' +
-          '<div style="font-size:13px;margin-top:6px">Возраст: <b>' + (a.age||'—') + '</b> · Откуда: ' + esc(a.from||'—') + '</div>' +
-          '<div style="font-size:12px;color:#888">Способ: ' + (a.method==='face'?'Селфи':'Документ') + ' · ' + st + '</div>' +
-          acts + '</div>' +
-          (a.photoData ? '<img src="'+a.photoData+'" style="max-width:140px;max-height:140px;border-radius:10px;object-fit:cover;border:1px solid rgba(255,255,255,.1)"/>' : '') +
+          '<div style="display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap">' +
+          '<div style="flex:1;min-width:180px">' +
+          '<div style="font-weight:800;color:#fff;font-size:15px">' + esc(a.firstName || '') + ' ' + esc(a.lastName || '') + '</div>' +
+          '<div style="font-size:12px;color:#999;margin-top:2px">@' + esc(a.username || '') + ' · ' + esc(a.code || '') + '</div>' +
+          '<div style="font-size:13px;margin-top:8px;color:#ddd">Возраст: <b>' + (a.age || '—') + '</b> · Откуда: ' + esc(a.from || '—') + '</div>' +
+          '<div style="font-size:12px;color:#888;margin-top:4px">Способ: ' + (a.method === 'face' ? 'Селфи / лицо' : a.method === 'doc' ? 'Документ' : (a.method || '—')) + ' · ' + st + '</div>' +
+          acts +
+          '</div>' + photo +
           '</div></div>'
         );
       });
-      el.innerHTML = rows.length ? rows.join('') : '<div class="empty-state">Нет заявок</div>';
-    } catch(e) {
-      el.innerHTML = '<div style="color:#f66;padding:16px">'+(e.message||e)+'</div>';
+      el.innerHTML = rows.length
+        ? rows.join('')
+        : '<div class="empty-state"><span class="emo">🪪</span>Заявок пока нет<br><span style="font-size:12px;color:#666">Пользователи подают их в Настройках → Подтверждение возраста</span></div>';
+      console.log('[BV] age verifications loaded', rows.length);
+    } catch (e) {
+      console.error('[BV] loadAgeVerifications', e);
+      el.innerHTML = '<div style="color:#f66;padding:16px">Ошибка загрузки: ' + esc(String(e.message || e)) +
+        '<div style="margin-top:8px;font-size:12px;color:#888">Проверьте правила Firestore для коллекции ageVerifications (read для admin/owner).</div></div>';
     }
   };
 
@@ -4630,4 +4662,67 @@ console.log('[BV] fix v26 assets+ach+admin');
   };
 
   console.log('[BV] support fix v28');
+})();
+
+
+// ═══════════════════════════════════════════════════════════
+// AGE ADMIN FIX v29 — always show tab + reliable load
+// ═══════════════════════════════════════════════════════════
+(function () {
+  function showAgeTab() {
+    try {
+      var btn = document.getElementById('admAgeTabBtn');
+      if (!btn) return;
+      var ok = UD && (UD.isOwner || UD.role === 'admin' || UD.role === 'helper' || UD.role === 'owner');
+      // show for anyone who reached admin panel; still prefer staff
+      if (ok || (UD && (UD.isOwner || UD.role === 'admin'))) {
+        btn.style.display = 'flex';
+      } else if (document.getElementById('pgAdmin')) {
+        // if admin page is accessible, show tab
+        btn.style.display = 'flex';
+      }
+    } catch (e) {}
+  }
+
+  var prevLoad = window.loadAdminData;
+  window.loadAdminData = async function () {
+    if (typeof prevLoad === 'function') {
+      try { await prevLoad(); } catch (e) { console.error(e); }
+    }
+    showAgeTab();
+    // if age panel currently visible, refresh
+    var panel = document.getElementById('admAge');
+    if (panel && panel.style.display !== 'none' && window.loadAgeVerifications) {
+      try { await window.loadAgeVerifications(); } catch (e) {}
+    }
+  };
+
+  var prevAdm = window.admTab;
+  window.admTab = function (t) {
+    if (typeof prevAdm === 'function') prevAdm(t);
+    try {
+      // hide all known admin content panels first if needed
+      var ids = ['admWallets','admDeposits','admTx','admReports','admTgreq','admGive','admTake','admStaff','admGrantTag','admContest','admComplaints','admAchievements','admBroadcast','admFreeze','admAge'];
+      if (t === 'age') {
+        ids.forEach(function (id) {
+          var el = document.getElementById(id);
+          if (el) el.style.display = (id === 'admAge') ? 'block' : 'none';
+        });
+        var panel = document.getElementById('admAge');
+        if (panel) panel.style.display = 'block';
+        if (window.loadAgeVerifications) window.loadAgeVerifications();
+        // highlight tab
+        document.querySelectorAll('#adminTabs .btn').forEach(function (b) {
+          b.className = 'btn btn-secondary btn-sm';
+        });
+        var ab = document.getElementById('admAgeTabBtn');
+        if (ab) ab.className = 'btn btn-primary btn-sm';
+      }
+    } catch (e) { console.error('[BV] admTab age', e); }
+  };
+
+  // expose
+  window.showAgeTab = showAgeTab;
+  setInterval(showAgeTab, 3000);
+  console.log('[BV] age admin fix v29');
 })();
