@@ -291,11 +291,49 @@ select.form-input{cursor:pointer}
 .qr-scan-status{position:absolute;bottom:12px;left:0;right:0;text-align:center;color:#fff;font-size:13px;font-weight:700;text-shadow:0 1px 5px #000}
 
 /* PIN */
-#pinWall{position:fixed;inset:0;background:var(--bg);z-index:8500;display:none;align-items:center;justify-content:center;padding:24px}
-#pinWall.show{display:flex}
-.pin-dots{display:flex;gap:11px;margin:18px 0;justify-content:center}
-.pin-dot{width:13px;height:13px;border-radius:50%;border:2px solid var(--c-border2);transition:.2s}.pin-dot.on{background:var(--btn1);border-color:var(--btn1);box-shadow:0 0 10px var(--glow)}
-.pin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;max-width:270px}
+#pinWall{
+  position:fixed;inset:0;z-index:9500;
+  background:#07070F;
+  display:none;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  padding:24px 20px;
+  gap:0;
+}
+#pinWall.show{display:flex !important}
+.pin-ico{font-size:40px;margin-bottom:10px;line-height:1}
+.pin-h{font-size:22px;font-weight:900;color:#fff;margin-bottom:6px;letter-spacing:-0.02em}
+.pin-s{font-size:14px;color:rgba(255,255,255,.55);margin-bottom:22px;font-weight:600}
+.pin-track,.pin-dots{
+  display:flex;gap:12px;margin:0 0 28px;justify-content:center;align-items:center;
+}
+.pin-d,.pin-dot{
+  width:14px;height:14px;border-radius:50%;
+  border:2px solid rgba(255,255,255,.25);
+  background:transparent;transition:.15s;
+}
+.pin-d.on,.pin-dot.on{
+  background:#7C5CFC;border-color:#7C5CFC;
+  box-shadow:0 0 12px rgba(124,92,252,.5);
+}
+.pin-grid{
+  display:grid;grid-template-columns:repeat(3,72px);
+  gap:12px;justify-content:center;max-width:280px;
+}
+.pin-k{
+  width:72px;height:72px;border-radius:50%;
+  background:rgba(255,255,255,.08);
+  border:1px solid rgba(255,255,255,.12);
+  font-size:24px;font-weight:800;color:#fff;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;
+  user-select:none;-webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;
+}
+.pin-k:active{background:rgba(124,92,252,.35);transform:scale(.96)}
+.pin-k.sub{background:transparent;border-color:transparent;font-size:20px}
+#pinErr{margin-top:18px;min-height:20px;color:#FF6B7A;font-size:13px;font-weight:700;text-align:center}
+
 .pin-k{aspect-ratio:1;border-radius:15px;background:rgba(255,255,255,.07);border:1px solid var(--c-border);font-size:21px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .pin-k:hover{background:rgba(124,92,252,.15);border-color:rgba(124,92,252,.3)}.pin-k:active{transform:scale(.93)}
 
@@ -1346,3 +1384,24 @@ button.wa.off{
 /* kill old hidden buttons */
 .wh-btn { display: none !important; }
 .wa { display: none !important; }
+
+/* PIN layout force v25 */
+#pinWall.show {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+#pinWall .pin-h, #pinWall .pin-s, #pinWall .pin-ico {
+  display: block !important;
+  text-align: center !important;
+  width: 100% !important;
+}
+
+/* Assets + ach visible v26 */
+#assetsList, .asset-list { min-height: 80px; }
+.asset-row { color: #fff; }
+.ach-grid { display: grid !important; grid-template-columns: repeat(2, 1fr) !important; gap: 8px !important; }
+.ach-card.on { opacity: 1 !important; filter: none !important; border-color: rgba(124,92,252,.5) !important; }
+.ach-card:not(.on) { opacity: 0.4; }
+#admWalletsTb td { color: #ddd; }
