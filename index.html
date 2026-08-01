@@ -678,7 +678,7 @@
         <button class="btn btn-secondary btn-sm" id="admStaffTabBtn" style="display:none" onclick="admTab('staff')">Персонал</button>
         <button class="btn btn-secondary btn-sm" id="admTagTabBtn" style="display:none" onclick="admTab('grantTag')">Выдать тег</button>
         <button class="btn btn-secondary btn-sm" id="admContestTabBtn" style="display:none" onclick="admTab('contest')">Конкурсы</button>
-        <button class="btn btn-secondary btn-sm" id="admAgeTabBtn" style="display:none" onclick="admTab('age');loadAgeVerifications()">🪪 Возраст</button>
+        <button class="btn btn-secondary btn-sm" id="admAgeTabBtn" type="button" style="display:flex" onclick="admTab('age');if(window.loadAgeVerifications)loadAgeVerifications()">🪪 Возраст</button>
         <button class="btn btn-secondary btn-sm" id="admComplaintsTabBtn" style="display:flex" onclick="admTab('complaints');loadComplaints()">⚠️ Жалобы</button>
       </div>
       
